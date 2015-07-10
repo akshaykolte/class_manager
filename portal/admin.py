@@ -1,3 +1,22 @@
 from django.contrib import admin
+from portal.models import *
 
-# Register your models here.
+admin.site.register(AcademicYear)
+admin.site.register(Branch)
+admin.site.register(Batch)
+admin.site.register(Student)
+admin.site.register(Parent)
+admin.site.register(StudentParent)
+admin.site.register(Staff)
+admin.site.register(Role)
+admin.site.register(StaffRole)
+admin.site.register(Standard)
+admin.site.register(Subject)
+admin.site.register(SubjectYear)
+admin.site.register(StudentBatch)
+admin.site.register(Lecture)
+admin.site.register(LectureBatch)
+admin.site.register(Attendance)
+admin.site.register(BaseFee)
+admin.site.register(FeeType)
+admin.site.register(FeeTransaction)
