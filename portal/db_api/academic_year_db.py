@@ -47,6 +47,9 @@ def get_academic_year(id=None):
 
 
 def set_current_academic_year(id):
+	
+	# if all academic year is already set then first unset it
+
 	AcademicYear.objects.all().update(is_current=False)
 	academic_year_object = AcademicYear.objects.get(id=id)
 	academic_year_object.is_current = True
@@ -54,10 +57,13 @@ def set_current_academic_year(id):
 	return academic_year_object.id
 
 def get_current_academic_year():
-	current_academic_year = AcademicYear.objects.get(is_current=True)
-	current_academic_year_id = current_academic_year.id
-	current_academic_year_name = str(current_academic_year.year_start) + '-' + str(current_academic_year.year_end)
-	current_academic_year_start = current_academic_year.year_start
-	current_academic_year_end = current_academic_year.year_end
-	return {'id' : current_academic_year_id ,'name': current_academic_year_name, 'year_start' : current_academic_year_start , 'year_end' : current_academic_year_end}
+	if not AcademicYear.objects.filter(is_current=True).exists():
+		raise Exception("No Current Academic Year Set")
+	else:
+		current_academic_year = AcademicYear.objects.get(is_current=True)	
+		current_academic_year_id = current_academic_year.id
+		current_academic_year_name = str(current_academic_year.year_start) + '-' + str(current_academic_year.year_end)
+		current_academic_year_start = current_academic_year.year_start
+		current_academic_year_end = current_academic_year.year_end
+		return {'id' : current_academic_year_id ,'name': current_academic_year_name, 'year_start' : current_academic_year_start , 'year_end' : current_academic_year_end}
 
