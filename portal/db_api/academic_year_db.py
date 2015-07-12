@@ -47,14 +47,15 @@ def get_academic_year(id=None):
 
 
 def set_current_academic_year(id):
-	
-	# if all academic year is already set then first unset it
 
-	AcademicYear.objects.all().update(is_current=False)
-	academic_year_object = AcademicYear.objects.get(id=id)
-	academic_year_object.is_current = True
-	academic_year_object.save()
-	return academic_year_object.id
+	if not AcademicYear.objects.filter(id=id).exists():
+		raise Exception('No Such Academic Year Found')
+	else:
+		AcademicYear.objects.all().update(is_current=False)
+		academic_year_object = AcademicYear.objects.get(id=id)
+		academic_year_object.is_current = True
+		academic_year_object.save()
+		return academic_year_object.id
 
 def get_current_academic_year():
 	if not AcademicYear.objects.filter(is_current=True).exists():

@@ -15,12 +15,22 @@ class Branch(models.Model):
 	def __str__(self):
 		return self.name
 
-class Batch(models.Model):
+class Standard(models.Model):
 	name = models.CharField(max_length=50)
-	description = models.CharField(max_length=200)
 
 	def __str__(self):
 		return self.name
+
+
+class Batch(models.Model):
+	name = models.CharField(max_length=50)
+	description = models.CharField(max_length=200)
+	academic_year = models.ForeignKey(AcademicYear)
+	branch = models.ForeignKey(Branch)
+	standard = models.ForeignKey(Standard)
+
+	def __str__(self):
+		return self.first_name
 
 class Student(models.Model):
 	first_name = models.CharField(max_length=50)
@@ -76,11 +86,6 @@ class StaffRole(models.Model):
 	def __str__(self):
 		return self.role + ' ' + self.staff
 
-class Standard(models.Model):
-	name = models.CharField(max_length=50)
-
-	def __str__(self):
-		return self.name
 
 
 class Subject(models.Model):
