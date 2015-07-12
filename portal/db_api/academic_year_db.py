@@ -2,11 +2,10 @@
 # get academic year
 # set current academic year
 # get current academic year
-
 from portal.models import AcademicYear
 
 def set_academic_year(id = None , year_start = None , year_end = None):
-	is_none_id = id ==None
+	is_none_id = id == None
 	is_none_year_start = year_start == None
 	is_none_year_end = year_end == None
 
