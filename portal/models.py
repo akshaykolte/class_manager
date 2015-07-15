@@ -142,9 +142,9 @@ class Attendance(models.Model):
 class BaseFee(models.Model):
 	amount = models.IntegerField()
 	subject_years = models.ManyToManyField(SubjectYear)
-
+	
 	def __str__(self):
-		return str(subject_years) + '- Rs. ' + str(amount)
+		return str(self.subject_years.all()) + '- Rs. ' + str(self.amount)
 
 class FeeType(models.Model):
 	name = models.CharField(max_length=50)
