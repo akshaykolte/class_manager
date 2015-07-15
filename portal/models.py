@@ -117,7 +117,7 @@ class Lecture(models.Model):
 	subject_year = models.ForeignKey(SubjectYear)
 
 	def __str__(self):
-		return self.name + '-' + str(count) + ' lectures'
+		return self.name + '-' + str(self.count) + ' lectures'
 
 class LectureBatch(models.Model):
 	name = models.CharField(max_length=50)
