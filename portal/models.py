@@ -59,7 +59,7 @@ class StudentParent(models.Model):
 	parent = models.ForeignKey(Parent)
 
 	def __str__(self):
-		return student + ' ' + parent 
+		return str(student) + ' ' + str(parent) 
 
 class Staff(models.Model):
 	first_name = models.CharField(max_length=50)
