@@ -84,7 +84,7 @@ class StaffRole(models.Model):
 	branch = models.ForeignKey(Branch)
 
 	def __str__(self):
-		return self.role + ' ' + self.staff
+		return str(self.role) + ' ' + str(self.staff)
 
 
 
@@ -124,6 +124,9 @@ class LectureBatch(models.Model):
 	description = models.CharField(max_length=200)
 	date = models.DateField()
 	duration = models.CharField(max_length=50)
+	lecture = models.ForeignKey(Lecture)
+	staff_role = models.ForeignKey(StaffRole)
+	batch = models.ForeignKey(Batch)
 
 	def __str__(self):
 		return self.name + ' ' + str(date)
