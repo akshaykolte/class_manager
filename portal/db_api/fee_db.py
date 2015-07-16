@@ -39,8 +39,9 @@ def set_base_fee(id = None ,amount=None , subject_years_list = None):
 		
 def get_base_fee(id = None , subject_years_list = None):
 	#subject_years is list of subject_year ids eg. [1,2]
-	#if 0 args return all base fee object
-	#else if id=none and subjectyearlist!=none specify return that object
+	
+	#if 0 args return all base fee object DONE
+	#else if id=none and subjectyearlist!=none specify return that object TODO
 	is_none_id = id == None
 	is_none_subject_years_list = subject_years_list == None
 	
@@ -104,14 +105,6 @@ def get_base_fee(id = None , subject_years_list = None):
 		print base_fee
 		
 		return True	
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		base_fee_object['id']=base_fee.id
 		base_fee_object['amount']=base_fee.amount
