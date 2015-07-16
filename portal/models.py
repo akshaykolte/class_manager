@@ -10,7 +10,15 @@ class AcademicYear(models.Model):
 		return str(self.year_start) + '-' + str(self.year_end) + ':' + str(self.is_current)
 
 	class Meta:
-		unique_together = (('year_start', 'year_end'))
+		unique_together = (('year_start', 'year_end',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_academic_year(self):
+				raise Exception('Validation Failed')
+
+		super(AcademicYear, self).save()
+
 
 class Branch(models.Model):
 	name = models.CharField(max_length=50)
@@ -20,7 +28,14 @@ class Branch(models.Model):
 		return self.name
 
 	class Meta:
-		unique_together = (('name'))
+		unique_together = (('name',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_branch(self):
+				raise Exception('Validation Failed')
+
+		super(Branch, self).save()
 
 class Standard(models.Model):
 	name = models.CharField(max_length=50)
@@ -29,8 +44,14 @@ class Standard(models.Model):
 		return self.name
 
 	class Meta:
-		unique_together = (('name'))
+		unique_together = (('name',),)
 
+	def save(self, validate=True):
+		if validate:
+			if not validate_standard(self):
+				raise Exception('Validation Failed')
+
+		super(Standard, self).save()
 
 class Batch(models.Model):
 	name = models.CharField(max_length=50)
@@ -43,9 +64,18 @@ class Batch(models.Model):
 		return self.name
 
 	class Meta:
-		unique_together = (('name', 'academic_year', 'branch', 'standard'))
+		unique_together = (('name', 'academic_year', 'branch', 'standard',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_batch(self):
+				raise Exception('Validation Failed')
+
+		super(Batch, self).save()
 
 class Student(models.Model):
+	username = models.CharField(max_length=50)
+	password = models.CharField(max_length=50)
 	first_name = models.CharField(max_length=50)
 	last_name = models.CharField(max_length=50)
 	address = models.CharField(max_length=200)
@@ -57,9 +87,18 @@ class Student(models.Model):
 		return self.first_name + ' ' + self.last_name
 
 	class Meta:
-		unique_together = (('username'), ('email'), ('phone_number'))
+		unique_together = (('username',), ('email',), ('phone_number',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_student(self):
+				raise Exception('Validation Failed')
+
+		super(Student, self).save()
 
 class Parent(models.Model):
+	username = models.CharField(max_length=50)
+	password = models.CharField(max_length=50)
 	first_name = models.CharField(max_length=50)
 	last_name = models.CharField(max_length=50)
 	address = models.CharField(max_length=200)
@@ -71,7 +110,14 @@ class Parent(models.Model):
 		return self.first_name + ' ' + self.last_name
 
 	class Meta:
-		unique_together = (('username'), ('email'), ('phone_number'))
+		unique_together = (('username',), ('email',), ('phone_number',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_parent(self):
+				raise Exception('Validation Failed')
+
+		super(Parent, self).save()
 
 class StudentParent(models.Model):
 	student = models.ForeignKey(Student)
@@ -81,7 +127,14 @@ class StudentParent(models.Model):
 		return str(student) + ' ' + str(parent)
 
 	class Meta:
-		unique_together = (('student', 'parent'))
+		unique_together = (('student', 'parent',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_student_parent(self):
+				raise Exception('Validation Failed')
+
+		super(StudentParent, self).save()
 
 class Staff(models.Model):
 	username = models.CharField(max_length=50)
@@ -97,7 +150,14 @@ class Staff(models.Model):
 		return self.first_name + ' ' + self.last_name
 
 	class Meta:
-		unique_together = (('username'), ('email'), ('phone_number'))
+		unique_together = (('username',), ('email',), ('phone_number',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_staff(self):
+				raise Exception('Validation Failed')
+
+		super(Staff, self).save()
 
 class Role(models.Model):
 	name = models.CharField(max_length=50)
@@ -106,7 +166,14 @@ class Role(models.Model):
 		return self.name
 
 	class Meta:
-		unique_together = (('name'))
+		unique_together = (('name',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_role(self):
+				raise Exception('Validation Failed')
+
+		super(Role, self).save()
 
 class StaffRole(models.Model):
 	role = models.ForeignKey(Role)
@@ -117,9 +184,14 @@ class StaffRole(models.Model):
 		return str(self.role) + ' ' + str(self.staff)
 
 	class Meta:
-		unique_together = (('name', 'staff', 'branch'))
+		unique_together = (('role', 'staff', 'branch',),)
 
+	def save(self, validate=True):
+		if validate:
+			if not validate_staff_role(self):
+				raise Exception('Validation Failed')
 
+		super(StaffRole, self).save()
 
 class Subject(models.Model):
 	name = models.CharField(max_length=50)
@@ -129,7 +201,14 @@ class Subject(models.Model):
 		return self.name + '-' + str(self.standard)
 
 	class Meta:
-		unique_together = (('name', 'standard'))
+		unique_together = (('name', 'standard',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_subject(self):
+				raise Exception('Validation Failed')
+
+		super(Subject, self).save()
 
 class SubjectYear(models.Model):
 	subject = models.ForeignKey(Subject)
@@ -139,7 +218,14 @@ class SubjectYear(models.Model):
 		return str(self.subject) + ' ' + str(self.academic_year)
 
 	class Meta:
-		unique_together = (('subject', 'academic_year'))
+		unique_together = (('subject', 'academic_year',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_subject_year(self):
+				raise Exception('Validation Failed')
+
+		super(SubjectYear, self).save()
 
 class StudentBatch(models.Model):
 	student = models.ForeignKey(Student)
@@ -150,7 +236,14 @@ class StudentBatch(models.Model):
 		return str(self.student) + ' ' + str(self.batch)
 
 	class Meta:
-		unique_together = (('student', 'batch'))
+		unique_together = (('student', 'batch',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_student_batch(self):
+				raise Exception('Validation Failed')
+
+		super(StudentBatch, self).save()
 
 class Lecture(models.Model):
 	name = models.CharField(max_length=50)
@@ -162,7 +255,14 @@ class Lecture(models.Model):
 		return self.name + '-' + str(self.count) + ' lectures'
 
 	class Meta:
-		unique_together = (('name', 'subject_year'))
+		unique_together = (('name', 'subject_year',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_lecture(self):
+				raise Exception('Validation Failed')
+
+		super(Lecture, self).save()
 
 class LectureBatch(models.Model):
 	name = models.CharField(max_length=50)
@@ -177,7 +277,7 @@ class LectureBatch(models.Model):
 		return self.name + ' ' + str(self.date)
 
 	class Meta:
-		unique_together = (('lecture', 'batch'))
+		unique_together = (('lecture', 'batch',),)
 
 	def save(self, validate=True):
 		if validate:
@@ -195,7 +295,14 @@ class Attendance(models.Model):
 		return str(student_batch) + ' ' + str(lecture_batch)
 
 	class Meta:
-		unique_together = (('lecture_batch', 'student_batch'))
+		unique_together = (('lecture_batch', 'student_batch',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_attendance(self):
+				raise Exception('Validation Failed')
+
+		super(Attendance, self).save()
 
 class BaseFee(models.Model):
 	amount = models.IntegerField()
@@ -204,6 +311,12 @@ class BaseFee(models.Model):
 	def __str__(self):
 		return str(self.subject_years.all()) + '- Rs. ' + str(self.amount)
 
+	def save(self, validate=True):
+		if validate:
+			if not validate_base_fee(self):
+				raise Exception('Validation Failed')
+
+		super(BaseFee, self).save()
 
 class FeeType(models.Model):
 	name = models.CharField(max_length=50)
@@ -212,7 +325,14 @@ class FeeType(models.Model):
 		return self.name
 
 	class Meta:
-		unique_together = (('name'))
+		unique_together = (('name',),)
+
+	def save(self, validate=True):
+		if validate:
+			if not validate_fee_type(self):
+				raise Exception('Validation Failed')
+
+		super(FeeType, self).save()
 
 class FeeTransaction(models.Model):
 	amount = models.IntegerField()
@@ -227,11 +347,11 @@ class FeeTransaction(models.Model):
 		return str(student_batch) + ':' + str(fee_type) + '- Rs. ' + str(amount)
 
 	class Meta:
-		unique_together = (('receipt_number'))
+		unique_together = (('receipt_number',),)
 
+	def save(self, validate=True):
+		if validate:
+			if not validate_fee_transaction(self):
+				raise Exception('Validation Failed')
 
-
-
-
-
-
+		super(FeeTransaction, self).save()
