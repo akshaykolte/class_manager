@@ -122,6 +122,88 @@ def get_base_fee(id = None , subject_years_list = None):
 		
 		return base_fee_object'''
 
+def set_fee_transaction(id = None ,amount=None ,date = None, time = None, receipt_number = None, student_batch_id = None, fee_type_id = None):
+	is_none_id = id == None
+	is_none_amount = amount == None
+	is_none_date = date == None
+	is_none_time = time == None
+	is_none_receipt_number = receipt_number == None
+	is_none_student_batch_id = student_batch_id == None
+	is_none_fee_type_id = fee_type_id == None
+
+	if is_none_id:
+		student_batch_object = StudentBatch.objects.get(id = student_batch_id)
+		fee_type_object = FeeType.objects.get(id = fee_type_id)
+		fee_transaction_object = FeeTransaction(amount = amount, date = date, time = time, receipt_number = receipt_number, student_batch = student_batch_object, fee_type = fee_type_object)
+		fee_transaction_object.save()
+		
+		return fee_transaction_object.id
+
+	else :
+		raise Exception('You cannot edit a fee transaction')
+		
+def get_fee_transaction(id = None ,date_start = None, date_end = None, receipt_number = None, student_batch_id = None, fee_type_id = None):
+	is_none_id = id == None
+	is_none_date_start = date_start == None
+	is_none_date_end = date_end == None
+	is_none_receipt_number = receipt_number == None
+	is_none_student_batch_id = student_batch_id == None
+	is_none_fee_type_id = fee_type_id == None
 	
+	# if student batch id given return transactions for that student
+	if not is_none_student_batch_id:
+		student_batch_object = StudentBatch.objects.get(id = student_batch_id)
+		fee_transaction = FeeTransaction.objects.filter(student_batch = student_batch_object)
+		fee_list = []
+
+		for i in fee_transaction:
+			fee_dict = {}
+			fee_dict['id'] = i.id
+			fee_dict['amount'] = i.amount
+			fee_dict['date'] = i.date
+			fee_dict['time'] = i.time
+			fee_dict['timestamp'] = i.timestamp
+			fee_dict['student_batch'] = i.student_batch
+			fee_dict['fee_type'] = i.fee_type
+			fee_list.append(fee_dict)
+			
+		return fee_list
+	
+	elif not is_none_fee_type_id:
+		fee_type_object = FeeType.objects.get(id = fee_type_id)
+		fee_transaction = FeeTransaction.objects.filter(fee_type = fee_type_object)
+		fee_list = []
+
+		for i in fee_transaction:
+			fee_dict = {}
+			fee_dict['id'] = i.id
+			fee_dict['amount'] = i.amount
+			fee_dict['date'] = i.date
+			fee_dict['time'] = i.time
+			fee_dict['timestamp'] = i.timestamp
+			fee_dict['student_batch'] = i.student_batch
+			fee_dict['fee_type'] = i.fee_type
+			fee_list.append(fee_dict)
+			
+		return fee_list
+		
+
+	elif not is_none_id:
+
+		i = FeeTransaction.objects.get(id =id)
+
+		fee_dict = {}
+		fee_dict['id'] = i.id
+		fee_dict['amount'] = i.amount
+		fee_dict['date'] = i.date
+		fee_dict['time'] = i.time
+		fee_dict['timestamp'] = i.timestamp
+		fee_dict['student_batch'] = i.student_batch
+		fee_dict['fee_type'] = i.fee_type
+					
+		return fee_dict
+	
+	else :
+		raise Exception('You cannot edit a fee transaction')		
 	
 	
