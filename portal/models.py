@@ -129,7 +129,7 @@ class LectureBatch(models.Model):
 	batch = models.ForeignKey(Batch)
 
 	def __str__(self):
-		return self.name + ' ' + str(date)
+		return self.name + ' ' + str(self.date)
 
 class Attendance(models.Model):
 	count = models.IntegerField()
