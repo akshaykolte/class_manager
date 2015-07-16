@@ -59,7 +59,7 @@ class StudentParent(models.Model):
 	parent = models.ForeignKey(Parent)
 
 	def __str__(self):
-		return student + ' ' + parent 
+		return str(student) + ' ' + str(parent) 
 
 class Staff(models.Model):
 	first_name = models.CharField(max_length=50)
@@ -84,7 +84,7 @@ class StaffRole(models.Model):
 	branch = models.ForeignKey(Branch)
 
 	def __str__(self):
-		return self.role + ' ' + self.staff
+		return str(self.role) + ' ' + str(self.staff)
 
 
 
@@ -117,13 +117,16 @@ class Lecture(models.Model):
 	subject_year = models.ForeignKey(SubjectYear)
 
 	def __str__(self):
-		return self.name + '-' + str(count) + ' lectures'
+		return self.name + '-' + str(self.count) + ' lectures'
 
 class LectureBatch(models.Model):
 	name = models.CharField(max_length=50)
 	description = models.CharField(max_length=200)
 	date = models.DateField()
 	duration = models.CharField(max_length=50)
+	lecture = models.ForeignKey(Lecture)
+	staff_role = models.ForeignKey(StaffRole)
+	batch = models.ForeignKey(Batch)
 
 	def __str__(self):
 		return self.name + ' ' + str(date)

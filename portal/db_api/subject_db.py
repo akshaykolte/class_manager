@@ -1,7 +1,7 @@
 # set_subject
 # get_subjects
 # assign subjects to student
-from portal.models import AcademicYear, Standard, StudentBatch, Subject, SubjectYear
+from portal.models import AcademicYear, Batch, Standard, StudentBatch, Subject, SubjectYear
 from portal.db_api.academic_year_db import *
 
 
@@ -109,10 +109,43 @@ def get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard
 		return student_dict
 
 	elif is_subject_id_none and is_student_batch_id_none and not is_batch_id_none and is_standard_id_none:
-		pass
+		
+		student_batch_object = StudentBatch.objects.filter(batch=Batch.objects.get(id=batch_id))
+
+		student_list=[]
+		for student in student_batch_object:
+			student_dict={}
+			student_dict['id'] = student.student.id
+			student_dict['name'] = student.student.first_name + ' ' + student.student.last_name
+			student_dict['batch_id'] = student.batch.id
+			student_dict['batch_name'] = student.batch.name
+			subject_year_list = []
+			for i in student.subject_years.all():
+				subject_year_dict={}
+				subject_year_dict['id'] = i.id
+				subject_year_dict['subject_id'] = i.subject.id
+				subject_year_dict['subject_name'] = i.subject.name
+				subject_year_dict['standard_id'] = i.subject.standard.id
+				subject_year_dict['standard_name'] = i.subject.standard.name
+				subject_year_dict['year_id'] = i.academic_year.id
+				subject_year_list.append(subject_year_dict)
+			student_dict['subjects'] = subject_year_list
+			student_list.append(student_dict)
+
+		return student_list
+
 
 	elif is_subject_id_none and is_student_batch_id_none and is_batch_id_none and not is_standard_id_none:
-		pass
+		
+		subject_object = Subject.objects.filter(standard=(Standard.objects.get(id=standard_id)))
+		subject_list = []
+		for subject in subject_object:
+			subject_dict = {}
+			subject_dict['id'] = subject.id
+			subject_dict['name'] = subject.name
+			subject_list.append(subject_dict)
+
+		return subject_list
 
 	else:
 		raise Exception('Wrong parameters passed')
