@@ -254,7 +254,7 @@ class StudentBatch(models.Model):
 	# Receiver is defined below this function
 	# While adding through admin panel, default validation will be done using the pre_add receiver
 	# While adding through python, validation should be done through save(validate=True, subject_year_id_list=list) first, so that no error is encountered while doing .add(subject_year_object)
-	def save(self, validate=False, subject_year_id_list = None):
+	def save(self, validate=False, subject_year_id_list = [] ):
 		from portal.validator.validator import validate_student_batch
 		print SubjectYear.objects.filter()
 		if validate:
@@ -318,7 +318,7 @@ class Attendance(models.Model):
 	student_batch = models.ForeignKey(StudentBatch)
 
 	def __str__(self):
-		return str(student_batch) + ' ' + str(lecture_batch)
+		return str(self.student_batch) + ' ' + str(self.lecture_batch)
 
 	class Meta:
 		unique_together = (('lecture_batch', 'student_batch',),)
@@ -338,13 +338,25 @@ class BaseFee(models.Model):
 	def __str__(self):
 		return str(self.subject_years.all()) + '- Rs. ' + str(self.amount)
 
-	def save(self, validate=True):
+	def save(self, validate=False, subject_year_id_list = [] ):
 		from portal.validator.validator import validate_base_fee
 		if validate:
-			if not validate_base_fee(self):
+			for i in subject_years.all():
+				subject_year_id_list.append(i.id)
+			if not validate_base_fee(self, subject_year_id_list):
 				raise Exception('Validation Failed')
 
 		super(BaseFee, self).save()
+
+@receiver(m2m_changed, sender = BaseFee.subject_years.through)
+def base_fee_subject_years_pre_add(sender, instance, action, reverse, model, pk_set, **kwargs):
+	from portal.validator.validator import validate_base_fee
+	if action == 'pre_add':
+		subject_year_id_list = list(pk_set)
+		for i in instance.subject_years.all():
+			subject_year_id_list.append(i.id)
+		if not validate_base_fee(instance, subject_year_id_list):
+			raise Exception('Validation Failed')
 
 class FeeType(models.Model):
 	name = models.CharField(max_length=50)
