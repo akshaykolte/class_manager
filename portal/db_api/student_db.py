@@ -13,12 +13,24 @@ def get_students(id = None,batch_id = None,branch_id = None):
 	if not is_none_id and is_none_batch_id:
 		student_object = {}
 		student = Student.objects.get(id=id)
+		student_batch = StudentBatch.objects.get(student = Student.objects.get(id=id))
 		student_object['first_name'] = student.first_name
 		student_object['last_name'] = student.last_name
 		student_object['address'] = student.address
 		student_object['email'] = student.email
 		student_object['phone_number'] = student.phone_number
 		student_object['gender'] = student.gender
+		subject_year_list = []
+		for j in student_batch.subject_years.all():
+				subject_year_dict={}
+				subject_year_dict['id'] = j.id
+				subject_year_dict['subject_id'] = j.subject.id
+				subject_year_dict['subject_name'] = j.subject.name
+				subject_year_dict['standard_id'] = j.subject.standard.id
+				subject_year_dict['standard_name'] = j.subject.standard.name
+				subject_year_dict['year_id'] = j.academic_year.id
+				subject_year_list.append(subject_year_dict)
+		student_object['subjects'] = subject_year_list
 		return student_object
 
 	if not is_none_id and not is_none_batch_id:
@@ -33,8 +45,19 @@ def get_students(id = None,batch_id = None,branch_id = None):
 		student_object['phone_number'] = student.phone_number
 		student_object['gender'] = student.gender
 		student_object['batch'] = student_batch.batch
-		student_object['subjects'] = student_batch.subject_years
+		subject_year_list = []
+		for j in student_batch.subject_years.all():
+				subject_year_dict={}
+				subject_year_dict['id'] = j.id
+				subject_year_dict['subject_id'] = j.subject.id
+				subject_year_dict['subject_name'] = j.subject.name
+				subject_year_dict['standard_id'] = j.subject.standard.id
+				subject_year_dict['standard_name'] = j.subject.standard.name
+				subject_year_dict['year_id'] = j.academic_year.id
+				subject_year_list.append(subject_year_dict)
+		student_object['subjects'] = subject_year_list
 		return student_object
+
 	elif not is_none_batch_id:
 		student_list = []
 		student_batch = StudentBatch.objects.filter(batch = Batch.objects.get(id = batch_id))
@@ -47,13 +70,24 @@ def get_students(id = None,batch_id = None,branch_id = None):
 			student_dict['phone_number'] = i.student.phone_number
 			student_dict['gender'] = i.student.gender
 			student_dict['batch'] = i.batch
-			student_dict['subjects'] = i.subject_years
+			subject_year_list = []
+			for j in i.subject_years.all():
+				subject_year_dict={}
+				subject_year_dict['id'] = j.id
+				subject_year_dict['subject_id'] = j.subject.id
+				subject_year_dict['subject_name'] = j.subject.name
+				subject_year_dict['standard_id'] = j.subject.standard.id
+				subject_year_dict['standard_name'] = j.subject.standard.name
+				subject_year_dict['year_id'] = j.academic_year.id
+				subject_year_list.append(subject_year_dict)
+			student_dict['subjects'] = subject_year_list
 			student_list.append(student_dict)
 		return student_list
 	else:
 		student_list = []
 		student = Student.objects.all()
 		for i in student:
+			student_batch = StudentBatch.objects.get(student = i)
 			student_dict = {}
 			student_dict['first_name'] = i.first_name
 			student_dict['last_name'] = i.last_name
@@ -61,6 +95,17 @@ def get_students(id = None,batch_id = None,branch_id = None):
 			student_dict['email'] = i.email
 			student_dict['phone_number'] = i.phone_number
 			student_dict['gender'] = i.gender
+			subject_year_list = []
+			for j in student_batch.subject_years.all():
+				subject_year_dict={}
+				subject_year_dict['id'] = j.id
+				subject_year_dict['subject_id'] = j.subject.id
+				subject_year_dict['subject_name'] = j.subject.name
+				subject_year_dict['standard_id'] = j.subject.standard.id
+				subject_year_dict['standard_name'] = j.subject.standard.name
+				subject_year_dict['year_id'] = j.academic_year.id
+				subject_year_list.append(subject_year_dict)
+			student_dict['subjects'] = subject_year_list
 			student_list.append(student_dict)
 		return student_list
 
@@ -131,7 +176,7 @@ def set_student(id=None, parent_id = None,batch_id= None, first_name=None ,last_
 	elif not is_none_id:
 		student_object = Student.objects.get(id=id)
 		if not is_none_batch_id:
-			student_batch_object = Student_batch(student = student_object,batch = Batch.objects.get(id = batch_id))
+			student_batch_object = StudentBatch(student = student_object,batch = Batch.objects.get(id = batch_id))
 			student_batch_object.save()
 			
 		if not is_none_parent_id:
