@@ -8,6 +8,7 @@ class AcademicYear(models.Model):
 	def __str__(self):
 		return str(self.year_start) + '-' + str(self.year_end) + ':' + str(self.is_current)
 
+
 class Branch(models.Model):
 	name = models.CharField(max_length=50)
 	address = models.CharField(max_length=200)
