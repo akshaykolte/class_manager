@@ -14,7 +14,8 @@
 
 # !!!!!!!!!!!!!!!!!!!!!!!!
 
-from portal.models import Student,Parent,StudentParent,Batch,StudentBatch,SubjectYear
+from portal.models import Student,Parent,StudentParent,Batch,StudentBatch,SubjectYear,Standard
+from portal.db_api.academic_year_db import *
 
 def get_students(id = None,batch_id = None,branch_id = None):
 	is_none_id = id == None
@@ -285,6 +286,150 @@ def set_student_batch(id=None,student_id=None,batch_id=None,subject_year_id_list
 		student_batch_object.save()
 		return student_batch_object.id
 				
+
+def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=None,student_id=None):
+	# if academic_year_id is None then academic_year_id = get_current_academic_year()['id']
+	# possible combinations: 00001,00011,00110,01000,10000
+	is_none_id = id == None
+	is_none_batch_id = batch_id == None
+	is_none_standard_id = standard_id == None
+	is_none_academic_year_id = academic_year_id == None
+	is_none_student_id = student_id == None
+
+	#00001
+	if not is_none_student_id and is_none_id and is_none_batch_id and is_none_standard_id and is_none_academic_year_id:
+		student_batch_object = StudentBatch.objects.get(student = Student.objects.get(id = student_id),batch = Batch.objects.get(academic_year = AcademicYear.objects.get(id =get_current_academic_year()['id'])))
+		student_batch = {}
+		student_batch['student_first_name'] = student_batch_object.student.first_name
+		student_batch['student_last_name'] = student_batch_object.student.last_name
+		student_batch['student_address'] = student_batch_object.student.address
+		student_batch['student_email'] = student_batch_object.student.email
+		student_batch['student_phone_number'] = student_batch_object.student.phone_number
+		student_batch['student_gender'] = student_batch_object.student.gender
+		student_batch['student_batch_name'] = student_batch_object.batch.name
+		student_batch['student_batch_description'] = student_batch_object.batch.description
+		subject_year_list = []
+		for j in student_batch_object.subject_years.all():
+			subject_year_dict ={}
+			subject_year_dict['id'] = j.id
+			subject_year_dict['subject_id'] = j.subject.id
+			subject_year_dict['subject_name'] = j.subject.name
+			subject_year_dict['standard_id'] = j.subject.standard.id
+			subject_year_dict['standard_name'] = j.subject.standard.name
+			subject_year_dict['year_id'] = j.academic_year.id
+			subject_year_list.append(subject_year_dict)
+		student_batch['student_subjects'] = subject_year_list
+		return student_batch
+
+	#00011
+	if not is_none_student_id and is_none_id and is_none_batch_id and is_none_standard_id and not is_none_academic_year_id:
+		student_batch_object = StudentBatch.objects.get(student = Student.objects.get(id = student_id),batch = Batch.objects.get(academic_year = AcademicYear.objects.get(id = academic_year_id)))
+		student_batch = {}
+		student_batch['student_first_name'] = student_batch_object.student.first_name
+		student_batch['student_last_name'] = student_batch_object.student.last_name
+		student_batch['student_address'] = student_batch_object.student.address
+		student_batch['student_email'] = student_batch_object.student.email
+		student_batch['student_phone_number'] = student_batch_object.student.phone_number
+		student_batch['student_gender'] = student_batch_object.student.gender
+		student_batch['student_batch_name'] = student_batch_object.batch.name
+		student_batch['student_batch_description'] = student_batch_object.batch.description
+		subject_year_list = []
+		for j in student_batch_object.subject_years.all():
+			subject_year_dict ={}
+			subject_year_dict['id'] = j.id
+			subject_year_dict['subject_id'] = j.subject.id
+			subject_year_dict['subject_name'] = j.subject.name
+			subject_year_dict['standard_id'] = j.subject.standard.id
+			subject_year_dict['standard_name'] = j.subject.standard.name
+			subject_year_dict['year_id'] = j.academic_year.id
+			subject_year_list.append(subject_year_dict)
+		student_batch['student_subjects'] = subject_year_list
+		return student_batch
+
+	#00110
+	if is_none_student_id and is_none_id and is_none_batch_id and not is_none_standard_id and not is_none_academic_year_id:
+		student_batch_object_list = StudentBatch.objects.filter(standard = Standard.objects.get(id = standard_id),batch = Batch.objects.get(academic_year = AcademicYear.objects.get(id = academic_year_id)))
+		student_batch_list = []
+		for student_batch_object in student_batch_object_list:
+			student_batch = {}
+			student_batch['student_first_name'] = student_batch_object.student.first_name
+			student_batch['student_last_name'] = student_batch_object.student.last_name
+			student_batch['student_address'] = student_batch_object.student.address
+			student_batch['student_email'] = student_batch_object.student.email
+			student_batch['student_phone_number'] = student_batch_object.student.phone_number
+			student_batch['student_gender'] = student_batch_object.student.gender
+			student_batch['student_batch_name'] = student_batch_object.batch.name
+			student_batch['student_batch_description'] = student_batch_object.batch.description
+			subject_year_list = []
+			for j in student_batch_object.subject_years.all():
+				subject_year_dict ={}
+				subject_year_dict['id'] = j.id
+				subject_year_dict['subject_id'] = j.subject.id
+				subject_year_dict['subject_name'] = j.subject.name
+				subject_year_dict['standard_id'] = j.subject.standard.id
+				subject_year_dict['standard_name'] = j.subject.standard.name
+				subject_year_dict['year_id'] = j.academic_year.id
+				subject_year_list.append(subject_year_dict)
+			student_batch['student_subjects'] = subject_year_list
+			student_batch_list.append(student_batch)
+		return student_batch_list
+
+	#01000
+	if is_none_student_id and is_none_id and not is_none_batch_id and is_none_standard_id and is_none_academic_year_id:
+		student_batch_object_list = StudentBatch.objects.filter(batch = Batch.objects.get(id=batch_id,academic_year = AcademicYear.objects.get(id = get_current_academic_year()['id'])))
+		student_batch_list = []
+		for student_batch_object in student_batch_object_list:
+			student_batch = {}
+			student_batch['student_first_name'] = student_batch_object.student.first_name
+			student_batch['student_last_name'] = student_batch_object.student.last_name
+			student_batch['student_address'] = student_batch_object.student.address
+			student_batch['student_email'] = student_batch_object.student.email
+			student_batch['student_phone_number'] = student_batch_object.student.phone_number
+			student_batch['student_gender'] = student_batch_object.student.gender
+			student_batch['student_batch_name'] = student_batch_object.batch.name
+			student_batch['student_batch_description'] = student_batch_object.batch.description
+			subject_year_list = []
+			for j in student_batch_object.subject_years.all():
+				subject_year_dict ={}
+				subject_year_dict['id'] = j.id
+				subject_year_dict['subject_id'] = j.subject.id
+				subject_year_dict['subject_name'] = j.subject.name
+				subject_year_dict['standard_id'] = j.subject.standard.id
+				subject_year_dict['standard_name'] = j.subject.standard.name
+				subject_year_dict['year_id'] = j.academic_year.id
+				subject_year_list.append(subject_year_dict)
+			student_batch['student_subjects'] = subject_year_list
+			student_batch_list.append(student_batch)
+		return student_batch_list
+
+	#10000
+	if is_none_student_id and not is_none_id and is_none_batch_id and is_none_standard_id and is_none_academic_year_id:
+		student_batch_object = StudentBatch.objects.get(id=id,batch = Batch.objects.get(academic_year = AcademicYear.objects.get(id =get_current_academic_year()['id'])))
+		student_batch = {}
+		student_batch['student_first_name'] = student_batch_object.student.first_name
+		student_batch['student_last_name'] = student_batch_object.student.last_name
+		student_batch['student_address'] = student_batch_object.student.address
+		student_batch['student_email'] = student_batch_object.student.email
+		student_batch['student_phone_number'] = student_batch_object.student.phone_number
+		student_batch['student_gender'] = student_batch_object.student.gender
+		student_batch['student_batch_name'] = student_batch_object.batch.name
+		student_batch['student_batch_description'] = student_batch_object.batch.description
+		subject_year_list = []
+		for j in student_batch_object.subject_years.all():
+			subject_year_dict ={}
+			subject_year_dict['id'] = j.id
+			subject_year_dict['subject_id'] = j.subject.id
+			subject_year_dict['subject_name'] = j.subject.name
+			subject_year_dict['standard_id'] = j.subject.standard.id
+			subject_year_dict['standard_name'] = j.subject.standard.name
+			subject_year_dict['year_id'] = j.academic_year.id
+			subject_year_list.append(subject_year_dict)
+		student_batch['student_subjects'] = subject_year_list
+		return student_batch
+
+
+
+
 
 
 
