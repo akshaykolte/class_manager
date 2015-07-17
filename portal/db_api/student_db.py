@@ -14,7 +14,7 @@
 
 # !!!!!!!!!!!!!!!!!!!!!!!!
 
-from portal.models import Student,Parent,StudentParent,Batch,StudentBatch
+from portal.models import Student,Parent,StudentParent,Batch,StudentBatch,SubjectYear
 
 def get_students(id = None,batch_id = None,branch_id = None):
 	is_none_id = id == None
@@ -254,6 +254,39 @@ def set_parent(id=None, student_id = None, first_name=None ,last_name=None ,addr
 		return parent_object.id
 	else:
 		raise Exception ('Enter all fields')
+
+def set_student_batch(id=None,student_id=None,batch_id=None,subject_year_id_list=None):
+	is_none_id = id == None
+	is_none_student_id = student_id == None
+	is_none_batch_id = batch_id == None
+	is_none_subject_year_id_list = subject_year_id_list == None
+
+	if is_none_id:
+
+		student_batch_object = StudentBatch(student = Student.objects.get(id = student_id),batch = Batch.objects.get(id = batch_id))
+		student_batch_object.save()
+		if not is_none_subject_year_id_list:
+			for subject_year_id in subject_year_id_list:
+				subject_year_object = SubjectYear.objects.get(id = subject_year_id)
+				student_batch_object.subject_years.add(subject_year_object)
+		student_batch_object.save()
+		return student_batch_object.id
+
+	else:
+		student_batch_object = StudentBatch.objects.get(id = id)
+		if not is_none_student_id:
+			student_batch_object.student = Student.objects.get(id = student_id)
+		if not is_none_batch_id:
+			student_batch_object.batch = Batch.objects.get(id = batch_id)
+		if not is_none_subject_year_id_list:
+			for subject_year_id in subject_year_id_list:
+				subject_year_object = SubjectYear.objects.get(id = subject_year_id)
+				student_batch_object.subject_years.add(subject_year_object)
+		student_batch_object.save()
+		return student_batch_object.id
+				
+
+
 
 def get_previous_students(batch_id = None):
 	is_none_batch_id = batch_id == None
