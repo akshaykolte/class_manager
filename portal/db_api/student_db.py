@@ -3,6 +3,17 @@
 # get_parent(from student) return: parent details
 # set_parent(student_id as a parameter) return: id
 # get_previous_students (pass batch_id as parameter)
+
+# !!!!!!!!!!!!!!!!!!!!!!!!
+	# 1. set_student_batch(student_batch_id,student_id,batch_id,subject_year_id_list)
+
+	# 2. get_student_batch(student_batch_id,batch_id,standard_id,academic_year_id,student_id)
+		# if academic_year_id is None then academic_year_id = get_current_academic_year()['id']
+		# possible combinations: 00001,00011,00110,01000,10000
+
+
+# !!!!!!!!!!!!!!!!!!!!!!!!
+
 from portal.models import Student,Parent,StudentParent,Batch,StudentBatch
 
 def get_students(id = None,batch_id = None,branch_id = None):
