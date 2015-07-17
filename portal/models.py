@@ -385,7 +385,7 @@ class FeeTransaction(models.Model):
 	fee_type = models.ForeignKey(FeeType)
 
 	def __str__(self):
-		return str(student_batch) + ':' + str(fee_type) + '- Rs. ' + str(amount)
+		return str(self.student_batch) + ':' + str(self.fee_type) + '- Rs. ' + str(self.amount)
 
 	class Meta:
 		unique_together = (('receipt_number',),)
