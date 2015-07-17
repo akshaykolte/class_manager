@@ -80,9 +80,6 @@ class Batch(models.Model):
 
 class Student(models.Model):
 
-	student_username = models.CharField(max_length=50)
-	student_password = models.CharField(max_length=50)
-
 	username = models.CharField(max_length=50)
 	password = models.CharField(max_length=50)
 
@@ -108,9 +105,6 @@ class Student(models.Model):
 		super(Student, self).save()
 
 class Parent(models.Model):
-
-	parent_username = models.CharField(max_length=50)
-	parent_password = models.CharField(max_length=50)
 
 	username = models.CharField(max_length=50)
 	password = models.CharField(max_length=50)
@@ -155,9 +149,6 @@ class StudentParent(models.Model):
 		super(StudentParent, self).save()
 
 class Staff(models.Model):
-
-	staff_username = models.CharField(max_length=50)
-	staff_password = models.CharField(max_length=50)
 
 	username = models.CharField(max_length=50)
 	password = models.CharField(max_length=50)

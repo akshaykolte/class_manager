@@ -6,8 +6,8 @@ def get_user(request):
 		username = request.POST['username']
 		password = request.POST['password']
 
-		if Staff.objects.filter(staff_username=username,staff_password=password).exists():
-			staff_obj = Staff.objects.get(teacher_username=username,teacher_password=password)
+		if Staff.objects.filter(username=username,password=password).exists():
+			staff_obj = Staff.objects.get(username=username,password=password)
 			
 			request.session['user']['logged_in'] = True
 			request.session['user']['login_type'] = 'staff'
@@ -40,8 +40,8 @@ def get_user(request):
 			
 			request.session.modified = True
 
-		elif Student.objects.filter(student_username=username,student_password=password).exists():
-			student_obj = Student.objects.get(student_username=username,student_password=password)
+		elif Student.objects.filter(username=username,password=password).exists():
+			student_obj = Student.objects.get(username=username,password=password)
 			request.session['user']['logged_in'] = True
 			request.session['user']['login_type']='student'
 
@@ -56,8 +56,8 @@ def get_user(request):
 			request.session.modified = True
 
 
-		elif Parent.objects.filter(parent_username=username,parent_password=password).exists():
-			parent_obj = Parent.objects.get(parent_username=username,parent_password=password)
+		elif Parent.objects.filter(username=username,password=password).exists():
+			parent_obj = Parent.objects.get(username=username,password=password)
 			request.session['user']['logged_in'] = True
 			request.session['user']['login_type']='parent'
 
@@ -89,8 +89,8 @@ def change_password_db(request):
 		
 		if request.session['user']['login_type']=='staff':
 			staff_obj=Staff.objects.get(id=request.session['user']['id'])
-			if staff_obj.staff_password == request.POST['oldpassword']:
-				staff_obj.staff_password=request.POST['newpassword']
+			if staff_obj.password == request.POST['oldpassword']:
+				staff_obj.password=request.POST['newpassword']
 				staff_obj.save()
 				return True
 			
@@ -100,8 +100,8 @@ def change_password_db(request):
 
 		elif request.session['user']['login_type']=='parent':
 			parent_obj=Parent.objects.get(id=request.session['user']['id'])
-			if parent_obj.parent_password == request.POST['oldpassword']:
-				parent_obj.parent_password=request.POST['newpassword']
+			if parent_obj.password == request.POST['oldpassword']:
+				parent_obj.password=request.POST['newpassword']
 				parent_obj.save()
 				return True
 
@@ -111,8 +111,8 @@ def change_password_db(request):
 
 		elif request.session['user']['login_type']=='student':
 			student_obj=Student.objects.get(id=request.session['user']['id'])
-			if student_obj.student_password == request.POST['oldpassword']:
-				student_obj.student_password=request.POST['newpassword']
+			if student_obj.password == request.POST['oldpassword']:
+				student_obj.password=request.POST['newpassword']
 				student_obj.save()
 				return True
 			else:
