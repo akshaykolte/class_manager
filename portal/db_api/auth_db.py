@@ -16,6 +16,8 @@ def get_user(request):
 			request.session['user']['permission_manager'] = False
 			request.session['user']['permission_teacher'] = False
 			request.session['user']['permission_accountant'] = False
+			request.session['user']['permission_parent'] = False
+			request.session['user']['permission_student'] = False
 
 			staff_roles = Staff.objects.filter(staff = staff_obj)
 
