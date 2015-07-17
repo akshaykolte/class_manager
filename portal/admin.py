@@ -13,7 +13,16 @@ admin.site.register(StaffRole)
 admin.site.register(Standard)
 admin.site.register(Subject)
 admin.site.register(SubjectYear)
-admin.site.register(StudentBatch)
+
+class StudentBatchCustom(admin.ModelAdmin):
+	
+	def save_model(self, request, obj, form, change):
+		subject_year_id_list = map(int,request.POST.getlist('subject_years'))
+		# No validations through save
+		# Validations will only be done while .add() generates pre_save signal
+		obj.save()
+
+admin.site.register(StudentBatch, StudentBatchCustom)
 admin.site.register(Lecture)
 admin.site.register(LectureBatch)
 admin.site.register(Attendance)
