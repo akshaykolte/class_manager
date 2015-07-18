@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^$', 'portal.views.auth_views.home'),
     url(r'^login/$', 'portal.views.auth_views.login'),
     url(r'^logout/$', 'portal.views.auth_views.logout'),
+    url(r'^student/', include('portal.urls.student_urls')),
 ]
