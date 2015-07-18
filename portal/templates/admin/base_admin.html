@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="http://fonts.googleapis.com/css?family=Titillium+Web:400,600,700" rel="stylesheet" type="text/css">
+
+	<link rel="stylesheet" href="/static/css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="/static/css/style.css"> <!-- Resource style -->
+	<script src="/static/js/modernizr.js"></script> <!-- Modernizr -->
+  	
+	<title>Campus Manager</title>
+</head>
+<body>
+	<header>
+		<a id="cd-logo" href="#0"><img src="/static/img/cd-logo.svg" alt="Homepage"></a>
+
+		<nav id="cd-top-nav">
+			<ul>
+				<li><a href="../../logout">Logout</a></li>
+			</ul>
+		</nav>
+		<!-- <a  id="cd-menu-trigger" href="#0"><span class="cd-menu-text">Menu</span><span class="cd-menu-icon"></span></a> -->
+	</header>
+	<main class="cd-main-content">
+		<br><br><br>
+		{% block main_content %}{% endblock %}
+
+	</main> <!-- cd-main-content -->
+
+	<nav id="cd-lateral-nav">
+		<ul class="cd-navigation">
+			
+			<li class="no-children">
+				<a {% block class_dashboard %}{% endblock %} href="../dashboard/">Dashboard</a>
+			</li>
+
+			<li class="no-children">
+				<a {% block class_set_current_academic_year %}{% endblock %} href="../set_current_academic_year/">Set Academic Year</a>
+			</li>
+
+			<li class="item-has-children">
+				<a href="#0">Fee Report</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_fee_report %}class="sub-menu"{% endblock %} >
+					<li><a {% block class_fee_report_subfield1 %}{% endblock %} href="../fee-report/fee-report-subfield1/">{% block spaces_fee_report_subfield1 %}{% endblock %}Fee Report Subfield1</a></li>
+					<li><a {% block class_fee_report_subfield2 %}{% endblock %} href="../fee-report/fee-report-subfield2/">{% block spaces_fee_report_subfield2 %}{% endblock %}Fee Report Subfield2</a></li>
+				</ul>
+			</li> <!-- item-has-children -->
+
+			<li class="item-has-children">
+				<a href="#0">Manager</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_manager %}class="sub-menu"{% endblock %}>
+					<li><a {% block class_add_manager %}{% endblock %} href="../manager/add-manager/">{% block spaces_add_manager %}{% endblock %}Add Manager</a></li>
+					<li><a {% block class_view_manager %}{% endblock %} href="../manager/view-manager/">{% block spaces_view_manager %}{% endblock %}View/Edit Manager</a></li>
+				</ul>
+			</li> <!-- item-has-children -->
+
+			<li class="item-has-children">
+				<a href="#0">Accountant</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_accountant %}class="sub-menu"{% endblock %}>
+					<li><a {% block class_add_accountant %}{% endblock %} href="../accountant/add-accountant/">{% block spaces_add_accountant %}{% endblock %}Add Accountant</a></li>
+					<li><a {% block class_view_accountant %}{% endblock %} href="../accountant/view-accountant/">{% block spaces_view_accountant %}{% endblock %}View/Edit Accountant</a></li>
+				</ul>
+			</li> <!-- item-has-children -->
+
+			<li class="item-has-children">
+				<a href="#0">Student Report</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_student_report %}class="sub-menu"{% endblock %} >
+					<li><a {% block class_student_report_subfield1 %}{% endblock %} href="../student-report/student-report-subfield1/">{% block spaces_student_report_subfield1 %}{% endblock %}Student Report Subfield1</a></li>
+					<li><a {% block class_student_report_subfield2 %}{% endblock %} href="../student-report/student-report-subfield2/">{% block spaces_student_report_subfield2 %}{% endblock %}Student Report Subfield2</a></li>
+				</ul>
+			</li> <!-- item-has-children -->
+
+			<li class="item-has-children">
+				<a href="#0">Staff Report</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_staff_report %}class="sub-menu"{% endblock %} >
+					<li><a {% block class_staff_report_subfield1 %}{% endblock %} href="../staff-report/staff-report-subfield1/">{% block spaces_staff_report_subfield1 %}{% endblock %}Staff Report Subfield1</a></li>
+					<li><a {% block class_staff_report_subfield2 %}{% endblock %} href="../staff-report/staff-report-subfield2/">{% block spaces_staff_report_subfield2 %}{% endblock %}Staff Report Subfield2</a></li>
+				</ul>
+			</li> <!-- item-has-children -->
+
+
+		</ul> <!-- cd-navigation -->
+
+		<ul class="cd-navigation cd-single-item-wrapper">
+			<li><a {% block class_about %}{% endblock %}href="#0">About</a></li>
+			<li><a {% block class_help %}{% endblock %} href="#0">Help</a></li>
+		</ul> <!-- cd-single-item-wrapper -->
+
+	</nav>
+
+
+	
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/static/js/main.js"></script> <!-- Resource jQuery -->
+</body>
+</html>
