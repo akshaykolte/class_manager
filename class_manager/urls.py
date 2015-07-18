@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^teacher/', include('portal.urls.teacher_urls')),
     url(r'^accountant/', include('portal.urls.accountant_urls')),
     url(r'^manager/', include('portal.urls.manager_urls')),
+    url(r'^admin/', include('portal.urls.admin_urls')),
 ]
