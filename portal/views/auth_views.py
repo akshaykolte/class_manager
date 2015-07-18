@@ -13,15 +13,12 @@ def home(request):
 def login(request):
 	auth_dict = get_user(request)
 	if auth_dict['logged_in']:
-		if auth_dict['login_type'] == 'teacher':
+		if auth_dict['login_type'] == 'staff':
 				return redirect('/teacher/profile/view-profile')
-	
 		elif auth_dict['login_type'] == 'student':
 			return redirect('/student/dashboard/')
-
 		elif auth_dict['login_type'] == 'parent':
 			return redirect('/parent/profile/view-profile/')
-			
 	else:
 		return render(request,'home.html', {'message':'Incorrect login details'})
 

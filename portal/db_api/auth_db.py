@@ -19,7 +19,7 @@ def get_user(request):
 			request.session['user']['permission_parent'] = False
 			request.session['user']['permission_student'] = False
 
-			staff_roles = Staff.objects.filter(staff = staff_obj)
+			staff_roles = StaffRole.objects.filter(staff__id = staff_obj.id)
 
 			for staff_role_obj in staff_roles:
 				if(staff_role_obj.role.name == 'manager'):
