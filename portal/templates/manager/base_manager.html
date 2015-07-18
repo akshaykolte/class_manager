@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="http://fonts.googleapis.com/css?family=Titillium+Web:400,600,700" rel="stylesheet" type="text/css">
+
+	<link rel="stylesheet" href="/static/css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="/static/css/style.css"> <!-- Resource style -->
+	<script src="/static/js/modernizr.js"></script> <!-- Modernizr -->
+  	
+	<title>Campus Manager</title>
+</head>
+<body>
+	<header>
+		<a id="cd-logo" href="#0"><img src="/static/img/cd-logo.svg" alt="Homepage"></a>
+
+		<nav id="cd-top-nav">
+			<ul>
+				<li><a href="../../logout">Logout</a></li>
+			</ul>
+		</nav>
+		<!-- <a  id="cd-menu-trigger" href="#0"><span class="cd-menu-text">Menu</span><span class="cd-menu-icon"></span></a> -->
+	</header>
+	<main class="cd-main-content">
+		<br><br><br>
+		{% block main_content %}{% endblock %}
+
+	</main> <!-- cd-main-content -->
+
+	<nav id="cd-lateral-nav">
+		<ul class="cd-navigation">
+			
+			<li class="no-children">
+				<a {% block class_dashboard %}{% endblock %} href="../dashboard/">Dashboard</a>
+			</li>
+
+			<li class="item-has-children">
+				<a href="#0">Lectures</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_lectures %}class="sub-menu"{% endblock %} >
+					<li><a {% block class_add_lectures %}{% endblock %} href="../lectures/add-lectures/">{% block spaces_add_lectures %}{% endblock %}Add lectures</a></li>
+					<li><a {% block class_view_lectures %}{% endblock %} href="../lectures/view-lectures/">{% block spaces_view_lectures %}{% endblock %}View/Edit lectures</a></li> <!-- Edit will be called after view, so variable names are not named as view-edit -->
+				</ul>
+			</li> <!-- item-has-children -->
+
+			<li class="item-has-children">
+				<a href="#0">Teacher</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_teacher %}class="sub-menu"{% endblock %}>
+					<li><a {% block class_add_teacher %}{% endblock %} href="../teacher/add-teacher/">{% block spaces_add_teacher %}{% endblock %}Add teacher</a></li>
+					<li><a {% block class_view_teacher %}{% endblock %} href="../teacher/view-teacher/">{% block spaces_view_teacher %}{% endblock %}View/Edit teacher</a></li>
+				</ul>
+			</li> <!-- item-has-children -->
+
+			<li class="item-has-children">
+				<a href="#0">Tests</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_tests %}class="sub-menu"{% endblock %}>
+					<li><a {% block class_add_tests %}{% endblock %} href="../tests/add-tests/">{% block spaces_add_tests %}{% endblock %}Add Tests</a></li>
+					<li><a {% block class_assign_batch_to_test %}{% endblock %} href="../tests/assign-batch-to-test/">{% block spaces_assign_batch_to_test %}{% endblock %}Assign Batch to Test</a></li> <!-- Edit will be called after view, so variable names are not named as view-edit -->
+					<li><a {% block class_assign_teacher_to_test %}{% endblock %} href="../tests/assign-teacher-to-test/">{% block spaces_assign_teacher_to_test %}{% endblock %}Assign Teacher to Test</a></li> <!-- Edit will be called after view, so variable names are not named as view-edit -->
+					<li><a {% block class_open_otp %}{% endblock %} href="http://otp.pentaflux.com">{% block spaces_open_otp %}{% endblock %}Open Test Portal</a></li> <!-- Edit will be called after view, so variable names are not named as view-edit -->
+				</ul>
+			</li> <!-- item-has-children -->
+
+			<li class="item-has-children">
+				<a href="#0">Attendance Reports</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_attendance_reports %}class="sub-menu"{% endblock %}>
+					<li><a {% block class_batchwise-attendance %}{% endblock %} href="../attendance-reports/batchwise-attendance/">{% block spaces_batchwise_attendance %}{% endblock %}Batchwise Attendance</a></li>
+					<li><a {% block class_studentwise-attendance %}{% endblock %} href="../attendance-reports/studentwise-attendance/">{% block spaces_studentwise_attendance %}{% endblock %}Studentwise Attendance</a></li>
+					<li><a {% block class_subjectwise-attendance %}{% endblock %} href="../attendance-reports/subjectwise-attendance/">{% block spaces_subjectwise_attendance %}{% endblock %}Subjectwise Attendance</a></li>
+					<li><a {% block class_teacherwise-attendance %}{% endblock %} href="../attendance-reports/teacherwise-attendance/">{% block spaces_teacherwise_attendance %}{% endblock %}Teacherwise Attendance</a></li>
+					<li><a {% block class_lecturewise-attendance %}{% endblock %} href="../attendance-reports/lecturewise-attendance/">{% block spaces_lecturewise_attendance %}{% endblock %}Lecturewise Attendance</a></li>
+				</ul>
+			</li> <!-- item-has-children -->
+
+		</ul> <!-- cd-navigation -->
+
+		<ul class="cd-navigation cd-single-item-wrapper">
+			<li><a {% block class_about %}{% endblock %}href="#0">About</a></li>
+			<li><a {% block class_help %}{% endblock %} href="#0">Help</a></li>
+		</ul> <!-- cd-single-item-wrapper -->
+
+	</nav>
+
+
+	
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/static/js/main.js"></script> <!-- Resource jQuery -->
+</body>
+</html>
