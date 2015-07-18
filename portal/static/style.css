@@ -1,0 +1,637 @@
+/*
+        Page
+==================================================================================================*/
+
+html {
+    color: #444;
+    background: #eee;
+    font: 16px/1.4 'Open Sans', Helvetica, Arial, sans-serif;
+}
+
+
+
+
+
+/*
+        Base
+==================================================================================================*/
+
+em {
+    font-style: italic;
+}
+
+a {
+    color: #0B71B5;
+    -webkit-transition: 0.12s;
+    -moz-transition: 0.12s;
+    transition: 0.12s;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #c00;
+    text-decoration: underline;
+}
+
+
+/*
+        Forms
+==================================================================================================*/
+
+label {
+    cursor: pointer;
+}
+
+form {
+    width: 500px;
+}
+
+.form-tooltip {
+    font-size: 14px;
+    color: #999;
+}
+
+.form-section-description {
+    margin-bottom: 28px;
+}
+
+.form-notice {
+    margin-bottom: 30px;
+}
+
+.form-section-heading {
+    margin-top: 42px;
+    margin-bottom: 16px;
+
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.form-section-heading:first-child {
+    margin-top: 0;
+}
+
+.vertical-form label,
+.vertical-form input,
+.vertical-form textarea,
+.vertical-form select {
+    display: block;
+}
+
+.vertical-form input[type="radio"],
+.vertical-form input[type="checkbox"] {
+    display: inline-block;
+    margin-right: 8px;
+    margin-bottom: 18px;
+}
+
+.vertical-form label {
+    margin-bottom: 10px;
+}
+
+.vertical-form input,
+.vertical-form textarea,
+.vertical-form select {
+    margin-bottom: 28px;
+}
+
+.vertical-form .form-tooltip {
+    margin-top: -20px;
+    margin-bottom: 28px;
+}
+
+
+
+
+
+/*
+        Buttons
+==================================================================================================*/
+
+.button {
+    margin: 0;
+    padding: 6px 20px;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    vertical-align: middle;
+
+    text-align: center;
+    font: 16px/1.4 'Open Sans';
+    color: #fff;
+    text-shadow: 0 1px 0 #333;
+    text-decoration: none;
+
+    background: #0D73B7;
+    background-image: -webkit-linear-gradient(rgba(75, 175, 245, 0.75), rgba(75, 175, 245, 0));
+    background-image: linear-gradient(rgba(75, 175, 245, 0.75), rgba(75, 175, 245, 0));
+
+    border: 1px solid #0D71B3;
+    border-radius: 2px;
+
+    -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.33), 0 1px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.33), 0 1px 3px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    -webkit-appearance: none;
+
+    -webkit-transition: 0.15s;
+    -moz-transition: 0.15s;
+    transition: 0.15s;
+    -webkit-transition-property: background, box-shadow;
+    -moz-transition-property: background, box-shadow;
+    transition-property: background, box-shadow;
+}
+
+.button:hover,
+.button:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #1084D1;
+}
+
+.button:active {
+    color: #fff;
+    text-decoration: none;
+    background-color: #0F84D2;
+    background-image: none;
+    -webkit-box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.33);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.33);
+}
+
+.button-submit {
+    min-width: 150px;
+}
+
+
+
+
+
+/*
+        Radio buttons and checkboxes
+==================================================================================================*/
+
+[type="radio"],
+[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+
+    cursor: pointer;
+}
+
+
+
+
+
+/*
+        Text inputs
+==================================================================================================*/
+
+select,
+textarea,
+[type="text"],
+[type="password"],
+[type="datetime"],
+[type="datetime-local"],
+[type="date"],
+[type="month"],
+[type="time"],
+[type="week"],
+[type="number"],
+[type="email"],
+[type="url"],
+[type="search"],
+[type="tel"],
+[type="color"] {
+    width: 500px;
+    padding: 6px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    vertical-align: middle;
+
+    font: 16px/1.4 'Open Sans', Helvetica, Arial, sans-serif;
+    color: #444;
+
+    background: #fafaff;
+
+    border: 1px solid #46ADF2;
+    border-radius: 2px;
+
+    -webkit-transition: 0.15s border-color, 0.15s background;
+    -moz-transition: 0.15s border-color, 0.15s background;
+    transition: 0.15s border-color, 0.15s background;
+}
+
+textarea {
+    height: 300px;
+    overflow-y: auto;
+}
+
+select:focus,
+textarea:focus,
+[type="text"]:focus,
+[type="password"]:focus,
+[type="datetime"]:focus,
+[type="datetime-local"]:focus,
+[type="date"]:focus,
+[type="month"]:focus,
+[type="time"]:focus,
+[type="week"]:focus,
+[type="number"]:focus,
+[type="email"]:focus,
+[type="url"]:focus,
+[type="search"]:focus,
+[type="tel"]:focus,
+[type="color"]:focus {
+    background: #fff;
+    border-color: #0E6FAF;
+    outline: none;
+}
+
+
+
+
+
+/*
+        Notices
+==================================================================================================*/
+
+.notice {
+    width: 500px;
+    padding: 16px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    color: #3d7fb2;
+    background: #dfebf4;
+
+    border: 1px solid #99c3e3;
+    border-radius: 2px;
+}
+
+.notice-success {
+    color: #339136;
+    background: #d4e8d5;
+    border-color: #96cb98;
+}
+
+.notice-error {
+    color: #b94a48;
+    background: #eacfcf;
+    border-color: #d49191;
+}
+
+.notice-heading {
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.notice-heading:last-child {
+    margin-bottom: 0;
+}
+
+.notice-message {
+    margin-top: 8px;
+}
+
+.notice-message:first-child {
+    margin-top: 0;
+}
+
+
+
+
+/*
+        Main content
+==================================================================================================*/
+
+.main-content {
+    margin-left: 275px;
+    padding: 30px 50px 50px;
+}
+
+
+
+
+
+/*
+        Sidebar
+==================================================================================================*/
+
+.sidebar {
+    width: 274px;
+    height: 100%;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    color: #e2e2e2;
+    text-shadow: 0 1px #111;
+
+    background: #444;
+    border-right: 1px solid #333;
+    -webkit-box-shadow: 2px 0 6px #888;
+    box-shadow: 2px 0 6px #888;
+}
+
+.sidebar:after {
+    content: '';
+
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sidebar a {
+    color: #54B4F3;
+}
+
+.sidebar a:hover {
+    color: #82C8F7;
+}
+
+
+
+
+
+/*
+        Logo
+==================================================================================================*/
+
+a.logo {
+    display: block;
+    padding: 20px;
+
+    font-size: 28px;
+    font-weight: 300;
+    color: #fff;
+    text-decoration: none;
+}
+
+
+
+
+
+/*
+        Main navigation
+==================================================================================================*/
+
+.main-nav {
+    margin: 0;
+    padding: 0;
+
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #595959;
+
+    list-style: none;
+}
+
+.main-nav li {
+    position: relative;
+
+    border-top: 1px solid #595959;
+    border-bottom: 1px solid #333;
+}
+
+.main-nav li.active {
+    background: #0B71B5;
+    border-top: 1px solid #1097F1;
+}
+
+.main-nav a {
+    display: block;
+    padding: 12px 20px;
+    vertical-align: middle;
+
+    line-height: 1;
+    color: inherit;
+    text-decoration: inherit;
+
+    -webkit-transition: 0.15s;
+    -moz-transition: 0.15s;
+    transition: 0.15s;
+}
+
+.main-nav a:hover,
+.main-nav a:focus {
+    color: inherit;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.main-nav i {
+    width: 18px;
+    margin-right: 10px;
+}
+
+/*
+        Page heading
+==================================================================================================*/
+
+.page-heading {
+    margin: 0 auto;
+    margin-bottom: 30px;
+    font-size: 42px;
+    line-height: 1;
+    color: #0B71B5;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.page-heading > i {
+    margin-right: 0.5em;
+}
+
+
+
+
+
+/*
+        Page description
+==================================================================================================*/
+
+.page-description {
+    margin-bottom: 30px;
+}
+
+
+
+
+
+/*
+        Subscription info
+==================================================================================================*/
+
+.subscription-info {
+    margin-bottom: 35px;
+    font-size: 32px;
+}
+
+.subscription-info-number {
+    font-size: 36px;
+    font-weight: 800;
+}
+
+
+
+
+
+/*
+        Subscription list
+==================================================================================================*/
+
+.subscription-list {
+    width: 348px;
+    height: 400px;
+    margin-right: 30px;
+
+    overflow: auto;
+    float: left;
+
+    background: #fff;
+
+    border: 1px solid #94C2E2;
+    border-radius: 2px;
+}
+
+.subscription-list > li {
+    padding: 5px 10px;
+}
+
+.subscription-list > li:nth-child(2n) {
+    background: #f5f5f5;
+}
+
+
+
+
+
+/*
+        Subscription actions
+==================================================================================================*/
+
+.subscription-actions {
+    float: left;
+}
+
+.subscription-actions .button {
+    display: block;
+    width: 100%;
+    margin-bottom: 16px;
+    -webkit-appearance: none;
+}
+
+
+
+
+
+/*
+        Centered page
+==================================================================================================*/
+
+.centered-page-html {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.centered-page-body {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+
+
+
+
+/*
+        Form page
+==================================================================================================*/
+
+.form-page-html {
+    background: -webkit-radial-gradient(#eee, #eee 25%, #bbb);
+    background: radial-gradient(#eee, #eee 25%, #bbb);
+}
+
+.form-page-content {
+    display: inline-block;
+    width: 300px;
+}
+
+.form-page-form {
+    width: auto;
+}
+
+.form-page-pict {
+    width: 600px;
+    margin-bottom: 15px;
+    font-weight: 300;
+}
+
+
+.form-page-heading {
+    margin-bottom: 15px;
+    font-weight: 300;
+}
+
+
+.form-page-heading-2 {
+    padding-top: 70px;
+    margin-bottom: 15px;
+    font-size: 25px;
+    font-weight: 300;
+}
+
+.form-page-description {
+    margin-bottom: 15px;
+}
+
+.form-page-notice {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+}
+
+.form-page-text-field {
+    width: 300px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.form-page-notice-title {
+    width: 500px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.form-page-submit {
+    display: block;
+    width: 300px;
+}
+
+.styleSelect select {
+  background: transparent;
+  width: 168px;
+  padding: 5px;
+  font-size: 16px;
+  line-height: 1;
+  border: 0;
+  border-radius: 0;
+  height: 34px;
+  -webkit-appearance: none;
+  color: #000;
+}
+
+.styleSelect {
+  width: 140px;
+  height: 34px;
+  overflow: hidden;
+  background: url("img/downarrow.png") no-repeat right #fff;
+  border: 2px solid #000;
+}
