@@ -14,7 +14,7 @@ def login(request):
 	auth_dict = get_user(request)
 	if auth_dict['logged_in']:
 		if auth_dict['login_type'] == 'staff':
-				return redirect('/teacher/profile/view-profile')
+				return redirect('/teacher/dashboard/')
 		elif auth_dict['login_type'] == 'student':
 			return redirect('/student/dashboard/')
 		elif auth_dict['login_type'] == 'parent':
