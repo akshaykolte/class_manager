@@ -8,3 +8,24 @@ def home(request):
 	if auth_dict['logged_in']:
 		context = {'logged_in':True,'message':'You are logged in'}
 	return render(request,'home.html',context)
+
+@csrf_exempt
+def login(request):
+	auth_dict = get_user(request)
+	if auth_dict['logged_in']:
+		if auth_dict['login_type'] == 'teacher':
+				return redirect('/teacher/profile/view-profile')
+	
+		elif auth_dict['login_type'] == 'student':
+			return redirect('/student/dashboard/')
+
+		elif auth_dict['login_type'] == 'parent':
+			return redirect('/parent/profile/view-profile/')
+			
+	else:
+		return render(request,'home.html', {'message':'Incorrect login details'})
+
+def logout(request):
+	set_logout(request)
+	return redirect('/')
+
