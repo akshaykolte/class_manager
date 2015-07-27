@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="http://fonts.googleapis.com/css?family=Titillium+Web:400,600,700" rel="stylesheet" type="text/css">
+
+	<link rel="stylesheet" href="/static/css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="/static/css/style.css"> <!-- Resource style -->
+	<script src="/static/js/modernizr.js"></script> <!-- Modernizr -->
+  	
+	<title>Campus Manager</title>
+</head>
+<body>
+	<header>
+		<a id="cd-logo" href="#0"><img src="/static/img/cd-logo.svg" alt="Homepage"></a>
+
+		<nav id="cd-top-nav">
+			<ul>
+				<li><a href="../../logout">Logout</a></li>
+			</ul>
+		</nav>
+		<!-- <a  id="cd-menu-trigger" href="#0"><span class="cd-menu-text">Menu</span><span class="cd-menu-icon"></span></a> -->
+	</header>
+	<main class="cd-main-content">
+		<br><br><br>
+		{% block main_content %}{% endblock %}
+
+	</main> <!-- cd-main-content -->
+
+	<nav id="cd-lateral-nav">
+		<ul class="cd-navigation">
+			
+			<li class="no-children">
+				<a {% block class_dashboard %}{% endblock %} href="/student/dashboard/">Dashboard</a>
+			</li>
+
+			<li class="item-has-children">
+				<a href="#0">Attendance</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_attendance %}class="sub-menu"{% endblock %} >
+					<li><a {% block class_mark_attendance %}{% endblock %} href="../attendance/mark-attendance">{% block spaces_mark_attendance %}{% endblock %}Mark Attendance</a></li>
+					<li><a {% block class_view_attendance %}{% endblock %} href="../attendance/view-attendance">{% block spaces_view_attendance %}{% endblock %}View Attendance</a></li>
+				</ul>
+			</li> <!-- item-has-children -->
+
+			<li class="item-has-children">
+				<a href="#0">Lectures</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_lectures %}class="sub-menu"{% endblock %}>
+					<li><a {% block class_add_lectures %}{% endblock %} href="../lectures/add-lectures">{% block spaces_add_lectures %}{% endblock %}Add Lectures</a></li> <!-- only lecture batch will be created, not lectures -->
+					<li><a {% block class_view_lectures %}{% endblock %} href="../lectures/view-lectures">{% block spaces_view_lectures %}{% endblock %}View Lectures</a></li>
+				</ul>
+			</li> <!-- item-has-children -->
+
+			<li class="no-children">
+				<a href="http://otp.pentaflux.com">Online Test Portal</a>
+			</li>
+
+
+		</ul> <!-- cd-navigation -->
+
+		<ul class="cd-navigation cd-single-item-wrapper">
+			<li><a {% block class_about %}{% endblock %}href="#0">About</a></li>
+			<li><a {% block class_help %}{% endblock %} href="#0">Help</a></li>
+		</ul> <!-- cd-single-item-wrapper -->
+
+	</nav>
+
+
+	
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/static/js/main.js"></script> <!-- Resource jQuery -->
+</body>
+</html>
