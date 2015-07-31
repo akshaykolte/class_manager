@@ -7,6 +7,10 @@ from portal.db_api.auth_db import *
 def view_profile(request):
 
 	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
 	if auth_dict['permission_teacher'] != True:
 		raise Http404
 
@@ -14,12 +18,15 @@ def view_profile(request):
 	
 	context = {'auth_dict':auth_dict, 'details':details}
 
-	return render(request,'teacher/view-profile.html', context)
+	return render(request,'teacher/profile/view-profile.html', context)
 
 def change_password(request):
 
 	auth_dict = get_user(request)
 	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
 	if auth_dict['permission_teacher'] != True:
 		raise Http404
 	if 'message' in request.GET:
@@ -34,6 +41,9 @@ def change_password(request):
 def change_password_submit(request):
 
 	auth_dict = get_user(request)
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
 	if auth_dict['permission_teacher'] != True:
 		raise Http404
 	if change_password_db(request):
@@ -41,7 +51,39 @@ def change_password_submit(request):
 	else:
 		return redirect('/teacher/profile/change-password/?message_error=Password Change Failed')
 
+def logout(request):
+	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	set_logout(request)
+	return redirect('/')
+
 
 def dashboard(request):
+
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	
+
+
+
+	# TODO Notices model yet to implement
+	
+
+
+
+
+
 
 	return render(request,'teacher/dashboard.html')
