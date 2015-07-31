@@ -64,7 +64,7 @@ def set_staff_role(id = None,role_id = None,staff_id = None,branch_id = None):
 		staff_role_object.save()
 		return staff_role_object.id
 
-def get_staff(id= None):
+def get_staff(id = None):
 	is_none_id = id == None
 	if not is_none_id:
 		staff_object = Staff.objects.get(id=id)

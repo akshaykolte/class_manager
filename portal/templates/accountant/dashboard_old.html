@@ -1,0 +1,21 @@
+{% extends "accountant/base_accountant.html" %}
+
+{% block class_dashboard %}class="current"{% endblock %}
+
+{% comment "Code for attendance" %}
+	{% block class_attendance %}class="submenu-open"{% endblock %}
+	{% block spaces_mark_attendance %}&nbsp;&nbsp;&nbsp;{% endblock %}
+	{% block spaces_view_attendance %}&nbsp;&nbsp;&nbsp;{% endblock %}
+	{% block class_view_attendance %}class="current"{% endblock %}
+{% endcomment %}
+
+{% comment "Code for lectures" %}
+	{% block class_lectures %}class="submenu-open"{% endblock %}
+	{% block spaces_add_lectures %}&nbsp;&nbsp;&nbsp;{% endblock %}
+	{% block spaces_view_lectures %}&nbsp;&nbsp;&nbsp;{% endblock %}
+	{% block class_view_lectures %}class="current"{% endblock %}
+{% endcomment %}
+
+{% block main_content%}
+<h1> Dashboard </h1>
+{% endblock %}

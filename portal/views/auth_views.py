@@ -14,7 +14,17 @@ def login(request):
 	auth_dict = get_user(request)
 	if auth_dict['logged_in']:
 		if auth_dict['login_type'] == 'staff':
+			if auth_dict['permission_admin'] == True:
+				return redirect('/admin/dashboard/')
+
+			elif auth_dict['permission_manager'] == True:
+				return redirect('/manager/dashboard/')
+
+			elif auth_dict['permission_teacher'] == True:
 				return redirect('/teacher/dashboard/')
+			if auth_dict['permission_accountant'] == True:
+				return redirect('/accountant/dashboard/')
+
 		elif auth_dict['login_type'] == 'student':
 			return redirect('/student/dashboard/')
 		elif auth_dict['login_type'] == 'parent':

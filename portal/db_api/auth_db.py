@@ -24,6 +24,7 @@ def get_user(request):
 			for staff_role_obj in staff_roles:
 				if(staff_role_obj.role.name == 'manager'):
 					request.session['user']['permission_manager'] = True
+
 		
 				if(staff_role_obj.role.name == 'teacher'):
 					request.session['user']['permission_teacher'] = True
@@ -77,6 +78,7 @@ def get_user(request):
 	if not 'user' in request.session:
 		request.session['user'] = {'logged_in':False}
 		request.session.modified = True
+	print request.session['user']
 	return request.session['user']
 
 

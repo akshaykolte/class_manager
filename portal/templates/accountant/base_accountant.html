@@ -1,91 +1,314 @@
-<!doctype html>
-<html lang="en" class="no-js">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link href="http://fonts.googleapis.com/css?family=Titillium+Web:400,600,700" rel="stylesheet" type="text/css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-	<link rel="stylesheet" href="/static/css/reset.css"> <!-- CSS reset -->
-	<link rel="stylesheet" href="/static/css/style.css"> <!-- Resource style -->
-	<script src="/static/js/modernizr.js"></script> <!-- Modernizr -->
-  	
-	<title>Campus Manager</title>
+    <title>PentaClass</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="/static/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Timeline CSS -->
+    <link href="/static/dist/css/timeline.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/static/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <!-- <link href="../bower_components/morrisjs/morris.css" rel="stylesheet"> -->
+
+    <!-- Custom Fonts -->
+    <link href="/static/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
 </head>
+
 <body>
-	<header>
-		<a id="cd-logo" href="#0"><img src="/static/img/cd-logo.svg" alt="Homepage"></a>
 
-		<nav id="cd-top-nav">
-			<ul>
-				<li><a href="../../logout">Logout</a></li>
-			</ul>
-		</nav>
-		<!-- <a  id="cd-menu-trigger" href="#0"><span class="cd-menu-text">Menu</span><span class="cd-menu-icon"></span></a> -->
-	</header>
-	<main class="cd-main-content">
-		<br><br><br>
-		{% block main_content %}{% endblock %}
+    <div id="wrapper">
 
-	</main> <!-- cd-main-content -->
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">PentaClass</a>
+            </div>
+            <!-- /.navbar-header -->
 
-	<nav id="cd-lateral-nav">
-		<ul class="cd-navigation">
-			
-			<li class="no-children">
-				<a {% block class_dashboard %}{% endblock %} href="../dashboard/">Dashboard</a>
-			</li>
+            <ul class="nav navbar-top-links navbar-right">
+                <!-- <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>Read All Messages</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li> -->
 
-			<li class="item-has-children">
-				<a href="#0">Subjects</a>
-				<!--ul class="sub-menu"-->
-				<ul {% block class_subjects %}class="sub-menu"{% endblock %} >
-					<li><a {% block class_add_subjects %}{% endblock %} href="../subject/add-subjects">{% block spaces_add_subjects %}{% endblock %}Add subjects</a></li>
-					<li><a {% block class_view_subjects %}{% endblock %} href="../subject/view-subjects">{% block spaces_view_subjects %}{% endblock %}View/Edit subjects</a></li> <!-- Edit will be called after view, so variable names are not named as view-edit -->
-				</ul>
-			</li> <!-- item-has-children -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <!-- <i class="fa fa-tasks fa-fw"></i>  --><strong>Use As</strong> &nbsp;<i class="fa fa-caret-down"></i> 
+                    </a>
+                    <ul class="dropdown-menu" style="width:200px;">
+                        {% block use_as %}
+                        <li>
+                            <a href="#">
+                                <strong>Admin</strong>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <strong>Accountant</strong><span class="pull-right"><i class="fa fa-check"></i></span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <strong>Manager</strong>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                               <strong>Teacher</strong> 
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <strong>Student</strong>
+                            </a>
+                        </li>
+                        {% endblock %}
+                    </ul>
+                    <!-- /.dropdown-tasks -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        {% block notifs %}
+                        <!-- <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-comment fa-fw"></i> New Comment
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-tasks fa-fw"></i> New Task
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li> -->
+                        {% endblock %}
+                    </ul>
+                    <!-- /.dropdown-alerts -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="/accountant/view-profile"><i class="fa fa-user fa-fw"></i> View Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="../../logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
 
-			<li class="item-has-children">
-				<a href="#0">Batches</a>
-				<!--ul class="sub-menu"-->
-				<ul {% block class_batches %}class="sub-menu"{% endblock %}>
-					<li><a {% block class_add_batches %}{% endblock %} href="../batches/add-batches">{% block spaces_add_batches %}{% endblock %}Add Batches</a></li>
-					<li><a {% block class_view_batches %}{% endblock %} href="../batches/view-batches">{% block spaces_view_batches %}{% endblock %}View/Edit Batches</a></li> <!-- Edit will be called after view, so variable names are not named as view-edit -->
-				</ul>
-			</li> <!-- item-has-children -->
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                     <ul class="nav" id="side-menu">
+                        <!-- <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+                        </li> -->
+                        <li>
+                            <a href="/accountant/dashboard/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-calendar-o"></i> Attendance<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/teacher/attendance/mark-attendance/">Mark Attendance</a>
+                                </li>
+                                <li>
+                                    <a href="/teacher/attendance/view-attendance/">View Attendance</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-edit fa-fw"></i> Fees<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/teacher/lectures/add-lectures/">View Batch Fees</a>
+                                </li>
+                                <li>
+                                    <a href="/teacher/lectures/view-lectures/">Set Student Fees</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="http://otp.pentaflux.com"><i class="fa fa-pencil"></i> <strong>Online Test Portal</strong></a>
+                        </li>
+                        </br></br></br></br></br></br>
+                        Note: See UI/startbootstrap-sb-admin-2-1.0.7/pages/tables.html to choose the right table for attendance, etc.
+                        </br></br>
+                              See UI/startbootstrap-sb-admin-2-1.0.7/pages/forms.html to use right input type
+                        </br></br>
+                              Also see panels-wells.html and buttons.html
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
 
-			<li class="item-has-children">
-				<a href="#0">Fees</a>
-				<!--ul class="sub-menu"-->
-				<ul {% block class_fees %}class="sub-menu"{% endblock %}>
-					<li><a {% block class_add_fees %}{% endblock %} href="../fees/add-fees">{% block spaces_add_fees %}{% endblock %}Add Fees</a></li>
-					<li><a {% block class_view_fees %}{% endblock %} href="../fees/view-fees">{% block spaces_view_fees %}{% endblock %}View/Edit Fees</a></li> <!-- Edit will be called after view, so variable names are not named as view-edit -->
-					<li><a {% block class_add_transaction %}{% endblock %} href="../fees/add-transaction">{% block spaces_add_transaction %}{% endblock %}Add Transaction</a></li>
-					<li><a {% block class_view_transaction %}{% endblock %} href="../fees/view-transaction">{% block spaces_view_transaction %}{% endblock %}View Transaction</a></li>
-				</ul>
-			</li> <!-- item-has-children -->
+        <div id="page-wrapper">
+            {% block main_content %}  
+  
+            {% endblock %}
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
 
-			<li class="item-has-children">
-				<a href="#0">Students</a>
-				<!--ul class="sub-menu"-->
-				<ul {% block class_students %}class="sub-menu"{% endblock %}>
-					<li><a {% block class_admin_students %}{% endblock %} href="../students/admit-students">{% block spaces_admit_students %}{% endblock %}Admit Students</a></li>
-					<li><a {% block class_create_students %}{% endblock %} href="../students/create-students">{% block spaces_create_students %}{% endblock %}Create Students</a></li>
-					<li><a {% block class_view_students %}{% endblock %} href="../students/view-students">{% block spaces_view_students %}{% endblock %}View/Edit Students</a></li> <!-- implement search for students and show fee deatails of different academic years --> <!-- also implement add/edit/view parents -->
-				</ul>
-			</li> <!-- item-has-children -->
-		</ul> <!-- cd-navigation -->
+    <!-- jQuery -->
+    <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
 
-		<ul class="cd-navigation cd-single-item-wrapper">
-			<li><a {% block class_about %}{% endblock %}href="#0">About</a></li>
-			<li><a {% block class_help %}{% endblock %} href="#0">Help</a></li>
-		</ul> <!-- cd-single-item-wrapper -->
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-	</nav>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="/static/bower_components/metisMenu/dist/metisMenu.min.js"></script>
 
+    <!-- Morris Charts JavaScript
+    <script src="/static/bower_components/raphael/raphael-min.js"></script>
+    <script src="/static/bower_components/morrisjs/morris.min.js"></script>
+    <script src="/static/morris-graphs/js/morris-data.js"></script -->
+    
+    <!-- Custom Theme JavaScript -->
+    <script src="/static/dist/js/sb-admin-2.js"></script>
 
-	
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="/static/js/main.js"></script> <!-- Resource jQuery -->
 </body>
+
 </html>

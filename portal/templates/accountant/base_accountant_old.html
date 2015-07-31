@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="http://fonts.googleapis.com/css?family=Titillium+Web:400,600,700" rel="stylesheet" type="text/css">
+
+	<link rel="stylesheet" href="/static/css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="/static/css/style.css"> <!-- Resource style -->
+	<script src="/static/js/modernizr.js"></script> <!-- Modernizr -->
+  	
+	<title>Campus Manager</title>
+</head>
+<body>
+	<header>
+		<a id="cd-logo" href="#0"><img src="/static/img/cd-logo.svg" alt="Homepage"></a>
+
+		<nav id="cd-top-nav">
+			<ul>
+				<li><a href="../../logout">Logout</a></li>
+			</ul>
+		</nav>
+		<!-- <a  id="cd-menu-trigger" href="#0"><span class="cd-menu-text">Menu</span><span class="cd-menu-icon"></span></a> -->
+	</header>
+	<main class="cd-main-content">
+		<br><br><br>
+		{% block main_content %}{% endblock %}
+
+	</main> <!-- cd-main-content -->
+
+	<nav id="cd-lateral-nav">
+		<ul class="cd-navigation">
+			
+			<li class="no-children">
+				<a {% block class_dashboard %}{% endblock %} href="../dashboard/">Dashboard</a>
+			</li>
+
+			<li class="item-has-children">
+				<a href="#0">Subjects</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_subjects %}class="sub-menu"{% endblock %} >
+					<li><a {% block class_add_subjects %}{% endblock %} href="../subject/add-subjects">{% block spaces_add_subjects %}{% endblock %}Add subjects</a></li>
+					<li><a {% block class_view_subjects %}{% endblock %} href="../subject/view-subjects">{% block spaces_view_subjects %}{% endblock %}View/Edit subjects</a></li> <!-- Edit will be called after view, so variable names are not named as view-edit -->
+				</ul>
+			</li> <!-- item-has-children -->
+
+			<li class="item-has-children">
+				<a href="#0">Batches</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_batches %}class="sub-menu"{% endblock %}>
+					<li><a {% block class_add_batches %}{% endblock %} href="../batches/add-batches">{% block spaces_add_batches %}{% endblock %}Add Batches</a></li>
+					<li><a {% block class_view_batches %}{% endblock %} href="../batches/view-batches">{% block spaces_view_batches %}{% endblock %}View/Edit Batches</a></li> <!-- Edit will be called after view, so variable names are not named as view-edit -->
+				</ul>
+			</li> <!-- item-has-children -->
+
+			<li class="item-has-children">
+				<a href="#0">Fees</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_fees %}class="sub-menu"{% endblock %}>
+					<li><a {% block class_add_fees %}{% endblock %} href="../fees/set-fees">{% block spaces_add_fees %}{% endblock %}Set Fees for Student</a></li>
+					<li><a {% block class_view_fees %}{% endblock %} href="../fees/view-fees">{% block spaces_view_fees %}{% endblock %}View Batch Fees</a></li> <!-- Edit will be called after view, so variable names are not named as view-edit 
+					<li><a {% block class_add_transaction %}{% endblock %} href="../fees/add-transaction">{% block spaces_add_transaction %}{% endblock %}Add Transaction</a></li>
+					<li><a {% block class_view_transaction %}{% endblock %} href="../fees/view-transaction">{% block spaces_view_transaction %}{% endblock %}View Transaction</a></li>-->
+				</ul>
+			</li> <!-- item-has-children -->
+
+			<li class="item-has-children">
+				<a href="#0">Students</a>
+				<!--ul class="sub-menu"-->
+				<ul {% block class_students %}class="sub-menu"{% endblock %}>
+					<li><a {% block class_admin_students %}{% endblock %} href="../students/admit-students">{% block spaces_admit_students %}{% endblock %}Admit Students</a></li>
+					<li><a {% block class_create_students %}{% endblock %} href="../students/create-students">{% block spaces_create_students %}{% endblock %}Create Students</a></li>
+					<li><a {% block class_view_students %}{% endblock %} href="../students/view-students">{% block spaces_view_students %}{% endblock %}View/Edit Students</a></li> <!-- implement search for students and show fee deatails of different academic years --> <!-- also implement add/edit/view parents -->
+				</ul>
+			</li> <!-- item-has-children -->
+		</ul> <!-- cd-navigation -->
+
+		<ul class="cd-navigation cd-single-item-wrapper">
+			<li><a {% block class_about %}{% endblock %}href="#0">About</a></li>
+			<li><a {% block class_help %}{% endblock %} href="#0">Help</a></li>
+		</ul> <!-- cd-single-item-wrapper -->
+
+	</nav>
+
+
+	
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/static/js/main.js"></script> <!-- Resource jQuery -->
+</body>
+</html>
