@@ -1,6 +1,5 @@
 from django.shortcuts import render,redirect
 from django.views.decorators.csrf import csrf_exempt
-from portal.db_api.auth_db import *
 from django.http import Http404
 from portal.db_api.staff_db import *
 from portal.db_api.auth_db import *
@@ -15,7 +14,7 @@ def view_profile(request):
 	
 	context = {'auth_dict':auth_dict, 'details':details}
 
-	return render(request,'teacher/profile/view-profile.html', context)
+	return render(request,'teacher/view-profile.html', context)
 
 def change_password(request):
 

@@ -23,7 +23,7 @@ def login(request):
 			elif auth_dict['permission_teacher'] == True:
 				return redirect('/teacher/dashboard/')
 			if auth_dict['permission_accountant'] == True:
-				return redirect('/accountant/dashboard/')
+				return redirect('/accountant/dashboard/dashboard')
 
 		elif auth_dict['login_type'] == 'student':
 			return redirect('/student/dashboard/')
