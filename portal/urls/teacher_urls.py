@@ -2,7 +2,22 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
+
+	# Profile
+	url(r'^profile/view-profile/$', 'portal.views.teacher_views.view_profile'),
+	# url(r'^profile/edit-profile/$', 'portal.views.teacher_views.edit_profile'),
+	url(r'^profile/change-password/$', 'portal.views.teacher_views.change_password'),
+	url(r'^profile/change-password/submit$', 'portal.views.teacher_views.change_password_submit'),
+	# url(r'^profile/logout/$', 'portal.views.teacher_views.logout'),
+	
+	# Dashboard
     url(r'^dashboard/$', 'portal.views.teacher_views.dashboard'),
-    url(r'^attendance/mark-attendance/$', 'portal.views.teacher_views.mark_attendance'),
-    url(r'^attendance/view-attendance/$', 'portal.views.teacher_views.view_attendance'),
+    
+    # Attendance
+    # url(r'^attendance/mark-attendance/$', 'portal.views.teacher_views.mark_attendance'),
+    # url(r'^attendance/view-attendance/$', 'portal.views.teacher_views.view_attendance'),
+    
+    # # Lecture
+    # url(r'^attendance/add-lecture/$', 'portal.views.teacher_views.add_lecture'),
+    # url(r'^attendance/view-lecture/$', 'portal.views.teacher_views.view_lecture'),
 ]

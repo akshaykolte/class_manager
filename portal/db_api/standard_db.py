@@ -23,12 +23,14 @@ def get_standard(id=None):
 		standard_object = Standard.objects.get(id = id)
 		standard = {}
 		standard['name'] = standard_object.name
+		standard['id'] = standard_object.id
 		return standard
 	else:
 		standard_list = []
 		for standard_object in Standard.objects.all():
 			standard = {}
 			standard['name'] = standard_object.name
+			standard['id'] = standard_object.id
 			standard_list.append(standard)
 		return standard_list
 

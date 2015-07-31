@@ -1,77 +1,88 @@
-<!doctype html>
-<html lang="en" class="no-js">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link href='/static/fonts/google-fonts.css' rel='stylesheet' type='text/css'>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="short icon" href="">
 
-	<!-- <link rel="stylesheet" href="/static/css/reset.css"> <! CSS reset > -->
-	<link rel="stylesheet" href="/static/css/style.css"> <!-- Resource style -->
-	<script src="/static/js/modernizr.js"></script> <!-- Modernizr -->
-  	
-	<title>Campus Manager</title>
+    <title>PentaClass</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="/static/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/static/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/static/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
 </head>
 
-<body style="margin:0px;">
-	<header>
-		<!-- <a id="cd-logo" href="#0"><img src="/static/img/cd-logo.svg" alt="Homepage"></a> -->
+<body>
 
-		<nav id="cd-top-nav">
-		</nav>
-	</header>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Please Sign In</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" action='/login/' method='post'>
+                            <fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Username" name="username" type="text" autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                </div>
+                                <!-- Change this to a button or input when using this as a form -->
+                                <input class='btn btn-lg btn-success btn-block' type='submit' value='Login'>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+                {% if message %}
+                    <div class="col-lg-12">
+                    <div class="panel panel-red">
+                        <div class="panel-heading">
+                            <span class='col-md-offset-3'>&nbsp;&nbsp;{{message}}</span>
+                        </div>
+                    </div>
+                    <!-- /.col-lg-4 -->
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
-	<br><br><br>
-	<div width="100%" align="center">
-		<table><tr><td><a id="cd-logo" href="#0"><img src="/static/img/logo.png" alt="Homepage"></a></td></tr></table>
-	</div>
-		
-		<form align="center" action="/login/" method="POST">
-			<div width="100%" align="center">	
-				<table>
-					<tr><td><h1 style="color:#000;">Login</h1></td></tr>
-				</table>
-				<table class="uif-table">
-					<tr>
-						<td>
-							<h3 style="color:#000;">Username:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h3>
-						</td>
-						<td>
-							<input type="text" class="uif-input" name="username">
-						</td>
-					</tr>
-					<tr><td><h3 style="color:#000;">Password: </h3></td><td><input class="uif-input" type="password" name="password"></td></tr>
-				</table>
-				<table>
-					<tr><td><input class="uif-button" type="submit" value="&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;"> <br/></td></tr>
-				</table>
-			</div>	
-		</form>
-		<br>
-	{% if message %}	
-		<table align="center">
-			<tr><td>
-				<div style="margin: 0;padding: 0;border: 3;font-size: 100%;font: inherit;vertical-align: baseline;" align="center" class="uif-message">
-					<p>{{message}}</p>
-				</div>
-			</td></tr>
-		</table>
-	{% endif %}
-	{% if logged_in %}
-		<a href="/logout/">logout</a>
-	{% endif %}
+    <!-- jQuery -->
+    <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
 
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-	
-<script src="/static/jquery/jquery.min.js"></script>
-<script src="/static/js/main.js"></script> <!-- Resource jQuery -->
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="/static/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="/static/dist/js/sb-admin-2.js"></script>
+
 </body>
-</html>
 
-
-
-
-<html>
-	
 </html>
