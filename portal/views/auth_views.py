@@ -18,7 +18,7 @@ def login(request):
 		elif auth_dict['login_type'] == 'student':
 			return redirect('/student/dashboard/')
 		elif auth_dict['login_type'] == 'parent':
-			return redirect('/parent/profile/view-profile/')
+			return redirect('/parent/dashboard/')
 	else:
 		return render(request,'home.html', {'message':'Incorrect login details'})
 
