@@ -5,7 +5,8 @@ urlpatterns = [
 
 	# Profile
 	url(r'^profile/view-profile/$', 'portal.views.teacher_views.view_profile'),
-	# url(r'^profile/edit-profile/$', 'portal.views.teacher_views.edit_profile'),
+	url(r'^profile/edit-profile/$', 'portal.views.teacher_views.edit_profile'),
+	url(r'^profile/edit-profile/submit$', 'portal.views.teacher_views.edit_profile_submit'),
 	url(r'^profile/change-password/$', 'portal.views.teacher_views.change_password'),
 	url(r'^profile/change-password/submit$', 'portal.views.teacher_views.change_password_submit'),
 	url(r'^profile/logout/$', 'portal.views.teacher_views.logout'),

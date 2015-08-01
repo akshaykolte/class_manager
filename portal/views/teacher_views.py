@@ -7,6 +7,23 @@ from portal.db_api.auth_db import *
 def view_profile(request):
 
 	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	details = get_staff(id=auth_dict['id'])
+	
+	context['auth_dict'] =auth_dict
+	context['details'] = details
+
+	return render(request,'teacher/profile/view-profile.html', context)
+
+def edit_profile(request):
+	auth_dict = get_user(request)
+	context = {}
 
 	if auth_dict['logged_in'] == False:
 		raise Http404
@@ -16,9 +33,27 @@ def view_profile(request):
 
 	details = get_staff(id=auth_dict['id'])
 	
-	context = {'auth_dict':auth_dict, 'details':details}
+	context['auth_dict'] =auth_dict
+	context['details'] = details
 
-	return render(request,'teacher/profile/view-profile.html', context)
+	return render(request, 'teacher/profile/edit-profile.html', context)
+
+@csrf_exempt
+def edit_profile_submit(request):
+
+	auth_dict = get_user(request)
+	context = {}
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	set_staff(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
+
+	return redirect('/teacher/profile/view-profile')
+
 
 def change_password(request):
 
