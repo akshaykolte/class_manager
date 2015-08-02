@@ -91,38 +91,46 @@ def change_password_db(request):
 
 	if 'oldpassword' in request.POST :
 		
-		if request.session['user']['login_type']=='staff':
-			staff_obj=Staff.objects.get(id=request.session['user']['id'])
-			if staff_obj.password == request.POST['oldpassword']:
-				staff_obj.password=request.POST['newpassword']
-				staff_obj.save()
-				return True
-			
-			else:
+		if request.POST['newpassword'] == request.POST['repassword']:
+			if request.session['user']['login_type']=='staff':
+				staff_obj=Staff.objects.get(id=request.session['user']['id'])
+				if staff_obj.password == request.POST['oldpassword']:
+					staff_obj.password=request.POST['newpassword']
+					staff_obj.save()
+					return True
+				
+				else:
+					#print "passwd dont match"
+					return False
+		
+
+			elif request.session['user']['login_type']=='parent':
+				parent_obj=Parent.objects.get(id=request.session['user']['id'])
+				if parent_obj.password == request.POST['oldpassword']:
+					parent_obj.password=request.POST['newpassword']
+					parent_obj.save()
+					return True
+
+				else:
+					#print "passwd dont match"
+					return False
+
+			elif request.session['user']['login_type']=='student':
+				student_obj=Student.objects.get(id=request.session['user']['id'])
+				if student_obj.password == request.POST['oldpassword']:
+					student_obj.password=request.POST['newpassword']
+					student_obj.save()
+					return True
+				else:
+					#print "passwd dont match"
+					return False
+		else:
 				#print "passwd dont match"
-				return False
+				return False			
 
-		elif request.session['user']['login_type']=='parent':
-			parent_obj=Parent.objects.get(id=request.session['user']['id'])
-			if parent_obj.password == request.POST['oldpassword']:
-				parent_obj.password=request.POST['newpassword']
-				parent_obj.save()
-				return True
-
-			else:
+	else:
 				#print "passwd dont match"
-				return False
-
-		elif request.session['user']['login_type']=='student':
-			student_obj=Student.objects.get(id=request.session['user']['id'])
-			if student_obj.password == request.POST['oldpassword']:
-				student_obj.password=request.POST['newpassword']
-				student_obj.save()
-				return True
-			else:
-				#print "passwd dont match"
-				return False
-
+				return False			
 
 	return request.session['user']
 

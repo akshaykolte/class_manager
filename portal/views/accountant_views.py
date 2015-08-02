@@ -42,3 +42,37 @@ def change_password_submit(request):
 		return redirect('/accountant/profile/change-password/?message=Password Successfully Changed')
 	else:
 		return redirect('/accountant/profile/change-password/?message_error=Password Change Failed')	
+
+
+def edit_profile(request):
+	auth_dict = get_user(request)
+	context = {}
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+
+	details = get_staff(id=auth_dict['id'])
+	
+	context['auth_dict'] =auth_dict
+	context['details'] = details
+
+	return render(request, 'accountant/profile/edit-profile.html', context)
+
+@csrf_exempt
+def edit_profile_submit(request):
+
+	auth_dict = get_user(request)
+	context = {}
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+
+	set_staff(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
+
+	return redirect('/accountant/profile/view-profile')
