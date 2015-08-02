@@ -155,7 +155,7 @@ def get_fee_transaction(id = None ,date_start = None, date_end = None, receipt_n
 		student_batch_object = StudentBatch.objects.get(id = student_batch_id)
 		fee_transaction = FeeTransaction.objects.filter(student_batch = student_batch_object)
 		fee_list = []
-
+		
 		for i in fee_transaction:
 			fee_dict = {}
 			fee_dict['id'] = i.id
@@ -165,6 +165,7 @@ def get_fee_transaction(id = None ,date_start = None, date_end = None, receipt_n
 			fee_dict['timestamp'] = i.timestamp
 			fee_dict['student_batch'] = i.student_batch
 			fee_dict['fee_type'] = i.fee_type
+			
 			fee_list.append(fee_dict)
 			
 		return fee_list
@@ -204,6 +205,64 @@ def get_fee_transaction(id = None ,date_start = None, date_end = None, receipt_n
 		return fee_dict
 	
 	else :
-		raise Exception('You cannot edit a fee transaction')		
+		raise Exception('Wrong set of arguments')
+
+
+def get_fee_balance(student_batch_id = None, fee_type_name = None):
+
+	is_none_student_batch_id = student_batch_id == None
+	is_none_fee_type = fee_type_name == None
 	
+	# if student batch id given return transactions for that student
+	if not is_none_student_batch_id:
+		student_batch_object = StudentBatch.objects.get(id = student_batch_id)
+		fee_type_object = FeeType.objects.get(name = fee_type_name)
 	
+		fee_transaction = FeeTransaction.objects.filter(student_batch = student_batch_object, fee_type = fee_type_object)
+		fee_list = []
+		
+	
+		total = {}
+		total['total_fees_paid'] =0
+		for i in fee_transaction:
+			
+			
+			total['student'] = i.student_batch.student.first_name + ' ' + i.student_batch.student.last_name
+			total['total_fees_paid'] = total['total_fees_paid'] + i.amount
+
+			
+		fee_list.append(total)
+		print fee_list
+		return fee_list
+
+	else :
+		raise Exception('Wrong set of arguments')
+
+def get_batch_fees(fee_type_name = None):
+
+	is_none_fee_type = fee_type_name == None
+	
+	if not is_none_fee_type :
+		student_batch_object = StudentBatch.objects.all()
+		fee_type_object = FeeType.objects.get(name = fee_type_name)
+		fee_list = []
+		for object in student_batch_object:
+
+			fee_transaction = FeeTransaction.objects.filter(student_batch = object, fee_type = fee_type_object)
+			
+			total = {}
+			total['total_fees_paid'] =0
+			for i in fee_transaction:
+				
+				
+				total['student'] = i.student_batch.student.first_name + ' ' + i.student_batch.student.last_name
+				total['total_fees_paid'] = total['total_fees_paid'] + i.amount
+
+				
+			fee_list.append(total)
+		
+		return fee_list
+
+	else :
+		raise Exception('Wrong set of arguments')		
+

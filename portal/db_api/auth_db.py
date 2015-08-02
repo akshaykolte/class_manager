@@ -56,6 +56,8 @@ def get_user(request):
 
 			request.session['user']['permission_student'] = True
 			request.session['user']['id'] = student_obj.id
+			request.session['user']['first_name'] = student_obj.first_name
+			request.session['user']['last_name'] = student_obj.last_name
 			request.session.modified = True
 
 

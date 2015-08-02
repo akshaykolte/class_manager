@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404
 from portal.db_api.staff_db import *
 from portal.db_api.auth_db import *
+from portal.db_api.fee_db import *
 
 def dashboard(request):
 	return render(request,'accountant/dashboard/dashboard.html')
@@ -76,3 +77,15 @@ def edit_profile_submit(request):
 	set_staff(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
 
 	return redirect('/accountant/profile/view-profile')
+
+def view_fees(request):
+	auth_dict = get_user(request)
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+
+	details = get_batch_fees(fee_type_name = 'payment')
+	print details
+	context = {'auth_dict':auth_dict, 'details':details}
+
+	return render(request,'accountant/fees/view-fees.html', context)	
+
