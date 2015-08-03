@@ -172,7 +172,7 @@ def get_parent(id = None,student_id = None):
 
 
 
-def set_student(id=None,username=None,password=None parent_id = None,batch_id= None, first_name=None ,last_name=None ,address=None, email=None, phone_number=None, gender=None ):
+def set_student(id=None,username=None,password=None, parent_id = None,batch_id= None, first_name=None ,last_name=None ,address=None, email=None, phone_number=None, gender=None ):
 
 	is_none_id = id == None
 	is_none_username = username == None
