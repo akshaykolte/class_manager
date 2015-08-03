@@ -1,0 +1,95 @@
+{% extends "manager/base_manager.html" %}
+
+{% block main_content%}
+<div class="row">
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">View/Edit Teacher</h1>
+    </div>
+</div>
+	{% if message %}
+	    <div class="panel-body">
+	        <div class="alert alert-success alert-dismissable col-lg-8">
+	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	            {{message}}
+	        </div>
+	    </div>
+    {% elif message_error %}
+	    <div class="panel-body">
+		    <div class="alert alert-danger alert-dismissable col-lg-8">
+		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		        {{message_error}}
+		    </div>
+		</div>
+	{% endif %}
+
+<div class="col-lg-8">
+	
+	{% if page_type == 0 %}
+	   <table class="table table-bordered table-hover table-striped">
+			<thead>
+				<tr>
+					<th class="col-lg-2">#</th>
+					<th>Teacher Name</th>
+					<th class="col-lg-1">Username</th>
+					<th class="col-lg-1">Link</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for staff in staffs %}
+					<tr>
+						<td>{{staff.id}}</td>
+						<td>{{staff.first_name}} {{staff.last_name}}</td>
+						<td>{{staff.username}}</td>
+						<td><a href="./?staff={{staff.id}}">Edit</a></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+
+	{% if page_type == 1 %}
+		<form action="." method="POST">
+			<input type="hidden" name="staff" value="{{staff.id}}">
+			<label><strong>First Name</strong></label>
+			<input name="first_name" class="form-control" value="{{staff.first_name}}" required><br/>
+
+			<label><strong>Last Name</strong></label>
+			<input name="last_name" class="form-control" value="{{staff.last_name}}" required><br/>
+
+			<label><strong>Address</strong></label>
+			<input name="address" class="form-control" value="{{staff.address}}" required><br/>
+
+			<label><strong>Email</strong></label>
+			<input name="email" class="form-control" value="{{staff.email}}" required><br/>
+
+			<label><strong>Phone Number</strong></label>
+			<input name="phone_number" class="form-control" value="{{staff.phone_number}}" required><br/>
+
+			<label><strong>Gender</strong></label>
+			<select name="gender" class="form-control">
+				<option>Select</option>
+				<option value="M"{% if staff.gender == 'M' %} selected{% endif %}>Male</option>
+				<option value="F"{% if staff.gender == 'F' %} selected{% endif %}>Female</option>
+			</select><br/>
+
+			<label><strong>Username</strong></label>
+			<input name="username" class="form-control" value="{{staff.username}}" required><br/>
+
+			<label><strong>Password</strong></label>
+			<input name="password" class="form-control" value="{{staff.password}}" required><br/>
+				
+			<label><strong>Select branches where the staff will teach</strong></label>
+			{% for branch in branches %}
+				<div class="checkbox">
+					<label><input type="checkbox" name="{{branch.0.id}}" value="True"{% if branch.1 == 'T' %} checked{% endif%}>{{branch.0.name}}</label>
+				</div>
+			{% endfor %}
+			
+			<input class="btn btn-default" type='submit' value='Save'>
+
+		</form>
+	{% endif %}
+
+{% endblock %}
