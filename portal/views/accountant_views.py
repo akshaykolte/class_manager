@@ -84,6 +84,14 @@ def view_fees(request):
 		raise Http404
 
 	details = get_batch_fees(fee_type_name = 'payment')
+	subject_years_list = {}
+
+	for i in details:
+		subject_years = StudentBatch.objects.get(id = i['student_id']).subject_years.all()
+		print subject_years
+		basefees = get_base_fee(id = None , subject_years_list = subject_years)
+		for basefee in basefees :
+			i['base_fee'] = basefee.amount
 	print details
 	context = {'auth_dict':auth_dict, 'details':details}
 

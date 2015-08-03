@@ -17,13 +17,15 @@
                 <table class="table">
                     <tbody>
                          <tr>
-                            <td style='border-top:none' align="center"><strong>Username</strong></td>
-                             <td style='border-top:none' align="center"><strong>Paid fees</strong></td>
+                            <td style='border-top:none' align="center"><strong>Student</strong></td>
+                             <td style='border-top:none' align="center"><strong>Paid Fees</strong></td>
+                             <td style='border-top:none' align="center"><strong>Total Fees</strong></td>
                          </tr>
                          {% for i in details %}
                         <tr>
                             <td align="center">{{i.student}}</td>
                             <td align="center">{{i.total_fees_paid}}</td>
+                            <td align="center">{{i.base_fee}}</td>
                         </tr>
                         {% endfor %}
                         

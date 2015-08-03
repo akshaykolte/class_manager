@@ -2,10 +2,12 @@ from django.shortcuts import render,redirect
 from django.views.decorators.csrf import csrf_exempt
 from portal.db_api.standard_db import *
 from portal.db_api.subject_db import *
+from portal.db_api.lecture_db import *
 
 def dashboard(request):
 	return render(request,'manager/dashboard.html')
 
+@csrf_exempt
 def add_lectures(request):
 	'''
 		Page Type					GET  (optional: 'msg')
@@ -18,8 +20,10 @@ def add_lectures(request):
 	
 	if request.method == 'GET':
 		context = {}
-		if 'msg' in request.GET:
-			context['msg'] = request.GET['msg']
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
 		
 		page_type = 0
 		if 'standard' in request.GET:
@@ -41,3 +45,15 @@ def add_lectures(request):
 		context['page_type'] = page_type
 
 		return render(request,'manager/lectures/add_lectures.html', context)
+
+	elif request.method == 'POST':
+		try:
+			subject_id = request.POST['subject']
+			lecture_name = request.POST['lecture_name']
+			lecture_description = request.POST['lecture_description']
+			lecture_count = request.POST['lecture_count']
+
+			set_lecture(name=lecture_name, description=lecture_description, count=lecture_count, subject_year_id=subject_id)
+			return redirect('./?message=Lecture Added')
+		except:
+			return redirect('./?message_error=Error Adding Lecture')
