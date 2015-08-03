@@ -1,7 +1,7 @@
 from portal.models import *
 
 def get_user(request):
-	if 'username' in request.POST:
+	if 'login' in request.POST:
 		request.session['user'] = {'logged_in':False}
 		username = request.POST['username']
 		password = request.POST['password']
@@ -80,7 +80,6 @@ def get_user(request):
 	if not 'user' in request.session:
 		request.session['user'] = {'logged_in':False}
 		request.session.modified = True
-	print request.session['user']
 	return request.session['user']
 
 
