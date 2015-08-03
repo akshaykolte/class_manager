@@ -2,7 +2,7 @@
 # get_base_fee
 # add_transaction
 # get_transaction (one or all of one student or of any particular type)
-
+from django.db.models import Count
 from portal.models import *
 
 def set_base_fee(id = None ,amount=None , subject_years_list = None):
@@ -95,9 +95,23 @@ def get_base_fee(id = None , subject_years_list = None):
 		
 		return base_fee_object
 		
-	'''if is_none_id and not is_none_subject_years_list :
+	if is_none_id and not is_none_subject_years_list :
+
+		'''subject_year_combo = []
+								for subject in subject_years_list:
+									subject_year_object = SubjectYear.objects.get(id = subject)
+									subject_year_combo.append(subject_year_object)'''
+
+		base_fee = BaseFee.objects.annotate(count=Count('subject_years')).filter(subject_years=subject_years_list[0])
+	
+		for subject_year in subject_years_list[1:]:
+			base_fee = base_fee.filter(subject_years = subject_year)
+
+		base_fee = base_fee.filter(count=len(subject_years_list))
+
+		return base_fee
 		
-		base_fee_object = {}
+		'''base_fee_object = {}
 		
 			
 		base_fee = BaseFee.objects.filter(subject_years__id = subject_years_list[0]).filter(subject_years__id = subject_years_list[1])
@@ -230,6 +244,7 @@ def get_fee_balance(student_batch_id = None, fee_type_name = None):
 			total['student'] = i.student_batch.student.first_name + ' ' + i.student_batch.student.last_name
 			total['total_fees_paid'] = total['total_fees_paid'] + i.amount
 
+
 			
 		fee_list.append(total)
 		print fee_list
@@ -256,8 +271,9 @@ def get_batch_fees(fee_type_name = None):
 				
 				
 				total['student'] = i.student_batch.student.first_name + ' ' + i.student_batch.student.last_name
+				total['student_id'] = i.student_batch.id
 				total['total_fees_paid'] = total['total_fees_paid'] + i.amount
-
+				total['base_fees'] = 0
 				
 			fee_list.append(total)
 		
