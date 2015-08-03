@@ -3,7 +3,10 @@ from django.views.decorators.csrf import csrf_exempt
 from portal.db_api.standard_db import *
 from portal.db_api.subject_db import *
 from portal.db_api.auth_db import *
+from portal.db_api.branch_db import *
 from portal.db_api.lecture_db import *
+from portal.db_api.staff_db import *
+from portal.db_api.roles_db import *
 from django.http import Http404
 
 def dashboard(request):
@@ -136,3 +139,50 @@ def view_lectures(request):
 			return redirect('./?message=Lecture Edited')
 		except:
 			return redirect('./?message_error=Error Editing Lecture')
+
+@csrf_exempt
+def add_teacher(request):
+
+	context = {}
+	
+	if 'message' in request.GET:
+		context['message'] = request.GET['message']
+	elif 'message_error' in request.GET:
+		context['message_error'] = request.GET['message_error']
+
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		page_type = 0
+		context['page_type'] = page_type
+		context['branches'] = get_branch_of_manager(manager_id=auth_dict['id'])
+		return render(request, 'manager/teacher/add_teacher.html', context)
+	elif request.method == 'POST':
+		first_name = request.POST['first_name']
+		last_name = request.POST['last_name']
+		address = request.POST['address']
+		email = request.POST['email']
+		phone_number = request.POST['phone_number']
+		gender = request.POST['gender']
+		username = request.POST['username']
+		password = request.POST['password']
+
+		branches = get_branch_of_manager(manager_id=auth_dict['id'])
+
+		branch_list = []
+		for branch in branches:
+			if str(branch['id']) in request.POST:
+				branch_list.append(branch['id'])
+
+		staff_id = set_staff(username = username, password = password, first_name = first_name, last_name = last_name, address = address, email = email, phone_number = phone_number, gender = gender)
+
+		for branch in branch_list:
+			set_staff_role(role_id=get_role_by_name('teacher')['id'], staff_id=staff_id, branch_id=branch)
+
+		return redirect("./?message=Added Teacher")
