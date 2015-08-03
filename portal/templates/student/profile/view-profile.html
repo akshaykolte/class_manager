@@ -1,0 +1,57 @@
+{% extends "student/base_student.html" %}
+
+{% block main_content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Profile</h1>
+    </div>
+</div>
+<div class="col-lg-10">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Personal Info
+        <span class="pull-right"><a href="/teacher/profile/edit-profile/">Edit</a></span>
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table">
+                  	<tbody>
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Username</strong></td>
+                            <td style='border-top:none' align="center">{{details.username}}</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><strong>Name</strong></td>
+                            <td align="center">{{details.first_name}}&nbsp;{{details.last_name}}</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><strong>Gender</strong></td>
+                            <td align="center">{% if details.gender == 'M' or details.gender == 'm' %}Male {% elif details.gender == 'F' or details.gender == 'f' %}Female {% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><strong>Address</strong></td>
+                            <td align="center">{{details.address}}</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><strong>Email</strong></td>
+                            <td align="center">{{details.email}}</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><strong>Phone Number</strong></td>
+                            <td align="center">{{details.phone_number}}</td>
+                        </tr>
+                        <tr><td></td><td></td></tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+
+{% endblock %}

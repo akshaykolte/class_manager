@@ -12,6 +12,7 @@ def home(request):
 @csrf_exempt
 def login(request):
 	auth_dict = get_user(request)
+	print auth_dict
 	if auth_dict['logged_in']:
 		if auth_dict['login_type'] == 'staff':
 			if auth_dict['permission_admin'] == True:
@@ -22,7 +23,8 @@ def login(request):
 
 			elif auth_dict['permission_teacher'] == True:
 				return redirect('/teacher/dashboard/')
-			if auth_dict['permission_accountant'] == True:
+
+			elif auth_dict['permission_accountant'] == True:
 				return redirect('/accountant/dashboard/dashboard')
 
 		elif auth_dict['login_type'] == 'student':
