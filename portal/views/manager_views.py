@@ -209,7 +209,7 @@ def view_teacher(request):
 		page_type = 0
 		if not 'staff' in request.GET:
 			page_type = 0
-			context['staffs'] = get_staff(role_name='teacher')
+			context['staffs'] = get_staff(role_name='teacher')		# TODO: think about displaying staff of all roles rather than just teacher
 		elif 'staff' in request.GET:
 			page_type = 1
 			context['staff'] = get_staff(id=request.GET['staff'])
