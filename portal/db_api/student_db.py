@@ -26,6 +26,8 @@ def get_students(id = None,batch_id = None,branch_id = None):
 		student_object = {}
 		student = Student.objects.get(id=id)
 		student_batch = StudentBatch.objects.get(student = Student.objects.get(id=id))
+		student_object['username'] = student.username
+		student_object['password'] = student.password
 		student_object['first_name'] = student.first_name
 		student_object['last_name'] = student.last_name
 		student_object['address'] = student.address
@@ -50,6 +52,8 @@ def get_students(id = None,batch_id = None,branch_id = None):
 
 		student_object = {}
 		student = Student.objects.get(id=id)
+		student_object['username'] = student.username
+		student_object['password'] = student.password
 		student_object['first_name'] = student.first_name
 		student_object['last_name'] = student.last_name
 		student_object['address'] = student.address
@@ -75,6 +79,8 @@ def get_students(id = None,batch_id = None,branch_id = None):
 		student_batch = StudentBatch.objects.filter(batch = Batch.objects.get(id = batch_id))
 		for i in student_batch:
 			student_dict = {}
+			student_dict['username'] = i.student.username
+			student_dict['password'] = i.student.password
 			student_dict['first_name'] = i.student.first_name
 			student_dict['last_name'] = i.student.last_name
 			student_dict['address'] = i.student.address
@@ -101,6 +107,8 @@ def get_students(id = None,batch_id = None,branch_id = None):
 		for i in student:
 			student_batch = StudentBatch.objects.get(student = i)
 			student_dict = {}
+			student_dict['username'] = i.username
+			student_dict['password'] = i.password
 			student_dict['first_name'] = i.first_name
 			student_dict['last_name'] = i.last_name
 			student_dict['address'] = i.address
@@ -134,6 +142,8 @@ def get_parent(id = None,student_id = None):
 	if not is_none_id:
 		parent_object = {}
 		parent = Parent.objects.get(id=id)
+		parent_object['username'] = parent.username
+		parent_object['password'] = parent.password
 		parent_object['first_name'] = parent.first_name
 		parent_object['last_name'] = parent.last_name
 		parent_object['address'] = parent.address
@@ -149,6 +159,8 @@ def get_parent(id = None,student_id = None):
 			return parent_object
 		student_parent_object = StudentParent.objects.get(student = Student.objects.get(id = student_id))
 		parent = student_parent_object.parent
+		parent_object['username'] = parent.username
+		parent_object['password'] = parent.password
 		parent_object['first_name'] = parent.first_name
 		parent_object['last_name'] = parent.last_name
 		parent_object['address'] = parent.address
@@ -160,9 +172,11 @@ def get_parent(id = None,student_id = None):
 
 
 
-def set_student(id=None, parent_id = None,batch_id= None, first_name=None ,last_name=None ,address=None, email=None, phone_number=None, gender=None ):
+def set_student(id=None,username=None,password=None, parent_id = None,batch_id= None, first_name=None ,last_name=None ,address=None, email=None, phone_number=None, gender=None ):
 
 	is_none_id = id == None
+	is_none_username = username == None
+	is_none_password = password == None
 	is_none_parent_id = parent_id == None
 	is_none_batch_id = batch_id == None
 	is_none_first_name = first_name == None
@@ -173,7 +187,7 @@ def set_student(id=None, parent_id = None,batch_id= None, first_name=None ,last_
 	is_none_gender = gender == None
 
 	if is_none_id:
-		student_object = Student(first_name = first_name,last_name = last_name, address = address, email = email, phone_number = phone_number, gender = gender)
+		student_object = Student(username = username,password = password,first_name = first_name,last_name = last_name, address = address, email = email, phone_number = phone_number, gender = gender)
 		student_object.save()
 		if not is_none_batch_id:
 			student_batch_object = Student_batch(student = student_object,batch = Batch.objects.get(id = batch_id))
@@ -195,6 +209,10 @@ def set_student(id=None, parent_id = None,batch_id= None, first_name=None ,last_
 			parent_object = Parent.objects.get(id=parent_id)
 			studentparent_object = StudentParent(student = student_object, parent = parent_object)
 			studentparent_object.save()
+		if not is_none_username:
+			student_object.username = username
+		if not is_none_password:
+			student_object.password = password
 		if not is_none_first_name:
 			student_object.first_name = first_name
 		if not is_none_last_name:
@@ -212,9 +230,11 @@ def set_student(id=None, parent_id = None,batch_id= None, first_name=None ,last_
 	else:
 		raise Exception ('Enter all fields')
 
-def set_parent(id=None, student_id = None, first_name=None ,last_name=None ,address=None, email=None, phone_number=None, gender=None ):
+def set_parent(id=None,username = None,password = None, student_id = None, first_name=None ,last_name=None ,address=None, email=None, phone_number=None, gender=None ):
 
 	is_none_id = id == None
+	is_none_username = username == None
+	is_none_password = password == None
 	is_none_student_id = student_id == None
 	is_none_first_name = first_name == None
 	is_none_last_name = last_name == None
@@ -234,6 +254,10 @@ def set_parent(id=None, student_id = None, first_name=None ,last_name=None ,addr
 
 	elif not is_none_id:
 		parent_object = Parent.objects.get(id=id)
+		if not is_none_username:
+			parent_object.username = username
+		if not is_none_password:
+			parent_object.password = password
 		if not is_none_student_id:
 			student_object = Student.objects.get(id=student_id)
 			studentparent_object = StudentParent(student = student_object, parent = parent_object)
@@ -300,6 +324,8 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 	if not is_none_student_id and is_none_id and is_none_batch_id and is_none_standard_id and is_none_academic_year_id:
 		student_batch_object = StudentBatch.objects.get(student = Student.objects.get(id = student_id),batch = Batch.objects.get(academic_year = AcademicYear.objects.get(id =get_current_academic_year()['id'])))
 		student_batch = {}
+		student_batch['student_username'] = student_batch_object.student.username
+		student_batch['student_password'] = student_batch_object.student.password
 		student_batch['student_first_name'] = student_batch_object.student.first_name
 		student_batch['student_last_name'] = student_batch_object.student.last_name
 		student_batch['student_address'] = student_batch_object.student.address
@@ -325,6 +351,8 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 	if not is_none_student_id and is_none_id and is_none_batch_id and is_none_standard_id and not is_none_academic_year_id:
 		student_batch_object = StudentBatch.objects.get(student = Student.objects.get(id = student_id),batch = Batch.objects.get(academic_year = AcademicYear.objects.get(id = academic_year_id)))
 		student_batch = {}
+		student_batch['student_username'] = student_batch_object.student.username
+		student_batch['student_password'] = student_batch_object.student.password
 		student_batch['student_first_name'] = student_batch_object.student.first_name
 		student_batch['student_last_name'] = student_batch_object.student.last_name
 		student_batch['student_address'] = student_batch_object.student.address
@@ -352,6 +380,8 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 		student_batch_list = []
 		for student_batch_object in student_batch_object_list:
 			student_batch = {}
+			student_batch['student_username'] = student_batch_object.student.username
+			student_batch['student_password'] = student_batch_object.student.password
 			student_batch['student_first_name'] = student_batch_object.student.first_name
 			student_batch['student_last_name'] = student_batch_object.student.last_name
 			student_batch['student_address'] = student_batch_object.student.address
@@ -380,6 +410,8 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 		student_batch_list = []
 		for student_batch_object in student_batch_object_list:
 			student_batch = {}
+			student_batch['student_username'] = student_batch_object.student.username
+			student_batch['student_password'] = student_batch_object.student.password
 			student_batch['student_first_name'] = student_batch_object.student.first_name
 			student_batch['student_last_name'] = student_batch_object.student.last_name
 			student_batch['student_address'] = student_batch_object.student.address
@@ -406,6 +438,8 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 	if is_none_student_id and not is_none_id and is_none_batch_id and is_none_standard_id and is_none_academic_year_id:
 		student_batch_object = StudentBatch.objects.get(id=id,batch = Batch.objects.get(academic_year = AcademicYear.objects.get(id =get_current_academic_year()['id'])))
 		student_batch = {}
+		student_batch['student_username'] = student_batch_object.student.username
+		student_batch['student_password'] = student_batch_object.student.password
 		student_batch['student_first_name'] = student_batch_object.student.first_name
 		student_batch['student_last_name'] = student_batch_object.student.last_name
 		student_batch['student_address'] = student_batch_object.student.address
@@ -440,6 +474,8 @@ def get_previous_students(batch_id = None):
 		student_list= []
 		for i in student_batch_object:
 			student_dict = {}
+			student_dict['username'] = i.student.username
+			student_dict['password'] = i.student.password
 			student_dict['first_name'] = i.student.first_name
 			student_dict['last_name'] = i.student.last_name
 			student_dict['address'] = i.student.address
