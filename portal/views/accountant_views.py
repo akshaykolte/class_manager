@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404
 from portal.db_api.staff_db import *
+from portal.db_api.student_db import *
 from portal.db_api.auth_db import *
 from portal.db_api.fee_db import *
 
@@ -95,4 +96,75 @@ def view_fees(request):
 	context = {'auth_dict':auth_dict, 'details':details}
 
 	return render(request,'accountant/fees/view-fees.html', context)	
+
+
+
+
+@csrf_exempt
+def make_transaction(request):
+	'''
+		Page Type					GET  (optional: 'msg')
+				0					None
+				1					student
+				2					student, fee_type
+				
+		Post request for making transaction: /accountant/fees/make_transaction/
+	'''
+	
+	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	
+	if request.method == 'GET':
+		context = {}
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		
+		page_type = 0
+		
+		students = get_students(id = None,batch_id = None,branch_id = None)
+		context['students'] = students
+		
+		if 'student' in request.GET:
+			page_type = 1
+			fee_types = get_fee_types()
+			context['fee_types'] = fee_types
+			context['student_id'] = int(request.GET['student'])
+			context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
+			if 'fee_type' in request.GET:
+				page_type = 2
+				context['fee_type_id'] = int(request.GET['fee_type'])
+		context['page_type'] = page_type
+
+		return render(request,'accountant/fees/make-transaction.html', context)
+
+	elif request.method == 'POST':
+		try:
+			print "sdsadasd"
+			student_batch = StudentBatch.objects.get(student = Student.objects.get(id = int(request.POST['student'])))
+			student_batch_id = request.POST['student']
+			
+			fee_type_id = request.POST['fee_type']
+			
+			receipt_number = request.POST['receipt_number']
+			
+			amount = request.POST['amount']
+			
+			date = request.POST['date']
+			
+			time = request.POST['time']
+			
+			set_fee_transaction(id = None ,amount = amount, date = '2015-8-5', time = '19:45:07', receipt_number = receipt_number, student_batch_id = student_batch_id, fee_type_id = fee_type_id)
+			
+			return redirect('./?message=Transaction made')
+		except:
+			return redirect('./?message_error=Error. Transaction Failed.')
+
+
 

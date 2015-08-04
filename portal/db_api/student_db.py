@@ -26,6 +26,7 @@ def get_students(id = None,batch_id = None,branch_id = None):
 		student_object = {}
 		student = Student.objects.get(id=id)
 		student_batch = StudentBatch.objects.get(student = Student.objects.get(id=id))
+		student_object['id'] = i.id
 		student_object['username'] = student.username
 		student_object['password'] = student.password
 		student_object['first_name'] = student.first_name
@@ -52,6 +53,7 @@ def get_students(id = None,batch_id = None,branch_id = None):
 
 		student_object = {}
 		student = Student.objects.get(id=id)
+		student_object['id'] = i.id
 		student_object['username'] = student.username
 		student_object['password'] = student.password
 		student_object['first_name'] = student.first_name
@@ -79,6 +81,7 @@ def get_students(id = None,batch_id = None,branch_id = None):
 		student_batch = StudentBatch.objects.filter(batch = Batch.objects.get(id = batch_id))
 		for i in student_batch:
 			student_dict = {}
+			student_dict['id'] = i.id
 			student_dict['username'] = i.student.username
 			student_dict['password'] = i.student.password
 			student_dict['first_name'] = i.student.first_name
@@ -107,6 +110,7 @@ def get_students(id = None,batch_id = None,branch_id = None):
 		for i in student:
 			student_batch = StudentBatch.objects.get(student = i)
 			student_dict = {}
+			student_dict['id'] = i.id
 			student_dict['username'] = i.username
 			student_dict['password'] = i.password
 			student_dict['first_name'] = i.first_name

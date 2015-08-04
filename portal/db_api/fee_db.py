@@ -151,7 +151,7 @@ def set_fee_transaction(id = None ,amount=None ,date = None, time = None, receip
 		fee_transaction_object = FeeTransaction(amount = amount, date = date, time = time, receipt_number = receipt_number, student_batch = student_batch_object, fee_type = fee_type_object)
 		fee_transaction_object.save()
 		
-		return fee_transaction_object.id
+		return True
 
 	else :
 		raise Exception('You cannot edit a fee transaction')
@@ -282,3 +282,21 @@ def get_batch_fees(fee_type_name = None):
 	else :
 		raise Exception('Wrong set of arguments')		
 
+
+def get_fee_types(id = None):
+
+	is_none_fee_id = id == None
+
+	if is_none_fee_id :
+		fee_types = FeeType.objects.all()
+		
+		fee_list = []
+
+		for i in fee_types:
+			fee_dict = {}
+			fee_dict['id'] = i.id
+			fee_dict['name'] = i.name
+		
+			fee_list.append(fee_dict)
+			
+		return fee_list

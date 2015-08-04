@@ -1,0 +1,108 @@
+{% extends "accountant/base_accountant.html" %}
+
+{% block main_content%}
+<div class="row">
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Transaction</h1>
+    </div>
+</div>
+	{% if message %}
+	    <div class="panel-body">
+	        <div class="alert alert-success alert-dismissable col-lg-8">
+	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	            {{message}}
+	        </div>
+	    </div>
+    {% elif message_error %}
+	    <div class="panel-body">
+		    <div class="alert alert-danger alert-dismissable col-lg-8">
+		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		        {{message_error}}
+		    </div>
+		</div>
+	{% endif %}
+
+<div class="col-lg-8">
+	
+	{% if page_type == 0 %}
+		<form>
+			<label><strong>Select Student</strong></label>
+			<select name="student" class="form-control" onchange="this.form.submit()">
+				<option>Select</option>
+				{% for student in students %}
+				<option value="{{student.id}}">{{student.first_name}}&nbsp;{{student.last_name}}</option>
+				{% endfor %}
+			</select>
+		</form>
+	{% endif %}
+	
+	{% if page_type == 1 %}
+	<form>
+		<label><strong>Select Student</strong></label>
+		<select name="student" class="form-control" onchange="this.form.submit()">
+			{% for student in students %}
+			<option value="{{student.id}}"{% if student_id == student.id %} selected{% endif %}>{{student.first_name}}&nbsp;{{student.last_name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+		<input type="hidden" name="student" value="{{student_id}}">
+			<label><strong>Select Fee Type</strong></label>
+			<select name="fee_type" class="form-control" onchange="this.form.submit()">
+				<option>Select</option>
+				{% for fee_type in fee_types %}
+				<option value="{{fee_type.id}}">{{fee_type.name}}</option>
+				{% endfor %}
+			</select>
+			</form>
+	
+	{% endif %}
+
+	{% if page_type == 2 %}
+	<form>
+		<label><strong>Select Student</strong></label>
+		<select name="student" class="form-control" onchange="this.form.submit()">
+			{% for student in students %}
+			<option value="{{student.id}}"{% if student_id == student.id %} selected{% endif %}>{{student.first_name}}&nbsp;{{student.last_name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+		<input type="hidden" name="student" value="{{student_id}}">
+		<label><strong>Select Fee Type</strong></label>
+		<select name="fee_type" class="form-control" onchange="this.form.submit()">
+			{% for fee_type in fee_types %}
+			<option value="{{fee_type.id}}"{% if fee_type_id == fee_type.id %} selected{% endif %}>{{fee_type.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form action="." method="POST">
+		<input type="hidden" name="student" value="{{student_id}}">
+		<input type="hidden" name="fee_type" value="{{fee_type_id}}">
+		<label><strong>Receipt Number</strong></label>
+		<input name="receipt_number" class="form-control">
+		<br/>
+		<label><strong>Amount</strong></label>
+		<input name="amount" class="form-control">
+		<br/>
+		<label><strong>Date</strong></label>
+		<input name="date" class="form-control">
+		<br/>
+		<label><strong>Time</strong></label>
+		<input name="time" class="form-control">
+		<br/>
+		<input class="btn btn-default" type='submit' value='Make Transaction'>
+	</form>
+
+	{% endif %}
+
+
+
+</br>
+
+{% endblock %}
