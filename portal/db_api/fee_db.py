@@ -52,14 +52,14 @@ def get_base_fee(id = None , subject_years_list = None):
 	
 		base_fee_list=[]
 		base_fee_objects = BaseFee.objects.all()
-		print base_fee_objects
+		#print base_fee_objects
 		for base_fee in base_fee_objects :
 			base_fee_object = {}
 			base_fee_object['id']=base_fee.id
 			base_fee_object['amount']=base_fee.amount
 			subject_year_list=[]
 			
-			print base_fee.subject_years
+			#print base_fee.subject_years
 			
 			for subject in base_fee.subject_years.all():
 				subject_year_object = {}
@@ -82,7 +82,7 @@ def get_base_fee(id = None , subject_years_list = None):
 		base_fee_object['id']=base_fee.id
 		base_fee_object['amount']=base_fee.amount
 		subject_year_list=[]
-		print base_fee.subject_years
+		#print base_fee.subject_years
 		
 		for subject in base_fee.subject_years.all():
 			subject_year_object = {}
