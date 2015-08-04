@@ -2,6 +2,8 @@
 # get_branch(branch_id)	if no parameters passed then return all branches
 
 from portal.models import Branch
+from portal.models import StaffRole
+from portal.models import Role
 
 def set_branch(id = None,name = None):
 	is_none_id = id == None
@@ -34,4 +36,12 @@ def get_branch(id=None):
 			branch_list.append(branch)
 		return branch_list
 
-
+def get_branch_of_manager(manager_id):
+	staff_roles = StaffRole.objects.filter(role__name='manager', staff__id=manager_id)
+	branch_list = []
+	for staff_role in staff_roles:
+		branch_obj = {}
+		branch_obj['id'] = staff_role.branch.id
+		branch_obj['name'] = staff_role.branch.name
+		branch_list.append(branch_obj)
+	return branch_list

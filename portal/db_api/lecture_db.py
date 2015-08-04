@@ -20,6 +20,7 @@ def get_lecture(id = None, subject_year_id = None):
 	if not is_none_id and is_none_subject_year_id:
 		lecture = Lecture.objects.get(id = id)
 		lecture_obj = {}
+		lecture_obj['id'] = lecture.id
 		lecture_obj['name'] = lecture.name
 		lecture_obj['description'] = lecture.description
 		lecture_obj['count'] = lecture.count
@@ -36,6 +37,7 @@ def get_lecture(id = None, subject_year_id = None):
 
 		for i in lecture_object:
 			lecture_dict = {}
+			lecture_dict['id'] = i.id
 			lecture_dict['name'] = i.name
 			lecture_dict['description'] = i.description
 			lecture_dict['count'] = i.count
@@ -51,6 +53,7 @@ def get_lecture(id = None, subject_year_id = None):
 		lecture = Lecture.objects.all()
 		for i in lecture:
 			lecture_dict = {}
+			lecture_dict['id'] = i.id
 			lecture_dict['name'] = i.name
 			lecture_dict['description'] = i.description
 			lecture_dict['count'] = i.count
