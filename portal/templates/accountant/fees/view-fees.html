@@ -13,28 +13,36 @@
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
-            <div class="table-responsive">
-                <table class="table">
-                    <tbody>
-                         <tr>
-                            <td style='border-top:none' align="center"><strong>Student</strong></td>
-                             <td style='border-top:none' align="center"><strong>Paid Fees</strong></td>
-                             <td style='border-top:none' align="center"><strong>Total Fees</strong></td>
-                         </tr>
-                         {% for i in details %}
+            <div class="dataTable_wrapper">                            
+                        
+                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                    <thead>
                         <tr>
-                            <td align="center">{{i.student}}</td>
-                            <td align="center">{{i.total_fees_paid}}</td>
-                            <td align="center">{{i.base_fee}}</td>
+                            <th>Student</th>
+                            <th>Paid Fees</th>
+                            <th>Total Fees</th>
+                            
                         </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in details %}
+                            <tr class="odd gradeX">
+                                <td align="center">{{i.student}}</td>
+                                <td align="center">{{i.total_fees_paid}}</td>
+                                <td align="center">{{i.base_fee}}</td>
+                            </tr>
                         {% endfor %}
                         
+                       
+                    
                     </tbody>
                 </table>
+                <!-- /.table-responsive -->
             </div>
-            <!-- /.table-responsive -->
+            <!-- /.-->
         </div>
         <!-- /.panel-body -->
+    
     </div>
     <!-- /.panel -->
 </div>
