@@ -241,43 +241,40 @@
                             </div>
                         </li> -->
                         <li>
-							<a href="/manager/dashboard/" {% block class_dashboard %}{% endblock %}><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+							<a href="/manager/dashboard/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-							<a href="#" {% block class_lectures %}{% endblock %}><i class="fa fa-calendar-o"></i> Lectures<span class="fa arrow"></span></a>
+							<a href="#"><i class="fa fa-calendar-o"></i> Lectures<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-									<a href="/manager/lectures/add-lectures/" {% block class_add_lectures %}{% endblock %}>Add Lectures</a>
+									<a href="/manager/lectures/add-lectures/">Add Lectures</a>
                                 </li>
                                 <li>
-									<a href="/manager/lectures/view-lectures/" {% block class_view_lectures %}{% endblock %}>View/Edit Lectures</a>
+									<a href="/manager/lectures/view-lectures/">View/Edit Lectures</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-							<a href="#" {% block class_teachers %}{% endblock %}><i class="fa fa-edit fa-fw"></i> Teachers<span class="fa arrow"></span></a>
-							<ul {% block class_teachers_list %}class="nav nav-second-level"{% endblock %}>
+							<a href="#"><i class="fa fa-edit fa-fw"></i> Teachers<span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level">
                                 <li>
-									<a href="/manager/teacher/add-teacher/" {% block class_add_teacher %}{% endblock %}>Add Teacher</a>
+									<a href="/manager/teacher/add-teacher/">Add Teacher</a>
                                 </li>
                                 <li>
-									<a href="/manager/teacher/view-teacher/" {% block class_view_teacher %}{% endblock %}>View/Edit Teacher</a>
+									<a href="/manager/teacher/view-teacher/">View/Edit Teacher</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-							<a href="#" {% block class_tests %}{% endblock %}><i class="fa fa-edit fa-fw"></i> Tests<span class="fa arrow"></span></a>
+							<a href="#"><i class="fa fa-edit fa-fw"></i> Tests<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-									<a href="/manager/tests/add-tests/" {% block class_add_tests %}{% endblock %}>Add Tests</a>
+									<a href="/manager/tests/add-tests/">Add Tests</a>	<!-- Also implement assign test to batch/teacher -->
                                 </li>
                                 <li>
-									<a href="/manager/tests/assign-batch-to-test/" {% block class_assign_batch_to_test %}{% endblock %}>Assign Batch to Test</a>
-                                </li>
-                                <li>
-									<a href="/manager/tests/assign-teacher-to-test/"  {% block class_assign_teacher_to_test %}{% endblock %}>Assign Teacher to Test</a>
+									<a href="/manager/tests/view-tests/">View/Edit</a>		<!-- Also consider assigning of test to batch/teacher -->
                                 </li>
                                 <li>
                                     <a href="http://otp.pentaflux.com/">Online Test Portal</a>
@@ -286,19 +283,19 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-							<a href="#" {% block class_attendace_reports %}{% endblock %}><i class="fa fa-edit fa-fw"></i> Attendance Reports<span class="fa arrow"></span></a>
+							<a href="#"><i class="fa fa-edit fa-fw"></i> Attendance Reports<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-									<a href="/manager/attendance-reports/batchwise-attendance/" {% block class_batchwise_attendance %}{% endblock %}>Batchwise Attendance</a>
+									<a href="/manager/attendance-reports/batchwise-attendance/">Batchwise Attendance</a>
                                 </li>
                                 <li>
-									<a href="/manager/attendance-reports/studentwise-attendance/" {% block class_studentwise_attendance %}{% endblock %}>Studentwise Attendance</a>
+									<a href="/manager/attendance-reports/studentwise-attendance/">Studentwise Attendance</a>
                                 </li>
                                 <li>
-									<a href="/manager/attendance-reports/subjectwise-attendance/" {% block class_subjectwise_attendance %}{% endblock %}>Subjectwise Attendance</a>
+									<a href="/manager/attendance-reports/subjectwise-attendance/">Subjectwise Attendance</a>
                                 </li>
                                 <li>
-									<a href="/manager/attendance-reports/lecturewise-attendance/" {% block class_lecturewise_attendance %}{% endblock %}>Lecturewise Attendance</a>
+									<a href="/manager/attendance-reports/lecturewise-attendance/">Lecturewise Attendance</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
