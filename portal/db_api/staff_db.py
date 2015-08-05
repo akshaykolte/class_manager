@@ -68,15 +68,16 @@ def set_staff_role(id = None,role_id = None,staff_id = None,branch_id = None):
 	except: # TODO catch IntegrityError
 		return False
 
-def get_staff(id = None, role_name = None):
+def get_staff(id = None, role_name = None, branch_id=None):
 	'''
-			Possible combination of parameters: 00, 1X, 01
+			Possible combination of parameters: 000, 1XX, 010, 001, 011
 	'''
 	is_none_id = id == None
 	is_none_role_name = role_name == None
+	is_none_branch_id = branch_id == None
 	if not is_none_id:
 		'''
-			Parameter combination: 1X
+			Parameter combination: 1XX
 		'''
 		staff_object = Staff.objects.get(id=id)
 		staff = {}
@@ -90,44 +91,45 @@ def get_staff(id = None, role_name = None):
 		staff['phone_number'] = staff_object.phone_number
 		staff['gender'] = staff_object.gender
 		return staff
-	elif is_none_role_name:
+	
+	staff_object_list = []
+	if is_none_role_name and is_none_branch_id:
 		'''
-			Parameter combination: 00
+			Parameter combination: 000
 		'''
 		staff_object_list = Staff.objects.all()
-		staff_list=[]
-		for staff_object in staff_object_list:
-			staff = {}
-			staff['id'] = staff_object.id
-			staff['username'] = staff_object.username
-			staff['password'] = staff_object.password
-			staff['first_name'] = staff_object.first_name
-			staff['last_name'] = staff_object.last_name
-			staff['address'] = staff_object.address
-			staff['email'] = staff_object.email
-			staff['phone_number'] = staff_object.phone_number
-			staff['gender'] = staff_object.gender
-			staff_list.append(staff)
-		return staff_list
-	else:
+	elif not is_none_role_name and is_none_branch_id:
 		'''
-			Parameter combination: 01
+			Parameter combination: 010
 		'''
 		staff_object_list = Staff.objects.filter(staffrole__role__name=role_name).distinct()
-		staff_list=[]
-		for staff_object in staff_object_list:
-			staff = {}
-			staff['id'] = staff_object.id
-			staff['username'] = staff_object.username
-			staff['password'] = staff_object.password
-			staff['first_name'] = staff_object.first_name
-			staff['last_name'] = staff_object.last_name
-			staff['address'] = staff_object.address
-			staff['email'] = staff_object.email
-			staff['phone_number'] = staff_object.phone_number
-			staff['gender'] = staff_object.gender
-			staff_list.append(staff)
-		return staff_list
+	elif is_none_role_name and not is_none_branch_id:
+		'''
+			Parameter combination: 001
+		'''
+		staff_object_list = Staff.objects.filter(staffrole__branch__id=branch_id).distinct()
+	elif not is_none_role_name and not is_none_branch_id:
+		'''
+			Parameter combination: 001
+		'''
+		staff_object_list = Staff.objects.filter(staffrole__role__name=role_name, staffrole__branch__id=branch_id).distinct()
+
+
+	staff_list=[]
+	for staff_object in staff_object_list:
+		staff = {}
+		staff['id'] = staff_object.id
+		staff['username'] = staff_object.username
+		staff['password'] = staff_object.password
+		staff['first_name'] = staff_object.first_name
+		staff['last_name'] = staff_object.last_name
+		staff['address'] = staff_object.address
+		staff['email'] = staff_object.email
+		staff['phone_number'] = staff_object.phone_number
+		staff['gender'] = staff_object.gender
+		staff_list.append(staff)
+	return staff_list
+
 
 
 def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None):
@@ -142,6 +144,7 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None):
 		staff_role_list = []
 		for staff_role_object in staff_role_object_list:
 			staff_role = {}
+			staff_role['id'] = staff_role_object.id
 			staff_role['role'] = staff_role_object.role.name
 			staff_role['staff_first_name'] = staff_role_object.staff.first_name
 			staff_role['staff_last_name'] = staff_role_object.staff.last_name
@@ -154,6 +157,7 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None):
 	elif not is_none_id and is_none_role_id and is_none_staff_id and is_none_branch_id:
 		staff_role_object = StaffRole.objects.get(id=id)
 		staff_role = {}
+		staff_role['id'] = staff_role_object.id
 		staff_role['role'] = staff_role_object.role.name
 		staff_role['staff_first_name'] = staff_role_object.staff.first_name
 		staff_role['staff_last_name'] = staff_role_object.staff.last_name
@@ -167,6 +171,7 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None):
 		staff_role_list = []
 		for staff_role_object in staff_role_object_list:
 			staff_role = {}
+			staff_role['id'] = staff_role_object.id
 			staff_role['role'] = staff_role_object.role.name
 			staff_role['staff_first_name'] = staff_role_object.staff.first_name
 			staff_role['staff_last_name'] = staff_role_object.staff.last_name
@@ -181,6 +186,7 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None):
 		staff_role_list = []
 		for staff_role_object in staff_role_object_list:
 			staff_role = {}
+			staff_role['id'] = staff_role_object.id
 			staff_role['role'] = staff_role_object.role.name
 			staff_role['staff_first_name'] = staff_role_object.staff.first_name
 			staff_role['staff_last_name'] = staff_role_object.staff.last_name
@@ -195,6 +201,7 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None):
 		staff_role_list = []
 		for staff_role_object in staff_role_object_list:
 			staff_role = {}
+			staff_role['id'] = staff_role_object.id
 			staff_role['role'] = staff_role_object.role.name
 			staff_role['staff_first_name'] = staff_role_object.staff.first_name
 			staff_role['staff_last_name'] = staff_role_object.staff.last_name
@@ -209,10 +216,25 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None):
 		staff_role_list = []
 		for staff_role_object in staff_role_object_list:
 			staff_role = {}
+			staff_role['id'] = staff_role_object.id
 			staff_role['role'] = staff_role_object.role.name
 			staff_role['staff_first_name'] = staff_role_object.staff.first_name
 			staff_role['staff_last_name'] = staff_role_object.staff.last_name
 			staff_role['branch'] = staff_role_object.branch.name
+			staff_role_list.append(staff_role)
+		return staff_role_list
+	#0111
+	elif is_none_id and not is_none_role_id and not is_none_staff_id and not is_none_branch_id:
+		staff_role_object_list = StaffRole.objects.filter(staff = Staff.objects.get(id=staff_id), role__id = role_id, branch__id = branch_id)
+		staff_role_list = []
+		for staff_role_object in staff_role_object_list:
+			staff_role = {}
+			staff_role['id'] = staff_role_object.id
+			staff_role['role'] = staff_role_object.role.name
+			staff_role['staff_first_name'] = staff_role_object.staff.first_name
+			staff_role['staff_last_name'] = staff_role_object.staff.last_name
+			staff_role['branch'] = staff_role_object.branch.name
+			staff_role['branch_id'] = staff_role_object.branch.id
 			staff_role_list.append(staff_role)
 		return staff_role_list
 

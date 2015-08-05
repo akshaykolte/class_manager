@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Add Tests</h1>
+        <h1 class="page-header">View Tests</h1>
     </div>
 </div>
 	{% if message %}
@@ -81,30 +81,58 @@
 		</select>
 	</form>
 	<br/>
-	<form action="." method="POST">
-		<input type="hidden" name="standard" value="{{standard_id}}">
-		<input type="hidden" name="subject" value="{{subject_id}}">
-		<label><strong>Test Name</strong></label>
-		<input name="test_name" class="form-control">
-		<br/>
-		<label><strong>Select batches which can give the test</strong></label>
-		{% for batch in batches %}
-			<div class="checkbox">
-				<label><input type="checkbox" name="batch_{{batch.id}}" value="True">{{batch.name}} - {{batch.standard}} {{batch.branch}}</label>
-			</div>
-		{% endfor %}
-		<br/>
 
-		<label><strong>Select teachers who have access to the test</strong></label>
-		{% for teacher in teachers %}
-			<div class="checkbox">
-				<label><input type="checkbox" name="teacher_{{teacher.id}}" value="True">{{teacher.username}} - {{teacher.first_name}} {{teacher.last_name}}</label>
-			</div>
-		{% endfor %}
-		<br/>
+	<label><strong>Tests</strong></label>
+	<br/>
 
-		<input class="btn btn-default" type='submit' value='Create Test'>
-	</form>
+	   <table class="table table-bordered table-hover table-striped">
+			<thead>
+				<tr>
+					<th class="col-lg-2">#</th>
+					<th>Test Name</th>
+					<th class="col-lg-1">Subject Name</th>
+					<th class="col-lg-1">Link</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for test in tests %}
+					<tr>
+						<td>{{test.id}}</td>
+						<td>{{test.name}}</td>
+						<td>{{test.subject_year_name}}</td>
+						<td><a href="./?test={{test.id}}">Edit</a></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+	{% endif %}
+	
+	{% if page_type == 3 %}
+
+		<form action="." method="POST">
+			<input type="hidden" name="test" value="{{test.id}}">
+			<label><strong>Test Name</strong></label>
+			<input name="test_name" value={{test.name}} class="form-control">
+			<br/>
+			<label><strong>Select batches which can give the test</strong></label>
+			{% for batch in batches %}
+				<div class="checkbox">
+					<label><input type="checkbox" name="batch_{{batch.id}}" value="True" {% if batch.check == True %}checked{% endif %}>{{batch.name}} - {{batch.standard}} {{batch.branch}}</label>
+				</div>
+			{% endfor %}
+			<br/>
+
+			<label><strong>Select teachers who have access to the test</strong></label>
+			{% for teacher in teachers %}
+				<div class="checkbox">
+					<label><input type="checkbox" name="teacher_{{teacher.id}}" value="True"{% if teacher.check == True %} checked{% endif %}>{{teacher.username}} - {{teacher.first_name}} {{teacher.last_name}}</label>
+				</div>
+			{% endfor %}
+			<br/>
+
+			<input class="btn btn-default" type='submit' value='Save'>
+		</form>
 
 	{% endif %}
 

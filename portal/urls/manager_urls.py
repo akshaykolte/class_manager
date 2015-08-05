@@ -8,4 +8,5 @@ urlpatterns = [
 	url(r'^teacher/add-teacher/$', 'portal.views.manager_views.add_teacher'),
 	url(r'^teacher/view-teacher/$', 'portal.views.manager_views.view_teacher'),
 	url(r'^tests/add-tests/$', 'portal.views.manager_views.add_tests'),
+	url(r'^tests/view-tests/$', 'portal.views.manager_views.view_tests'),
 ]

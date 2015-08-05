@@ -65,8 +65,8 @@ class Batch(models.Model):
 	standard = models.ForeignKey(Standard)
 
 	def __str__(self):
-		return self.name
-
+		return self.name + ' - ' + str(self.standard) + ' ' + str(self.branch)
+	
 	class Meta:
 		unique_together = (('name', 'academic_year', 'branch', 'standard',),)
 

@@ -8,6 +8,7 @@ from portal.db_api.lecture_db import *
 from portal.db_api.staff_db import *
 from portal.db_api.roles_db import *
 from portal.db_api.test_db import *
+from portal.db_api.batch_db import *
 from django.http import Http404
 
 def dashboard(request):
@@ -286,6 +287,18 @@ def add_tests(request):
 			context['standard_id'] = int(request.GET['standard'])
 			context['subjects'] = get_subjects(standard_id=request.GET['standard'])
 			context['subject_id'] = int(request.GET['subject'])
+			branches = get_branch_of_manager(manager_id=auth_dict['id'])
+			batches = []
+			for branch in branches:
+				batches += get_batch(branch_id=branch['id'], standard_id = request.GET['standard'])
+			context['batches'] = batches
+
+			teachers = []
+			for branch in branches:
+				teachers += get_staff(role_name='teacher', branch_id=branch['id'])
+
+			context['teachers'] = teachers
+
 		context['page_type'] = page_type
 				
 		return render(request,'manager/tests/add_tests.html', context)
@@ -294,7 +307,158 @@ def add_tests(request):
 		try:
 			test_name = request.POST['test_name']
 			subject_id = request.POST['subject']
-			set_test(name=test_name, subject_year_id=subject_id)
+			test = set_test(name=test_name, subject_year_id=subject_id)
+
+			branches = get_branch_of_manager(manager_id=auth_dict['id'])
+			batches = []
+			for branch in branches:
+				batches += get_batch(branch_id=branch['id'], standard_id=request.POST['standard'])
+	
+			print batches
+			for batch in batches:
+				if 'batch_'+str(batch['id']) in request.POST:
+					set_test_of_batch(test_id=test, batch_id=batch['id'])
+
+			teachers = []
+			for branch in branches:
+				teachers += get_staff(role_name='teacher', branch_id=branch['id'])
+
+			'''
+				To make sure the manager doesn't assign test to teacher outside his/her branches
+			'''
+			for teacher in teachers:
+				if 'teacher_'+str(teacher['id']) in request.POST:
+					staff_role_id = None
+					for branch in branches:
+						staff_role_list = get_staff_role(role_id = get_role_by_name('teacher')['id'], staff_id=teacher['id'], branch_id = branch['id'])
+						if len(staff_role_list) == 1:
+							set_test_of_staff_role(test_id=test, staff_role_id = staff_role_list[0]['id'])
+							break
+
+
 			return redirect('./?message=Test Added')
 		except:
 			return redirect('./?message_error=Error Adding Test')
+
+@csrf_exempt
+def view_tests(request):
+	context = {}
+	
+	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		page_type = -1
+		
+		if 'test' in request.GET:
+			page_type = 3
+			context['test'] = get_test(id=request.GET['test'])
+			branches = get_branch_of_manager(manager_id=auth_dict['id'])
+			batches = []
+			test_batches_list = get_batches_of_test(test_id=request.GET['test'])
+			test_batches = []
+			for test_i in test_batches_list:
+				test_batches.append(test_i['batch_id'])
+			for branch in branches:
+				batches += get_batch(branch_id=branch['id'], standard_id = context['test']['standard_id'])
+			
+			for i in xrange(len(batches)):
+				if batches[i]['id'] in test_batches:
+					batches[i]['check'] = True
+			context['batches'] = batches
+
+			teachers = []
+			test_teachers_list = get_teachers_of_test(test_id=request.GET['test'])
+			test_teachers = []
+			for test_i in test_teachers_list:
+				test_teachers.append(test_i['staff_id'])
+			for branch in branches:
+				teachers += get_staff(role_name='teacher', branch_id=branch['id'])
+
+			for i in xrange(len(teachers)):
+				if teachers[i]['id'] in test_teachers:
+					teachers[i]['check'] = True
+
+			context['teachers'] = teachers
+
+		elif not 'standard' in request.GET:
+			page_type = 0
+			context['standards'] = get_standard()
+		elif not 'subject' in request.GET:
+			page_type = 1
+			context['standards'] = get_standard()
+			context['standard_id'] = int(request.GET['standard'])
+			context['subjects'] = get_subjects(standard_id=request.GET['standard'])
+		else:
+			page_type = 2
+			context['standards'] = get_standard()
+			context['standard_id'] = int(request.GET['standard'])
+			context['subjects'] = get_subjects(standard_id=request.GET['standard'])
+			context['subject_id'] = int(request.GET['subject'])
+
+			context['tests'] = get_test(subject_year_id = request.GET['subject'])
+
+		context['page_type'] = page_type
+				
+		return render(request,'manager/tests/view_tests.html', context)
+
+	elif request.method == 'POST':
+#		try:
+			test_name = request.POST['test_name']
+			test_id = request.POST['test']
+			
+			# save test name
+			test = set_test(id=test_id, name=test_name)
+
+
+			branches = get_branch_of_manager(manager_id=auth_dict['id'])
+			batches = []
+			for branch in branches:
+				batches += get_batch(branch_id=branch['id'], standard_id = get_test(id=test_id)['standard_id'])
+	
+			for batch in batches:
+				if 'batch_'+str(batch['id']) in request.POST:
+					# save test and batch
+					try:
+						set_test_of_batch(test_id=test_id, batch_id=batch['id'])
+					except:
+						pass
+				else:
+					# delete test and batch
+					delete_test_of_batch(test_id=test_id, batch_id=batch['id'])
+
+			teachers = []
+			for branch in branches:
+				teachers += get_staff(role_name='teacher', branch_id=branch['id'])
+
+			'''
+				To make sure the manager doesn't assign test to teacher outside his/her branches
+			'''
+			for teacher in teachers:
+				if 'teacher_'+str(teacher['id']) in request.POST:
+					staff_role_id = None
+					for branch in branches:
+						staff_role_list = get_staff_role(role_id = get_role_by_name('teacher')['id'], staff_id=teacher['id'], branch_id = branch['id'])
+						if len(staff_role_list) == 1:
+							try:
+								set_test_of_staff_role(test_id=test, staff_role_id = staff_role_list[0]['id'])
+							except:
+								pass
+							break
+				else:
+					delete_test_of_staff_role(test_id=test_id, staff_id=teacher['id'])
+
+
+			return redirect('./?message=Test Saved')
+#		except:
+#			return redirect('./?message_error=Error Saving Test')
