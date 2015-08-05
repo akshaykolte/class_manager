@@ -1,5 +1,5 @@
-from portal.models import Test, TestBatch, TestStaffRole
-from portal.db_api import academic_year_db
+from portal.models import Test, TestBatch, TestStaffRole, Batch, SubjectYear
+from portal.db_api.academic_year_db import get_current_academic_year
 
 def get_test(id=None, subject_year_id=None, academic_year_id=get_current_academic_year()['id'], batch_id=None, staff_role_id=None, standard_id=None):
 	bit_list = []
@@ -44,9 +44,9 @@ def get_test(id=None, subject_year_id=None, academic_year_id=get_current_academi
 	return test_obj_list
 
 def set_test(id=None, name=None, subject_year_id=None):
-	if id!=None:
+	if id == None:
 		# 011
-		test_obj = Test(name=name, subject_year__id=subject_year_id)
+		test_obj = Test(name=name, subject_year=SubjectYear.objects.get(id=subject_year_id))
 		test_obj.save()
 		return test_obj.id
 	else:
@@ -60,9 +60,9 @@ def set_test(id=None, name=None, subject_year_id=None):
 		return test_obj.id
 
 def set_test_of_batch(id=None, test_id=None, batch_id=None):
-	if id!=None:
+	if id == None:
 		# 011
-		test_batch_obj = TestBatch(test__id=test_id, batch__id=batch_id)
+		test_batch_obj = TestBatch(test=Test.objects.get(id=test_id), batch=Batch.objects.get(id=batch_id))
 		test_batch_obj.save()
 		return test_batch_obj.id
 	else:
@@ -76,9 +76,9 @@ def set_test_of_batch(id=None, test_id=None, batch_id=None):
 		return test_batch_obj.id
 
 def set_test_of_staff_role(id=None, test_id=None, staff_role_id=None):
-	if id!=None:
+	if id == None:
 		# 011
-		test_staff_role_obj = TestBatch(test__id=test_id, staff_role__id=batch_id)
+		test_staff_role_obj = TestBatch(test=Test.objects.get(id=test_id), staff_role = StaffRole.objects.get(id=staff_role_id))
 		test_staff_role_obj.save()
 		return test_staff_role_obj.id
 	else:
