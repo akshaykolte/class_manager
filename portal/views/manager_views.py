@@ -7,6 +7,7 @@ from portal.db_api.branch_db import *
 from portal.db_api.lecture_db import *
 from portal.db_api.staff_db import *
 from portal.db_api.roles_db import *
+from portal.db_api.test_db import *
 from django.http import Http404
 
 def dashboard(request):
@@ -251,3 +252,49 @@ def view_teacher(request):
 				delete_staff_role(staff=id, role=get_role_by_name('teacher')['id'], branch = branch['id'])
 
 		return redirect('./?message=Edited Staff')
+
+@csrf_exempt
+def add_tests(request):
+	context = {}
+	
+	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		page_type = -1
+		if not 'standard' in request.GET:
+			page_type = 0
+			context['standards'] = get_standard()
+		elif not 'subject' in request.GET:
+			page_type = 1
+			context['standards'] = get_standard()
+			context['standard_id'] = int(request.GET['standard'])
+			context['subjects'] = get_subjects(standard_id=request.GET['standard'])
+		else:
+			page_type = 2
+			context['standards'] = get_standard()
+			context['standard_id'] = int(request.GET['standard'])
+			context['subjects'] = get_subjects(standard_id=request.GET['standard'])
+			context['subject_id'] = int(request.GET['subject'])
+		context['page_type'] = page_type
+				
+		return render(request,'manager/tests/add_tests.html', context)
+
+	elif request.method == 'POST':
+		try:
+			test_name = request.POST['test_name']
+			subject_id = request.POST['subject']
+			set_test(name=test_name, subject_year_id=subject_id)
+			return redirect('./?message=Test Added')
+		except:
+			return redirect('./?message_error=Error Adding Test')
