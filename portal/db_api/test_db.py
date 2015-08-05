@@ -3,7 +3,7 @@ from portal.db_api import academic_year_db
 
 def get_test(id=None, subject_year_id=None, academic_year_id=get_current_academic_year()['id'], batch_id=None, staff_role_id=None, standard_id=None):
 	bit_list = []
-	for i in [id, subject_year_id, academic_year_id, batch_id, staff_role_id, staff_role_id]:
+	for i in [id, subject_year_id, academic_year_id, batch_id, staff_role_id, standard_id]:
 		if i == None: bit_list.append('0')
 		else: bit_list.append('1')
 	if ''.join(bit_list) == '100000':
