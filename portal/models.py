@@ -403,3 +403,39 @@ class FeeTransaction(models.Model):
 				raise Exception('Validation Failed')
 
 		super(FeeTransaction, self).save()
+
+class Test(models.Model):
+	subject_year = models.ForeignKey(SubjectYear)
+	name = models.CharField(max_length=50)
+	
+	class Meta:
+		unique_together = (('name','subject_year',),)
+
+	def __str__(self):
+		return str(self.name)+' - '+str(self.subject_year)
+
+	# save() overriding not required
+
+class TestBatch(models.Model):
+	test = models.ForeignKey(Test)
+	batch = models.ForeignKey(Batch)
+
+	class Meta:
+		unique_together = (('test','batch',),)
+	
+	def __str__(self):
+		return str(self.test)+' - '+str(self.batch)
+
+	# save() overriding not required
+
+class TestStaffRole(models.Model):
+	test = models.ForeignKey(Test)
+	staff_role = models.ForeignKey(StaffRole)
+
+	class Meta:
+		unique_together = (('test','staff_role'),)
+
+	def __str__(self):
+		return str(self.test)+' - '+str(self.staff_role)
+
+	# save() overriding not required
