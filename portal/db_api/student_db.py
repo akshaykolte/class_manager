@@ -26,7 +26,7 @@ def get_students(id = None,batch_id = None,branch_id = None):
 		student_object = {}
 		student = Student.objects.get(id=id)
 		student_batch = StudentBatch.objects.get(student = Student.objects.get(id=id))
-		student_object['id'] = i.id
+		student_object['id'] = student.id
 		student_object['username'] = student.username
 		student_object['password'] = student.password
 		student_object['first_name'] = student.first_name
@@ -53,7 +53,7 @@ def get_students(id = None,batch_id = None,branch_id = None):
 
 		student_object = {}
 		student = Student.objects.get(id=id)
-		student_object['id'] = i.id
+		student_object['id'] = student.id
 		student_object['username'] = student.username
 		student_object['password'] = student.password
 		student_object['first_name'] = student.first_name

@@ -10,8 +10,8 @@ urlpatterns = [
 	url(r'^profile/edit-profile/submit$', 'portal.views.student_views.edit_profile_submit'),
 	url(r'^profile/change-password/$', 'portal.views.student_views.change_password'),
 	url(r'^profile/change-password/submit$', 'portal.views.student_views.change_password_submit'),
-	url(r'^profile/logout/$', 'portal.views.student_views.logout'),
+	
    	# Dashboard
     url(r'^dashboard/$', 'portal.views.student_views.dashboard'),
-    #url(r'^attendance/$', 'portal.views.student_views.attendance'),
+    url(r'^attendance/view-attendance/$', 'portal.views.student_views.view_attendance'),
 ]
