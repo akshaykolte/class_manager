@@ -7,6 +7,7 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^change/', 'portal.views.change.change_use_as'),
     url(r'^$', 'portal.views.auth_views.home'),
     url(r'^login/$', 'portal.views.auth_views.login'),
     url(r'^logout/$', 'portal.views.auth_views.logout'),

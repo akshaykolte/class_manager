@@ -102,14 +102,14 @@ def logout(request):
 def dashboard(request):
 
 	auth_dict = get_user(request)
-
+	context = {}
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
 	if auth_dict['permission_teacher'] != True:
 		raise Http404
 
-	
+	context['details'] = auth_dict	
 
 
 
@@ -121,4 +121,19 @@ def dashboard(request):
 
 
 
-	return render(request,'teacher/dashboard.html')
+	return render(request,'teacher/dashboard.html', context)
+
+
+# Lectures Tab
+
+def add_lectures(request):
+
+	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	return render(request, 'teacher/lectures/add-lectures.html', context)

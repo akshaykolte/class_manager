@@ -108,39 +108,41 @@
 
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <!-- <i class="fa fa-tasks fa-fw"></i>  --><strong>Use As</strong> &nbsp;<i class="fa fa-caret-down"></i> 
+                        <strong>Use As</strong> &nbsp;<i class="fa fa-caret-down"></i> 
                     </a>
                     <ul class="dropdown-menu" style="width:200px;">
                         {% block use_as %}
+                        {% if details.permission_admin == True %}
                         <li>
-                            <a href="#">
+                            <a href="/change/?use_as=admin">
                                 <strong>Admin</strong>
                             </a>
                         </li>
                         <li class="divider"></li>
+                        {% endif %}
+                        {% if details.permission_accountant == True %}
                         <li>
-                            <a href="#">
+                            <a href="/change/?use_as=accountant">
                                 <strong>Accountant</strong>
                             </a>
                         </li>
                         <li class="divider"></li>
+                        {% endif %}
+                        {% if details.permission_manager == True %}
                         <li>
-                            <a href="#">
+                            <a href="/change/?use_as=manager">
                                 <strong>Manager</strong>
                             </a>
                         </li>
                         <li class="divider"></li>
+                        {% endif %}
+                        {% if details.permission_teacher == True %}
                         <li>
-                            <a href="#">
+                            <a href="/change/?use_as=teacher">
                                <strong>Teacher</strong> <span class="pull-right"><i class="fa fa-check"></i></span>
                             </a>
                         </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <strong>Student</strong>
-                            </a>
-                        </li>
+                        {% endif %}
                         {% endblock %}
                     </ul>
                     <!-- /.dropdown-tasks -->
@@ -218,7 +220,7 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href="/logout/"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->

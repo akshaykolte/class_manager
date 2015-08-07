@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^dashboard/dashboard/$', 'portal.views.accountant_views.dashboard'),
+    url(r'^dashboard/$', 'portal.views.accountant_views.dashboard'),
 
     url(r'^profile/view-profile/$', 'portal.views.accountant_views.view_profile'),
     url(r'^profile/change-password/$', 'portal.views.accountant_views.change_password'),
