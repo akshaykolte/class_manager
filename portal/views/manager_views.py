@@ -13,14 +13,14 @@ from django.http import Http404
 
 def dashboard(request):
 	auth_dict = get_user(request)
-	
+	context = {}
 	if auth_dict['logged_in'] != True:
 		raise Http404
 	
 	if auth_dict['permission_manager'] != True:
 		raise Http404
-
-	return render(request,'manager/dashboard.html')
+	context['details'] = auth_dict
+	return render(request,'manager/dashboard.html', context)
 
 @csrf_exempt
 def add_lectures(request):
@@ -62,7 +62,7 @@ def add_lectures(request):
 				page_type = 2
 				context['subject_id'] = int(request.GET['subject'])
 		context['page_type'] = page_type
-
+		context['details'] = auth_dict
 		return render(request,'manager/lectures/add_lectures.html', context)
 
 	elif request.method == 'POST':
@@ -73,6 +73,7 @@ def add_lectures(request):
 			lecture_count = request.POST['lecture_count']
 
 			set_lecture(name=lecture_name, description=lecture_description, count=lecture_count, subject_year_id=subject_id)
+			context['details'] = auth_dict
 			return redirect('./?message=Lecture Added')
 		except:
 			return redirect('./?message_error=Error Adding Lecture')
@@ -127,6 +128,7 @@ def view_lectures(request):
 
 		context['page_type'] = page_type
 
+		context['details'] = auth_dict
 
 		return render(request,'manager/lectures/view_lectures.html', context)
 
@@ -138,6 +140,7 @@ def view_lectures(request):
 			lecture_count = request.POST['lecture_count']
 
 			set_lecture(id=lecture_id, name=lecture_name, description=lecture_description, count=lecture_count)
+			context['details'] = auth_dict
 			return redirect('./?message=Lecture Edited')
 		except:
 			return redirect('./?message_error=Error Editing Lecture')
@@ -164,6 +167,7 @@ def add_teacher(request):
 		page_type = 0
 		context['page_type'] = page_type
 		context['branches'] = get_branch_of_manager(manager_id=auth_dict['id'])
+		context['details'] = auth_dict
 		return render(request, 'manager/teacher/add_teacher.html', context)
 	elif request.method == 'POST':
 		first_name = request.POST['first_name']
@@ -228,6 +232,7 @@ def view_teacher(request):
 					context['branches'][i] = [context['branches'][i], 'F']
 
 		context['page_type'] = page_type
+		context['details'] = auth_dict
 		return render(request, 'manager/teacher/view_teacher.html', context)
 	elif request.method == 'POST':
 		id = request.POST['staff']
@@ -300,7 +305,7 @@ def add_tests(request):
 			context['teachers'] = teachers
 
 		context['page_type'] = page_type
-				
+		context['details'] = auth_dict
 		return render(request,'manager/tests/add_tests.html', context)
 
 	elif request.method == 'POST':
@@ -337,7 +342,8 @@ def add_tests(request):
 
 
 			return redirect('./?message=Test Added')
-		except:
+		except Exception as e:
+			print 'sd', e
 			return redirect('./?message_error=Error Adding Test')
 
 @csrf_exempt
@@ -409,7 +415,7 @@ def view_tests(request):
 			context['tests'] = get_test(subject_year_id = request.GET['subject'])
 
 		context['page_type'] = page_type
-				
+		context['details'] = auth_dict		
 		return render(request,'manager/tests/view_tests.html', context)
 
 	elif request.method == 'POST':

@@ -7,16 +7,34 @@ from portal.db_api.auth_db import *
 from portal.db_api.fee_db import *
 
 def dashboard(request):
-	return render(request,'accountant/dashboard/dashboard.html')
 
-def view_profile(request):
 	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
 	if auth_dict['permission_accountant'] != True:
 		raise Http404
 
-	details = get_staff(id=auth_dict['id'])
+	context['details'] = auth_dict;
+
+
+	return render(request,'accountant/dashboard.html', context)
+
+def view_profile(request):
+	auth_dict = get_user(request)
+	context = {}
 	
-	context = {'auth_dict':auth_dict, 'details':details}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+
+	staff_details = get_staff(id=auth_dict['id'])
+	
+	context['details'] = auth_dict;
+	context['staff_details'] = staff_details
 
 	return render(request,'accountant/profile/view-profile.html', context)	
 	
@@ -24,6 +42,9 @@ def change_password(request):
 
 	auth_dict = get_user(request)
 	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
 	if auth_dict['permission_accountant'] != True:
 		raise Http404
 	if 'message' in request.GET:
@@ -32,12 +53,19 @@ def change_password(request):
 	elif 'message_error' in request.GET:
 		context['message_error'] = request.GET['message_error']
 
+	context['details'] = auth_dict;
+
 	return render(request,'accountant/profile/change-password.html', context)
 
 @csrf_exempt
 def change_password_submit(request):
 
 	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+
 	if auth_dict['permission_accountant'] != True:
 		raise Http404
 	if change_password_db(request):
@@ -56,10 +84,10 @@ def edit_profile(request):
 	if auth_dict['permission_accountant'] != True:
 		raise Http404
 
-	details = get_staff(id=auth_dict['id'])
+	staff_details = get_staff(id=auth_dict['id'])
 	
-	context['auth_dict'] =auth_dict
-	context['details'] = details
+	context['details'] = auth_dict
+	context['staff_details'] = staff_details
 
 	return render(request, 'accountant/profile/edit-profile.html', context)
 
@@ -81,19 +109,23 @@ def edit_profile_submit(request):
 
 def view_fees(request):
 	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
 	if auth_dict['permission_accountant'] != True:
 		raise Http404
 
-	details = get_batch_fees(fee_type_name = 'payment')
+	fee_details = get_batch_fees(fee_type_name = 'payment')
 
 
-	for i in details:
+	for i in fee_details:
 		subject_years = StudentBatch.objects.get(id = i['student_id']).subject_years.all()
 		basefees = get_base_fee(id = None , subject_years_list = subject_years)
 		for basefee in basefees :
 			i['base_fee'] = basefee.amount
 	#print details
-	context = {'auth_dict':auth_dict, 'details':details}
+	context = {'details':auth_dict, 'fee_details':fee_details}
 
 	return render(request,'accountant/fees/view-fees.html', context)	
 
@@ -118,9 +150,11 @@ def make_transaction(request):
 	
 	if auth_dict['permission_accountant'] != True:
 		raise Http404
+	context = {}
+	context['details'] = auth_dict
 	
 	if request.method == 'GET':
-		context = {}
+		
 		if 'message' in request.GET:
 			context['message'] = request.GET['message']
 		elif 'message_error' in request.GET:
@@ -146,7 +180,6 @@ def make_transaction(request):
 
 	elif request.method == 'POST':
 		try:
-			print "sdsadasd"
 			student_batch = StudentBatch.objects.get(student = Student.objects.get(id = int(request.POST['student'])))
 			student_batch_id = request.POST['student']
 			
