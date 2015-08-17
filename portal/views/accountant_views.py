@@ -182,6 +182,7 @@ def make_transaction(request):
 	context = {}
 	context['details'] = auth_dict
 	
+
 	if request.method == 'GET':
 		
 		if 'message' in request.GET:
@@ -190,19 +191,33 @@ def make_transaction(request):
 			context['message_error'] = request.GET['message_error']
 		
 		page_type = 0
-		
-		students = get_students(id = None,batch_id = None,branch_id = None)
-		context['students'] = students
-		
-		if 'student' in request.GET:
+		branches = get_branch(id=None)
+		context['branches'] = branches
+
+		if 'branch' in request.GET:
 			page_type = 1
-			fee_types = get_fee_types()
-			context['fee_types'] = fee_types
-			context['student_id'] = int(request.GET['student'])
-			context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
-			if 'fee_type' in request.GET:
+			batches = get_batch(branch_id = int(request.GET['branch']))
+			context['batches'] = batches
+			context['branch_id'] = int(request.GET['branch'])
+			#context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
+			if 'batch' in request.GET:
 				page_type = 2
-				context['fee_type_id'] = int(request.GET['fee_type'])
+				context['batch_id'] = int(request.GET['batch'])
+
+				students = get_students(id = None,batch_id = int(request.GET['batch']) , branch_id = None)
+				context['students'] = students
+				
+			
+
+				if 'student' in request.GET:
+					page_type = 3
+					fee_types = get_fee_types()
+					context['fee_types'] = fee_types
+					context['student_id'] = int(request.GET['student'])
+					context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
+					if 'fee_type' in request.GET:
+						page_type = 4
+						context['fee_type_id'] = int(request.GET['fee_type'])
 		context['page_type'] = page_type
 
 		return render(request,'accountant/fees/make-transaction.html', context)
