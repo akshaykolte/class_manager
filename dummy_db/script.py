@@ -33,6 +33,19 @@ def insert_academic_years():
 	print "Added Academic Years Successfully"
 
 
+def insert_fee_types():
+	print "Adding Fee Types..."
+	
+	f = open("dummy_db/fee_types.txt", "r+")
+	for fee in f.readlines():
+		if not FeeType.objects.filter(name=fee).exists():
+			fee_obj = FeeType(name=fee)
+			fee_obj.save()
+
+	print "Added Fee Types Successfully"
+
+
 
 insert_academic_years()
 insert_roles()
+insert_fee_types()
