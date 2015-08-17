@@ -54,10 +54,10 @@
 			<select name="fee_type" class="form-control" onchange="this.form.submit()">
 				<option>Select</option>
 				{% for fee_type in fee_types %}
-				<option value="{{fee_type.id}}">{{fee_type.name}}</option>
+					<option value="{{fee_type.id}}">{{fee_type.name}}</option>
 				{% endfor %}
 			</select>
-			</form>
+	</form>
 	
 	{% endif %}
 

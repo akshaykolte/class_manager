@@ -253,34 +253,42 @@ def get_fee_balance(student_batch_id = None, fee_type_name = None):
 	else :
 		raise Exception('Wrong set of arguments')
 
-def get_batch_fees(fee_type_name = None):
+def get_batch_fees(batch_id = None):
 
-	is_none_fee_type = fee_type_name == None
+	is_none_batch_id = batch_id == None
 	
-	if not is_none_fee_type :
-		student_batch_object = StudentBatch.objects.all()
-		fee_type_object = FeeType.objects.get(name = fee_type_name)
-		fee_list = []
-		for object in student_batch_object:
-
-			fee_transaction = FeeTransaction.objects.filter(student_batch = object, fee_type = fee_type_object)
-			
-			total = {}
-			total['total_fees_paid'] =0
-			for i in fee_transaction:
-				
-				
-				total['student'] = i.student_batch.student.first_name + ' ' + i.student_batch.student.last_name
-				total['student_id'] = i.student_batch.id
-				total['total_fees_paid'] = total['total_fees_paid'] + i.amount
-				total['base_fees'] = 0
-				
-			fee_list.append(total)
-		
-		return fee_list
-
+	if not is_none_batch_id :
+		student_batch_object = StudentBatch.objects.filter(batch = Batch.objects.get(id = batch_id))
 	else :
-		raise Exception('Wrong set of arguments')		
+		student_batch_object = StudentBatch.objects.all()
+	#fee_type_object = FeeType.objects.get(name = fee_type_name)
+	fee_list = []
+	for object in student_batch_object:
+
+		fee_transaction = FeeTransaction.objects.filter(student_batch = object)
+		
+		total = {}
+		total['total_fees_paid'] =0
+		total['discount'] = 0
+		total['base_fees'] = 0
+		total['total_fees'] = 0
+		for i in fee_transaction:
+			
+			
+			total['student'] = i.student_batch.student.first_name + ' ' + i.student_batch.student.last_name
+			total['student_id'] = i.student_batch.id
+			if(i.fee_type.name == 'payment'):
+				total['total_fees_paid'] = total['total_fees_paid'] + i.amount
+			
+			if(i.fee_type.name == 'discount'):
+				total['discount'] = total['discount'] + i.amount
+				
+		fee_list.append(total)
+	
+	return fee_list
+
+	#else :
+	#	raise Exception('Wrong set of arguments')		
 
 
 def get_fee_types(id = None):

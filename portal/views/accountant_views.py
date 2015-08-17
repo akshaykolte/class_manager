@@ -5,6 +5,10 @@ from portal.db_api.staff_db import *
 from portal.db_api.student_db import *
 from portal.db_api.auth_db import *
 from portal.db_api.fee_db import *
+from portal.db_api.branch_db import *
+from portal.db_api.batch_db import *
+
+
 
 def dashboard(request):
 
@@ -116,20 +120,45 @@ def view_fees(request):
 	if auth_dict['permission_accountant'] != True:
 		raise Http404
 
-	fee_details = get_batch_fees(fee_type_name = 'payment')
+	context = {}
+	context['details'] = auth_dict
+	branches = get_branch(id=None)
+	context['branches'] = branches
 
+	if request.method == 'GET':
+	
+		
+		page_type = 0
+		
+		
+		
+		if 'branch' in request.GET:
+			page_type = 1
+			batches = get_batch(branch_id = int(request.GET['branch']))
+			context['batches'] = batches
+			context['branch_id'] = int(request.GET['branch'])
+			#context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
+			if 'batch' in request.GET:
+				page_type = 2
+				context['batch_id'] = int(request.GET['batch'])
+				context['branch_id'] = int(request.GET['branch'])
+				fee_details = get_batch_fees(batch_id =  int(request.GET['batch']))
 
-	for i in fee_details:
-		subject_years = StudentBatch.objects.get(id = i['student_id']).subject_years.all()
-		basefees = get_base_fee(id = None , subject_years_list = subject_years)
-		for basefee in basefees :
-			i['base_fee'] = basefee.amount
-	#print details
-	context = {'details':auth_dict, 'fee_details':fee_details}
+				for i in fee_details:
+					subject_years = StudentBatch.objects.get(id = i['student_id']).subject_years.all()
+					basefees = get_base_fee(id = None , subject_years_list = subject_years)
+					for basefee in basefees :
+						i['base_fee'] = basefee.amount
+					i['total_fees'] = i['base_fee'] - i['discount']
+				
+				#print fee_details
+				context = {'details':auth_dict, 'fee_details':fee_details, 'batches' : batches, 'branches' : branches}
+				
+		context['page_type'] = page_type
+		print context
 
-	return render(request,'accountant/fees/view-fees.html', context)	
-
-
+		return render(request,'accountant/fees/view-fees.html', context)
+	
 
 
 @csrf_exempt
