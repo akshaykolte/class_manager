@@ -16,9 +16,10 @@ from portal.models import Lecture,LectureBatch,SubjectYear,StaffRole,Batch
 def get_lecture(id = None, subject_year_id = None):
 	is_none_id = id == None
 	is_none_subject_year_id = subject_year_id == None
-
+	lecture_list = []
 	if not is_none_id and is_none_subject_year_id:
 		lecture = Lecture.objects.get(id = id)
+		lecture_batch_object = LectureBatch.objects.get(lecture = lecture)
 		lecture_obj = {}
 		lecture_obj['id'] = lecture.id
 		lecture_obj['name'] = lecture.name
@@ -27,15 +28,17 @@ def get_lecture(id = None, subject_year_id = None):
 		lecture_obj['subject_year_id'] = lecture.subject_year.id
 		lecture_obj['subject_id'] = lecture.subject_year.subject.id
 		lecture_obj['subject_name'] = lecture.subject_year.subject.name
-		
-		return lecture_obj
+		lecture_obj['date'] = lecture_batch_object.date
+		lecture_list.append(lecture_obj)
+		return lecture_list
 	
 	elif is_none_id and not is_none_subject_year_id:
 
 		lecture_object = Lecture.objects.filter(subject_year=(SubjectYear.objects.get(id=subject_year_id)))
-		lecture_list = []
+		
 
 		for i in lecture_object:
+			lecture_batch_object = LectureBatch.objects.get(lecture = i)
 			lecture_dict = {}
 			lecture_dict['id'] = i.id
 			lecture_dict['name'] = i.name
@@ -44,14 +47,15 @@ def get_lecture(id = None, subject_year_id = None):
 			lecture_dict['subject_year_id'] = i.subject_year.id
 			lecture_dict['subject_id'] = i.subject_year.subject.id
 			lecture_dict['subject_name'] = i.subject_year.subject.name
+			lecture_dict['date'] = lecture_batch_object.date
 			lecture_list.append(lecture_dict)
 
 		return lecture_list
 
 	else:
-		lecture_list = []
 		lecture = Lecture.objects.all()
 		for i in lecture:
+			lecture_batch_object = LectureBatch.objects.get(lecture = i)
 			lecture_dict = {}
 			lecture_dict['id'] = i.id
 			lecture_dict['name'] = i.name
@@ -60,6 +64,7 @@ def get_lecture(id = None, subject_year_id = None):
 			lecture_dict['subject_year_id'] = i.subject_year.id
 			lecture_dict['subject_id'] = i.subject_year.subject.id
 			lecture_dict['subject_name'] = i.subject_year.subject.name
+			lecture_dict['date'] = lecture_batch_object.date
 			lecture_list.append(lecture_dict)
 		return lecture_list
 
