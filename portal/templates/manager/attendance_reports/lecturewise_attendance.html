@@ -122,24 +122,22 @@
 	{% if page_type == 5 %}
 		<label><strong>Lecturewise Report</strong></label>
 		<br/>
-		Still thinking bitch
 
 	   <table class="table table-bordered table-hover table-striped">
 			<thead>
 				<tr>
-					<th class="col-lg-2">#</th>
-					<th>Lecture Name</th>
-					<th class="col-lg-1">Count</th>
-					<th class="col-lg-1">Link</th>
+					<th>Student</th>
+					{% for lecture in report.0 %}
+						<th>{{lecture.batch__name}}</th>
+					{% endfor %}
 				</tr>
 			</thead>
 			<tbody>
-				{% for lecture in lectures %}
+				{% for student in report.1 %}
 					<tr>
-						<td>{{lecture.subject_year_id}}</td>
-						<td>{{lecture.name}}</td>
-						<td>{{lecture.count}}</td>
-						<td><a href="./?lecture={{lecture.id}}&branch={{branch_id}}">Report</a></td>
+						{% for st in student %}
+							<td>{{st}}</td>
+						{% endfor %}
 					</tr>
 				{% endfor %}
 			</tbody>

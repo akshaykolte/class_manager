@@ -488,7 +488,7 @@ def lecturewise_attendance(request):
 		if 'branch' in request.GET:
 			if 'lecture' in request.GET:
 				page_type = 5
-				attendance_report(lecture_id=request.GET['lecture'], branch_id=request.GET['branch'])
+				context['report'] = attendance_report(lecture_id=request.GET['lecture'], branch_id=request.GET['branch'])
 			else:
 				page_type = 2
 				context['standards'] = get_standard()
