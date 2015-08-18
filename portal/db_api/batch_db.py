@@ -43,6 +43,23 @@ def get_batch(id=None,branch_id =None,academic_year_id =None,standard_id =None):
 	is_none_academic_year_id = academic_year_id == None
 	is_none_standard_id = standard_id == None
 
+	#0000
+	if is_none_id and is_none_branch_id and is_none_academic_year_id and is_none_standard_id:
+		batch_object_list = Batch.objects.all()
+		batch_list = []
+		
+		for batch_object in batch_object_list:
+			batch = {}
+			batch['id'] = batch_object.id
+			batch['name'] = batch_object.name
+			batch['description'] = batch_object.description
+			batch['academic_year'] = batch_object.academic_year
+			batch['branch'] = batch_object.branch.name
+			batch['standard'] = batch_object.standard.name
+			batch_list.append(batch)
+		return batch_list
+
+
 	#1000
 	if not is_none_id:
 		batch_object = Batch.objects.get(id = id)

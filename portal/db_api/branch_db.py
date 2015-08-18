@@ -25,6 +25,7 @@ def get_branch(id=None):
 	if not is_none_id:
 		branch_object = Branch.objects.get(id=id)
 		branch={}
+		branch['id'] = branch_object.id
 		branch['name'] = branch_object.name
 		return branch
 	else:
@@ -33,7 +34,9 @@ def get_branch(id=None):
 		for branch_object in branch_object_list:
 			branch={}
 			branch['name'] = branch_object.name
+			branch['id'] = branch_object.id
 			branch_list.append(branch)
+
 		return branch_list
 
 def get_branch_of_manager(manager_id):

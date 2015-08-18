@@ -26,8 +26,71 @@
 
 <div class="col-lg-8">
 	
-	{% if page_type == 0 %}
+		{% if page_type == 0 %}
+            <form>
+                <label><strong>Select Branch</strong></label>
+                <select name="branch" class="form-control" onchange="this.form.submit()">
+                    <option>Select</option>
+                    {% for branch in branches %}
+                    <option value="{{branch.id}}">{{branch.name}}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        {% endif %}
+        
+        {% if page_type == 1 %}
+            <form>
+                <label><strong>Select Branch</strong></label>
+                <select name="branch" class="form-control" onchange="this.form.submit()">
+                    {% for branch in branches %}
+                    <option value="{{branch.id}}"{% if branch_id == branch.id %} selected{% endif %}>{{branch.name}}</option>
+                    {% endfor %}
+                </select>
+            </form>
+           
+            <br/>
+
+            <form>
+                <input type="hidden" name="branch" value="{{branch_id}}">
+                    <label><strong>Select Batch</strong></label>
+                    <select name="batch" class="form-control" onchange="this.form.submit()">
+                        <option>Select</option>
+                        {% for batch in batches %}
+                        <option value="{{batch.id}}">{{batch.name}}&nbsp;{{batch.branch}}</option>
+                        {% endfor %}
+                    </select>
+            </form>
+        
+        {% endif %}
+
+	{% if page_type == 2 %}
+
 		<form>
+            <label><strong>Select Branch</strong></label>
+            <select name="branch" class="form-control" onchange="this.form.submit()">
+                {% for branch in branches %}
+                <option value="{{branch.id}}"{% if branch_id == branch.id %} selected{% endif %}>{{branch.name}}</option>
+                {% endfor %}
+            </select>
+        </form>
+        <br/>
+
+        <form>
+            <input type="hidden" name="branch" value="{{branch_id}}">
+                <label><strong>Select Batch</strong></label>
+                <select name="batch" class="form-control" onchange="this.form.submit()">
+                    
+                    {% for batch in batches %}
+                    <option value="{{batch.id}}"{% if batch_id == batch.id %} selected{% endif %}>{{batch.name}}&nbsp;{{batch.branch}}</option>
+                    {% endfor %}
+
+                </select>
+        </form>
+        <br/>
+
+		<form>
+			<input type="hidden" name="branch" value="{{branch_id}}">
+		    <input type="hidden" name="batch" value="{{batch_id}}">
 			<label><strong>Select Student</strong></label>
 			<select name="student" class="form-control" onchange="this.form.submit()">
 				<option>Select</option>
@@ -37,9 +100,35 @@
 			</select>
 		</form>
 	{% endif %}
+
 	
-	{% if page_type == 1 %}
+	{% if page_type == 3 %}
 	<form>
+        <label><strong>Select Branch</strong></label>
+        <select name="branch" class="form-control" onchange="this.form.submit()">
+            {% for branch in branches %}
+            <option value="{{branch.id}}"{% if branch_id == branch.id %} selected{% endif %}>{{branch.name}}</option>
+            {% endfor %}
+        </select>
+    </form>
+    <br/>
+
+    <form>
+        <input type="hidden" name="branch" value="{{branch_id}}">
+            <label><strong>Select Batch</strong></label>
+            <select name="batch" class="form-control" onchange="this.form.submit()">
+                
+                {% for batch in batches %}
+                <option value="{{batch.id}}"{% if batch_id == batch.id %} selected{% endif %}>{{batch.name}}&nbsp;{{batch.branch}}</option>
+                {% endfor %}
+
+            </select>
+    </form>
+    <br/>	
+
+	<form>
+		<input type="hidden" name="branch" value="{{branch_id}}">
+		<input type="hidden" name="batch" value="{{batch_id}}">	
 		<label><strong>Select Student</strong></label>
 		<select name="student" class="form-control" onchange="this.form.submit()">
 			{% for student in students %}
@@ -47,22 +136,53 @@
 			{% endfor %}
 		</select>
 	</form>
+
 	<br/>
 	<form>
+		<input type="hidden" name="branch" value="{{branch_id}}">
+		<input type="hidden" name="batch" value="{{batch_id}}">
 		<input type="hidden" name="student" value="{{student_id}}">
 			<label><strong>Select Fee Type</strong></label>
 			<select name="fee_type" class="form-control" onchange="this.form.submit()">
 				<option>Select</option>
 				{% for fee_type in fee_types %}
-				<option value="{{fee_type.id}}">{{fee_type.name}}</option>
+					<option value="{{fee_type.id}}">{{fee_type.name}}</option>
 				{% endfor %}
 			</select>
-			</form>
-	
+	</form>
+
+	<br/>
+
 	{% endif %}
 
-	{% if page_type == 2 %}
+	{% if page_type == 4 %}
+
 	<form>
+        <label><strong>Select Branch</strong></label>
+        <select name="branch" class="form-control" onchange="this.form.submit()">
+            {% for branch in branches %}
+            <option value="{{branch.id}}"{% if branch_id == branch.id %} selected{% endif %}>{{branch.name}}</option>
+            {% endfor %}
+        </select>
+    </form>
+    <br/>
+
+    <form>
+        <input type="hidden" name="branch" value="{{branch_id}}">
+            <label><strong>Select Batch</strong></label>
+            <select name="batch" class="form-control" onchange="this.form.submit()">
+                
+                {% for batch in batches %}
+                <option value="{{batch.id}}"{% if batch_id == batch.id %} selected{% endif %}>{{batch.name}}&nbsp;{{batch.branch}}</option>
+                {% endfor %}
+
+            </select>
+    </form>
+    <br/>	
+
+	<form>
+		<input type="hidden" name="branch" value="{{branch_id}}">
+	    <input type="hidden" name="batch" value="{{batch_id}}">
 		<label><strong>Select Student</strong></label>
 		<select name="student" class="form-control" onchange="this.form.submit()">
 			{% for student in students %}
@@ -70,8 +190,10 @@
 			{% endfor %}
 		</select>
 	</form>
-	<br/>
+
 	<form>
+		<input type="hidden" name="branch" value="{{branch_id}}">
+		<input type="hidden" name="batch" value="{{batch_id}}">
 		<input type="hidden" name="student" value="{{student_id}}">
 		<label><strong>Select Fee Type</strong></label>
 		<select name="fee_type" class="form-control" onchange="this.form.submit()">
@@ -82,8 +204,12 @@
 	</form>
 	<br/>
 	<form action="." method="POST">
+	
+		<input type="hidden" name="branch" value="{{branch_id}}">
+		<input type="hidden" name="batch" value="{{batch_id}}">		
 		<input type="hidden" name="student" value="{{student_id}}">
 		<input type="hidden" name="fee_type" value="{{fee_type_id}}">
+
 		<label><strong>Receipt Number</strong></label>
 		<input name="receipt_number" class="form-control">
 		<br/>
