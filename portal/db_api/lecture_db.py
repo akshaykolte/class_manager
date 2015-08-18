@@ -38,7 +38,8 @@ def get_lecture(id = None, subject_year_id = None):
 		
 
 		for i in lecture_object:
-			lecture_batch_object = LectureBatch.objects.get(lecture = i)
+			# Commented because of error
+			#lecture_batch_object = LectureBatch.objects.get(lecture = i)
 			lecture_dict = {}
 			lecture_dict['id'] = i.id
 			lecture_dict['name'] = i.name
@@ -47,7 +48,7 @@ def get_lecture(id = None, subject_year_id = None):
 			lecture_dict['subject_year_id'] = i.subject_year.id
 			lecture_dict['subject_id'] = i.subject_year.subject.id
 			lecture_dict['subject_name'] = i.subject_year.subject.name
-			lecture_dict['date'] = lecture_batch_object.date
+			#lecture_dict['date'] = lecture_batch_object.date
 			lecture_list.append(lecture_dict)
 
 		return lecture_list

@@ -308,7 +308,7 @@ class LectureBatch(models.Model):
 		return self.name + ' ' + str(self.date)
 
 	class Meta:
-		unique_together = (('lecture', 'batch',),)
+		unique_together = (('lecture', 'batch', 'name',),)
 
 	def save(self, validate=True):
 		from portal.validator.validator import validate_lecture_batch

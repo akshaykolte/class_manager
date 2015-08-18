@@ -9,6 +9,7 @@ from portal.db_api.staff_db import *
 from portal.db_api.roles_db import *
 from portal.db_api.test_db import *
 from portal.db_api.batch_db import *
+from portal.db_api.attendance_reports_db import *
 from django.http import Http404
 
 def dashboard(request):
@@ -468,3 +469,37 @@ def view_tests(request):
 			return redirect('./?message=Test Saved')
 #		except:
 #			return redirect('./?message_error=Error Saving Test')
+
+def lecturewise_attendance(request):
+
+	context = {}
+	
+	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+	if request.method == "GET":
+		context['branches'] = get_branch_of_manager(manager_id=auth_dict['id'])
+		page_type = 1
+		if 'branch' in request.GET:
+			if 'lecture' in request.GET:
+				page_type = 5
+				attendance_report(lecture_id=request.GET['lecture'], branch_id=request.GET['branch'])
+			else:
+				page_type = 2
+				context['standards'] = get_standard()
+				context['branch_id'] = int(request.GET['branch'])
+				if 'standard' in request.GET:
+					page_type = 3
+					context['standard_id'] = int(request.GET['standard'])
+					context['subjects'] = get_subjects(standard_id=request.GET['standard'])
+					if 'subject' in request.GET:
+						page_type = 4
+						context['lectures'] = get_lecture(subject_year_id=request.GET['subject'])
+
+	context['page_type'] = page_type
+	return render(request, 'manager/attendance_reports/lecturewise_attendance.html', context)

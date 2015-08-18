@@ -131,7 +131,7 @@
                         {% if details.permission_manager == True %}
                         <li>
                             <a href="/change/?use_as=manager">
-                                <strong>Manager</strong>
+                                <strong>Manager</strong> <span class="pull-right"><i class="fa fa-check"></i></span>
                             </a>
                         </li>
                         <li class="divider"></li>
@@ -139,7 +139,7 @@
                         {% if details.permission_teacher == True %}
                         <li>
                             <a href="/change/?use_as=teacher">
-                               <strong>Teacher</strong> <span class="pull-right"><i class="fa fa-check"></i></span>
+                               <strong>Teacher</strong>
                             </a>
                         </li>
                         {% endif %}
@@ -288,16 +288,13 @@
 							<a href="#"><i class="fa fa-edit fa-fw"></i> Attendance Reports<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-									<a href="/manager/attendance-reports/batchwise-attendance/">Batchwise Attendance</a>
+									<a href="/manager/attendance-reports/lecturewise-attendance/">Lecturewise Attendance</a>
                                 </li>
                                 <li>
 									<a href="/manager/attendance-reports/studentwise-attendance/">Studentwise Attendance</a>
                                 </li>
                                 <li>
-									<a href="/manager/attendance-reports/subjectwise-attendance/">Subjectwise Attendance</a>
-                                </li>
-                                <li>
-									<a href="/manager/attendance-reports/lecturewise-attendance/">Lecturewise Attendance</a>
+									<a href="/manager/attendance-reports/batchwise-attendance/">Batchwise Attendance</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
