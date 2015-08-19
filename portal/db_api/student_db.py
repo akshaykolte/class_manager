@@ -326,7 +326,7 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 
 	#00001
 	if not is_none_student_id and is_none_id and is_none_batch_id and is_none_standard_id and is_none_academic_year_id:
-		student_batch_object = StudentBatch.objects.get(student = Student.objects.get(id = student_id),batch = Batch.objects.get(academic_year = AcademicYear.objects.get(id =get_current_academic_year()['id'])))
+		student_batch_object = StudentBatch.objects.get(student = Student.objects.get(id = student_id),batch__academic_year = AcademicYear.objects.get(id =get_current_academic_year()['id']))
 		student_batch = {}
 		student_batch['student_username'] = student_batch_object.student.username
 		student_batch['student_password'] = student_batch_object.student.password

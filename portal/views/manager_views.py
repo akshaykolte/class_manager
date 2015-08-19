@@ -10,6 +10,7 @@ from portal.db_api.roles_db import *
 from portal.db_api.test_db import *
 from portal.db_api.batch_db import *
 from portal.db_api.attendance_reports_db import *
+from portal.db_api.student_db import *
 from django.http import Http404
 
 def dashboard(request):
@@ -420,7 +421,7 @@ def view_tests(request):
 		return render(request,'manager/tests/view_tests.html', context)
 
 	elif request.method == 'POST':
-#		try:
+		try:
 			test_name = request.POST['test_name']
 			test_id = request.POST['test']
 			
@@ -467,14 +468,16 @@ def view_tests(request):
 
 
 			return redirect('./?message=Test Saved')
-#		except:
-#			return redirect('./?message_error=Error Saving Test')
+		except:
+			return redirect('./?message_error=Error Saving Test')
 
 def lecturewise_attendance(request):
 
+	# TODO: add checking of permission of branch to manager
 	context = {}
 	
 	auth_dict = get_user(request)
+	context['details'] = auth_dict
 	
 	if auth_dict['logged_in'] != True:
 		raise Http404
@@ -501,5 +504,42 @@ def lecturewise_attendance(request):
 						page_type = 4
 						context['lectures'] = get_lecture(subject_year_id=request.GET['subject'])
 
-	context['page_type'] = page_type
-	return render(request, 'manager/attendance_reports/lecturewise_attendance.html', context)
+		context['page_type'] = page_type
+		return render(request, 'manager/attendance_reports/lecturewise_attendance.html', context)
+
+def studentwise_attendance(request):
+
+	'''
+			TODO: important: fix the UX for selecting student id and then selecting subjects
+	'''
+	context = {}
+	
+	auth_dict = get_user(request)
+	context['details'] = auth_dict
+	
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+	if request.method == "GET":
+		page_type = 1
+
+		if 'student' in request.GET:
+			page_type = 2
+			subject_years = get_student_batch(student_id=request.GET['student'])['student_subjects']
+			context['student_id'] = request.GET['student']
+			context['subjects'] = subject_years
+
+			if 'report' in request.GET:
+				page_type = 3
+				subject_years = get_student_batch(student_id=request.GET['student'])['student_subjects']
+				subjects = []
+				for subject_year in subject_years:
+					if str(subject_year['id']) in request.GET:
+						subjects.append(subject_year['id'])
+				context['report'] = attendance_report(student_id=request.GET['student'], subjects=subjects)
+
+		context['page_type'] = page_type
+		return render(request, 'manager/attendance_reports/studentwise_attendance.html', context)
