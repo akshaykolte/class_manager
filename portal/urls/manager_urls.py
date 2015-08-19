@@ -10,4 +10,5 @@ urlpatterns = [
 	url(r'^tests/add-tests/$', 'portal.views.manager_views.add_tests'),
 	url(r'^tests/view-tests/$', 'portal.views.manager_views.view_tests'),
 	url(r'^attendance-reports/lecturewise-attendance/$', 'portal.views.manager_views.lecturewise_attendance'),
+	url(r'^attendance-reports/studentwise-attendance/$', 'portal.views.manager_views.studentwise_attendance'),
 ]
