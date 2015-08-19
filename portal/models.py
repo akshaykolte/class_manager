@@ -135,7 +135,7 @@ class StudentParent(models.Model):
 	parent = models.ForeignKey(Parent)
 
 	def __str__(self):
-		return str(self.student) + ' ' + str(self.parent)
+		return str(self.student) + ' : ' + str(self.parent)
 
 	class Meta:
 		unique_together = (('student', 'parent',),)
