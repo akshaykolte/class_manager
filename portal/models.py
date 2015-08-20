@@ -248,8 +248,10 @@ class SubjectYear(models.Model):
 
 class StudentBatch(models.Model):
 	student = models.ForeignKey(Student)
-	batch = models.ForeignKey(Batch)
+	batch = models.ForeignKey(Batch, blank=True, null=True)
 	subject_years = models.ManyToManyField(SubjectYear)
+	academic_year = models.ForeignKey(AcademicYear, blank=True, null=True)
+	standard = models.ForeignKey(Standard, blank=True, null=True)
 
 	def __str__(self):
 		return str(self.student) + ' ' + str(self.batch)

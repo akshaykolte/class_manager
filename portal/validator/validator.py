@@ -29,13 +29,24 @@ def validate_student_parent(student_parent_object):
 def validate_student_batch(student_batch_object, subject_year_id_list):
 	print student_batch_object, subject_year_id_list
 	from portal.models import SubjectYear
-	for subject_year_id in subject_year_id_list:
-		subject_year_object = SubjectYear.objects.get(id=subject_year_id)
-		if student_batch_object.batch.academic_year != subject_year_object.academic_year:
-			return False
-		if student_batch_object.batch.standard != subject_year_object.subject.standard:
-			return False
-	return True
+	if student_batch_object.standard == None and student_batch_object.academic_year == None and student_batch_object.batch != None:
+		for subject_year_id in subject_year_id_list:
+			subject_year_object = SubjectYear.objects.get(id=subject_year_id)
+			if student_batch_object.batch.academic_year != subject_year_object.academic_year:
+				return False
+			if student_batch_object.batch.standard != subject_year_object.subject.standard:
+				return False
+		return True
+	elif student_batch_object.standard != None and student_batch_object.academic_year != None and student_batch_object.batch == None:
+		for subject_year_id in subject_year_id_list:
+			subject_year_object = SubjectYear.objects.get(id=subject_year_id)
+			if student_batch_object.academic_year != subject_year_object.academic_year:
+				return False
+			if student_batch_object.standard != subject_year_object.subject.standard:
+				return False
+		return True
+	else:
+		return False
 
 def validate_staff(staff_object):
 	# No special dependency
