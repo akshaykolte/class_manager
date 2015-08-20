@@ -11,4 +11,5 @@ urlpatterns = [
 	url(r'^tests/view-tests/$', 'portal.views.manager_views.view_tests'),
 	url(r'^attendance-reports/lecturewise-attendance/$', 'portal.views.manager_views.lecturewise_attendance'),
 	url(r'^attendance-reports/studentwise-attendance/$', 'portal.views.manager_views.studentwise_attendance'),
+	url(r'^attendance-reports/batchwise-attendance/$', 'portal.views.manager_views.batchwise_attendance'),
 ]

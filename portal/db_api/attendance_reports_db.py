@@ -1,13 +1,13 @@
-from portal.models import Attendance, StudentBatch, LectureBatch, Lecture, SubjectYear
+from portal.models import Attendance, StudentBatch, LectureBatch, Lecture, SubjectYear, Batch
 from django.db.models import Count, IntegerField, Case, When
 
-def attendance_report(lecture_id = None, branch_id = None, student_id = None, subjects = None):
-	# Valid cases: 1100, 0011
+def attendance_report(lecture_id = None, branch_id = None, student_id = None, subjects = None, batch_id = None):
+	# Valid cases: 11000, 00110, 00001
 	bit_list = []
-	for i in [lecture_id, branch_id, student_id, subjects]:
+	for i in [lecture_id, branch_id, student_id, subjects, batch_id]:
 		if i == None: bit_list.append('0')
 		else: bit_list.append('1')
-	if ''.join(bit_list) == '1100':
+	if ''.join(bit_list) == '11000':
 		attendance_list = Attendance.objects.filter(lecture_batch__lecture__id = lecture_id, student_batch__batch__branch__id=branch_id).values('student_batch__student__first_name', 'student_batch__student__last_name', 'student_batch__id', 'lecture_batch__batch__name', 'lecture_batch__batch__id').annotate(Count('lecture_batch__batch'))
 		
 		print ''
@@ -62,11 +62,11 @@ def attendance_report(lecture_id = None, branch_id = None, student_id = None, su
 
 		return report_list
 
-	if ''.join(bit_list) == '0011':
+	if ''.join(bit_list) == '00110':
 		if len(subjects) == 1:
 			subject_id = subjects[0]
 
-			lectures = Lecture.objects.filter(lecturebatch__batch = StudentBatch.objects.get(id=student_id).batch).annotate(Count('lecturebatch'))
+			lectures = Lecture.objects.filter(subject_year__id = subject_id, lecturebatch__batch = StudentBatch.objects.get(id=student_id).batch).annotate(Count('lecturebatch'))
 			lectures_dict = {}
 			for lecture in lectures:
 				lectures_dict[lecture.id] = lecture
@@ -74,17 +74,28 @@ def attendance_report(lecture_id = None, branch_id = None, student_id = None, su
 			
 			attendance_list = Attendance.objects.filter(student_batch__id=student_id, lecture_batch__lecture__subject_year__id = subject_id).values('lecture_batch__lecture__name', 'lecture_batch__lecture__id').annotate(Count('lecture_batch'))
 		
-			report_table = []
 			attendance_dict = {}
-			sum = [0,0]
+
 			for attendance in attendance_list:
+				attendance_dict[attendance['lecture_batch__lecture__id']] = attendance
+
+			report_table = []
+			sum = [0,0]
+			for lecture in lectures_dict:
 				report_table.append([])
-				report_table[-1].append(lectures_dict[attendance['lecture_batch__lecture__id']].name)
-				report_table[-1].append(attendance['lecture_batch__count'])
-				report_table[-1].append(lectures_dict[attendance['lecture_batch__lecture__id']].lecturebatch__count)
-				sum[0] += attendance['lecture_batch__count']
-				sum[1] += lectures_dict[attendance['lecture_batch__lecture__id']].lecturebatch__count
-			
+				report_table[-1].append(lectures_dict[lecture].name)
+				#report_table[-1].append(lectures_dict[attendance['lecture_batch__lecture__id']].name)
+				if lectures_dict[lecture].id in attendance_dict:
+					report_table[-1].append(attendance_dict[lectures_dict[lecture].id]['lecture_batch__count'])
+				else:
+					report_table[-1].append(0)
+				#report_table[-1].append(attendance['lecture_batch__count'])
+				report_table[-1].append(lectures_dict[lecture].lecturebatch__count)
+				#report_table[-1].append(lectures_dict[attendance['lecture_batch__lecture__id']].lecturebatch__count)
+				sum[0] += report_table[-1][1]
+				sum[1] += report_table[-1][2]
+
+
 			report_table.append(['Total', sum[0], sum[1]])
 			
 			'''
@@ -132,3 +143,53 @@ def attendance_report(lecture_id = None, branch_id = None, student_id = None, su
 				report_table[-1].append(subject_dict[subject][0])
 
 			return report_table
+
+	if ''.join(bit_list) == '00001':
+		batch = Batch.objects.get(id=batch_id)
+		subjects = SubjectYear.objects.filter(academic_year = batch.academic_year, subject__standard = batch.standard)
+		subject_list = LectureBatch.objects.filter(lecture__subject_year__in = subjects,batch__id=batch_id).values('lecture__subject_year__id', 'lecture__subject_year__subject__name').annotate(Count('name'))
+		
+		
+		subject_dict = {}
+		subject_name_list = []
+		index = 0
+		for subject in subjects:
+			subject_dict[subject.id] = [subject.subject.name, 0, index]
+			subject_name_list.append([subject.subject.name,0])
+			index += 1
+		
+		for subject in subject_list:
+			subject_dict[subject['lecture__subject_year__id']][1] = subject['name__count']
+		
+		attendance_list = Attendance.objects.filter(lecture_batch__lecture__subject_year__in=subjects).values('student_batch__id', 'lecture_batch__lecture__subject_year__id').annotate(Count('count'))
+
+		attendance_dict = {}
+
+		for attendance in attendance_list:
+			if attendance['student_batch__id'] in attendance_dict:
+				attendance_dict[attendance['student_batch__id']].append(attendance)
+			else:
+				attendance_dict[attendance['student_batch__id']] = [attendance]
+
+		'''
+		print subject_dict
+		
+		print attendance_list
+		
+		print attendance_dict
+		
+		'''
+
+		report_table = [subject_name_list, []]
+
+		students = StudentBatch.objects.filter(batch__id=batch_id)
+
+		for student in students:
+			report_table[1].append([0 for i in range(len(subject_name_list))])
+			for subject in subject_dict:
+				report_table[1][-1][subject_dict[subject][2]] = '-/'+str(subject_dict[subject][1])
+			for attendance in attendance_dict[student.id]:
+				report_table[1][-1][subject_dict[attendance['lecture_batch__lecture__subject_year__id']][2]] = report_table[1][-1][subject_dict[attendance['lecture_batch__lecture__subject_year__id']][2]].replace('-', str(attendance['count__count']))
+			report_table[1][-1] = [student.student.first_name+' '+student.student.last_name] + report_table[1][-1]
+
+		return report_table

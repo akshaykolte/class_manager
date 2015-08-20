@@ -543,3 +543,36 @@ def studentwise_attendance(request):
 
 		context['page_type'] = page_type
 		return render(request, 'manager/attendance_reports/studentwise_attendance.html', context)
+
+def batchwise_attendance(request):
+
+	context = {}
+	
+	auth_dict = get_user(request)
+	context['details'] = auth_dict
+	
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+	if request.method == "GET":
+		page_type = 1
+		context['branches'] = get_branch_of_manager(manager_id=auth_dict['id'])
+		
+		if 'batch' in request.GET:
+			page_type = 4
+			context['report'] = attendance_report(batch_id=request.GET['batch'])
+		elif 'branch' in request.GET:
+			page_type = 2
+			context['branch_id'] = int(request.GET['branch'])
+			context['standards'] = get_standard()
+
+			if 'standard' in request.GET:
+				page_type = 3
+				context['standard_id'] = int(request.GET['standard'])
+				context['batches'] = get_batch(branch_id=request.GET['branch'], standard_id=request.GET['standard'])
+					
+	context['page_type'] = page_type
+	return render(request, 'manager/attendance_reports/batchwise_attendance.html', context)
