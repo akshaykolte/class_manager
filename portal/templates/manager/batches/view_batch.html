@@ -1,0 +1,110 @@
+{% extends "manager/base_manager.html" %}
+
+{% block main_content%}
+<div class="row">
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">View/Edit Batches</h1>
+    </div>
+</div>
+	{% if message %}
+	    <div class="panel-body">
+	        <div class="alert alert-success alert-dismissable col-lg-8">
+	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	            {{message}}
+	        </div>
+	    </div>
+    {% elif message_error %}
+	    <div class="panel-body">
+		    <div class="alert alert-danger alert-dismissable col-lg-8">
+		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		        {{message_error}}
+		    </div>
+		</div>
+	{% endif %}
+
+<div class="col-lg-8">
+	
+	{% if page_type == 1 %}
+		<form>
+			<label><strong>Select Branch</strong></label>
+			<select name="branch" class="form-control" onchange="this.form.submit()">
+				<option>Select</option>
+				{% for branch in branches %}
+				<option value="{{branch.id}}">{{branch.name}}</option>
+				{% endfor %}
+			</select>
+		</form>
+	{% endif %}
+	
+	{% if page_type == 2 %}
+	<form>
+		<label><strong>Select Branch</strong></label>
+		<select name="branch" class="form-control" onchange="this.form.submit()">
+			{% for branch in branches %}
+			<option value="{{branch.id}}"{% if branch_id == branch.id %} selected{% endif %}>{{branch.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+		<input type="hidden" name="branch" value="{{branch_id}}">
+			<label><strong>Select Standard</strong></label>
+			<select name="standard" class="form-control" onchange="this.form.submit()">
+				<option>Select</option>
+				{% for standard in standards %}
+				<option value="{{standard.id}}">{{standard.name}}</option>
+				{% endfor %}
+			</select>
+			</form>
+	
+	{% endif %}
+
+	{% if page_type == 3 %}
+	<label><strong>Batch Details</strong></label>
+	   <table class="table table-bordered table-hover table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Standard</th>
+					<th>Link</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for batch in batches %}
+					<tr>
+						<td>{{batch.id}}</td>
+						<td>{{batch.name}}</td>
+						<td>{{batch.description}}</td>
+						<td>{{batch.standard}}</td>
+						<td><a href="./?batch={{batch.id}}">Edit</a></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+
+	{% endif %}
+
+
+	{% if page_type == 4 %}
+		<form action='.' method="POST">
+			<input type="hidden" name="batch" value="{{batch.id}}">
+			<label><strong>Name</strong></label>
+			<input name="name" class="form-control" value="{{batch.name}}">
+			<br/>
+			<label><strong>Description</strong></label>
+			<input name="description" class="form-control" value="{{batch.description}}">
+			<br/>
+			<input class="btn btn-default" type='submit' value='Save'>
+		</form>
+	{% endif %}
+
+
+
+</br>
+
+{% endblock %}
