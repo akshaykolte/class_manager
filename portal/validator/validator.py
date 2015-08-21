@@ -28,7 +28,7 @@ def validate_student_parent(student_parent_object):
 
 def validate_student_batch(student_batch_object, subject_year_id_list):
 	print student_batch_object, subject_year_id_list
-	from portal.models import SubjectYear
+	from portal.models import SubjectYear, StudentBatch
 	if student_batch_object.standard == None and student_batch_object.academic_year == None and student_batch_object.batch != None:
 		for subject_year_id in subject_year_id_list:
 			subject_year_object = SubjectYear.objects.get(id=subject_year_id)
@@ -36,6 +36,13 @@ def validate_student_batch(student_batch_object, subject_year_id_list):
 				return False
 			if student_batch_object.batch.standard != subject_year_object.subject.standard:
 				return False
+			if student_batch_object.id == None:
+				# True when creating new StudentBatch object
+				if (StudentBatch.objects.filter(student = student_batch_object.student, academic_year=student_batch_object.batch.academic_year).count() + StudentBatch.objects.filter(student = student_batch_object.student, batch__academic_year=student_batch_object.batch.academic_year).count() ) > 0:
+					return False # StudentBatch of academic_year already exists
+			else:
+				if (StudentBatch.objects.exclude(id=student_batch_object.id).filter(student = student_batch_object.student, academic_year=student_batch_object.batch.academic_year).count() + StudentBatch.objects.exclude(id=student_batch_object.id).filter(student = student_batch_object.student, batch__academic_year=student_batch_object.batch.academic_year).count() ) > 0:
+					return False # StudentBatch of academic_year already exists
 		return True
 	elif student_batch_object.standard != None and student_batch_object.academic_year != None and student_batch_object.batch == None:
 		for subject_year_id in subject_year_id_list:
@@ -44,6 +51,14 @@ def validate_student_batch(student_batch_object, subject_year_id_list):
 				return False
 			if student_batch_object.standard != subject_year_object.subject.standard:
 				return False
+			if student_batch_object.id == None:
+				# True when creating new StudentBatch object
+				if (StudentBatch.objects.filter(student = student_batch_object.student, academic_year=student_batch_object.academic_year).count() + StudentBatch.objects.filter(student = student_batch_object.student, batch__academic_year=student_batch_object.academic_year).count() ) > 0:
+					return False # StudentBatch of academic_year already exists
+			else:
+				if (StudentBatch.objects.exclude(id=student_batch_object.id).filter(student = student_batch_object.student, academic_year=student_batch_object.academic_year).count() + StudentBatch.objects.exclude(id=student_batch_object.id).filter(student = student_batch_object.student, batch__academic_year=student_batch_object.academic_year).count() ) > 0:
+					return False # StudentBatch of academic_year already exists
+
 		return True
 	else:
 		return False
