@@ -1,0 +1,33 @@
+Optics$Physics$12th$4
+Electronic Devices$Physics$12th$4
+Communication Systems$Physics$12th$4
+Atoms and nuclei$Physics$12th$4
+Electrostatics$Physics$12th$4
+Dual nature of matter$Physics$12th$4
+Calculus$Maths$12th$4
+Vectors and 3d$Maths$12th$4
+Probability$Maths$12th$4
+Matrices$Maths$12th$4
+Determinants$Maths$12th$4
+Linear Programming$Maths$12th$4
+P-block elements$Chemistry$12th$4
+D and F block elements$Chemistry$12th$4
+Electrochemistry$Chemistry$12th$4
+Solid States$Chemistry$12th$4
+Chemical Kinetics$Chemistry$12th$4
+Surface Chemistry$Chemistry$12th$4
+Coordinate Geometry$Maths$11th$4
+Limits$Maths$11th$4
+Continuity$Maths$11th$4
+Differentiation$Maths$11th$4
+Sequences And Series$Maths$11th$4
+Permutations And Combinations$Maths$11th$4
+Chemical Bonding And Molecular Structure$Chemistry$11th$4
+Thermodynamics$Chemistry$11th$4
+Equilibrium$Chemistry$11th$4
+S And P Block$Chemistry$11th$4
+Mechanics$Physics$11th$4
+Rotation$Physics$11th$4
+Thermodynamics$Physics$11th$4
+Properties Of Solids$Physics$11th$4
+Properties Of Liquids$Physics$11th$4
