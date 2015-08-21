@@ -440,5 +440,51 @@ def get_previous_students(batch_id = None):
 	else:
 		raise Exception('batch_id required')
 
+def search_students(first_name='', last_name='', username='', email='', phone_number=''):
+	# TODO Think of optimisation (probably using indexes
+	students = Student.objects.filter(first_name__icontains=first_name, last_name__icontains=last_name, username__icontains=username, email__icontains=email, phone_number__icontains=phone_number)
+	student_list = []
+	for i in students:
+		student_dict = {}
+		student_dict['id'] = i.id
+		student_dict['username'] = i.username
+		student_dict['first_name'] = i.first_name
+		student_dict['last_name'] = i.last_name
+		student_dict['email'] = i.email
+		student_dict['phone_number'] = i.phone_number
+		student_list.append(student_dict)
+	
+	return student_list
 
-
+def get_student_batch_of_student(student_id):
+	# TODO (maybe?) merge with get_student_batch()
+	student_batch = StudentBatch.objects.filter(student__id=student_id)
+	student_batch_list = []
+	for student_batch_object in student_batch:
+		student_batch = {}
+		student_batch['id'] = student_batch_object.id
+		student_batch['student_username'] = student_batch_object.student.username
+		student_batch['student_password'] = student_batch_object.student.password
+		student_batch['student_first_name'] = student_batch_object.student.first_name
+		student_batch['student_last_name'] = student_batch_object.student.last_name
+		student_batch['student_address'] = student_batch_object.student.address
+		student_batch['student_email'] = student_batch_object.student.email
+		student_batch['student_phone_number'] = student_batch_object.student.phone_number
+		student_batch['student_gender'] = student_batch_object.student.gender
+		student_batch['student_batch_name'] = student_batch_object.batch.name
+		student_batch['student_batch_description'] = student_batch_object.batch.description
+		subject_year_list = []
+		for j in student_batch_object.subject_years.all():
+			subject_year_dict ={}
+			subject_year_dict['id'] = j.id
+			subject_year_dict['subject_id'] = j.subject.id
+			subject_year_dict['subject_name'] = j.subject.name
+			subject_year_dict['standard_id'] = j.subject.standard.id
+			subject_year_dict['standard_name'] = j.subject.standard.name
+			subject_year_dict['academic_year_id'] = j.academic_year.id
+			subject_year_dict['academic_year_name'] = str(j.academic_year.year_start)+'-'+str(j.academic_year.year_end)
+			subject_year_dict['year_id'] = j.academic_year.id
+			subject_year_list.append(subject_year_dict)
+		student_batch['student_subjects'] = subject_year_list
+		student_batch_list.append(student_batch)
+	return student_batch_list
