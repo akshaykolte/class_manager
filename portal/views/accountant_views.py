@@ -7,6 +7,9 @@ from portal.db_api.auth_db import *
 from portal.db_api.fee_db import *
 from portal.db_api.branch_db import *
 from portal.db_api.batch_db import *
+from portal.db_api.academic_year_db import *
+from portal.db_api.standard_db import *
+from portal.db_api.subject_db import *
 
 
 
@@ -137,7 +140,7 @@ def view_fees(request):
 			batches = get_batch(branch_id = int(request.GET['branch']))
 			context['batches'] = batches
 			context['branch_id'] = int(request.GET['branch'])
-			#context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
+
 			if 'batch' in request.GET:
 				page_type = 2
 				context['batch_id'] = int(request.GET['batch'])
@@ -156,6 +159,69 @@ def view_fees(request):
 
 		return render(request,'accountant/fees/view-fees.html', context)
 	
+
+@csrf_exempt
+def add_base_fees(request):
+	
+	
+	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	context = {}
+	context['details'] = auth_dict
+	
+
+	if request.method == 'GET':
+		
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		
+		page_type = 0
+		academic_years = get_academic_year(id=None)
+		context['academic_years'] = academic_years
+
+		if 'academic_year' in request.GET:
+			page_type = 1
+			standards = get_standard(id=None)
+			context['standards'] = standards
+			context['academic_year_id'] = int(request.GET['academic_year'])
+			#context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
+			if 'standard' in request.GET:
+				page_type = 2
+				context['standard_id'] = int(request.GET['standard'])
+
+				subject_years = get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard_id=int(request.GET['standard']), academic_year_id=int(request.GET['academic_year']), subject_year_id=None)
+				context['subject_years'] = subject_years
+				
+			
+
+		context['page_type'] = page_type
+
+		return render(request,'accountant/fees/add-base-fees.html', context)
+
+	elif request.method == 'POST':
+		try:
+			
+			amount = request.POST['amount']
+			subject_years = get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard_id=int(request.POST['standard']), academic_year_id=int(request.POST['academic_year']), subject_year_id=None)
+			subject_year_list = []
+			for subject_year in subject_years:
+				if 'subject_year_'+str(subject_year['id']) in request.POST:
+					print subject_year
+					subject_year_list.append(subject_year['id'])
+
+			set_base_fee(amount=amount , subject_years_list = subject_year_list)
+			return redirect('./?message=Base Fee Set')
+		except:
+			return redirect('./?message_error=Error. Transaction Failed.')
+
+
 
 
 @csrf_exempt

@@ -168,7 +168,7 @@ def get_fee_transaction(id = None ,date_start = None, date_end = None, receipt_n
 	# if student batch id given return transactions for that student
 	if not is_none_student_id:
 		student_object = Student.objects.get(id = student_id)
-		fee_transaction = FeeTransaction.objects.filter(student = student_object)
+		fee_transaction = FeeTransaction.objects.filter(student_batch = StudentBatch.objects.get(student=student_object))
 		fee_list = []
 		
 		for i in fee_transaction:
@@ -178,7 +178,7 @@ def get_fee_transaction(id = None ,date_start = None, date_end = None, receipt_n
 			fee_dict['date'] = i.date
 			fee_dict['time'] = i.time
 			fee_dict['timestamp'] = i.timestamp
-			fee_dict['student'] = i.student
+			fee_dict['student_batch'] = i.student_batch
 			fee_dict['fee_type'] = i.fee_type
 			
 			fee_list.append(fee_dict)
@@ -298,7 +298,7 @@ def get_batch_fees(batch_id = None):
 	#fee_type_object = FeeType.objects.get(name = fee_type_name)
 	fee_list = []
 	for object in student_batch_object:
-		fee_transaction = FeeTransaction.objects.filter(student = object.student)
+		fee_transaction = FeeTransaction.objects.filter(student_batch = object)
 		print fee_transaction
 		total = {}
 		total['total_fees_paid'] =0
@@ -321,8 +321,8 @@ def get_batch_fees(batch_id = None):
 		for i in fee_transaction:
 			
 			
-			total['student'] = i.student.first_name + ' ' + i.student.last_name
-			total['student_id'] = i.student.id
+			total['student'] = i.student_batch.student.first_name + ' ' + i.student_batch.student.last_name
+			total['student_id'] = i.student_batch.student.id
 			if(i.fee_type.name == 'payment'):
 				total['total_fees_paid'] = total['total_fees_paid'] + i.amount
 			
