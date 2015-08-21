@@ -144,12 +144,9 @@ def view_fees(request):
 				context['branch_id'] = int(request.GET['branch'])
 				fee_details = get_batch_fees(batch_id =  int(request.GET['batch']))
 
-				for i in fee_details:
-					subject_years = StudentBatch.objects.get(id = i['student_id']).subject_years.all()
-					basefees = get_base_fee(id = None , subject_years_list = subject_years)
-					for basefee in basefees :
-						i['base_fee'] = basefee.amount
-					i['total_fees'] = i['base_fee'] - i['discount']
+				
+
+				
 				
 				#print fee_details
 				context = {'details':auth_dict, 'fee_details':fee_details, 'batches' : batches, 'branches' : branches}
@@ -204,7 +201,7 @@ def make_transaction(request):
 				page_type = 2
 				context['batch_id'] = int(request.GET['batch'])
 
-				students = get_students(id = None,batch_id = int(request.GET['batch']) , branch_id = None)
+				students = get_students(id = None, batch_id = int(request.GET['batch']) , branch_id = None, academic_year_id = None, standard_id = None)
 				context['students'] = students
 				
 			
@@ -214,7 +211,6 @@ def make_transaction(request):
 					fee_types = get_fee_types()
 					context['fee_types'] = fee_types
 					context['student_id'] = int(request.GET['student'])
-					context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
 					if 'fee_type' in request.GET:
 						page_type = 4
 						context['fee_type_id'] = int(request.GET['fee_type'])
@@ -224,9 +220,9 @@ def make_transaction(request):
 
 	elif request.method == 'POST':
 		try:
-			student_batch = StudentBatch.objects.get(student = Student.objects.get(id = int(request.POST['student'])))
-			student_batch_id = request.POST['student']
-			
+			student = Student.objects.get(id = int(request.POST['student']))
+			student_id = student.id
+
 			fee_type_id = request.POST['fee_type']
 			
 			receipt_number = request.POST['receipt_number']
@@ -237,7 +233,7 @@ def make_transaction(request):
 			
 			time = request.POST['time']
 			
-			set_fee_transaction(id = None ,amount = amount, date = '2015-8-5', time = '19:45:07', receipt_number = receipt_number, student_batch_id = student_batch_id, fee_type_id = fee_type_id)
+			set_fee_transaction(id = None ,amount = amount, date = '2015-8-5', time = '19:45:07', receipt_number = receipt_number, student_id = student_id, fee_type_id = fee_type_id)
 			
 			return redirect('./?message=Transaction made')
 		except:

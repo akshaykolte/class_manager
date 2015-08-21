@@ -102,12 +102,15 @@ def insert_subjects():
 	print ""
 
 
-def insert_students():
+def insert_students(n=100):
 	print "Adding Students..."
-
+	n+=1
 	f = open("dummy_db/students.txt", "r+")
 	
 	for stu in f.readlines():
+		n-=1;
+		if n <= 0:
+			break
 		line = stu.split('$')
 		username = line[0]
 		password = line[1]
@@ -125,12 +128,15 @@ def insert_students():
 	print ""
 
 
-def insert_parents():
+def insert_parents(n=100):
 	print "Adding Parents..."
-
+	n+=1
 	f = open("dummy_db/parents.txt", "r+")
 	
 	for par in f.readlines():
+		n-=1;
+		if n <= 0:
+			break
 		line = par.split('$')
 		username = line[0]
 		password = line[1]
@@ -148,9 +154,10 @@ def insert_parents():
 	print ""
 
 
-def assign_student_parent():
+def assign_student_parent(n=100):
 
 	print "Assigning Students to Parents"
+	# n+=1
 	f = open("dummy_db/students.txt", "r+")
 	stu_list = f.readlines()
 	f.close()
@@ -158,7 +165,7 @@ def assign_student_parent():
 	par_list = f.readlines()
 	f.close()
 
-	for i in xrange(min(len(stu_list), len(par_list))):
+	for i in xrange(n):
 		line1 = stu_list[i].split('$')
 		line2 = par_list[i].split('$')
 		s_username = line1[0]
@@ -184,8 +191,60 @@ def assign_student_parent():
 			stu_par_obj.save()
 
 	print "Assigned Students to Parents Successfully"
+	print ""
 
 
+def insert_staff(n=100):
+
+	
+	print "Adding Staff..."
+	n+=1
+	f = open("dummy_db/staffs.txt", "r+")
+	for staff in f.readlines():
+		
+		n-=1;
+		if n <= 0:
+			break
+
+		line = staff.split('$')
+		username = line[0]
+		password = line[1]
+		first_name = line[2]
+		last_name = line[3]
+		address = line[4]
+		email = line[5]
+		phone_number = line[6]
+		gender = line[7].rstrip('\n')
+		if not Staff.objects.filter(username=username).exists():
+			staff_obj = Staff(username=username, password=password, first_name=first_name, last_name=last_name, address=address, email=email, phone_number=phone_number, gender=gender)
+			staff_obj.save()
+	f.close()
+	print "Added Staff Successfully"
+	print ""
+
+def insert_staff_role():
+
+	print "Assigning roles to each Staff..."
+	staff_obj = Staff.objects.all();
+	role_obj = Role.objects.all();
+	branch_obj = Branch.objects.all();
+	
+	bsize = len(branch_obj)
+	rsize = len(role_obj)
+	
+	for i in xrange(len(staff_obj)):
+		branch = branch_obj[i%bsize]
+		role = role_obj[i%rsize]
+		staff = staff_obj[i]
+
+		if not StaffRole.objects.filter(staff=Staff.objects.get(id=staff.id), role=Role.objects.get(id=role.id), branch=Branch.objects.get(id=branch.id)).exists():
+
+			staff_role_obj = StaffRole(staff=Staff.objects.get(id=staff.id), role=Role.objects.get(id=role.id), branch=Branch.objects.get(id=branch.id))
+
+			staff_role_obj.save()
+
+	print "Roles Assigned to Staffs Successfully"
+	print ""
 
 
 insert_academic_years()
@@ -195,7 +254,25 @@ insert_fee_types()
 insert_standards()
 insert_subjects()
 
+# print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
+# n = int(raw_input())
+
+# while n > 105 and n < 0:
+# 	print "Maximum exceeded, enter again."
+# 	print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
+# 	n = int(raw_input())
+
 insert_students()
 insert_parents()
 assign_student_parent()
-# insert_staff()
+
+# print "How many staffs do you want to enter?(MAX = 100)"
+# n = int(raw_input())
+
+# while n > 100 and n < 0:
+# 	print "Maximum exceeded, enter again."
+# 	print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
+# 	n = int(raw_input())
+
+insert_staff()
+insert_staff_role()

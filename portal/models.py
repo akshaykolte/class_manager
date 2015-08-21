@@ -389,11 +389,11 @@ class FeeTransaction(models.Model):
 	time = models.TimeField()
 	timestamp = models.DateTimeField(auto_now_add=True)
 	receipt_number = models.CharField(max_length=50)
-	student_batch = models.ForeignKey(StudentBatch)
+	student = models.ForeignKey(Student)
 	fee_type = models.ForeignKey(FeeType)
 
 	def __str__(self):
-		return str(self.student_batch) + ':' + str(self.fee_type) + '- Rs. ' + str(self.amount)
+		return str(self.student) + ':' + str(self.fee_type) + '- Rs. ' + str(self.amount)
 
 	class Meta:
 		unique_together = (('receipt_number',),)
