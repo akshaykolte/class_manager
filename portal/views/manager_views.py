@@ -576,8 +576,6 @@ def batchwise_attendance(request):
 					
 	context['page_type'] = page_type
 	return render(request, 'manager/attendance_reports/batchwise_attendance.html', context)
-<<<<<<< HEAD
-=======
 
 @csrf_exempt
 def add_batch(request):
@@ -664,4 +662,3 @@ def view_batch(request):
 		# TODO: Check for permission of manager to batch
 		set_batch(id=request.POST['batch'], name=request.POST['name'], description=request.POST['description'])
 		return redirect('./?message=Batch Saved')
->>>>>>> 7c97dacf0d1e6f2a4b14923b320246a48f76f61c

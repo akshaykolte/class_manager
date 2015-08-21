@@ -37,7 +37,7 @@ def set_base_fee(id = None ,amount=None , subject_years_list = None):
 		base_fee_object.save()
 		return base_fee_object.id	
 		
-def get_base_fee(id = None , subject_years_list = None, academic_year_id=None):
+def get_base_fee(id = None , subject_years_list = None, academic_year_id=None, standard_id=None):
 	#subject_years is list of subject_year ids eg. [1,2]
 	
 	#if 0 args return all base fee object DONE
@@ -45,10 +45,11 @@ def get_base_fee(id = None , subject_years_list = None, academic_year_id=None):
 	is_none_id = id == None
 	is_none_subject_years_list = subject_years_list == None
 	is_none_academic_year_id = academic_year_id == None
+	is_none_standard_id = standard_id == None
 	
-	if not is_none_academic_year_id:
+	if not is_none_academic_year_id and not is_none_standard_id:
 		base_fee_list=[]
-		base_fee_objects = BaseFee.objects.filter(subject_years__academic_year__id=academic_year_id).distinct()
+		base_fee_objects = BaseFee.objects.filter(subject_years__academic_year__id=academic_year_id, subject_years__subject__standard__id=standard_id).distinct()
 		#print base_fee_objects
 		for base_fee in base_fee_objects :
 			base_fee_object = {}
