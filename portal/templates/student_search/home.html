@@ -36,6 +36,16 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+	<script>
+		function select_student(student_id){
+			opener.document.getElementById('chooseStudentId').value = student_id;
+			self.close();
+		}
+		function select_student_batch(student_id){
+			opener.document.getElementById('chooseStudentBatchId').value = student_id;
+			self.close();
+		}
+	</script>
 </head>
 
 <body>
@@ -84,7 +94,11 @@
 									<td>{{student.username}}</td>
 									<td>{{student.email}}</td>
 									<td>{{student.phone_number}}</td>
-									<td><a href=".?student={{student.id}}">Details</a></td>
+									{% if type == 'studentbatch' %}
+										<td><a href=".?student={{student.id}}&type={{type}}">Details</a></td>
+									{% elif type == 'student' %}
+										<td><a href="javascript:select_student({{student.id}});">Choose</a></td>
+									{% endif %}
 								</tr>
 							{% endfor %}
 						</tbody>
@@ -113,7 +127,9 @@
 									<td>{{student.student_username}}</td>
 									<td>{{student.student_subjects.0.academic_year_name}}</td>
 									<td>{{student.student_subjects.0.standard_name}}</td>
-									<td><a href="javascript:select_student({{student.id}});">Choose</a></td>
+									{% if type == 'studentbatch' %}
+										<td><a href="javascript:select_student_batch({{student.id}});">Choose</a></td>
+									{% endif %}
 								</tr>
 							{% endfor %}
 						</tbody>
@@ -124,6 +140,7 @@
 				<br/>
 				<h3>Enter Atleast one field</h3><br/>
 					<form action="." method="GET">
+						<input type="hidden" name="type" value="{{type}}">
 						<input type="hidden" name="search" value="true">
 						<label><strong>First Name</strong></label>
 						<input name="first_name" class="form-control"><br/>

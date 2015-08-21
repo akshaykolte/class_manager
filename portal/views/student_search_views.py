@@ -28,6 +28,15 @@ def home(request):
 	context['details'] = auth_dict
 	page_type = 1
 
+	type=''
+	if 'type' in request.GET:
+		if request.GET['type'] == 'student':
+			type='student'
+		elif request.GET['type'] == 'studentbatch':
+			type='studentbatch'
+		else:
+			return Http404
+
 	if 'search' in request.GET:
 		students = search_students(first_name=request.GET['first_name'], last_name=request.GET['last_name'], username=request.GET['username'], email=request.GET['email'], phone_number=request.GET['phone_number'])
 		page_type = 0
@@ -37,6 +46,8 @@ def home(request):
 		students = get_student_batch_of_student(student_id=request.GET['student'])
 		context['students'] = students
 		page_type = 2
+
+	context['type'] = type
 
 	context['page_type'] = page_type
 	return render(request,'student_search/home.html', context)
