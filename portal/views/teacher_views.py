@@ -225,6 +225,7 @@ def view_lecture(request):
 		page_type = 0
 		staff_role_list = get_staff_role(staff_id = auth_dict['id'])
 		staff_role_id_list = []
+		
 		for staff_role in staff_role_list:
 			staff_role_id = staff_role['id']
 			staff_role_id_list.append(staff_role_id)
@@ -235,11 +236,20 @@ def view_lecture(request):
 				lecturebatches.append(i)
 		context['lecturebatches'] = lecturebatches	
 		if 'lecturebatch' in request.GET:
-			page_type = 1	
+			page_type = 1
+			context['lecturebatch'] = get_lecture_batch(id = request.GET['lecturebatch'])	
 		context['page_type'] = page_type
 		context['details'] = auth_dict
 		return render(request, 'teacher/lectures/view-lecture.html', context)
 	elif request.method == 'POST':
+		
+		id = request.POST['lecturebatch']
+		lecturebatch_name = request.POST['lecturebatch_name']
+		lecturebatch_description = request.POST['lecturebatch_description']
+		lecturebatch_date = request.POST['lecturebatch_date']
+		lecturebatch_duration = request.POST['lecturebatch_duration']
+
+		set_lecture_batch(id=id, name = lecturebatch_name, description = lecturebatch_description, date = lecturebatch_date , duration = lecturebatch_duration)
 		
 
 		return redirect('./?message=Edited Lecture batch')	
