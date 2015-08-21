@@ -5,6 +5,7 @@ from portal.db_api.student_db import *
 from portal.db_api.auth_db import *
 from portal.db_api.attendance_db import *
 from portal.db_api.lecture_db import *
+from portal.db_api.attendance_reports_db import *
 
 def dashboard(request):
 	auth_dict = get_user(request)
@@ -66,7 +67,18 @@ def view_attendance(request):
 	if auth_dict['permission_student'] != True:
 		raise Http404
 
-	details = get_attendance(id=auth_dict['id'])
+	page_type = 1
+	student_batch = get_student_batch(student_id=auth_dict['id'])
+	subjects = student_batch['student_subjects']
+	context['subjects'] = subjects
+	if 'attendance' in request.GET:
+		page_type = 2
+		subjects_id_list = []
+		for subject in subjects:
+			if str(subject['id']) in request.GET:
+				subjects_id_list.append(subject['id'])
+		context['report'] = attendance_report(student_id=student_batch['id'], subjects=subjects_id_list)
+	context['page_type'] = page_type
 
 	return render(request, 'student/attendance/view_attendance.html', context)
 

@@ -63,40 +63,7 @@ def get_students(id = None,batch_id = None):
 			student_dict['subjects'] = subject_year_list
 			student_list.append(student_dict)
 		return student_list
-<<<<<<< HEAD
 	elif is_none_id and is_none_batch_id:
-=======
-	elif not is_none_academic_year_id and not is_none_standard_id:
-		student_list = []
-		student_batch = StudentBatch.objects.filter(academic_year__id = academic_year_id, standard__id = standard_id)
-		for i in student_batch:
-			student_dict = {}
-			student_dict['id'] = i.student.id
-			student_dict['username'] = i.student.username
-			student_dict['password'] = i.student.password
-			student_dict['first_name'] = i.student.first_name
-			student_dict['last_name'] = i.student.last_name
-			student_dict['address'] = i.student.address
-			student_dict['email'] = i.student.email
-			student_dict['phone_number'] = i.student.phone_number
-			student_dict['gender'] = i.student.gender
-			student_dict['academic_year_id'] = i.academic_year.id
-			student_dict['standard_id'] = i.standard.id
-			subject_year_list = []
-			for j in i.subject_years.all():
-				subject_year_dict={}
-				subject_year_dict['id'] = j.id
-				subject_year_dict['subject_id'] = j.subject.id
-				subject_year_dict['subject_name'] = j.subject.name
-				subject_year_dict['standard_id'] = j.subject.standard.id
-				subject_year_dict['standard_name'] = j.subject.standard.name
-				subject_year_dict['year_id'] = j.academic_year.id
-				subject_year_list.append(subject_year_dict)
-			student_dict['subjects'] = subject_year_list
-			student_list.append(student_dict)
-		return student_list
-	else:
->>>>>>> 54e0d8488775bc1bef0d6785f6956f39edb1fba7
 		student_list = []
 		student = Student.objects.all()
 		for i in student:
@@ -305,6 +272,7 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 	if not is_none_student_id and is_none_id and is_none_batch_id and is_none_standard_id and is_none_academic_year_id:
 		student_batch_object = StudentBatch.objects.get(student = Student.objects.get(id = student_id),batch__academic_year = AcademicYear.objects.get(id =get_current_academic_year()['id']))
 		student_batch = {}
+		student_batch['id'] = student_batch_object.id
 		student_batch['student_username'] = student_batch_object.student.username
 		student_batch['student_password'] = student_batch_object.student.password
 		student_batch['student_first_name'] = student_batch_object.student.first_name

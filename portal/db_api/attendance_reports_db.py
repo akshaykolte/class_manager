@@ -1,6 +1,9 @@
 from portal.models import Attendance, StudentBatch, LectureBatch, Lecture, SubjectYear, Batch
 from django.db.models import Count, IntegerField, Case, When
 
+'''
+		student_id here refers to id of StudentBatch
+'''
 def attendance_report(lecture_id = None, branch_id = None, student_id = None, subjects = None, batch_id = None):
 	# Valid cases: 11000, 00110, 00001
 	bit_list = []
