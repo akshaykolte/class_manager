@@ -111,6 +111,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 		lecture_batch_dict['name'] = lecture_batch_object.name
 		lecture_batch_dict['description'] = lecture_batch_object.description
 		lecture_batch_dict['date'] = lecture_batch_object.date
+		lecture_batch_dict['duration'] = lecture_batch_object.duration
 		lecture_batch_dict['lecture'] = lecture_batch_object.lecture
 		lecture_batch_dict['staff_role'] = lecture_batch_object.staff_role
 		lecture_batch_dict['batch'] = lecture_batch_object.batch_id
@@ -125,6 +126,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['name'] = i.name
 			lecture_batch_dict['description'] = i.description
 			lecture_batch_dict['date'] = i.date
+			lecture_batch_dict['duration'] = i.duration
 			lecture_batch_dict['lecture'] = i.lecture
 			lecture_batch_dict['staff_role'] = i.staff_role
 			lecture_batch_dict['batch'] = i.batch_id
@@ -140,6 +142,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['name'] = i.name
 			lecture_batch_dict['description'] = i.description
 			lecture_batch_dict['date'] = i.date
+			lecture_batch_dict['duration'] = i.duration
 			lecture_batch_dict['lecture'] = i.lecture
 			lecture_batch_dict['staff_role'] = i.staff_role
 			lecture_batch_dict['batch'] = i.batch_id
@@ -155,6 +158,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['name'] = i.name
 			lecture_batch_dict['description'] = i.description
 			lecture_batch_dict['date'] = i.date
+			lecture_batch_dict['duration'] = i.duration
 			lecture_batch_dict['lecture'] = i.lecture
 			lecture_batch_dict['staff_role'] = i.staff_role
 			lecture_batch_dict['batch'] = i.batch_id
