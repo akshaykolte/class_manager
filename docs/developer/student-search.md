@@ -37,3 +37,5 @@ Use the two code samples given in the documentation to integrate the implementat
 		</span>
 </div>
  ```
+
+ - A sample implementation can be found out at the url: /manager/attendance-reports/studentwise-attendance/
