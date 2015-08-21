@@ -17,10 +17,11 @@ def dashboard(request):
 	if auth_dict['permission_student'] != True:
 		raise Http404
 	context['auth_dict'] = auth_dict
-	student_object = get_students(id = auth_dict['id'])
+	student_object = get_student_batch(student_id = auth_dict['id'])
 	lecture_list = []
-	for subject_year in student_object['subjects']:
-		context['lectures'] = get_lecture(subject_year_id = subject_year['id'])
+	context['lectures'] = []
+	for subject_year in student_object['student_subjects']:
+		context['lectures'] += get_lecture(subject_year_id = subject_year['id'])
 	return render(request,'student/dashboard.html', context)
 
 def view_profile(request):

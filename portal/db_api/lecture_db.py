@@ -48,7 +48,7 @@ def get_lecture(id = None, subject_year_id = None):
 			lecture_dict['subject_year_id'] = i.subject_year.id
 			lecture_dict['subject_id'] = i.subject_year.subject.id
 			lecture_dict['subject_name'] = i.subject_year.subject.name
-			#lecture_dict['date'] = lecture_batch_object.date
+			lecture_dict['date'] = '-' # TODO
 			lecture_list.append(lecture_dict)
 
 		return lecture_list
