@@ -576,3 +576,92 @@ def batchwise_attendance(request):
 					
 	context['page_type'] = page_type
 	return render(request, 'manager/attendance_reports/batchwise_attendance.html', context)
+<<<<<<< HEAD
+=======
+
+@csrf_exempt
+def add_batch(request):
+	context = {}
+	
+	if 'message' in request.GET:
+		context['message'] = request.GET['message']
+	elif 'message_error' in request.GET:
+		context['message_error'] = request.GET['message_error']
+
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+	context['details'] = auth_dict
+	if request.method == 'GET':
+		page_type = 1
+		context['branches'] = get_branch_of_manager(manager_id=auth_dict['id'])
+		
+		if 'branch' in request.GET:
+			page_type = 2
+			standards = get_standard()
+			context['standards'] = standards
+			context['branch_id'] = int(request.GET['branch'])
+
+			if 'standard' in request.GET:
+				page_type = 3
+				context['standard_id'] = int(request.GET['standard'])
+
+		context['page_type'] = page_type
+		return render(request, 'manager/batches/add_batch.html', context)
+
+	elif request.method == 'POST':
+		# TODO: Check for permission of manager to branch
+		set_batch(branch_id=request.POST['branch'], academic_year_id=get_current_academic_year()['id'], standard_id=request.POST['standard'], name=request.POST['batch_name'], description=request.POST['batch_description'])
+		return redirect('./?message=Batch Added')
+
+@csrf_exempt
+def view_batch(request):
+	context = {}
+	
+	if 'message' in request.GET:
+		context['message'] = request.GET['message']
+	elif 'message_error' in request.GET:
+		context['message_error'] = request.GET['message_error']
+
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+	context['details'] = auth_dict
+	if request.method == 'GET':
+		page_type = 1
+		context['branches'] = get_branch_of_manager(manager_id=auth_dict['id'])
+
+		if 'batch' in request.GET:
+			page_type = 4
+			# TODO check permission of manager to batch
+			context['batch'] = get_batch(id=request.GET['batch'])
+		elif 'branch' in request.GET:
+			page_type = 2
+			standards = get_standard()
+			context['standards'] = standards
+			context['branch_id'] = int(request.GET['branch'])
+
+			if 'standard' in request.GET:
+				page_type = 3
+				context['standard_id'] = int(request.GET['standard'])
+				# TODO check for permission of manager to the branch
+				context['batches'] = get_batch(branch_id=request.GET['branch'], standard_id=request.GET['standard'])
+
+		context['page_type'] = page_type
+		return render(request, 'manager/batches/view_batch.html', context)
+
+	elif request.method == 'POST':
+		# TODO: Check for permission of manager to batch
+		set_batch(id=request.POST['batch'], name=request.POST['name'], description=request.POST['description'])
+		return redirect('./?message=Batch Saved')
+>>>>>>> 7c97dacf0d1e6f2a4b14923b320246a48f76f61c

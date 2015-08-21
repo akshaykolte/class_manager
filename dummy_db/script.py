@@ -1,5 +1,6 @@
 from portal.models import *
-
+from portal.db_api.academic_year_db import get_current_academic_year
+from itertools import combinations
 	
 def insert_academic_years():
 	print "Adding Academic Years..."
@@ -83,6 +84,23 @@ def insert_standards():
 	print "Added Standards Successfully"
 	print ""
 
+def insert_batches():
+	print "Adding Batches..."
+	cur_ay = get_current_academic_year()['id']
+	cur_ay_obj = AcademicYear.objects.get(id=cur_ay)
+	branches = Branch.objects.all()
+	standards = Standard.objects.all()
+	batches = ['Morning Batch', 'Evening Batch']
+	for std in standards:
+		for br in branches:
+			for bat in batches:
+				if not Batch.objects.filter(name=bat, academic_year=cur_ay_obj, branch=br, standard=std).exists():
+					bat_obj = Batch(name=bat, description="Temporary Description", academic_year=cur_ay_obj, branch=br, standard=std)
+					bat_obj.save()
+	
+	print "Added Batches Successfully"
+	print ""
+
 
 def insert_subjects():
 	print "Adding Subjects..."
@@ -99,6 +117,23 @@ def insert_subjects():
 			sub_obj.save()
 	f.close()
 	print "Added Subjects Successfully"
+	print ""
+
+
+def insert_subject_years():
+	print "Adding Subject Years..."
+
+	subjects = Subject.objects.all()
+	years = AcademicYear.objects.all()
+
+	for year in years:
+		for sub in subjects:
+
+			if not SubjectYear.objects.filter(subject=Subject.objects.get(id=sub.id), academic_year=AcademicYear.objects.get(id=year.id)).exists():
+				sub_year_obj = SubjectYear(subject=Subject.objects.get(id=sub.id), academic_year=AcademicYear.objects.get(id=year.id))
+				sub_year_obj.save()
+
+	print "Added Subject Years Successfully"
 	print ""
 
 
@@ -224,7 +259,7 @@ def insert_staff(n=100):
 
 def insert_staff_role():
 
-	print "Assigning roles to each Staff..."
+	print "Assigning Roles to each Staff..."
 	staff_obj = Staff.objects.all();
 	role_obj = Role.objects.all();
 	branch_obj = Branch.objects.all();
@@ -247,12 +282,67 @@ def insert_staff_role():
 	print ""
 
 
+def insert_lectures():
+	print "Adding Lectures..."
+	
+	f = open("dummy_db/lectures.txt", "r+")
+	cur_ay = get_current_academic_year()['id']
+	cur_ay_obj = AcademicYear.objects.get(id=cur_ay)
+	for lec in f.readlines():
+		line = lec.split('$')
+		name = line[0]
+		subject = line[1]
+		standard = line[2]
+		count = line[3].rstrip('\n')
+		
+		if not Lecture.objects.filter(name=name, subject_year=SubjectYear.objects.get(subject=Subject.objects.get(name=subject, standard=Standard.objects.get(name=standard)), academic_year=cur_ay_obj)).exists():
+			
+			lec_obj = Lecture(name=name, description="Temporary description", count=count, subject_year=SubjectYear.objects.get(subject=Subject.objects.get(name=subject, standard=Standard.objects.get(name=standard)), academic_year=cur_ay_obj))
+			lec_obj.save()
+	f.close()
+
+	print "Added Lectures Successfully"
+	print ""
+
+def insert_base_fees():
+
+	print "Adding Base Fees..."
+
+	ays = AcademicYear.objects.all()
+	standards = Standard.objects.all()
+	count = len(ays)
+	count = float(count)
+	percent = (1/count)*100
+	adder = percent
+	for ay in ays:
+		for std in standards:
+			sub_years = SubjectYear.objects.filter(subject__standard__id=std.id, academic_year__id=ay.id)
+			k=2
+			for i in xrange(1,k+1):
+				for p in combinations(sub_years, i):
+					if i == 1:
+						amount = 5000
+					elif i == 2:
+						amount = 8000
+					base_fee_object = BaseFee(amount=amount)
+					base_fee_object.save()
+					for perm in p :
+						base_fee_object.subject_years.add(perm)
+		print ""
+		print percent,"% Done"
+		percent += adder
+
+	print "Added Base Fees Successfully"
+
+
 insert_academic_years()
 insert_branches()
 insert_roles()
 insert_fee_types()
 insert_standards()
+insert_batches()
 insert_subjects()
+insert_subject_years()
 
 # print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
 # n = int(raw_input())
@@ -276,3 +366,7 @@ assign_student_parent()
 
 insert_staff()
 insert_staff_role()
+insert_lectures()
+
+insert_base_fees()
+

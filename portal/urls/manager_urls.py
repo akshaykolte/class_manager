@@ -12,4 +12,6 @@ urlpatterns = [
 	url(r'^attendance-reports/lecturewise-attendance/$', 'portal.views.manager_views.lecturewise_attendance'),
 	url(r'^attendance-reports/studentwise-attendance/$', 'portal.views.manager_views.studentwise_attendance'),
 	url(r'^attendance-reports/batchwise-attendance/$', 'portal.views.manager_views.batchwise_attendance'),
+	url(r'^batches/add-batch/$', 'portal.views.manager_views.add_batch'),
+	url(r'^batches/view-batch/$', 'portal.views.manager_views.view_batch'),
 ]
