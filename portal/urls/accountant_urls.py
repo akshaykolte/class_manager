@@ -11,6 +11,12 @@ urlpatterns = [
 	url(r'^profile/edit-profile/submit$', 'portal.views.accountant_views.edit_profile_submit'),
 	
 	url(r'^fees/view-fees/$', 'portal.views.accountant_views.view_fees'),
+
 	url(r'^fees/add-base-fees/$', 'portal.views.accountant_views.add_base_fees'),	
+	url(r'^fees/view-base-fees/$', 'portal.views.accountant_views.view_base_fees'),	
+	url(r'^fees/edit-base-fees/$', 'portal.views.accountant_views.edit_base_fees'),		
+	#url(r'^fees/edit-base-fees/submit$', 'portal.views.accountant_views.edit_base_fees_submit'),		
+
+
 	url(r'^fees/make-transaction/$', 'portal.views.accountant_views.make_transaction'),
 ]

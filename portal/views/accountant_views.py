@@ -223,6 +223,104 @@ def add_base_fees(request):
 
 
 
+@csrf_exempt
+def view_base_fees(request):
+	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	context = {}
+	context['details'] = auth_dict
+	
+
+	
+	if request.method == 'GET':
+		
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		
+		page_type = 0
+		academic_years = get_academic_year(id=None)
+		context['academic_years'] = academic_years
+
+		if 'academic_year' in request.GET:
+			page_type = 1
+			standards = get_standard(id=None)
+			context['standards'] = standards
+			context['academic_year_id'] = int(request.GET['academic_year'])
+			#context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
+			if 'standard' in request.GET:
+				page_type = 2
+				context['standard_id'] = int(request.GET['standard'])
+
+				base_fees = get_base_fee(id = None , subject_years_list = None,  academic_year_id=int(request.GET['academic_year']), standard_id=int(request.GET['standard']))
+				context['base_fees'] = base_fees
+				
+			
+
+		context['page_type'] = page_type
+
+		return render(request,'accountant/fees/view-base-fees.html', context)
+
+@csrf_exempt
+def edit_base_fees(request):
+	auth_dict = get_user(request)
+	context = {}
+
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		base_fees = get_base_fee(id = (request.GET.get('base-fee')) , subject_years_list = None,  academic_year_id=None, standard_id=None)
+		context['academic_year_id'] = request.GET.get('academic_year')
+		context['standard_id'] = request.GET.get('standard')
+		context['base_fees'] = base_fees
+		context['details'] = auth_dict
+		return render(request, 'accountant/fees/edit-base-fee.html', context)
+
+	elif request.method == 'POST':
+		try:
+			print "dfdsfsdf"
+			set_base_fee(id = (request.POST.get('base-fee')), amount=request.POST['amount'] , subject_years_list = None)  
+			print "dfdsfsdf"
+			return redirect('/accountant/fees/edit-base-fees/?academic_year='+str((request.POST.get('academic_year_id')))+'&standard='+str((request.POST.get('standard_id')))+'&base-fee='+str((request.POST.get('base-fee')))+'&message=Transaction made')
+		except:
+			return redirect('./?message_error=Error. Transaction Failed.')
+				
+
+
+'''@csrf_exempt
+def edit_base_fees_submit(request):
+
+	auth_dict = get_user(request)
+	context = {}
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+
+	set_base_fee(id = request.POST['base-fee'] , amount=request.POST['amount'] , subject_years_list = None)  
+
+	return redirect('/accountant/fees/view-base-fees.html')	'''	
+
+	
+
 
 @csrf_exempt
 def make_transaction(request):
