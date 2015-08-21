@@ -1,6 +1,6 @@
 from portal.models import *
 from portal.db_api.academic_year_db import get_current_academic_year
-
+from itertools import combinations
 	
 def insert_academic_years():
 	print "Adding Academic Years..."
@@ -82,6 +82,23 @@ def insert_standards():
 			st_obj.save()
 	f.close()
 	print "Added Standards Successfully"
+	print ""
+
+def insert_batches():
+	print "Adding Batches..."
+	cur_ay = get_current_academic_year()['id']
+	cur_ay_obj = AcademicYear.objects.get(id=cur_ay)
+	branches = Branch.objects.all()
+	standards = Standard.objects.all()
+	batches = ['Morning Batch', 'Evening Batch']
+	for std in standards:
+		for br in branches:
+			for bat in batches:
+				if not Batch.objects.filter(name=bat, academic_year=cur_ay_obj, branch=br, standard=std).exists():
+					bat_obj = Batch(name=bat, description="Temporary Description", academic_year=cur_ay_obj, branch=br, standard=std)
+					bat_obj.save()
+	
+	print "Added Batches Successfully"
 	print ""
 
 
@@ -287,6 +304,35 @@ def insert_lectures():
 	print "Added Lectures Successfully"
 	print ""
 
+def insert_base_fees():
+
+	print "Adding Base Fees..."
+
+	ays = AcademicYear.objects.all()
+	standards = Standard.objects.all()
+	count = len(ays)
+	count = float(count)
+	percent = (1/count)*100
+	adder = percent
+	for ay in ays:
+		for std in standards:
+			sub_years = SubjectYear.objects.filter(subject__standard__id=std.id, academic_year__id=ay.id)
+			k=2
+			for i in xrange(1,k+1):
+				for p in combinations(sub_years, i):
+					if i == 1:
+						amount = 5000
+					elif i == 2:
+						amount = 8000
+					base_fee_object = BaseFee(amount=amount)
+					base_fee_object.save()
+					for perm in p :
+						base_fee_object.subject_years.add(perm)
+		print ""
+		print percent,"% Done"
+		percent += adder
+
+	print "Added Base Fees Successfully"
 
 
 insert_academic_years()
@@ -294,6 +340,7 @@ insert_branches()
 insert_roles()
 insert_fee_types()
 insert_standards()
+insert_batches()
 insert_subjects()
 insert_subject_years()
 
@@ -320,4 +367,6 @@ assign_student_parent()
 insert_staff()
 insert_staff_role()
 insert_lectures()
+
+insert_base_fees()
 
