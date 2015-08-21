@@ -84,6 +84,23 @@ def insert_standards():
 	print "Added Standards Successfully"
 	print ""
 
+def insert_batches():
+	print "Adding Batches..."
+	cur_ay = get_current_academic_year()['id']
+	cur_ay_obj = AcademicYear.objects.get(id=cur_ay)
+	branches = Branch.objects.all()
+	standards = Standard.objects.all()
+	batches = ['Morning Batch', 'Evening Batch']
+	for std in standards:
+		for br in branches:
+			for bat in batches:
+				if not Batch.objects.filter(name=bat, academic_year=cur_ay_obj, branch=br, standard=std).exists():
+					bat_obj = Batch(name=bat, description="Temporary Description", academic_year=cur_ay_obj, branch=br, standard=std)
+					bat_obj.save()
+	
+	print "Added Batches Successfully"
+	print ""
+
 
 def insert_subjects():
 	print "Adding Subjects..."
@@ -323,6 +340,7 @@ insert_branches()
 insert_roles()
 insert_fee_types()
 insert_standards()
+insert_batches()
 insert_subjects()
 insert_subject_years()
 
