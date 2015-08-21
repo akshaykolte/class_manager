@@ -1,4 +1,5 @@
 from portal.models import *
+from portal.db_api.academic_year_db import get_current_academic_year
 
 	
 def insert_academic_years():
@@ -99,6 +100,23 @@ def insert_subjects():
 			sub_obj.save()
 	f.close()
 	print "Added Subjects Successfully"
+	print ""
+
+
+def insert_subject_years():
+	print "Adding Subject Years..."
+
+	subjects = Subject.objects.all()
+	years = AcademicYear.objects.all()
+
+	for year in years:
+		for sub in subjects:
+
+			if not SubjectYear.objects.filter(subject=Subject.objects.get(id=sub.id), academic_year=AcademicYear.objects.get(id=year.id)).exists():
+				sub_year_obj = SubjectYear(subject=Subject.objects.get(id=sub.id), academic_year=AcademicYear.objects.get(id=year.id))
+				sub_year_obj.save()
+
+	print "Added Subject Years Successfully"
 	print ""
 
 
@@ -224,7 +242,7 @@ def insert_staff(n=100):
 
 def insert_staff_role():
 
-	print "Assigning roles to each Staff..."
+	print "Assigning Roles to each Staff..."
 	staff_obj = Staff.objects.all();
 	role_obj = Role.objects.all();
 	branch_obj = Branch.objects.all();
@@ -247,12 +265,37 @@ def insert_staff_role():
 	print ""
 
 
+def insert_lectures():
+	print "Adding Lectures..."
+	
+	f = open("dummy_db/lectures.txt", "r+")
+	cur_ay = get_current_academic_year()['id']
+	cur_ay_obj = AcademicYear.objects.get(id=cur_ay)
+	for lec in f.readlines():
+		line = lec.split('$')
+		name = line[0]
+		subject = line[1]
+		standard = line[2]
+		count = line[3].rstrip('\n')
+		
+		if not Lecture.objects.filter(name=name, subject_year=SubjectYear.objects.get(subject=Subject.objects.get(name=subject, standard=Standard.objects.get(name=standard)), academic_year=cur_ay_obj)).exists():
+			
+			lec_obj = Lecture(name=name, description="Temporary description", count=count, subject_year=SubjectYear.objects.get(subject=Subject.objects.get(name=subject, standard=Standard.objects.get(name=standard)), academic_year=cur_ay_obj))
+			lec_obj.save()
+	f.close()
+
+	print "Added Lectures Successfully"
+	print ""
+
+
+
 insert_academic_years()
 insert_branches()
 insert_roles()
 insert_fee_types()
 insert_standards()
 insert_subjects()
+insert_subject_years()
 
 # print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
 # n = int(raw_input())
@@ -276,3 +319,5 @@ assign_student_parent()
 
 insert_staff()
 insert_staff_role()
+insert_lectures()
+
