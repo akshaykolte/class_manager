@@ -32,9 +32,10 @@ Use the two code samples given in the documentation to integrate the implementat
 <div class="form-group input-group">
     <input type="text" name="{{your_name}}" class="form-control" id="chooseStudentId" onchange="this.form.submit()">
     <span class="input-group-btn">
-      <button class="btn btn-default" type="button"><i class="fa fa-search" onClick="call_student_search_window('{{your_search_type}}')"></i>
+      <button class="btn btn-default" type="button" onClick="call_student_search_window('student')">
+        <i class="fa fa-search"> &nbsp;or search for student</i>
       </button>
-		</span>
+    </span>
 </div>
  ```
 
