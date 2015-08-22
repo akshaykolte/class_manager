@@ -171,6 +171,7 @@ def add_base_fees(request):
 	
 	if auth_dict['permission_accountant'] != True:
 		raise Http404
+	
 	context = {}
 	context['details'] = auth_dict
 	
@@ -405,3 +406,85 @@ def make_transaction(request):
 
 
 
+@csrf_exempt
+def create_student(request):
+	
+	
+	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	
+	context = {}
+	context['details'] = auth_dict
+	
+
+	if request.method == 'GET':
+		
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		return render(request, 'accountant/student/create-student.html', context)	
+	 
+
+	elif request.method == 'POST':
+
+		if request.POST['password'] != request.POST['confirmpassword'] :
+			return redirect('./?message_error=Student Passwords Do Not Match')
+
+		if request.POST['ppassword'] != request.POST['pconfirmpassword'] :
+		    return redirect('./?message_error=Parent Passwords Do Not Match')    
+        
+		else:
+
+			username = request.POST['username']
+			
+			password = request.POST['password']
+			
+			first_name = request.POST['first_name']
+			
+			last_name = request.POST['last_name']
+			
+			address = request.POST['address']
+
+			email = request.POST['email']
+
+			phone_number = int(request.POST['phone_number'])
+
+			gender = request.POST['gender']
+
+
+			pusername = request.POST['pusername']
+			
+			ppassword = request.POST['ppassword']
+			
+			pfirst_name = request.POST['pfirst_name']
+			
+			plast_name = request.POST['plast_name']
+			
+			paddress = request.POST['paddress']
+
+			pemail = request.POST['pemail']
+
+			pphone_number = int(request.POST['pphone_number'])
+
+			pgender = request.POST['pgender']
+			
+		 	parent_id = set_parent(id = None,username = pusername , password = ppassword, student_id = None, first_name = pfirst_name ,last_name = plast_name ,address = paddress, email = pemail, phone_number = pphone_number, gender = pgender )
+
+			set_student(id = None,username = username, password = password, parent_id = parent_id, batch_id = None, first_name = first_name ,last_name = last_name ,address = address, email = email, phone_number = phone_number, gender = gender )				
+			
+			return redirect('./?message=Entry made')
+
+			'''except:
+				return redirect('./?message_error=Error. Entry Failed.')'''
+
+
+@csrf_exempt
+def admit_student(request):
+	pass
