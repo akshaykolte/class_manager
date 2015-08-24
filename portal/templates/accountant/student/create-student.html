@@ -1,0 +1,176 @@
+{% extends "accountant/base_accountant.html" %}
+
+{% block main_content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Create Student Entry</h1>
+    </div>
+</div>
+<div class="col-lg-10">
+
+    {% if message %}
+        <div class="panel-body">
+            <div class="alert alert-success alert-dismissable col-lg-8">
+                <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{message}}
+            </div>
+        </div>
+    {% elif message_error %}
+        <div class="panel-body">
+            <div class="alert alert-danger alert-dismissable col-lg-8">
+                <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{message_error}}
+            </div>
+        </div>
+    {% endif %}
+
+    <form method='post' action='.'>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Enter  Student Details
+        </div>
+        <!-- /.panel-heading -->
+        
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>First Name</strong></td>
+                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='first_name' placeholder='First Name'></td>
+                        </tr>
+
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Last Name</strong></td>
+                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='last_name' placeholder='Last Name'></td>
+                        </tr>
+
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Gender</strong></td>
+                            <td style='border-top:none' align="center"><div class="form-group">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="gender" value="M" checked>Male
+                                            </label>
+
+                                            <label class="radio-inline">
+                                                <input type="radio" name="gender" value="F">Female
+                                            </label>
+                                        </div></td>
+                        </tr>
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Address</strong></td>
+                            <td style='border-top:none' align="center"><textarea name='address' class='form-control'></textarea></td>
+                        </tr>
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Email</strong></td>
+                            <td style='border-top:none' align="center"><input name='email' class='form-control' style='width:250px' type='text' placeholder='Email'></td>
+                        </tr>
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Phone Number</strong></td>
+                            <td style='border-top:none' align="center"><input name='phone_number' class='form-control' style='width:250px' type='text' placeholder='Phone Number'></td>
+                        </tr>
+
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>User Name</strong></td>
+                            <td style='border-top:none' align="center"><input name='username' class='form-control' style='width:250px' type='text' placeholder='User Name'></td>
+                        </tr>
+
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Password</strong></td>
+                            <td style='border-top:none' align="center"><input name='password' class='form-control' style='width:250px' type='password' placeholder='Password'></td>
+                        </tr>
+
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Confirm Password</strong></td>
+                            <td style='border-top:none' align="center"><input name='confirmpassword' class='form-control' style='width:250px' type='password' placeholder='Confirm Password'></td>
+                        </tr>
+                        <tr><td style='border-top:none' ></td><td style='border-top:none' ></td></tr>
+                       
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+    </div>    
+    <div class="panel panel-default">    
+        <div class="panel-heading">
+            Enter  Parent Details
+        </div>
+
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>First Name</strong></td>
+                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='pfirst_name' placeholder='First Name'></td>
+                        </tr>
+
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Last Name</strong></td>
+                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='plast_name' placeholder='Last Name'></td>
+                        </tr>
+
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Gender</strong></td>
+                            <td style='border-top:none' align="center"><div class="form-group">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="pgender" value="M" checked>Male
+                                            </label>
+
+                                            <label class="radio-inline">
+                                                <input type="radio" name="pgender" value="F">Female
+                                            </label>
+                                        </div></td>
+                        </tr>
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Address</strong></td>
+                            <td style='border-top:none' align="center"><textarea name='paddress' class='form-control'></textarea></td>
+                        </tr>
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Email</strong></td>
+                            <td style='border-top:none' align="center"><input name='pemail' class='form-control' style='width:250px' type='text' placeholder='Email'></td>
+                        </tr>
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Phone Number</strong></td>
+                            <td style='border-top:none' align="center"><input name='pphone_number' class='form-control' style='width:250px' type='text' placeholder='Phone Number'></td>
+                        </tr>
+
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>User Name</strong></td>
+                            <td style='border-top:none' align="center"><input name='pusername' class='form-control' style='width:250px' type='text' placeholder='User Name'></td>
+                        </tr>
+
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Password</strong></td>
+                            <td style='border-top:none' align="center"><input name='ppassword' class='form-control' style='width:250px' type='password' placeholder='Password'></td>
+                        </tr>
+
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Confirm Password</strong></td>
+                            <td style='border-top:none' align="center"><input name='pconfirmpassword' class='form-control' style='width:250px' type='password' placeholder='Confirm Password'></td>
+                        </tr>
+                        <tr><td style='border-top:none' ></td><td style='border-top:none' ></td></tr>
+                        <tr>
+                            <td style='border-top:none' align="center"></td>
+                            <td style='border-top:none' align="center"><input type='submit' class='btn btn-primary' style='width:250px' value='Update Info'></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+
+
+        
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+    </form>
+</div>
+
+{% endblock %}

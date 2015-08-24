@@ -1,6 +1,7 @@
 {% extends "manager/base_manager.html" %}
 
 {% block main_content%}
+
 <div class="row">
 
 <div class="row">
@@ -29,7 +30,13 @@
 	{% if page_type == 1 %}
 		<form>
 			<label><strong>Enter Student ID</strong></label>
-			<input type="text" name="student" class="form-control" onchange="this.form.submit()">
+			<div class="form-group input-group">
+				<input type="text" name="student" class="form-control" id="chooseStudentId" onchange="this.form.submit()">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="button" onClick="call_student_search_window('student')"><i class="fa fa-search"> &nbsp;or search for student</i>
+					</button>
+				</span>
+			</div>
 		</form>
 	{% endif %}
 	

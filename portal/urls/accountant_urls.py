@@ -12,4 +12,14 @@ urlpatterns = [
 	
 	url(r'^fees/view-fees/$', 'portal.views.accountant_views.view_fees'),
 	url(r'^fees/make-transaction/$', 'portal.views.accountant_views.make_transaction'),
+
+	url(r'^fees/add-base-fees/$', 'portal.views.accountant_views.add_base_fees'),	
+	url(r'^fees/view-base-fees/$', 'portal.views.accountant_views.view_base_fees'),	
+	url(r'^fees/edit-base-fees/$', 'portal.views.accountant_views.edit_base_fees'),		
+	#url(r'^fees/edit-base-fees/submit$', 'portal.views.accountant_views.edit_base_fees_submit'),	
+
+	url(r'^student/create-student/$', 'portal.views.accountant_views.create_student'),	
+	url(r'^student/admit-student/$', 'portal.views.accountant_views.admit_student'),	
+
+
 ]

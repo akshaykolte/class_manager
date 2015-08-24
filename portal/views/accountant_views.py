@@ -7,6 +7,9 @@ from portal.db_api.auth_db import *
 from portal.db_api.fee_db import *
 from portal.db_api.branch_db import *
 from portal.db_api.batch_db import *
+from portal.db_api.academic_year_db import *
+from portal.db_api.standard_db import *
+from portal.db_api.subject_db import *
 
 
 
@@ -137,7 +140,7 @@ def view_fees(request):
 			batches = get_batch(branch_id = int(request.GET['branch']))
 			context['batches'] = batches
 			context['branch_id'] = int(request.GET['branch'])
-			#context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
+
 			if 'batch' in request.GET:
 				page_type = 2
 				context['batch_id'] = int(request.GET['batch'])
@@ -155,6 +158,168 @@ def view_fees(request):
 		print context
 
 		return render(request,'accountant/fees/view-fees.html', context)
+	
+
+@csrf_exempt
+def add_base_fees(request):
+	
+	
+	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	
+	context = {}
+	context['details'] = auth_dict
+	
+
+	if request.method == 'GET':
+		
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		
+		page_type = 0
+		academic_years = get_academic_year(id=None)
+		context['academic_years'] = academic_years
+
+		if 'academic_year' in request.GET:
+			page_type = 1
+			standards = get_standard(id=None)
+			context['standards'] = standards
+			context['academic_year_id'] = int(request.GET['academic_year'])
+			#context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
+			if 'standard' in request.GET:
+				page_type = 2
+				context['standard_id'] = int(request.GET['standard'])
+
+				subject_years = get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard_id=int(request.GET['standard']), academic_year_id=int(request.GET['academic_year']), subject_year_id=None)
+				context['subject_years'] = subject_years
+				
+			
+
+		context['page_type'] = page_type
+
+		return render(request,'accountant/fees/add-base-fees.html', context)
+
+	elif request.method == 'POST':
+		try:
+			
+			amount = request.POST['amount']
+			subject_years = get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard_id=int(request.POST['standard']), academic_year_id=int(request.POST['academic_year']), subject_year_id=None)
+			subject_year_list = []
+			for subject_year in subject_years:
+				if 'subject_year_'+str(subject_year['id']) in request.POST:
+					print subject_year
+					subject_year_list.append(subject_year['id'])
+
+			set_base_fee(amount=amount , subject_years_list = subject_year_list)
+			return redirect('./?message=Base Fee Set')
+		except:
+			return redirect('./?message_error=Error. Transaction Failed.')
+
+
+
+@csrf_exempt
+def view_base_fees(request):
+	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	context = {}
+	context['details'] = auth_dict
+	
+
+	
+	if request.method == 'GET':
+		
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		
+		page_type = 0
+		academic_years = get_academic_year(id=None)
+		context['academic_years'] = academic_years
+
+		if 'academic_year' in request.GET:
+			page_type = 1
+			standards = get_standard(id=None)
+			context['standards'] = standards
+			context['academic_year_id'] = int(request.GET['academic_year'])
+			#context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
+			if 'standard' in request.GET:
+				page_type = 2
+				context['standard_id'] = int(request.GET['standard'])
+
+				base_fees = get_base_fee(id = None , subject_years_list = None,  academic_year_id=int(request.GET['academic_year']), standard_id=int(request.GET['standard']))
+				context['base_fees'] = base_fees
+				
+			
+
+		context['page_type'] = page_type
+
+		return render(request,'accountant/fees/view-base-fees.html', context)
+
+@csrf_exempt
+def edit_base_fees(request):
+	auth_dict = get_user(request)
+	context = {}
+
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		base_fees = get_base_fee(id = (request.GET.get('base-fee')) , subject_years_list = None,  academic_year_id=None, standard_id=None)
+		context['academic_year_id'] = request.GET.get('academic_year')
+		context['standard_id'] = request.GET.get('standard')
+		context['base_fees'] = base_fees
+		context['details'] = auth_dict
+		return render(request, 'accountant/fees/edit-base-fee.html', context)
+
+	elif request.method == 'POST':
+		try:
+			print "dfdsfsdf"
+			set_base_fee(id = (request.POST.get('base-fee')), amount=request.POST['amount'] , subject_years_list = None)  
+			print "dfdsfsdf"
+			return redirect('/accountant/fees/edit-base-fees/?academic_year='+str((request.POST.get('academic_year_id')))+'&standard='+str((request.POST.get('standard_id')))+'&base-fee='+str((request.POST.get('base-fee')))+'&message=Transaction made')
+		except:
+			return redirect('./?message_error=Error. Transaction Failed.')
+				
+
+
+'''@csrf_exempt
+def edit_base_fees_submit(request):
+
+	auth_dict = get_user(request)
+	context = {}
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+
+	set_base_fee(id = request.POST['base-fee'] , amount=request.POST['amount'] , subject_years_list = None)  
+
+	return redirect('/accountant/fees/view-base-fees.html')	'''	
+
 	
 
 
@@ -241,3 +406,85 @@ def make_transaction(request):
 
 
 
+@csrf_exempt
+def create_student(request):
+	
+	
+	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	
+	context = {}
+	context['details'] = auth_dict
+	
+
+	if request.method == 'GET':
+		
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		return render(request, 'accountant/student/create-student.html', context)	
+	 
+
+	elif request.method == 'POST':
+
+		if request.POST['password'] != request.POST['confirmpassword'] :
+			return redirect('./?message_error=Student Passwords Do Not Match')
+
+		if request.POST['ppassword'] != request.POST['pconfirmpassword'] :
+		    return redirect('./?message_error=Parent Passwords Do Not Match')    
+        
+		else:
+
+			username = request.POST['username']
+			
+			password = request.POST['password']
+			
+			first_name = request.POST['first_name']
+			
+			last_name = request.POST['last_name']
+			
+			address = request.POST['address']
+
+			email = request.POST['email']
+
+			phone_number = int(request.POST['phone_number'])
+
+			gender = request.POST['gender']
+
+
+			pusername = request.POST['pusername']
+			
+			ppassword = request.POST['ppassword']
+			
+			pfirst_name = request.POST['pfirst_name']
+			
+			plast_name = request.POST['plast_name']
+			
+			paddress = request.POST['paddress']
+
+			pemail = request.POST['pemail']
+
+			pphone_number = int(request.POST['pphone_number'])
+
+			pgender = request.POST['pgender']
+			
+		 	parent_id = set_parent(id = None,username = pusername , password = ppassword, student_id = None, first_name = pfirst_name ,last_name = plast_name ,address = paddress, email = pemail, phone_number = pphone_number, gender = pgender )
+
+			set_student(id = None,username = username, password = password, parent_id = parent_id, batch_id = None, first_name = first_name ,last_name = last_name ,address = address, email = email, phone_number = phone_number, gender = gender )				
+			
+			return redirect('./?message=Entry made')
+
+			'''except:
+				return redirect('./?message_error=Error. Entry Failed.')'''
+
+
+@csrf_exempt
+def admit_student(request):
+	pass
