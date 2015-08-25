@@ -6,6 +6,7 @@ from portal.db_api.staff_db import *
 from portal.db_api.branch_db import *
 from portal.db_api.batch_db import *
 from portal.db_api.fee_db import *
+from portal.db_api.roles_db import *
 
 
 def dashboard(request):
@@ -223,3 +224,19 @@ def assign_roles(request):
 		context['page_type'] = page_type
 
 		return render(request, 'admin/staff/assign_roles.html', context)
+
+	elif request.method == 'POST':
+		try:
+			role_name = {}
+			role_name[1] = 'teacher'
+			role_name[2] = 'accountant'
+			role_name[3] = 'manager'
+			branches = get_branch()
+			for role_index in xrange(1, 4):
+				for branch in branches:
+					print 'checking for',str(role_index)+'_'+str(branch['id'])
+					if str(role_index)+'_'+str(branch['id']) in request.POST:
+						set_staff_role(role_id = get_role_by_name(role_name[role_index])['id'], staff_id = request.POST['staff'], branch_id=branch['id'])
+			return redirect('./?message=Permissions modified')
+		except:
+			return redirect('./?message_error=Error modifying permission')

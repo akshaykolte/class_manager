@@ -42,7 +42,7 @@
 	{% elif page_type == 2%}
 		<label><strong>Staff Permissions</strong></label>
 		<br/>
-		<form>
+		<form method="POST">
 		<input type="hidden" name="staff" value="{{staff}}">
 	   <table class="table table-bordered table-hover table-striped">
 			<thead>
@@ -59,7 +59,7 @@
 						<td>{{entry.0}}</td>
 						{% for ent in entry.1 %}
 							<td>
-								<input type="checkbox" name="{{ent.0}}_{{ent.2}}" value="true" {% if ent.1 %}checked{% endif %}>
+								<input type="checkbox" name="{{ent.0}}_{{ent.2}}" value="true" {% if ent.1 %}checked disabled="True"{% endif %}>
 							</td>
 						{% endfor %}
 					</tr>
