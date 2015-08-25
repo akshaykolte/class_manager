@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^logout/$', 'portal.views.auth_views.logout'),
     url(r'^student-search/$', 'portal.views.student_search_views.home'),
     url(r'^student/', include('portal.urls.student_urls')),
+    url(r'^parent/', include('portal.urls.parent_urls')),
     url(r'^teacher/', include('portal.urls.teacher_urls')),
     url(r'^accountant/', include('portal.urls.accountant_urls')),
     url(r'^manager/', include('portal.urls.manager_urls')),

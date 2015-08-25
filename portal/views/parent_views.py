@@ -14,15 +14,18 @@ def dashboard(request):
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
-	if auth_dict['permission_student'] != True:
+	if auth_dict['permission_parent'] != True:
 		raise Http404
 	context['auth_dict'] = auth_dict
-	student_object = get_student_batch(student_id = auth_dict['id'])
+	parent_object = get_parent(id = auth_dict['id'])
+	student_object = StudentParent.objects.get(parent = Parent.objects.get( id = parent_object['id'])).student
+	print student_object
+	student_object = get_student_batch(student_id = student_object.id)
 	lecture_list = []
 	context['lectures'] = []
 	for subject_year in student_object['student_subjects']:
 		context['lectures'] += get_lecture(subject_year_id = subject_year['id'])
-	return render(request,'student/dashboard.html', context)
+	return render(request,'parent/dashboard.html', context)
 
 def view_profile(request):
 	auth_dict = get_user(request)
@@ -31,13 +34,13 @@ def view_profile(request):
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
-	if auth_dict['permission_student'] != True:
+	if auth_dict['permission_parent'] != True:
 		raise Http404
 
-	details = get_students(id = auth_dict['id'])
+	details = get_parent(id = auth_dict['id'])
 	context['auth_dict'] = auth_dict
 	context['details'] = details
-	return render(request,'student/profile/view-profile.html', context)
+	return render(request,'parent/profile/view-profile.html', context)
 
 
 
@@ -48,15 +51,15 @@ def edit_profile(request):
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
-	if auth_dict['permission_student'] != True:
+	if auth_dict['permission_parent'] != True:
 		raise Http404
 
-	details = get_students(id=auth_dict['id'])
+	details = get_parent(id = auth_dict['id'])
 	
 	context['auth_dict'] =auth_dict
 	context['staff_details'] = details
 
-	return render(request, 'student/profile/edit-profile.html', context)
+	return render(request, 'parent/profile/edit-profile.html', context)
 
 def view_attendance(request):
 	auth_dict = get_user(request)
@@ -65,7 +68,7 @@ def view_attendance(request):
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
-	if auth_dict['permission_student'] != True:
+	if auth_dict['permission_parent'] != True:
 		raise Http404
 
 	page_type = 1
@@ -81,7 +84,7 @@ def view_attendance(request):
 		context['report'] = attendance_report(student_id=student_batch['id'], subjects=subjects_id_list)
 	context['page_type'] = page_type
 
-	return render(request, 'student/attendance/view_attendance.html', context)
+	return render(request, 'parent/attendance/view_attendance.html', context)
 
 
 @csrf_exempt
@@ -93,12 +96,12 @@ def edit_profile_submit(request):
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
-	if auth_dict['permission_student'] != True:
+	if auth_dict['permission_parent'] != True:
 		raise Http404
 
-	set_student(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
-
-	return redirect('/student/profile/view-profile')
+	set_parent(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
+	
+	return redirect('/parent/profile/view-profile')
 
 
 def change_password(request):
@@ -108,7 +111,7 @@ def change_password(request):
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
-	if auth_dict['permission_student'] != True:
+	if auth_dict['permission_parent'] != True:
 		raise Http404
 	if 'message' in request.GET:
 		context['message'] = request.GET['message']
@@ -116,7 +119,7 @@ def change_password(request):
 	elif 'message_error' in request.GET:
 		context['message_error'] = request.GET['message_error']
 
-	return render(request,'student/profile/change-password.html', context)
+	return render(request,'parent/profile/change-password.html', context)
 
 @csrf_exempt
 def change_password_submit(request):
@@ -125,10 +128,10 @@ def change_password_submit(request):
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
-	if auth_dict['permission_student'] != True:
+	if auth_dict['permission_parent'] != True:
 		raise Http404
 	if change_password_db(request):
-		return redirect('/student/profile/change-password/?message=Password Successfully Changed')
+		return redirect('/parent/profile/change-password/?message=Password Successfully Changed')
 	else:
-		return redirect('/student/profile/change-password/?message_error=Password Change Failed')
+		return redirect('/parent/profile/change-password/?message_error=Password Change Failed')
 
