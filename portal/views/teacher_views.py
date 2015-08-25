@@ -7,6 +7,7 @@ from portal.db_api.subject_db import *
 from portal.db_api.standard_db import *
 from portal.db_api.batch_db import *
 from portal.db_api.lecture_db import *
+from portal.db_api.branch_db import *
 from portal.db_api.academic_year_db import *
 from portal.models import *
 import datetime
@@ -176,9 +177,16 @@ def add_lectures(request):
 					page_type = 3
 					context['lecture_id'] = int(request.GET['lecture'])
 					context['expected_count'] = get_lecture(id=context['lecture_id'])[0]['count']
+					branches =  get_branch_of_teacher(teacher_id = auth_dict['id'])
+					context['branches'] = branches
 					academic_year_id = get_current_academic_year()['id']
-					context['batches']  = get_batch(academic_year_id = academic_year_id,standard_id = request.GET['standard'])
-					
+					batch_list=[]
+					for branch in branches:
+						batch = get_batch(academic_year_id = academic_year_id,standard_id = request.GET['standard'],branch_id = branch['id'])
+						for i in batch:
+							batch_list.append(i)
+					print batch_list
+					context['batches'] = batch_list
 		
 		context['page_type'] = page_type
 		context['details'] = auth_dict

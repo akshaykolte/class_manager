@@ -48,3 +48,13 @@ def get_branch_of_manager(manager_id):
 		branch_obj['name'] = staff_role.branch.name
 		branch_list.append(branch_obj)
 	return branch_list
+
+def get_branch_of_teacher(teacher_id):
+	staff_roles = StaffRole.objects.filter(role__name='teacher', staff__id=teacher_id)
+	branch_list = []
+	for staff_role in staff_roles:
+		branch_obj = {}
+		branch_obj['id'] = staff_role.branch.id
+		branch_obj['name'] = staff_role.branch.name
+		branch_list.append(branch_obj)
+	return branch_list
