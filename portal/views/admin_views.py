@@ -57,8 +57,30 @@ def add_staff(request):
 		except:
 			return redirect('./?message_error=Error Adding Staff')
 
+@csrf_exempt
 def view_staff(request):
-	pass
+	context = {}
+	auth_dict = get_user(request)
+	context['details'] = auth_dict
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_admin'] != True:
+		return Http404
+
+	if request.method == 'GET':
+		page_type = 1
+		if 'staff' in request.GET:
+			page_type = 2
+			staff = get_staff(id=request.GET['staff'])
+			context['staff'] = staff
+		context['page_type'] = page_type
+		return render(request, 'admin/staff/view_staff.html', context)
+	elif request.method == 'POST':
+		# TODO get all entered details and save
+		pass
+
 
 @csrf_exempt
 def set_current_academic_year_view(request):
