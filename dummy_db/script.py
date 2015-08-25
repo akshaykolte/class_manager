@@ -3,7 +3,14 @@ from portal.db_api.academic_year_db import get_current_academic_year
 from itertools import combinations
 from time import sleep
 import sys, math
-	
+
+
+def add_progress(i,length):
+	sys.stdout.write('\r')
+	sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
+	sys.stdout.flush()
+
+
 def insert_academic_years():
 	print "Adding Academic Years...",
 	
@@ -11,9 +18,7 @@ def insert_academic_years():
 	ay_list = f.readlines()
 	length = len(ay_list)
 	for i,ay in enumerate(ay_list):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
-		sys.stdout.flush()
+		add_progress(i,length)
 		line = ay.split()
 		year_start = int(line[0])
 		year_end = int(line[1])
@@ -38,9 +43,7 @@ def insert_branches():
 	length = len(br_list)
 	
 	for i,branch in enumerate(br_list):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
-		sys.stdout.flush()
+		add_progress(i,length)
 		line = branch.split('$')
 		name = line[0]
 		address = line[1]
@@ -62,9 +65,7 @@ def insert_roles():
 	length = len(rl_list)
 	
 	for i,role in enumerate(rl_list):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
-		sys.stdout.flush()
+		add_progress(i,length)
 		role = role.rstrip('\n')
 		if not Role.objects.filter(name=role).exists():
 			role_obj = Role(name=role);
@@ -81,9 +82,7 @@ def insert_fee_types():
 	length = len(fee_list)
 	
 	for i,fee in enumerate(fee_list):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
-		sys.stdout.flush()
+		add_progress(i,length)
 		fee = fee.rstrip('\n')
 		if not FeeType.objects.filter(name=fee).exists():
 			fee_obj = FeeType(name=fee)
@@ -100,9 +99,7 @@ def insert_standards():
 	length = len(st_list)
 	
 	for i,st in enumerate(st_list):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
-		sys.stdout.flush()
+		add_progress(i,length)
 		st = st.rstrip('\n')
 		if not Standard.objects.filter(name=st).exists():
 			st_obj = Standard(name=st)
@@ -119,9 +116,7 @@ def insert_batches():
 	batches = ['Morning Batch', 'Evening Batch']
 	length = len(standards)
 	for i,std in enumerate(standards):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
-		sys.stdout.flush()
+		add_progress(i,length)
 		for br in branches:
 			for bat in batches:
 				if not Batch.objects.filter(name=bat, academic_year=cur_ay_obj, branch=br, standard=std).exists():
@@ -138,9 +133,7 @@ def insert_subjects():
 	sub_list = f.readlines()
 	length = len(sub_list)
 	for i,subs in enumerate(sub_list):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
-		sys.stdout.flush()
+		add_progress(i,length)
 		line = subs.split()
 		name = line[0]
 		standard = line[1]
@@ -160,9 +153,7 @@ def insert_subject_years():
 	length = len(years)
 	
 	for i,year in enumerate(years):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
-		sys.stdout.flush()
+		add_progress(i,length)
 		for sub in subjects:
 
 			if not SubjectYear.objects.filter(subject=Subject.objects.get(id=sub.id), academic_year=AcademicYear.objects.get(id=year.id)).exists():
@@ -179,9 +170,7 @@ def insert_students(n=105):
 	stu_list = f.readlines()
 	length = n-1
 	for i,stu in enumerate(stu_list):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
-		sys.stdout.flush()
+		add_progress(i,length)
 		n-=1;
 		if n <= 0:
 			break
@@ -209,9 +198,7 @@ def insert_parents(n=105):
 	length = n-1
 	
 	for i,par in enumerate(par_list):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
-		sys.stdout.flush()
+		add_progress(i,length)
 		n-=1;
 		if n <= 0:
 			break
@@ -243,9 +230,7 @@ def assign_student_parent(n=105):
 	f.close()
 
 	for i in xrange(n):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/n))
-		sys.stdout.flush()
+		add_progress(i,n)
 		line1 = stu_list[i].split('$')
 		line2 = par_list[i].split('$')
 		s_username = line1[0]
@@ -286,9 +271,7 @@ def insert_student_batches():
 	counter = 0
 
 	for i,stud in enumerate(students):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/stud_len))
-		sys.stdout.flush()
+		add_progress(i,stud_len)
 		if counter >= it_len:
 			batch_it+=1
 			counter = 0
@@ -313,10 +296,7 @@ def insert_staff(n=100):
 	length = n-1
 	
 	for i,staff in enumerate(staff_list):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
-		sys.stdout.flush()
-		
+		add_progress(i,length)
 		n-=1;
 		if n <= 0:
 			break
@@ -347,9 +327,7 @@ def insert_staff_role():
 	rsize = len(role_obj)
 	
 	for i in xrange(len(staff_obj)):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/len(staff_obj)))
-		sys.stdout.flush()
+		add_progress(i,len(staff_obj))
 		branch = branch_obj[i%bsize]
 		role = role_obj[i%rsize]
 		staff = staff_obj[i]
@@ -373,9 +351,7 @@ def insert_lectures():
 	length = len(lec_list)
 	
 	for i,lec in enumerate(lec_list):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
-		sys.stdout.flush()
+		add_progress(i,length)
 		line = lec.split('$')
 		name = line[0]
 		subject = line[1]
@@ -398,9 +374,7 @@ def insert_base_fees():
 	length = len(ays)
 
 	for i,ay in enumerate(ays):
-		sys.stdout.write('\r')
-		sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
-		sys.stdout.flush()
+		add_progress(i,length)
 		for std in standards:
 			sub_years = SubjectYear.objects.filter(subject__standard__id=std.id, academic_year__id=ay.id)
 			k=2

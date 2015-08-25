@@ -264,7 +264,7 @@ class StudentBatch(models.Model):
 	# While adding through python, validation should be done through save(validate=True, subject_year_id_list=list) first, so that no error is encountered while doing .add(subject_year_object)
 	def save(self, validate=False, subject_year_id_list = [] ):
 		from portal.validator.validator import validate_student_batch
-		print SubjectYear.objects.filter()
+		# print SubjectYear.objects.filter()
 		if validate:
 			if not validate_student_batch(self, subject_year_id_list):
 				raise Exception('Validation Failed')

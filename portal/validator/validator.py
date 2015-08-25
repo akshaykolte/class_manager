@@ -27,7 +27,7 @@ def validate_student_parent(student_parent_object):
 	return True
 
 def validate_student_batch(student_batch_object, subject_year_id_list):
-	print student_batch_object, subject_year_id_list
+	# print student_batch_object, subject_year_id_list
 	from portal.models import SubjectYear, StudentBatch
 	if student_batch_object.standard == None and student_batch_object.academic_year == None and student_batch_object.batch != None:
 		for subject_year_id in subject_year_id_list:
