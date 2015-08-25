@@ -91,3 +91,6 @@ def set_current_academic_year_view(request):
 		current_academic_year = request.POST['current_academic_year']
 		set_current_academic_year(current_academic_year)
 		return redirect('./?message=Current academic year changed.')
+
+def assign_roles(request):
+	pass
