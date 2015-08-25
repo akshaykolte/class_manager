@@ -70,6 +70,11 @@ def view_staff(request):
 		return Http404
 
 	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
 		page_type = 1
 		if 'staff' in request.GET:
 			page_type = 2
@@ -78,9 +83,20 @@ def view_staff(request):
 		context['page_type'] = page_type
 		return render(request, 'admin/staff/view_staff.html', context)
 	elif request.method == 'POST':
-		# TODO get all entered details and save
-		pass
-
+		try:
+			id = request.POST['staff']
+			first_name = request.POST['first_name']
+			last_name = request.POST['last_name']
+			address = request.POST['address']
+			email = request.POST['email']
+			phone_number = request.POST['phone_number']
+			gender = request.POST['gender']
+			username = request.POST['username']
+			password = request.POST['password']
+			set_staff(id=id, username=username, password=password, first_name=first_name, last_name=last_name, address=address, email=email, phone_number=phone_number, gender=gender)
+			return redirect('./?message=Staff Saved')
+		except:
+			return redirect('./?message_error=Error saving staff')
 
 @csrf_exempt
 def set_current_academic_year_view(request):
