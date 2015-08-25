@@ -63,6 +63,19 @@
 
 			<label><strong>Duration</strong></label>
 			<input name="lecturebatch_duration" class="form-control" value="{{lecturebatch.duration}}" required><br/>
+			<form>
+			</br>	
+			<label><strong>Select Batch</strong></label>
+			<select name="batch" class="form-control" >
+				<option>Select</option>
+				{% for batch in batches %}
+				<option value="{{batch.id}}">{{batch.name}}</option>
+				{% endfor %}
+			</select>
+			</br>
+			</br>
+			
+			</form>
 
 			<input class="btn btn-default" type='submit' value='Save'>
 

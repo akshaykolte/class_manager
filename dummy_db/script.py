@@ -1,12 +1,24 @@
 from portal.models import *
 from portal.db_api.academic_year_db import get_current_academic_year
 from itertools import combinations
-	
+from time import sleep
+import sys, math
+
+
+def add_progress(i,length):
+	sys.stdout.write('\r')
+	sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
+	sys.stdout.flush()
+
+
 def insert_academic_years():
-	print "Adding Academic Years..."
+	print "Adding Academic Years...",
 	
 	f = open("dummy_db/academic_years.txt", "r+")
-	for ay in f.readlines():
+	ay_list = f.readlines()
+	length = len(ay_list)
+	for i,ay in enumerate(ay_list):
+		add_progress(i,length)
 		line = ay.split()
 		year_start = int(line[0])
 		year_end = int(line[1])
@@ -19,16 +31,19 @@ def insert_academic_years():
 			ay_obj = AcademicYear(year_start=year_start, year_end=year_end, is_current=is_current)
 			ay_obj.save()
 	f.close()
-	print "Added Academic Years Successfully"
 	print ""
 
 
 def insert_branches():
 
-	print "Adding Branches..."
+	print "Adding Branches...",
 	
 	f = open("dummy_db/branches.txt", "r+")
-	for branch in f.readlines():
+	br_list = f.readlines()
+	length = len(br_list)
+	
+	for i,branch in enumerate(br_list):
+		add_progress(i,length)
 		line = branch.split('$')
 		name = line[0]
 		address = line[1]
@@ -37,77 +52,88 @@ def insert_branches():
 			br_obj = Branch(name=name, address=address);
 			br_obj.save()
 	f.close()
-	print "Added Branches Successfully"
 	print ""
-
+	
 
 
 def insert_roles():
 
-	print "Adding Roles..."
+	print "Adding Roles...",
 	
 	f = open("dummy_db/roles.txt", "r+")
-	for role in f.readlines():
+	rl_list = f.readlines()
+	length = len(rl_list)
+	
+	for i,role in enumerate(rl_list):
+		add_progress(i,length)
 		role = role.rstrip('\n')
 		if not Role.objects.filter(name=role).exists():
 			role_obj = Role(name=role);
 			role_obj.save()
 	f.close()
-	print "Added Roles Successfully"
 	print ""
-
+	
 
 def insert_fee_types():
-	print "Adding Fee Types..."
+	print "Adding Fee Types...",
 	
 	f = open("dummy_db/fee_types.txt", "r+")
-	for fee in f.readlines():
+	fee_list = f.readlines()
+	length = len(fee_list)
+	
+	for i,fee in enumerate(fee_list):
+		add_progress(i,length)
 		fee = fee.rstrip('\n')
 		if not FeeType.objects.filter(name=fee).exists():
 			fee_obj = FeeType(name=fee)
 			fee_obj.save()
 	f.close()
-	print "Added Fee Types Successfully"
 	print ""
-
+	
 
 def insert_standards():
-	print "Adding Standards..."
+	print "Adding Standards...",
 	
 	f = open("dummy_db/standards.txt", "r+")
-	for st in f.readlines():
+	st_list = f.readlines()
+	length = len(st_list)
+	
+	for i,st in enumerate(st_list):
+		add_progress(i,length)
 		st = st.rstrip('\n')
 		if not Standard.objects.filter(name=st).exists():
 			st_obj = Standard(name=st)
 			st_obj.save()
 	f.close()
-	print "Added Standards Successfully"
 	print ""
-
+	
 def insert_batches():
-	print "Adding Batches..."
+	print "Adding Batches...",
 	cur_ay = get_current_academic_year()['id']
 	cur_ay_obj = AcademicYear.objects.get(id=cur_ay)
 	branches = Branch.objects.all()
 	standards = Standard.objects.all()
 	batches = ['Morning Batch', 'Evening Batch']
-	for std in standards:
+	length = len(standards)
+	for i,std in enumerate(standards):
+		add_progress(i,length)
 		for br in branches:
 			for bat in batches:
 				if not Batch.objects.filter(name=bat, academic_year=cur_ay_obj, branch=br, standard=std).exists():
 					bat_obj = Batch(name=bat, description="Temporary Description", academic_year=cur_ay_obj, branch=br, standard=std)
 					bat_obj.save()
 	
-	print "Added Batches Successfully"
 	print ""
-
+	
 
 def insert_subjects():
-	print "Adding Subjects..."
+	print "Adding Subjects...",
 
 	f = open("dummy_db/subjects.txt", "r+")
-	
-	for subs in f.readlines():
+	sub_list = f.readlines()
+	length = len(sub_list)
+	for i,subs in enumerate(sub_list):
+		add_progress(i,length)
 		line = subs.split()
 		name = line[0]
 		standard = line[1]
@@ -116,33 +142,35 @@ def insert_subjects():
 			sub_obj = Subject(name=name, standard=Standard.objects.get(name=standard))
 			sub_obj.save()
 	f.close()
-	print "Added Subjects Successfully"
 	print ""
-
+	
 
 def insert_subject_years():
-	print "Adding Subject Years..."
+	print "Adding Subject Years...",
 
 	subjects = Subject.objects.all()
 	years = AcademicYear.objects.all()
-
-	for year in years:
+	length = len(years)
+	
+	for i,year in enumerate(years):
+		add_progress(i,length)
 		for sub in subjects:
 
 			if not SubjectYear.objects.filter(subject=Subject.objects.get(id=sub.id), academic_year=AcademicYear.objects.get(id=year.id)).exists():
 				sub_year_obj = SubjectYear(subject=Subject.objects.get(id=sub.id), academic_year=AcademicYear.objects.get(id=year.id))
 				sub_year_obj.save()
 
-	print "Added Subject Years Successfully"
 	print ""
+	
 
-
-def insert_students(n=100):
-	print "Adding Students..."
+def insert_students(n=105):
+	print "Adding Students...",
 	n+=1
 	f = open("dummy_db/students.txt", "r+")
-	
-	for stu in f.readlines():
+	stu_list = f.readlines()
+	length = n-1
+	for i,stu in enumerate(stu_list):
+		add_progress(i,length)
 		n-=1;
 		if n <= 0:
 			break
@@ -159,16 +187,18 @@ def insert_students(n=100):
 			stu_obj = Student(username=username, password=password, first_name=first_name, last_name=last_name, address=address, email=email, phone_number=phone_number, gender=gender)
 			stu_obj.save()
 	f.close()
-	print "Added Students Successfully"
 	print ""
+	
 
-
-def insert_parents(n=100):
-	print "Adding Parents..."
+def insert_parents(n=105):
+	print "Adding Parents...",
 	n+=1
 	f = open("dummy_db/parents.txt", "r+")
+	par_list = f.readlines()
+	length = n-1
 	
-	for par in f.readlines():
+	for i,par in enumerate(par_list):
+		add_progress(i,length)
 		n-=1;
 		if n <= 0:
 			break
@@ -185,13 +215,12 @@ def insert_parents(n=100):
 			par_obj = Parent(username=username, password=password, first_name=first_name, last_name=last_name, address=address, email=email, phone_number=phone_number, gender=gender)
 			par_obj.save()
 	f.close()
-	print "Added Parents Successfully"
 	print ""
+	
 
+def assign_student_parent(n=105):
 
-def assign_student_parent(n=100):
-
-	print "Assigning Students to Parents"
+	print "Assigning Students to Parents",
 	# n+=1
 	f = open("dummy_db/students.txt", "r+")
 	stu_list = f.readlines()
@@ -201,6 +230,7 @@ def assign_student_parent(n=100):
 	f.close()
 
 	for i in xrange(n):
+		add_progress(i,n)
 		line1 = stu_list[i].split('$')
 		line2 = par_list[i].split('$')
 		s_username = line1[0]
@@ -225,18 +255,48 @@ def assign_student_parent(n=100):
 			stu_par_obj = StudentParent(student=Student.objects.get(username=s_username), parent=Parent.objects.get(username=p_username))
 			stu_par_obj.save()
 
-	print "Assigned Students to Parents Successfully"
 	print ""
+	
+def insert_student_batches():
+	print "Adding Student Batches...",
+	
+	batches = Batch.objects.all()
+	batch_len = len(batches)
+	students = Student.objects.all()
+	stud_len = len(students)
+	it_len = stud_len/batch_len
+	it_len += 1
+	cur_ay_obj = AcademicYear.objects.get(id=get_current_academic_year()['id'])
+	batch_it = 0
+	counter = 0
 
+	for i,stud in enumerate(students):
+		add_progress(i,stud_len)
+		if counter >= it_len:
+			batch_it+=1
+			counter = 0
 
+		if batch_it > batch_len:
+			break
+
+		if not StudentBatch.objects.filter(student=stud, batch=batches[batch_it], academic_year=cur_ay_obj).exists():
+			stud_bat_obj = StudentBatch(student=stud, batch=batches[batch_it], academic_year=cur_ay_obj, standard=batches[batch_it].standard)
+			stud_bat_obj.save()
+		
+		counter+=1
+		    
+	print ""
+	
 def insert_staff(n=100):
 
-	
-	print "Adding Staff..."
+	print "Adding Staff...",
 	n+=1
 	f = open("dummy_db/staffs.txt", "r+")
-	for staff in f.readlines():
-		
+	staff_list = f.readlines()
+	length = n-1
+	
+	for i,staff in enumerate(staff_list):
+		add_progress(i,length)
 		n-=1;
 		if n <= 0:
 			break
@@ -254,12 +314,11 @@ def insert_staff(n=100):
 			staff_obj = Staff(username=username, password=password, first_name=first_name, last_name=last_name, address=address, email=email, phone_number=phone_number, gender=gender)
 			staff_obj.save()
 	f.close()
-	print "Added Staff Successfully"
 	print ""
-
+	
 def insert_staff_role():
 
-	print "Assigning Roles to each Staff..."
+	print "Assigning Roles to each Staff...",
 	staff_obj = Staff.objects.all();
 	role_obj = Role.objects.all();
 	branch_obj = Branch.objects.all();
@@ -268,6 +327,7 @@ def insert_staff_role():
 	rsize = len(role_obj)
 	
 	for i in xrange(len(staff_obj)):
+		add_progress(i,len(staff_obj))
 		branch = branch_obj[i%bsize]
 		role = role_obj[i%rsize]
 		staff = staff_obj[i]
@@ -278,17 +338,20 @@ def insert_staff_role():
 
 			staff_role_obj.save()
 
-	print "Roles Assigned to Staffs Successfully"
 	print ""
-
+	
 
 def insert_lectures():
-	print "Adding Lectures..."
+	print "Adding Lectures...",
 	
 	f = open("dummy_db/lectures.txt", "r+")
 	cur_ay = get_current_academic_year()['id']
 	cur_ay_obj = AcademicYear.objects.get(id=cur_ay)
-	for lec in f.readlines():
+	lec_list = f.readlines()
+	length = len(lec_list)
+	
+	for i,lec in enumerate(lec_list):
+		add_progress(i,length)
 		line = lec.split('$')
 		name = line[0]
 		subject = line[1]
@@ -300,21 +363,18 @@ def insert_lectures():
 			lec_obj = Lecture(name=name, description="Temporary description", count=count, subject_year=SubjectYear.objects.get(subject=Subject.objects.get(name=subject, standard=Standard.objects.get(name=standard)), academic_year=cur_ay_obj))
 			lec_obj.save()
 	f.close()
-
-	print "Added Lectures Successfully"
 	print ""
-
+	
 def insert_base_fees():
 
-	print "Adding Base Fees..."
+	print "Adding Base Fees...",
 
 	ays = AcademicYear.objects.all()
 	standards = Standard.objects.all()
-	count = len(ays)
-	count = float(count)
-	percent = (1/count)*100
-	adder = percent
-	for ay in ays:
+	length = len(ays)
+
+	for i,ay in enumerate(ays):
+		add_progress(i,length)
 		for std in standards:
 			sub_years = SubjectYear.objects.filter(subject__standard__id=std.id, academic_year__id=ay.id)
 			k=2
@@ -328,12 +388,9 @@ def insert_base_fees():
 					base_fee_object.save()
 					for perm in p :
 						base_fee_object.subject_years.add(perm)
-		print ""
-		print percent,"% Done"
-		percent += adder
 
-	print "Added Base Fees Successfully"
-
+	print ""
+	
 
 insert_academic_years()
 insert_branches()
@@ -355,6 +412,7 @@ insert_subject_years()
 insert_students()
 insert_parents()
 assign_student_parent()
+insert_student_batches()
 
 # print "How many staffs do you want to enter?(MAX = 100)"
 # n = int(raw_input())

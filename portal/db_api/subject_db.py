@@ -180,3 +180,22 @@ def get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard
 
 	else:
 		raise Exception('Wrong parameters passed')
+
+
+def get_subject_year(subject_id=None, academic_year_id=None):
+
+	is_subject_id_none = subject_id == None
+	is_academic_year_id_none = academic_year_id == None
+
+	if is_academic_year_id_none:
+		academic_year_id = get_current_academic_year()['id']
+
+
+	subject_year_dict = {}
+	subject_year_obj = SubjectYear.objects.get(subject=Subject.objects.get(id=subject_id), academic_year=AcademicYear.objects.get(id=academic_year_id))
+	subject_year_dict['id'] = subject_year_obj.id
+	subject_year_dict['name'] = subject_year_obj.subject.name
+	subject_year_dict['subject_id'] = subject_year_obj.subject.id
+	subject_year_dict['academic_year_id'] = subject_year_obj.academic_year.id
+
+	return subject_year_dict

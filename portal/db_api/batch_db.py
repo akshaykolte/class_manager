@@ -69,6 +69,7 @@ def get_batch(id=None,branch_id =None,academic_year_id =None,standard_id =None):
 		batch['description'] = batch_object.description
 		batch['academic_year'] = batch_object.academic_year
 		batch['branch'] = batch_object.branch.name
+		batch['branch_id'] = batch_object.branch.id
 		batch['standard'] = batch_object.standard.name
 		return batch
 

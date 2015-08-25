@@ -86,6 +86,7 @@ def get_parent(id = None,student_id = None):
 	if not is_none_id:
 		parent_object = {}
 		parent = Parent.objects.get(id=id)
+		parent_object['id'] = parent.id
 		parent_object['username'] = parent.username
 		parent_object['password'] = parent.password
 		parent_object['first_name'] = parent.first_name
@@ -103,6 +104,7 @@ def get_parent(id = None,student_id = None):
 			return parent_object
 		student_parent_object = StudentParent.objects.get(student = Student.objects.get(id = student_id))
 		parent = student_parent_object.parent
+		parent_object['id'] = parent.id		
 		parent_object['username'] = parent.username
 		parent_object['password'] = parent.password
 		parent_object['first_name'] = parent.first_name

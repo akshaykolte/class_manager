@@ -36,13 +36,6 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-	<script>
-		function call_student_search_window(type) {
-			window.open("/student-search/?type="+type,"name_" + Math.random(), "toolbar=1,status=1,");
-		}
-	</script>
-
-
 </head>
 
 <body>
@@ -58,7 +51,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">PentaClass</a>
+                <a class="navbar-brand" href="/teacher/dashboard/">PentaClass</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -113,48 +106,7 @@
                     </ul>
                 </li> -->
 
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <strong>Use As</strong> &nbsp;<i class="fa fa-caret-down"></i> 
-                    </a>
-                    <ul class="dropdown-menu" style="width:200px;">
-                        {% block use_as %}
-                        {% if details.permission_admin == True %}
-                        <li>
-                            <a href="/change/?use_as=admin">
-                                <strong>Admin</strong> <span class="pull-right"><i class="fa fa-check"></i></span>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        {% endif %}
-                        {% if details.permission_accountant == True %}
-                        <li>
-                            <a href="/change/?use_as=accountant">
-                                <strong>Accountant</strong>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        {% endif %}
-                        {% if details.permission_manager == True %}
-                        <li>
-                            <a href="/change/?use_as=manager">
-                                <strong>Manager</strong>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        {% endif %}
-                        {% if details.permission_teacher == True %}
-                        <li>
-                            <a href="/change/?use_as=teacher">
-                               <strong>Teacher</strong>
-                            </a>
-                        </li>
-                        {% endif %}
-                        {% endblock %}
-                    </ul>
-                    <!-- /.dropdown-tasks -->
-                </li>
-                <!-- /.dropdown -->
+               
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -222,12 +174,12 @@
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        <li><a href="/parent/profile/view-profile/"><i class="fa fa-user fa-fw"></i> User Profile</a>
                         </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        <li><a href="/parent/profile/change-password/"><i class="fa fa-gear fa-fw"></i> Change Password</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="/logout/"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href="/../../../logout/"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -250,36 +202,27 @@
                             </div>
                         </li> -->
                         <li>
-							<a href="/admin/dashboard/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="/parent/dashboard/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-							<a href="/admin/batchwise-fees"><i class="fa fa-calendar-o"></i> Batchwise Fees (Kolte)<span class="fa arrow"></span></a>
-                        </li>
-                        <li>
-							<a href="#"><i class="fa fa-edit fa-fw"></i> Manage Staff<span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level">
+                            <a href="#"><i class="fa fa-calendar-o"></i> Attendance<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
                                 <li>
-									<a href="/admin/staff/add-staff/">Add Staff</a>
-                                </li>
-                                <li>
-									<a href="/admin/staff/view-staff/">View/Edit Staff</a>
-                                </li>
-                                <li>
-									<a href="/admin/staff/assign-roles/">Assign Roles</a>
+                                    <a href="/parent/attendance/view-attendance/">View Attendance</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        
                         <li>
-							<a href="/admin/set-current-academic-year"><i class="fa fa-edit fa-fw"></i> Set Current Academic Year<span class="fa arrow"></span></a>
+                            <a href="http://otp.pentaflux.com"><i class="fa fa-pencil"></i> <strong>Online Test Portal</strong></a>
                         </li>
-
-                        </br></br></br></br></br></br>
+                        <!-- </br></br></br></br></br></br>
                         Note: See UI/startbootstrap-sb-admin-2-1.0.7/pages/tables.html to choose the right table for attendance, etc.
                         </br></br>
                               See UI/startbootstrap-sb-admin-2-1.0.7/pages/forms.html to use right input type
                         </br></br>
-                              Also see panels-wells.html and buttons.html
+                              Also see panels-wells.html and buttons.html -->
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

@@ -7,8 +7,10 @@ from portal.db_api.subject_db import *
 from portal.db_api.standard_db import *
 from portal.db_api.batch_db import *
 from portal.db_api.lecture_db import *
+from portal.db_api.branch_db import *
 from portal.db_api.academic_year_db import *
 from portal.models import *
+import datetime
 def view_profile(request):
 
 	auth_dict = get_user(request)
@@ -161,10 +163,12 @@ def add_lectures(request):
 			
 			
 			if 'subject' in request.GET:
+				print "hehrheheheheheh"
 				page_type = 2
-				subject_year_object = SubjectYear.objects.get(subject = Subject.objects.get(id = request.GET['subject']))
+				subject_year_dict = get_subject_year(subject_id=request.GET['subject'])
+				print subject_year_dict
 
-				lectures = get_lecture(subject_year_id = subject_year_object.id)
+				lectures = get_lecture(subject_year_id = subject_year_dict['id'])
 
 				context['subject_id'] = int(request.GET['subject'])
 				context['lectures'] = lectures
@@ -172,9 +176,17 @@ def add_lectures(request):
 				if 'lecture' in request.GET:
 					page_type = 3
 					context['lecture_id'] = int(request.GET['lecture'])
+					context['expected_count'] = get_lecture(id=context['lecture_id'])[0]['count']
+					branches =  get_branch_of_teacher(teacher_id = auth_dict['id'])
+					context['branches'] = branches
 					academic_year_id = get_current_academic_year()['id']
-					context['batches']  = get_batch(academic_year_id = academic_year_id,standard_id = request.GET['standard'])
-					
+					batch_list=[]
+					for branch in branches:
+						batch = get_batch(academic_year_id = academic_year_id,standard_id = request.GET['standard'],branch_id = branch['id'])
+						for i in batch:
+							batch_list.append(i)
+					print batch_list
+					context['batches'] = batch_list
 		
 		context['page_type'] = page_type
 		context['details'] = auth_dict
@@ -182,25 +194,24 @@ def add_lectures(request):
 
 
 	elif request.method == 'POST':
-		try:
-			lecture_id = request.POST['lecture']
-			lecture_name = request.POST['lecture_name']
-			lecture_description = request.POST['lecture_description']
-			lecture_date = request.POST['lecture_date']
-			lecture_duration = request.POST['lecture_duration']
-			batch = request.POST['batch']
-			staff_role_list = get_staff_role(staff_id = auth_dict['id'])
-			staff_role_id_list = []
-			for staff_role in staff_role_list:
-				staff_role_id = staff_role['id']
-				staff_role_id_list.append(staff_role_id)
+		# try:
+		lecture_id = request.POST['lecture']
+		lecture_name = request.POST['lecture_name']
+		lecture_description = request.POST['lecture_description']
+		lecture_date = request.POST['lecture_date']
+		lecture_duration = request.POST['lecture_duration']
+		batch = request.POST['batch']
+		branch = get_batch(id = batch)
+		staff_role_dict = get_staff_role(staff_id = auth_dict['id'], branch_id = branch['branch_id'], role_name='teacher')
+		print staff_role_dict
+		set_lecture_batch(name=lecture_name, description=lecture_description, date=datetime.datetime.strptime(lecture_date, "%Y-%m-%d").date() , duration = lecture_duration,lecture_id = lecture_id,staff_role_id = staff_role_dict['id'],batch_id = batch)
+		context['details'] = auth_dict
 
-			for staff_role_id in staff_role_id_list:
-				set_lecture_batch(name=lecture_name, description=lecture_description, date = lecture_date, duration = lecture_duration,lecture_id = lecture_id,staff_role_id = staff_role_id,batch_id = batch)
-			context['details'] = auth_dict
-			return redirect('./?message=Lecture Added')
-		except:
-			return redirect('./?message_error=Error Adding Lecture')
+
+		return redirect('./?message=Lecture Added')
+		# except Exception as e:
+		# 	print e
+			# return redirect('./?message_error=Error Adding Lecture')
 
 @csrf_exempt
 
@@ -237,7 +248,8 @@ def view_lecture(request):
 		context['lecturebatches'] = lecturebatches	
 		if 'lecturebatch' in request.GET:
 			page_type = 1
-			context['lecturebatch'] = get_lecture_batch(id = request.GET['lecturebatch'])	
+			context['lecturebatch'] = get_lecture_batch(id = request.GET['lecturebatch'])
+			context['batches'] = get_batch	
 		context['page_type'] = page_type
 		context['details'] = auth_dict
 		return render(request, 'teacher/lectures/view-lecture.html', context)

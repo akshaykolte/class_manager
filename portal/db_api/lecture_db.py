@@ -19,7 +19,7 @@ def get_lecture(id = None, subject_year_id = None):
 	lecture_list = []
 	if not is_none_id and is_none_subject_year_id:
 		lecture = Lecture.objects.get(id = id)
-		lecture_batch_object = LectureBatch.objects.get(lecture = lecture)
+		# lecture_batch_object = LectureBatch.objects.get(lecture = lecture)
 		lecture_obj = {}
 		lecture_obj['id'] = lecture.id
 		lecture_obj['name'] = lecture.name
@@ -28,7 +28,6 @@ def get_lecture(id = None, subject_year_id = None):
 		lecture_obj['subject_year_id'] = lecture.subject_year.id
 		lecture_obj['subject_id'] = lecture.subject_year.subject.id
 		lecture_obj['subject_name'] = lecture.subject_year.subject.name
-		lecture_obj['date'] = lecture_batch_object.date
 		lecture_list.append(lecture_obj)
 		return lecture_list
 	
