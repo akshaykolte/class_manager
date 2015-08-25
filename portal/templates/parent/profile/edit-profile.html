@@ -1,0 +1,68 @@
+{% extends "parent/base_parent.html" %}
+
+{% block main_content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Profile</h1>
+    </div>
+</div>
+<div class="col-lg-10">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Edit Info
+        </div>
+        <!-- /.panel-heading -->
+        <form method='post' action='submit'>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>First Name</strong></td>
+                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='first_name' value='{{staff_details.first_name}}'></td>
+                        </tr>
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Last Name</strong></td>
+                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='last_name' value='{{staff_details.last_name}}'></td>
+                        </tr>
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Gender</strong></td>
+                            <td style='border-top:none' align="center"><div class="form-group">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="gender" value="M" {% if staff_details.gender == 'M' or staff_details.gender == 'm' %}checked{% endif %}>Male
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="gender" value="F" {% if staff_details.gender == 'F' or staff_details.gender == 'f' %}checked {% endif %}>Female
+                                            </label>
+                                        </div></td>
+                        </tr>
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Address</strong></td>
+                            <td style='border-top:none' align="center"><textarea name='address' class='form-control'>{{staff_details.address}}</textarea></td>
+                        </tr>
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Email</strong></td>
+                            <td style='border-top:none' align="center"><input name='email' class='form-control' style='width:250px' type='text' value='{{staff_details.email}}'></td>
+                        </tr>
+                        <tr>
+                            <td style='border-top:none' align="center"><strong>Phone Number</strong></td>
+                            <td style='border-top:none' align="center"><input name='phone_number' class='form-control' style='width:250px' type='text' value='{{staff_details.phone_number}}'></td>
+                        </tr>
+                        <tr><td style='border-top:none' ></td><td style='border-top:none' ></td></tr>
+                        <tr>
+                            <td style='border-top:none' align="center"></td>
+                            <td style='border-top:none' align="center"><input type='submit' class='btn btn-primary' style='width:250px' value='Update Info'></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        </form>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+
+{% endblock %}
