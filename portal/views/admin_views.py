@@ -21,8 +21,7 @@ def dashboard(request):
 	
 	return render(request,'admin/dashboard.html', context)
 
-def batchwise_fees(request):
-	pass
+
 
 def view_fees(request):
 	auth_dict = get_user(request)
