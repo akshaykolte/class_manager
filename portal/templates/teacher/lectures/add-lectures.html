@@ -131,6 +131,9 @@
 		<input type="hidden" name="subject" value="{{subject_id}}">
 		<input type="hidden" name="lecture" value="{{lecture_id}}">
 		</br>
+		<label><strong>Expected Count:</strong><strong>&nbsp;&nbsp;&nbsp;{{expected_count}}</strong></label>
+		</br>
+		</br>
 		<label><strong>Lecture Name</strong></label>
 		</br>
 		<input name="lecture_name" class="form-control">
@@ -147,12 +150,12 @@
 		
 		
 		<form>
-		</br>	
+		
 			<label><strong>Select Batch</strong></label>
 			<select name="batch" class="form-control" >
 				<option>Select</option>
 				{% for batch in batches %}
-				<option value="{{batch.id}}">{{batch.name}}</option>
+				<option value="{{batch.id}}">{{batch.name}} : {{batch.branch}}</option>
 				{% endfor %}
 			</select>
 			</br>
