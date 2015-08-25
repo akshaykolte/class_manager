@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.views.decorators.csrf import csrf_exempt
 from portal.db_api.auth_db import *
 from portal.db_api.academic_year_db import *
+from portal.db_api.staff_db import *
 
 def dashboard(request):
 	context = {}
@@ -17,10 +18,44 @@ def dashboard(request):
 	return render(request,'admin/dashboard.html', context)
 
 def batchwise_fees(request):
+	# TODO: Kolte will complete
 	pass
 
+@csrf_exempt
 def add_staff(request):
-	pass
+	context = {}
+	
+	auth_dict = get_user(request)
+	context['details'] = auth_dict
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_admin'] != True:
+		return Http404
+
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		return render(request, 'admin/staff/add_staff.html', context)
+	else:
+		try:
+			first_name = request.POST['first_name']
+			last_name = request.POST['last_name']
+			address = request.POST['address']
+			email = request.POST['email']
+			phone_number = request.POST['phone_number']
+			gender = request.POST['gender']
+			username = request.POST['username']
+			password = request.POST['password']
+			
+			set_staff(username=username, password=password, first_name=first_name, last_name=last_name, address=address, email=email, phone_number=phone_number, gender=gender)
+			return redirect('./?message=Added Staff')
+		except:
+			return redirect('./?message_error=Error Adding Staff')
 
 def view_staff(request):
 	pass
@@ -28,7 +63,6 @@ def view_staff(request):
 @csrf_exempt
 def set_current_academic_year_view(request):
 	context = {}
-	print request.POST
 	auth_dict = get_user(request)
 	context['details'] = auth_dict
 
