@@ -133,8 +133,8 @@ def get_base_fee(id = None , subject_years_list = None, academic_year_id=None, s
 			base_fee = base_fee.filter(subject_years = subject_year)
 
 		base_fee = base_fee.filter(count=len(subject_years_list))
-		print "========================================================================================================================================"
-		print base_fee
+		#print "========================================================================================================================================"
+		#print base_fee
 		return base_fee
 		
 		'''base_fee_object = {}
@@ -378,3 +378,56 @@ def get_fee_types(id = None):
 			fee_list.append(fee_dict)
 			
 		return fee_list
+
+def get_batch_fees(batch_id = None):
+
+	is_none_batch_id = batch_id == None
+	
+	if not is_none_batch_id :
+		student_batch_objects = StudentBatch.objects.filter(batch = Batch.objects.get(id = batch_id))
+	else :
+		student_batch_objects = StudentBatch.objects.all()
+	#fee_type_object = FeeType.objects.get(name = fee_type_name)
+	fee_list = []
+	for object in student_batch_objects:
+
+		fee_transaction = FeeTransaction.objects.filter(student_batch__student = object.student)
+		
+		total = {}
+		total['total_fees_paid'] =0
+		total['total_fees_remaining'] =0
+		total['discount'] = 0
+		total['base_fees'] = 0
+		total['total_fees'] = 0
+
+		studentbatches = StudentBatch.objects.filter(student = object.student)
+
+		for studentbatch in studentbatches:
+			subject_years = studentbatch.subject_years.all()
+			basefees = get_base_fee(id = None , subject_years_list = subject_years)
+			print basefees
+			for basefee in basefees :
+				total['base_fees'] = total['base_fees'] + basefee.amount
+
+
+		
+		for i in fee_transaction:
+			
+			
+
+			total['student'] = i.student_batch.student.first_name + ' ' + i.student_batch.student.last_name
+			total['student_id'] = i.student_batch.student.id
+			if(i.fee_type.name == 'payment'):
+				total['total_fees_paid'] = total['total_fees_paid'] + i.amount
+			
+			if(i.fee_type.name == 'discount'):
+				total['discount'] = total['discount'] + i.amount
+		
+		total['total_fees'] = total['base_fees'] - total['discount']		
+		total['total_fees_remaining'] = total['total_fees'] - total['total_fees_paid']
+		fee_list.append(total)
+	
+	return fee_list
+
+	#else :
+	#	raise Exception('Wrong set of arguments')

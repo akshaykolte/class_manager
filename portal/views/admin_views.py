@@ -3,6 +3,10 @@ from django.views.decorators.csrf import csrf_exempt
 from portal.db_api.auth_db import *
 from portal.db_api.academic_year_db import *
 from portal.db_api.staff_db import *
+from portal.db_api.branch_db import *
+from portal.db_api.batch_db import *
+from portal.db_api.fee_db import *
+
 
 def dashboard(request):
 	context = {}
@@ -18,8 +22,48 @@ def dashboard(request):
 	return render(request,'admin/dashboard.html', context)
 
 def batchwise_fees(request):
-	# TODO: Kolte will complete
 	pass
+
+def view_fees(request):
+	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_admin'] != True:
+		raise Http404
+
+	context = {}
+	context['details'] = auth_dict
+	branches = get_branch(id=None)
+	context['branches'] = branches
+
+	if request.method == 'GET':
+	
+		
+		page_type = 0
+		
+		
+		
+		if 'branch' in request.GET:
+			page_type = 1
+			batches = get_batch(branch_id = int(request.GET['branch']))
+			context['batches'] = batches
+			context['branch_id'] = int(request.GET['branch'])
+			#context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
+			if 'batch' in request.GET:
+				page_type = 2
+				context['batch_id'] = int(request.GET['batch'])
+				context['branch_id'] = int(request.GET['branch'])
+				fee_details = get_batch_fees(batch_id =  int(request.GET['batch']))
+
+				#print fee_details
+				context = {'details':auth_dict, 'fee_details':fee_details, 'batches' : batches, 'branches' : branches}
+				
+		context['page_type'] = page_type
+		print context
+
+		return render(request,'admin/fees/view-fees.html', context)
 
 @csrf_exempt
 def add_staff(request):
