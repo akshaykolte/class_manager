@@ -28,8 +28,15 @@ def home(request):
 	context['details'] = auth_dict
 	page_type = 1
 
+	type=''
+	if 'type' in request.GET:
+		if request.GET['type'] == 'staff':
+			type='staff'
+		else:
+			return Http404
+
 	if 'search' in request.GET:
-		students = search_staff(first_name=request.GET['first_name'], last_name=request.GET['last_name'], username=request.GET['username'], email=request.GET['email'], phone_number=request.GET['phone_number'])
+		staffs = search_staffs(first_name=request.GET['first_name'], last_name=request.GET['last_name'], username=request.GET['username'], email=request.GET['email'], phone_number=request.GET['phone_number'])
 		page_type = 0
 		context['staffs'] = staffs
 
