@@ -173,5 +173,53 @@ def set_current_academic_year_view(request):
 		set_current_academic_year(current_academic_year)
 		return redirect('./?message=Current academic year changed.')
 
+@csrf_exempt
 def assign_roles(request):
-	pass
+
+	context = {}
+	auth_dict = get_user(request)
+	context['details'] = auth_dict
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_admin'] != True:
+		return Http404
+
+	if request.method == 'GET':
+
+		context = {}
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		page_type = 1
+		if 'staff' in request.GET:
+			page_type = 2
+			staff_roles = get_staff_role(staff_id=request.GET['staff'])
+			branch_permissions = {}
+			branches = get_branch()
+			branch_dict = {}
+			for branch in branches:
+				branch_permissions[branch['name']] = []
+				branch_dict[branch['name']] = branch['id']
+			for staff_role in staff_roles:
+				branch_permissions[staff_role['branch_name']].append(staff_role['role'])
+			table_display = []
+			for index in branch_permissions:
+				table_display.append([])
+				table_display[-1].append(index)
+				table_display[-1].append([[1,False, branch_dict[index]], [2,False, branch_dict[index]], [3,False, branch_dict[index]]])
+				for perms in branch_permissions[index]:
+					if perms == 'teacher':
+						table_display[-1][1][0][1]=True
+					if perms == 'accountant':
+						table_display[-1][1][1][1]=True
+					if perms == 'manager':
+						table_display[-1][1][2][1]=True
+			context['table_display'] = table_display
+			context['staff'] = request.GET['staff']
+		context['page_type'] = page_type
+
+		return render(request, 'admin/staff/assign_roles.html', context)
