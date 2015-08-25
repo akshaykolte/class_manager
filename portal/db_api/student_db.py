@@ -471,8 +471,9 @@ def get_student_batch_of_student(student_id):
 		student_batch['student_email'] = student_batch_object.student.email
 		student_batch['student_phone_number'] = student_batch_object.student.phone_number
 		student_batch['student_gender'] = student_batch_object.student.gender
-		student_batch['student_batch_name'] = student_batch_object.batch.name
-		student_batch['student_batch_description'] = student_batch_object.batch.description
+		if student_batch_object.batch != None :
+			student_batch['student_batch_name'] = student_batch_object.batch.name
+			student_batch['student_batch_description'] = student_batch_object.batch.description
 		subject_year_list = []
 		for j in student_batch_object.subject_years.all():
 			subject_year_dict ={}
