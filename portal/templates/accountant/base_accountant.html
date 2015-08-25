@@ -36,6 +36,12 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <script>
+    function call_student_search_window(type) {
+        window.open("/student-search/?type="+type,"name_" + Math.random(), "toolbar=1,status=1,");
+    }
+  </script>
+
 </head>
 
 <body>
@@ -261,7 +267,7 @@
                             <a href="#"><i class="fa fa-edit fa-fw"></i> Fees<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="/accountant/fees/view-fees/">View Batch Fees</a>
+                                    <a href="/accountant/fees/view-fees/">View Fee Details</a>
                                 </li>
                                
                                 <li>
