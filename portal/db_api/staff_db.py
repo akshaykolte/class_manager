@@ -151,6 +151,7 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None,rol
 			staff_role['staff_last_name'] = staff_role_object.staff.last_name
 			staff_role['branch'] = staff_role_object.branch.name
 			staff_role['branch_id'] = staff_role_object.branch.id
+			staff_role['branch_name'] = staff_role_object.branch.name
 			staff_role_list.append(staff_role)
 		return staff_role_list
 	
@@ -164,6 +165,7 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None,rol
 		staff_role['staff_last_name'] = staff_role_object.staff.last_name
 		staff_role['branch'] = staff_role_object.branch.name
 		staff_role['branch_id'] = staff_role_object.branch.id
+		staff_role['branch_name'] = staff_role_object.branch.name
 		return staff_role
 	
 	#01000
@@ -178,6 +180,7 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None,rol
 			staff_role['staff_last_name'] = staff_role_object.staff.last_name
 			staff_role['branch'] = staff_role_object.branch.name
 			staff_role['branch_id'] = staff_role_object.branch.id
+			staff_role['branch_name'] = staff_role_object.branch.name
 			staff_role_list.append(staff_role)
 		return staff_role_list		
 
@@ -193,6 +196,7 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None,rol
 			staff_role['staff_last_name'] = staff_role_object.staff.last_name
 			staff_role['branch'] = staff_role_object.branch.name
 			staff_role['branch_id'] = staff_role_object.branch.id
+			staff_role['branch_name'] = staff_role_object.branch.name
 			staff_role_list.append(staff_role)
 		return staff_role_list
 
@@ -207,6 +211,7 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None,rol
 			staff_role['staff_first_name'] = staff_role_object.staff.first_name
 			staff_role['staff_last_name'] = staff_role_object.staff.last_name
 			staff_role['branch'] = staff_role_object.branch.name
+			staff_role['branch_name'] = staff_role_object.branch.name
 			staff_role['branch_id'] = staff_role_object.branch.id
 			staff_role_list.append(staff_role)
 		return staff_role_list
@@ -221,6 +226,7 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None,rol
 			staff_role['role'] = staff_role_object.role.name
 			staff_role['staff_first_name'] = staff_role_object.staff.first_name
 			staff_role['staff_last_name'] = staff_role_object.staff.last_name
+			staff_role['branch_name'] = staff_role_object.branch.name
 			staff_role['branch'] = staff_role_object.branch.name
 			staff_role_list.append(staff_role)
 		return staff_role_list
@@ -235,6 +241,7 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None,rol
 			staff_role['staff_first_name'] = staff_role_object.staff.first_name
 			staff_role['staff_last_name'] = staff_role_object.staff.last_name
 			staff_role['branch'] = staff_role_object.branch.name
+			staff_role['branch_name'] = staff_role_object.branch.name
 			staff_role['branch_id'] = staff_role_object.branch.id
 			staff_role_list.append(staff_role)
 		return staff_role_list
@@ -250,8 +257,25 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None,rol
 		staff_role['staff_first_name'] = staff_role_object.staff.first_name
 		staff_role['staff_last_name'] = staff_role_object.staff.last_name
 		staff_role['branch'] = staff_role_object.branch.name
+		staff_role['branch_name'] = staff_role_object.branch.name
 		staff_role['branch_id'] = staff_role_object.branch.id
 		return staff_role
+
+def search_staffs(first_name='', last_name='', username='', email='', phone_number=''):
+	# TODO Think of optimisation (probably using indexes)
+	staffs = Staff.objects.filter(first_name__icontains=first_name, last_name__icontains=last_name, username__icontains=username, email__icontains=email, phone_number__icontains=phone_number)
+	staff_list = []
+	for i in staffs:
+		staff_dict = {}
+		staff_dict['id'] = i.id
+		staff_dict['username'] = i.username
+		staff_dict['first_name'] = i.first_name
+		staff_dict['last_name'] = i.last_name
+		staff_dict['email'] = i.email
+		staff_dict['phone_number'] = i.phone_number
+		staff_list.append(staff_dict)
+	
+	return staff_list
 
 
 def delete_staff_role(staff=None, role=None, branch=None):

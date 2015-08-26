@@ -37,11 +37,10 @@
     <![endif]-->
 
 	<script>
-		function call_student_search_window(type) {
-			window.open("/student-search/?type="+type,"name_" + Math.random(), "toolbar=1,status=1,");
-		}
+	  function call_staff_search_window(type) {
+		  window.open("/staff-search/?type="+type,"name_" + Math.random(), "toolbar=1,status=1,");
+	  }
 	</script>
-
 
 </head>
 
@@ -253,7 +252,7 @@
 							<a href="/admin/dashboard/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-							<a href="/admin/batchwise-fees"><i class="fa fa-calendar-o"></i> Batchwise Fees (Kolte)<span class="fa arrow"></span></a>
+							<a href="/admin/fees/view-fees"><i class="fa fa-calendar-o"></i> Batchwise Fees <span class="fa arrow"></span></a>
                         </li>
                         <li>
 							<a href="#"><i class="fa fa-edit fa-fw"></i> Manage Staff<span class="fa arrow"></span></a>
@@ -263,6 +262,9 @@
                                 </li>
                                 <li>
 									<a href="/admin/staff/view-staff/">View/Edit Staff</a>
+                                </li>
+                                <li>
+									<a href="/admin/staff/assign-roles/">Assign Roles</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

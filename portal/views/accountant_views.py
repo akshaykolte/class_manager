@@ -125,8 +125,7 @@ def view_fees(request):
 
 	context = {}
 	context['details'] = auth_dict
-	branches = get_branch(id=None)
-	context['branches'] = branches
+	
 
 	if request.method == 'GET':
 	
@@ -135,24 +134,23 @@ def view_fees(request):
 		
 		
 		
-		if 'branch' in request.GET:
+		if 'student' in request.GET:
 			page_type = 1
-			batches = get_batch(branch_id = int(request.GET['branch']))
-			context['batches'] = batches
-			context['branch_id'] = int(request.GET['branch'])
+			
+			context['student_id'] = int(request.GET['student'])
 
-			if 'batch' in request.GET:
-				page_type = 2
-				context['batch_id'] = int(request.GET['batch'])
-				context['branch_id'] = int(request.GET['branch'])
-				fee_details = get_batch_fees(batch_id =  int(request.GET['batch']))
-
-				
+			
+		
+			
+			fee_details = get_student_fees( student_id = int(request.GET['student']) )
+			transaction_details = get_fee_transaction(id = None ,date_start = None, date_end = None, receipt_number = None, student_id = int(request.GET['student']), fee_type_id = None)
+		
 
 				
 				
-				#print fee_details
-				context = {'details':auth_dict, 'fee_details':fee_details, 'batches' : batches, 'branches' : branches}
+			#print fee_details
+			context['fee_details'] = fee_details
+			context['transaction_details'] = transaction_details
 				
 		context['page_type'] = page_type
 		print context
@@ -356,40 +354,31 @@ def make_transaction(request):
 		branches = get_branch(id=None)
 		context['branches'] = branches
 
-		if 'branch' in request.GET:
+		if 'student_batch' in request.GET:
 			page_type = 1
-			batches = get_batch(branch_id = int(request.GET['branch']))
-			context['batches'] = batches
-			context['branch_id'] = int(request.GET['branch'])
-			#context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
-			if 'batch' in request.GET:
-				page_type = 2
-				context['batch_id'] = int(request.GET['batch'])
-
-				students = get_students(id = None, batch_id = int(request.GET['batch']) , branch_id = None, academic_year_id = None, standard_id = None)
-				context['students'] = students
+			context['student_batch_id'] = request.GET['student_batch']
 				
-			
-
-				if 'student' in request.GET:
-					page_type = 3
-					fee_types = get_fee_types()
-					context['fee_types'] = fee_types
-					context['student_id'] = int(request.GET['student'])
-					if 'fee_type' in request.GET:
-						page_type = 4
-						context['fee_type_id'] = int(request.GET['fee_type'])
+			fee_types = get_fee_types()
+			context['fee_types'] = fee_types
+			if 'fee_type' in request.GET:
+				page_type = 2
+				context['fee_type_id'] = int(request.GET['fee_type'])
 		context['page_type'] = page_type
-
+		print context
 		return render(request,'accountant/fees/make-transaction.html', context)
 
 	elif request.method == 'POST':
 		try:
-			student = Student.objects.get(id = int(request.POST['student']))
-			student_id = student.id
+			id = request.POST['student_batch']
+
+			student_batch_object = StudentBatch.objects.get(id = request.POST['student_batch'])
+			student_batch_id = student_batch_object.id
+			
+			print student_batch_id
 
 			fee_type_id = request.POST['fee_type']
 			
+			print fee_type_id
 			receipt_number = request.POST['receipt_number']
 			
 			amount = request.POST['amount']
@@ -398,8 +387,8 @@ def make_transaction(request):
 			
 			time = request.POST['time']
 			
-			set_fee_transaction(id = None ,amount = amount, date = '2015-8-5', time = '19:45:07', receipt_number = receipt_number, student_id = student_id, fee_type_id = fee_type_id)
-			
+			set_fee_transaction(id = None ,amount = amount, date =  date, time = time , receipt_number = receipt_number, student_batch_id = student_batch_id, fee_type_id = fee_type_id)
+		
 			return redirect('./?message=Transaction made')
 		except:
 			return redirect('./?message_error=Error. Transaction Failed.')
@@ -487,4 +476,82 @@ def create_student(request):
 
 @csrf_exempt
 def admit_student(request):
-	pass
+	
+	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	context = {}
+	context['details'] = auth_dict
+	
+
+	if request.method == 'GET':
+		
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		
+		page_type = -1
+		
+
+		if 'student' in request.GET:
+			page_type = 0
+			context['student_id'] = request.GET['student']
+			academic_years = get_academic_year(id=None)
+			context['academic_years'] = academic_years	
+			if 'academic_year' in request.GET:
+				page_type = 1
+				standards = get_standard(id=None)
+				context['standards'] = standards
+				context['academic_year_id'] = int(request.GET['academic_year'])
+				#context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id
+				if 'standard' in request.GET:
+					page_type = 2
+					context['standard_id'] = int(request.GET['standard'])
+					batches = get_batch()
+					batches.append({'id' : -1, 'name' : 'Empty Batch'})
+					context['batches'] =  batches
+				
+					if 'batch' in request.GET:
+						page_type = 3
+						context['batch_id'] = int(request.GET['batch'])
+						subject_years = get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard_id=int(request.GET['standard']), academic_year_id=int(request.GET['academic_year']), subject_year_id=None)
+						context['subject_years'] = subject_years
+							
+			
+		context['page_type'] = page_type
+		return render(request,'accountant/student/admit-student.html', context)
+
+	elif request.method == 'POST':
+		'''try:'''
+		id = request.POST['student']
+
+		student_object = Student.objects.get(id = request.POST['student'])
+		student_id = student_object.id
+		
+	
+
+		academic_year_id = request.POST['academic_year']
+		
+
+		standard_id = request.POST['standard']
+		
+		batch_id = request.POST['batch']
+		print batch_id
+		subject_years = get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard_id=int(request.POST['standard']), academic_year_id=int(request.POST['academic_year']), subject_year_id=None)
+		subject_year_list = []
+		for subject_year in subject_years:
+			if 'subject_year_'+str(subject_year['id']) in request.POST:
+				print subject_year
+				subject_year_list.append(subject_year['id'])
+		if batch_id == '-1':
+			set_student_batch(id=None,student_id = student_id, batch_id = None, subject_year_id_list= subject_year_list, academic_year_id = academic_year_id, standard_id = standard_id)
+		else:
+			set_student_batch(id=None,student_id = student_id, batch_id = batch_id, subject_year_id_list= subject_year_list, academic_year_id = None, standard_id = None)	
+		return redirect('./?message=Transaction made')
+		'''except:
+			return redirect('./?message_error=Error. Transaction Failed.')'''

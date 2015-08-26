@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^login/$', 'portal.views.auth_views.login'),
     url(r'^logout/$', 'portal.views.auth_views.logout'),
     url(r'^student-search/$', 'portal.views.student_search_views.home'),
+    url(r'^staff-search/$', 'portal.views.staff_search_views.home'),
     url(r'^student/', include('portal.urls.student_urls')),
     url(r'^parent/', include('portal.urls.parent_urls')),
     url(r'^teacher/', include('portal.urls.teacher_urls')),
