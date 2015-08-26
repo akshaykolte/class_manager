@@ -15,7 +15,7 @@ urlpatterns = [
     url(r'^dashboard/$', 'portal.views.teacher_views.dashboard'),
     
     # Attendance
-    # url(r'^attendance/mark-attendance/$', 'portal.views.teacher_views.mark_attendance'),
+    url(r'^attendance/add-attendance/$', 'portal.views.teacher_views.add_attendance'),
     # url(r'^attendance/view-attendance/$', 'portal.views.teacher_views.view_attendance'),
     
     # # Lecture

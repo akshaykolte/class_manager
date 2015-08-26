@@ -113,7 +113,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 		lecture_batch_dict['duration'] = lecture_batch_object.duration
 		lecture_batch_dict['lecture'] = lecture_batch_object.lecture
 		lecture_batch_dict['staff_role'] = lecture_batch_object.staff_role
-		lecture_batch_dict['batch'] = lecture_batch_object.batch_id
+		lecture_batch_dict['batch_id'] = lecture_batch_object.batch.id
 		return lecture_batch_dict
 
 	elif is_none_id and not is_none_date and is_none_lecture_id and is_none_staff_role_id and is_none_batch_id:
@@ -128,7 +128,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['duration'] = i.duration
 			lecture_batch_dict['lecture'] = i.lecture
 			lecture_batch_dict['staff_role'] = i.staff_role
-			lecture_batch_dict['batch'] = i.batch_id
+			lecture_batch_dict['batch_id'] = i.batch.id
 			lecture_batch_list.append(lecture_batch_dict)
 		return lecture_batch_list
 
@@ -144,7 +144,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['duration'] = i.duration
 			lecture_batch_dict['lecture'] = i.lecture
 			lecture_batch_dict['staff_role'] = i.staff_role
-			lecture_batch_dict['batch'] = i.batch_id
+			lecture_batch_dict['batch_id'] = i.batch.id
 			lecture_batch_list.append(lecture_batch_dict)
 		return lecture_batch_list
 
@@ -160,7 +160,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['duration'] = i.duration
 			lecture_batch_dict['lecture'] = i.lecture
 			lecture_batch_dict['staff_role'] = i.staff_role
-			lecture_batch_dict['batch'] = i.batch_id
+			lecture_batch_dict['batch_id'] = i.batch.id
 			lecture_batch_list.append(lecture_batch_dict)
 		return lecture_batch_list
 
@@ -175,7 +175,8 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['date'] = i.date
 			lecture_batch_dict['lecture'] = i.lecture
 			lecture_batch_dict['staff_role'] = i.staff_role
-			lecture_batch_dict['batch'] = i.batch_id
+			lecture_batch_dict['batch_id'] = i.batch.id
+
 			lecture_batch_list.append(lecture_batch_dict)
 		return lecture_batch_list
 			

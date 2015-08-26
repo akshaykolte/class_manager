@@ -9,6 +9,8 @@ from portal.db_api.batch_db import *
 from portal.db_api.lecture_db import *
 from portal.db_api.branch_db import *
 from portal.db_api.academic_year_db import *
+from portal.db_api.student_db import *
+from portal.db_api.attendance_db import *
 from portal.models import *
 import datetime
 def view_profile(request):
@@ -265,3 +267,99 @@ def view_lecture(request):
 		
 
 		return redirect('./?message=Edited Lecture batch')	
+
+@csrf_exempt
+def add_attendance(request):
+	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		context = {}
+
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		page_type = 0
+
+		standards = get_standard()
+		context['standards'] = standards
+
+		if 'standard' in request.GET:
+			page_type = 1
+			subjects = get_subjects(standard_id=request.GET['standard'])
+			context['subjects'] = subjects
+			context['standard_id'] = int(request.GET['standard'])
+			
+			
+			if 'subject' in request.GET:
+				page_type = 2
+				subject_year_dict = get_subject_year(subject_id=request.GET['subject'])
+
+				lectures = get_lecture(subject_year_id = subject_year_dict['id'])
+
+				context['subject_id'] = int(request.GET['subject'])
+				context['lectures'] = lectures
+				
+				if 'lecture' in request.GET:
+					page_type = 3
+					context['lecture_id'] = int(request.GET['lecture'])
+					context['expected_count'] = get_lecture(id=context['lecture_id'])[0]['count']
+					branches =  get_branch_of_teacher(teacher_id = auth_dict['id'])
+					context['branches'] = branches
+					academic_year_id = get_current_academic_year()['id']
+					batch_list=[]
+					for branch in branches:
+						batch = get_batch(academic_year_id = academic_year_id,standard_id = request.GET['standard'],branch_id = branch['id'])
+						for i in batch:
+							batch_list.append(i)
+					context['batches'] = batch_list
+					lecturebatches = []
+					for batch in batch_list:
+						lecturebatch = get_lecture_batch(batch_id = batch['id'])
+						for i in lecturebatch:
+							lecturebatches.append(i)
+					print lecturebatches
+					context['lecturebatches'] = lecturebatches
+
+					if 'lecturebatch' in request.GET:
+						page_type = 4
+						context['lecturebatch_id'] = int(request.GET['lecturebatch'])
+						lecturebatch = get_lecture_batch(id = int(request.GET['lecturebatch']))
+						batch_id = lecturebatch['batch_id']
+						students = get_students(batch_id = batch_id)
+						context['students'] = students
+
+
+
+		
+		context['page_type'] = page_type
+		context['details'] = auth_dict
+		return render(request, 'teacher/attendance/add-attendance.html', context)
+
+	elif request.method == 'POST':
+		try:
+			count = request.POST['count']
+			lecturebatch_id = request.POST['lecturebatch']
+			lecturebatch = get_lecture_batch(id = lecturebatch_id)
+			batch_id = lecturebatch['batch_id']
+			students = get_students(batch_id = batch_id)
+			for student in students:
+				if 'student_'+str(student['id']) in request.POST:
+					student_batch = get_student_batch(student_id = student['id'])
+					print student_batch
+					set_attendance(count = count,student_batch_id = student_batch['id'],lecture_batch_id = lecturebatch_id)
+					print 'here1'
+					
+
+
+			return redirect('./?message=Attendance Marked')
+		except Exception as e:
+			print 'sd', e
+			return redirect('./?message_error=Error Marking Attendance')
+
