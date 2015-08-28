@@ -280,7 +280,7 @@ def insert_student_batches():
 			break
 
 		if not StudentBatch.objects.filter(student=stud, batch=batches[batch_it], academic_year=cur_ay_obj).exists():
-			stud_bat_obj = StudentBatch(student=stud, batch=batches[batch_it], academic_year=cur_ay_obj, standard=batches[batch_it].standard)
+			stud_bat_obj = StudentBatch(student=stud, batch=batches[batch_it])
 			stud_bat_obj.save()
 		
 		counter+=1
