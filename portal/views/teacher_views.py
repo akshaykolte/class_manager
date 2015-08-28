@@ -354,13 +354,18 @@ def add_attendance(request):
 					print lecturebatches
 					context['lecturebatches'] = lecturebatches
 
-					if 'lecturebatch' in request.GET:
-						page_type = 4
-						context['lecturebatch_id'] = int(request.GET['lecturebatch'])
-						lecturebatch = get_lecture_batch(id = int(request.GET['lecturebatch']))
+				
+					lecturebatch_list = []
+					for lecturebatch in lecturebatches:
+						lecturebatch_dict={}
 						batch_id = lecturebatch['batch_id']
 						students = get_students(batch_id = batch_id)
-						context['students'] = students
+						lecturebatch_dict['lecturebatch'] = lecturebatch
+						lecturebatch_dict['students'] = students
+						lecturebatch_list.append(lecturebatch_dict)
+					context['lecturebatch_list'] = lecturebatch_list
+
+
 
 
 

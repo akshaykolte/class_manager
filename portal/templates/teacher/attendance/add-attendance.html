@@ -125,7 +125,7 @@
 		</select>
 	</form>
 	</br>
-	<form action="." method="GET">
+	<!--<form action="." method="GET">
 		<input type="hidden" name="standard" value="{{standard_id}}">
 		<input type="hidden" name="subject" value="{{subject_id}}">
 		<input type="hidden" name="lecture" value="{{lecture_id}}">
@@ -136,11 +136,30 @@
 			<option value="{{lecturebatch.id}}"{% if lecturebatch_id == lecturebatch.id %} selected{% endif %}>{{lecturebatch.name}}</option>
 			{% endfor %}
 		</select>
+	</form> -->
+	<form action="." method="POST">
+		<input type="hidden" name="standard" value="{{standard_id}}">
+		<input type="hidden" name="subject" value="{{subject_id}}">
+		<input type="hidden" name="lecture" value="{{lecture_id}}">
+		<!--<input type="hidden" name="lecturebatch" value="{{lecturebatch_id}}"> -->
+		<br/>
+		<label><strong>Mark Attendance</strong></label>
+		{{lecturebatch_list[0]}}
+		
+		<br/>
+		</br>
+		<label><strong>Count</strong></label>
+		</br>
+		<input name="count" class="form-control">
+		<br/>
+		<input class="btn btn-default" type='submit' value='Mark Attendance'>
+		<br/>
+		
 	</form>
 	
 	{% endif %}
 
-	{% if page_type == 4 %}
+	<!--{% if page_type == 4 %}
 	<form>
 		<label><strong>Select Standard</strong></label>
 		<select name="standard" class="form-control" onchange="this.form.submit()">
@@ -205,7 +224,7 @@
 		
 	</form>
 
-	{% endif %}
+	{% endif %} -->
 
 
 
