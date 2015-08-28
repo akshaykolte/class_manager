@@ -28,6 +28,8 @@ def get_lecture(id = None, subject_year_id = None):
 		lecture_obj['subject_year_id'] = lecture.subject_year.id
 		lecture_obj['subject_id'] = lecture.subject_year.subject.id
 		lecture_obj['subject_name'] = lecture.subject_year.subject.name
+		lecture_obj['standard_id'] = lecture.subject_year.subject.standard.id
+		lecture_obj['standard_name'] = lecture.subject_year.subject.standard.name
 		lecture_list.append(lecture_obj)
 		return lecture_list
 	
@@ -111,8 +113,8 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 		lecture_batch_dict['description'] = lecture_batch_object.description
 		lecture_batch_dict['date'] = lecture_batch_object.date
 		lecture_batch_dict['duration'] = lecture_batch_object.duration
-		lecture_batch_dict['lecture'] = lecture_batch_object.lecture
-		lecture_batch_dict['staff_role'] = lecture_batch_object.staff_role
+		lecture_batch_dict['lecture_id'] = lecture_batch_object.lecture.id
+		lecture_batch_dict['staff_role_id'] = lecture_batch_object.staff_role.id
 		lecture_batch_dict['batch_id'] = lecture_batch_object.batch.id
 		return lecture_batch_dict
 
@@ -126,8 +128,8 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['description'] = i.description
 			lecture_batch_dict['date'] = i.date
 			lecture_batch_dict['duration'] = i.duration
-			lecture_batch_dict['lecture'] = i.lecture
-			lecture_batch_dict['staff_role'] = i.staff_role
+			lecture_batch_dict['lecture_id'] = i.lecture.id
+			lecture_batch_dict['staff_role_id'] = i.staff_role.id
 			lecture_batch_dict['batch_id'] = i.batch.id
 			lecture_batch_list.append(lecture_batch_dict)
 		return lecture_batch_list
@@ -142,8 +144,8 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['description'] = i.description
 			lecture_batch_dict['date'] = i.date
 			lecture_batch_dict['duration'] = i.duration
-			lecture_batch_dict['lecture'] = i.lecture
-			lecture_batch_dict['staff_role'] = i.staff_role
+			lecture_batch_dict['lecture_id'] = i.lecture.id
+			lecture_batch_dict['staff_role_id'] = i.staff_role.id
 			lecture_batch_dict['batch_id'] = i.batch.id
 			lecture_batch_list.append(lecture_batch_dict)
 		return lecture_batch_list
@@ -158,7 +160,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['description'] = i.description
 			lecture_batch_dict['date'] = i.date
 			lecture_batch_dict['duration'] = i.duration
-			lecture_batch_dict['lecture'] = i.lecture
+			lecture_batch_dict['lecture_id'] = i.lecture.id
 			lecture_batch_dict['staff_role'] = i.staff_role
 			lecture_batch_dict['batch_id'] = i.batch.id
 			lecture_batch_list.append(lecture_batch_dict)
@@ -173,8 +175,8 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['name'] = i.name
 			lecture_batch_dict['description'] = i.description
 			lecture_batch_dict['date'] = i.date
-			lecture_batch_dict['lecture'] = i.lecture
-			lecture_batch_dict['staff_role'] = i.staff_role
+			lecture_batch_dict['lecture_id'] = i.lecture.id
+			lecture_batch_dict['staff_role_id'] = i.staff_role.id
 			lecture_batch_dict['batch_id'] = i.batch.id
 
 			lecture_batch_list.append(lecture_batch_dict)

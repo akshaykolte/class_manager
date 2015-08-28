@@ -250,23 +250,50 @@ def view_lecture(request):
 		context['lecturebatches'] = lecturebatches	
 		if 'lecturebatch' in request.GET:
 			page_type = 1
-			context['lecturebatch'] = get_lecture_batch(id = request.GET['lecturebatch'])
-			context['batches'] = get_batch	
+			lecturebatch = get_lecture_batch(id = request.GET['lecturebatch'])
+			context['lecturebatch'] = lecturebatch
+			context['cur_batch_id'] = lecturebatch['batch_id']
+			lecture_id = lecturebatch['lecture_id']
+			lecture = get_lecture(id = lecture_id)
+			standard_id = lecture[0]['standard_id']
+			subject_year_id = lecture[0]['subject_year_id']
+			lectures = get_lecture(subject_year_id = subject_year_id)
+			context['lectures'] = lectures
+			context['cur_lecture_id'] = lecturebatch['lecture_id']
+
+
+			branches =  get_branch_of_teacher(teacher_id = auth_dict['id'])
+			context['branches'] = branches
+			academic_year_id = get_current_academic_year()['id']
+			batch_list=[]
+			for branch in branches:
+				batch = get_batch(academic_year_id = academic_year_id,standard_id = standard_id,branch_id = branch['id'])
+				for i in batch:
+					batch_list.append(i)
+					print batch_list
+				context['batches'] = batch_list
 		context['page_type'] = page_type
 		context['details'] = auth_dict
 		return render(request, 'teacher/lectures/view-lecture.html', context)
 	elif request.method == 'POST':
+		try:
 		
-		id = request.POST['lecturebatch']
-		lecturebatch_name = request.POST['lecturebatch_name']
-		lecturebatch_description = request.POST['lecturebatch_description']
-		lecturebatch_date = request.POST['lecturebatch_date']
-		lecturebatch_duration = request.POST['lecturebatch_duration']
+			id = request.POST['lecturebatch']
+			lecturebatch_name = request.POST['lecturebatch_name']
+			lecturebatch_description = request.POST['lecturebatch_description']
+			lecturebatch_date = request.POST['lecturebatch_date']
+			lecturebatch_duration = request.POST['lecturebatch_duration']
+			lecturebatch_batch = request.POST['batch']
+			lecturebatch_lecture = request.POST['lecture']
 
-		set_lecture_batch(id=id, name = lecturebatch_name, description = lecturebatch_description, date = lecturebatch_date , duration = lecturebatch_duration)
+
+			set_lecture_batch(id=id, name = lecturebatch_name, description = lecturebatch_description, date = lecturebatch_date , duration = lecturebatch_duration,batch_id = lecturebatch_batch,lecture_id = lecturebatch_lecture)
 		
-
-		return redirect('./?message=Edited Lecture batch')	
+			print 'Hererere'
+			return redirect('./?message=Edited Lecture batch')	
+		except Exception as e:
+			print 'sd', e
+			return redirect('./?message_error=Error Editing Lecture')
 
 @csrf_exempt
 def add_attendance(request):

@@ -63,22 +63,30 @@
 
 			<label><strong>Duration</strong></label>
 			<input name="lecturebatch_duration" class="form-control" value="{{lecturebatch.duration}}" required><br/>
-			<form>
-			</br>	
+			
+			
+			<label><strong>Select Lecture</strong></label>
+			<select name="lecture" class="form-control" value="{{.name}}" >
+				<option>Select</option>
+				{% for lecture in lectures %}
+				<option value="{{lecture.id}}" {%if lecture.id == cur_lecture_id%}selected{% endif %}>{{lecture.name}}</option>
+				{% endfor %}
+			</select>
+			</br>
 			<label><strong>Select Batch</strong></label>
 			<select name="batch" class="form-control" >
 				<option>Select</option>
 				{% for batch in batches %}
-				<option value="{{batch.id}}">{{batch.name}}</option>
+				<option value="{{batch.id}}"{% if batch.id == cur_batch_id %}selected{% endif %}>{{batch.name}}-{{batch.branch}}</option>
 				{% endfor %}
 			</select>
 			</br>
 			</br>
-			
-			</form>
-
 			<input class="btn btn-default" type='submit' value='Save'>
 
+			
+
+			
 			
 		</form>
 	{% endif %}
