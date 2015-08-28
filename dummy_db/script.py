@@ -2,7 +2,7 @@ from portal.models import *
 from portal.db_api.academic_year_db import get_current_academic_year
 from itertools import combinations
 from time import sleep
-import sys, math
+import sys, math, random
 
 
 def add_progress(i,length):
@@ -279,10 +279,14 @@ def insert_student_batches():
 		if batch_it > batch_len:
 			break
 
-		if not StudentBatch.objects.filter(student=stud, batch=batches[batch_it], academic_year=cur_ay_obj).exists():
+		if not StudentBatch.objects.filter(student=stud, batch=batches[batch_it]).exists():
 			stud_bat_obj = StudentBatch(student=stud, batch=batches[batch_it])
 			stud_bat_obj.save()
-		
+			subject_year_list = SubjectYear.objects.filter(subject=(Subject.objects.filter(standard=stud_bat_obj.batch.standard)), academic_year=cur_ay_obj)
+			rn = random.randint(1, len(subject_year_list))
+			for i in range(rn):
+				stud_bat_obj.subject_years.add(subject_year_list[i].id)
+				
 		counter+=1
 		    
 	print ""
@@ -426,5 +430,5 @@ insert_staff()
 insert_staff_role()
 insert_lectures()
 
-insert_base_fees()
+# insert_base_fees()
 
