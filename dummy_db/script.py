@@ -2,7 +2,7 @@ from portal.models import *
 from portal.db_api.academic_year_db import get_current_academic_year
 from itertools import combinations
 from time import sleep
-import sys, math, random
+import sys, math, random, datetime
 
 
 def add_progress(i,length):
@@ -323,9 +323,9 @@ def insert_staff(n=100):
 def insert_staff_role():
 
 	print "Assigning Roles to each Staff...",
-	staff_obj = Staff.objects.all();
-	role_obj = Role.objects.all();
-	branch_obj = Branch.objects.all();
+	staff_obj = Staff.objects.all()
+	role_obj = Role.objects.all()
+	branch_obj = Branch.objects.all()
 	
 	bsize = len(branch_obj)
 	rsize = len(role_obj)
@@ -336,11 +336,18 @@ def insert_staff_role():
 		role = role_obj[i%rsize]
 		staff = staff_obj[i]
 
-		if not StaffRole.objects.filter(staff=Staff.objects.get(id=staff.id), role=Role.objects.get(id=role.id), branch=Branch.objects.get(id=branch.id)).exists():
+		if role.name != 'teacher':
+			if not StaffRole.objects.filter(staff=Staff.objects.get(id=staff.id), role=Role.objects.get(id=role.id), branch=Branch.objects.get(id=branch.id)).exists():
 
-			staff_role_obj = StaffRole(staff=Staff.objects.get(id=staff.id), role=Role.objects.get(id=role.id), branch=Branch.objects.get(id=branch.id))
+				staff_role_obj = StaffRole(staff=Staff.objects.get(id=staff.id), role=Role.objects.get(id=role.id), branch=Branch.objects.get(id=branch.id))
 
-			staff_role_obj.save()
+				staff_role_obj.save()
+
+		else:
+			for br in branch_obj:
+				if not StaffRole.objects.filter(staff=staff, role=role, branch=br).exists():
+					staff_role_obj = StaffRole(staff=staff, role=role, branch=br)
+					staff_role_obj.save()
 
 	print ""
 	
@@ -367,6 +374,39 @@ def insert_lectures():
 			lec_obj = Lecture(name=name, description="Temporary description", count=count, subject_year=SubjectYear.objects.get(subject=Subject.objects.get(name=subject, standard=Standard.objects.get(name=standard)), academic_year=cur_ay_obj))
 			lec_obj.save()
 	f.close()
+	print ""
+
+def insert_lecture_batches():
+	print "Adding Lecture Batches...",
+	
+	cur_ay = get_current_academic_year()['id']
+	cur_ay_obj = AcademicYear.objects.get(id=cur_ay)
+	standard_list = Standard.objects.all()
+	lecture_list = Lecture.objects.all()
+	batch_list = Batch.objects.all()
+	staff_role_list = StaffRole.objects.filter(role__name='teacher')
+	staff_it = 0
+	staff_role_length = len(staff_role_list)
+	j = 0
+	total_iterations = len(standard_list)*len(lecture_list)*len(batch_list)
+	for i,std in enumerate(standard_list):
+		lecture_list = Lecture.objects.filter(subject_year__subject__standard__id=std.id)
+		batch_list = Batch.objects.filter(standard__id=std.id)
+
+		for batch in batch_list:
+			for lecture in lecture_list:
+				add_progress(j, total_iterations - lecture.count)
+				j += lecture.count
+				for i in xrange(lecture.count):
+					while batch.branch != staff_role_list[staff_it%staff_role_length].branch:
+						staff_it+=1
+						staff_it%=staff_role_length
+
+					if not LectureBatch.objects.filter(name=lecture.name+" "+str(i+1), lecture=lecture, batch=batch).exists():
+						lecture_batch_obj = LectureBatch(name=lecture.name+" "+str(i+1), description="Temporary Description", date=datetime.datetime.strptime("2015-08-31", "%Y-%m-%d").date(), duration="2 Hours", lecture=lecture, staff_role=staff_role_list[staff_it%staff_role_length], batch=batch)
+						lecture_batch_obj.save()
+					staff_it+=1
+					staff_it%=staff_role_length
 	print ""
 	
 def insert_base_fees():
@@ -429,6 +469,7 @@ insert_student_batches()
 insert_staff()
 insert_staff_role()
 insert_lectures()
+insert_lecture_batches()
 
 # insert_base_fees()
 
