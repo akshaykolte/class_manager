@@ -120,36 +120,29 @@
 		<label><strong>Select Lecture</strong></label>
 		<select name="lecture" class="form-control" onchange="this.form.submit()">
 			{% for lecture in lectures %}
-			<option value="{{lectures.id}}"{% if lecture_id == lecture.id %} selected{% endif %}>{{lecture.name}}</option>
+			<option value="{{lecture.id}}"{% if lecture_id == lecture.id %} selected{% endif %}>{{lecture.name}}</option>
 			{% endfor %}
 		</select>
 	</form>
 	</br>
-	<!--<form action="." method="GET">
-		<input type="hidden" name="standard" value="{{standard_id}}">
-		<input type="hidden" name="subject" value="{{subject_id}}">
-		<input type="hidden" name="lecture" value="{{lecture_id}}">
-		<label><strong>Select Lecture Batch</strong></label>
-		<select name="lecturebatch" class="form-control" onchange="this.form.submit()">
-			<option>Select</option>
-			{% for lecturebatch in lecturebatches %}
-			<option value="{{lecturebatch.id}}"{% if lecturebatch_id == lecturebatch.id %} selected{% endif %}>{{lecturebatch.name}}</option>
-			{% endfor %}
-		</select>
-	</form> -->
+	
 	<form action="." method="POST">
 		<input type="hidden" name="standard" value="{{standard_id}}">
 		<input type="hidden" name="subject" value="{{subject_id}}">
 		<input type="hidden" name="lecture" value="{{lecture_id}}">
 		<!--<input type="hidden" name="lecturebatch" value="{{lecturebatch_id}}"> -->
 		<br/>
-		<label><strong>Mark Attendance</strong></label>
-		{{lecturebatch_list[0]}}
-		
+		{%for lecturebatch in lecturebatch_list%}
+			<label><strong>Lecture: {{lecturebatch.lecturebatch.name}} &nbsp;&nbsp; Batch: {{lecturebatch.lecturebatch.batch_name}}   &nbsp;&nbsp;Standard: {{lecturebatch.lecturebatch.standard_name}} </strong></label>
+			<br/>
+			{%for student in lecturebatch.students%}
+			<input type="checkbox" name="lecturebatch_{{lecturebatch.lecturebatch.id}}student_{{student.id}}" value="True">{{student.first_name}} {{student.last_name}}
+			<br/>
+			{%endfor%}
+			<br/>
+		{% endfor %}	
 		<br/>
-		</br>
 		<label><strong>Count</strong></label>
-		</br>
 		<input name="count" class="form-control">
 		<br/>
 		<input class="btn btn-default" type='submit' value='Mark Attendance'>
@@ -159,73 +152,7 @@
 	
 	{% endif %}
 
-	<!--{% if page_type == 4 %}
-	<form>
-		<label><strong>Select Standard</strong></label>
-		<select name="standard" class="form-control" onchange="this.form.submit()">
-			{% for standard in standards %}
-			<option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}}</option>
-			{% endfor %}
-		</select>
-	</form>
-	<br/>
-	<form>
-		<input type="hidden" name="standard" value="{{standard_id}}">
-		<label><strong>Select Subject</strong></label>
-		<select name="subject" class="form-control" onchange="this.form.submit()">
-			{% for subject in subjects %}
-			<option value="{{subject.id}}"{% if subject_id == subject.id %} selected{% endif %}>{{subject.name}}</option>
-			{% endfor %}
-		</select>
-	</form>
-	<br/>
-	<form>
-		<input type="hidden" name="subject" value="{{subject_id}}">
-		<label><strong>Select Lecture</strong></label>
-		<select name="lecture" class="form-control" onchange="this.form.submit()">
-			{% for lecture in lectures %}
-			<option value="{{lecture.id}}"{% if lecture_id == lecture.id %} selected{% endif %}>{{lecture.name}}</option>
-			{% endfor %}
-		</select>
-	</form>
-	<br/>
-	<form>
-		<input type="hidden" name="lecture" value="{{subject_id}}">
-		<label><strong>Select LectureBatch</strong></label>
-		<select name="lecturebatch" class="form-control" onchange="this.form.submit()">
-			{% for lecturebatch in lecturebatches %}
-			<option value="{{lecturebatch.id}}"{% if lecturebatch_id == lecturebatch.id %} selected{% endif %}>{{lecturebatch.name}}</option>
-			{% endfor %}
-		</select>
-	</form>
-
 	
-	<form action="." method="POST">
-		<input type="hidden" name="standard" value="{{standard_id}}">
-		<input type="hidden" name="subject" value="{{subject_id}}">
-		<input type="hidden" name="lecture" value="{{lecture_id}}">
-		<input type="hidden" name="lecturebatch" value="{{lecturebatch_id}}">
-		<br/>
-		<label><strong>Mark Attendance</strong></label>
-		{% for student in students %}
-			<div class="checkbox">
-				<label><input type="checkbox" name="student_{{student.id}}" value="True">{{student.first_name}} {{student.last_name}}
-				</label>
-			</div>
-		{% endfor %}
-		<br/>
-		</br>
-		<label><strong>Count</strong></label>
-		</br>
-		<input name="count" class="form-control">
-		<br/>
-		<input class="btn btn-default" type='submit' value='Mark Attendance'>
-		<br/>
-		
-	</form>
-
-	{% endif %} -->
-
 
 
 </br>
