@@ -196,24 +196,24 @@ def add_lectures(request):
 
 
 	elif request.method == 'POST':
-		# try:
-		lecture_id = request.POST['lecture']
-		lecture_name = request.POST['lecture_name']
-		lecture_description = request.POST['lecture_description']
-		lecture_date = request.POST['lecture_date']
-		lecture_duration = request.POST['lecture_duration']
-		batch = request.POST['batch']
-		branch = get_batch(id = batch)
-		staff_role_dict = get_staff_role(staff_id = auth_dict['id'], branch_id = branch['branch_id'], role_name='teacher')
-		print staff_role_dict
-		set_lecture_batch(name=lecture_name, description=lecture_description, date=datetime.datetime.strptime(lecture_date, "%Y-%m-%d").date() , duration = lecture_duration,lecture_id = lecture_id,staff_role_id = staff_role_dict['id'],batch_id = batch)
-		context['details'] = auth_dict
+		try:
+			lecture_id = request.POST['lecture']
+			lecture_name = request.POST['lecture_name']
+			lecture_description = request.POST['lecture_description']
+			lecture_date = request.POST['lecture_date']
+			lecture_duration = request.POST['lecture_duration']
+			batch = request.POST['batch']
+			branch = get_batch(id = batch)
+			staff_role_dict = get_staff_role(staff_id = auth_dict['id'], branch_id = branch['branch_id'], role_name='teacher')
+			print staff_role_dict
+			set_lecture_batch(name=lecture_name, description=lecture_description, date=datetime.datetime.strptime(lecture_date, "%Y-%m-%d").date() , duration = lecture_duration,lecture_id = lecture_id,staff_role_id = staff_role_dict['id'],batch_id = batch)
+			context['details'] = auth_dict
 
 
-		return redirect('./?message=Lecture Added')
-		# except Exception as e:
-		# 	print e
-			# return redirect('./?message_error=Error Adding Lecture')
+			return redirect('./?message=Lecture Added')
+		except Exception as e:
+			print e
+			return redirect('./?message_error=Error Adding Lecture')
 
 @csrf_exempt
 
@@ -348,14 +348,15 @@ def add_attendance(request):
 					context['batches'] = batch_list
 					lecturebatches = []
 					for batch in batch_list:
-						lecturebatch = get_lecture_batch(batch_id = batch['id'])
+						lecturebatch = get_lecture_batch(batch_id = batch['id'],lecture_id = context['lecture_id'])
 						for i in lecturebatch:
 							lecturebatches.append(i)
-					print lecturebatches
+					
 					context['lecturebatches'] = lecturebatches
 
 				
 					lecturebatch_list = []
+
 					for lecturebatch in lecturebatches:
 						lecturebatch_dict={}
 						batch_id = lecturebatch['batch_id']
@@ -363,6 +364,8 @@ def add_attendance(request):
 						lecturebatch_dict['lecturebatch'] = lecturebatch
 						lecturebatch_dict['students'] = students
 						lecturebatch_list.append(lecturebatch_dict)
+					if not lecturebatch_list:
+						page_type = 2
 					context['lecturebatch_list'] = lecturebatch_list
 
 
@@ -377,16 +380,21 @@ def add_attendance(request):
 	elif request.method == 'POST':
 		try:
 			count = request.POST['count']
-			lecturebatch_id = request.POST['lecturebatch']
-			lecturebatch = get_lecture_batch(id = lecturebatch_id)
-			batch_id = lecturebatch['batch_id']
-			students = get_students(batch_id = batch_id)
-			for student in students:
-				if 'student_'+str(student['id']) in request.POST:
-					student_batch = get_student_batch(student_id = student['id'])
-					print student_batch
-					set_attendance(count = count,student_batch_id = student_batch['id'],lecture_batch_id = lecturebatch_id)
-					print 'here1'
+			lecture = request.POST['lecture']
+			lecturebatches = get_lecture_batch(lecture_id = lecture)
+			for lecturebatch in lecturebatches:
+				students = get_students(batch_id = lecturebatch['batch_id'])
+				print 'heres'
+				for student in students:
+					if 'lecturebatch_'+str(lecturebatch['id'])+'student_'+str(student['id']) in request.POST:
+						print '00here123'
+						student_batch = get_student_batch(student_id = student['id'])
+						set_attendance(count = count,student_batch_id = student_batch['id'],lecture_batch_id = lecturebatch['id'])
+						print 'here1'
+
+
+			
+			
 					
 
 
