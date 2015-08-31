@@ -156,7 +156,6 @@ def set_current_academic_year_view(request):
 
 	if request.method == 'GET':
 
-		context = {}
 		if 'message' in request.GET:
 			context['message'] = request.GET['message']
 		elif 'message_error' in request.GET:
@@ -189,7 +188,6 @@ def assign_roles(request):
 
 	if request.method == 'GET':
 
-		context = {}
 		if 'message' in request.GET:
 			context['message'] = request.GET['message']
 		elif 'message_error' in request.GET:
