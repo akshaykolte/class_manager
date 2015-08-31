@@ -340,36 +340,32 @@ def add_attendance(request):
 					branches =  get_branch_of_teacher(teacher_id = auth_dict['id'])
 					context['branches'] = branches
 					academic_year_id = get_current_academic_year()['id']
-					batch_list=[]
+					batches=[]
 					for branch in branches:
 						batch = get_batch(academic_year_id = academic_year_id,standard_id = request.GET['standard'],branch_id = branch['id'])
 						for i in batch:
-							batch_list.append(i)
-					context['batches'] = batch_list
-					lecturebatches = []
-					for batch in batch_list:
-						lecturebatch = get_lecture_batch(batch_id = batch['id'],lecture_id = context['lecture_id'])
-						for i in lecturebatch:
-							lecturebatches.append(i)
+							batches.append(i)
+					context['batches'] = batches
 					
-					context['lecturebatches'] = lecturebatches
+					# for batch in batch_list:
+					# 	lecturebatch = get_lecture_batch(batch_id = batch['id'],lecture_id = context['lecture_id'])
+					# 	for i in lecturebatch:
+					# 		lecturebatches.append(i)
+					
+					# context['lecturebatches'] = lecturebatches
 
-				
-					lecturebatch_list = []
+					batch_list = []
 
-					for lecturebatch in lecturebatches:
-						lecturebatch_dict={}
-						batch_id = lecturebatch['batch_id']
+					for batch in batches:
+						batch_dict={}
+						batch_id = batch['id']
 						students = get_students(batch_id = batch_id)
-						lecturebatch_dict['lecturebatch'] = lecturebatch
-						lecturebatch_dict['students'] = students
-						lecturebatch_list.append(lecturebatch_dict)
-					if not lecturebatch_list:
+						batch_dict['batch'] = batch
+						batch_dict['students'] = students
+						batch_list.append(batch_dict)
+					if not batch_list:
 						page_type = 2
-					context['lecturebatch_list'] = lecturebatch_list
-
-
-
+					context['batch_list'] = batch_list
 
 
 		
@@ -379,7 +375,6 @@ def add_attendance(request):
 
 	elif request.method == 'POST':
 		try:
-			count = request.POST['count']
 			lecture = request.POST['lecture']
 			lecturebatches = get_lecture_batch(lecture_id = lecture)
 			for lecturebatch in lecturebatches:

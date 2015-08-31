@@ -132,20 +132,16 @@
 		<input type="hidden" name="lecture" value="{{lecture_id}}">
 		<!--<input type="hidden" name="lecturebatch" value="{{lecturebatch_id}}"> -->
 		<br/>
-		{%for lecturebatch in lecturebatch_list%}
-			<label><strong>Lecture: {{lecturebatch.lecturebatch.name}} &nbsp;&nbsp; Batch: {{lecturebatch.lecturebatch.batch_name}}   &nbsp;&nbsp;Standard: {{lecturebatch.lecturebatch.standard_name}} </strong></label>
+		{%for batch in batch_list%}
+			<label><strong> Batch: {{batch.batch.name}}   &nbsp;&nbsp; </br> Standard: {{batch.batch.standard}} &nbsp;&nbsp; </br> Branch: {{batch.batch.branch}} </strong></label>
 			<br/>
-			{%for student in lecturebatch.students%}
-			<input type="checkbox" name="lecturebatch_{{lecturebatch.lecturebatch.id}}student_{{student.id}}" value="True">{{student.first_name}} {{student.last_name}}
+			{%for student in batch.students %}
+			<input type="checkbox" name="batch_{{batch.batch.id}}student_{{student.id}}"> &nbsp;{{student.first_name}} {{student.last_name}}
 			<br/>
 			{%endfor%}
 			<br/>
-		{% endfor %}	
-		<br/>
-		<label><strong>Count</strong></label>
-		<input name="count" class="form-control">
-		<br/>
-		<input class="btn btn-default" type='submit' value='Mark Attendance'>
+		{% endfor %}
+		<input class="btn btn-success" type='submit' value='Mark Attendance'>
 		<br/>
 		
 	</form>
