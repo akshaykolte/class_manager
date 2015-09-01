@@ -441,3 +441,25 @@ class TestStaffRole(models.Model):
 		return str(self.test)+' - '+str(self.staff_role)
 
 	# save() overriding not required
+
+class Notice(models.Model):
+	title = models.CharField(max_length=200)
+	description = models.CharField(max_length=1000)
+	uploader = models.ForeignKey(Staff)
+	expiry_date = models.DateField()
+	important = models.BooleanField()
+
+	def __str__(self):
+		return str(self.title) + ' - ' + str(self.uploader)
+
+class NoticeViewer(models.Model):
+	notice = models.ForeignKey(Notice, null=False)
+	for_students = models.BooleanField(default=False)
+	for_staff = models.BooleanField(default=False)
+	branch = models.ForeignKey(Branch, blank=True, null=True)
+	batch = models.ForeignKey(Batch, blank=True, null=True)
+	student = models.ForeignKey(Student, blank=True, null=True)
+	staff = models.ForeignKey(Staff, blank=True, null=True)
+
+	def __str__(self):
+		return str(self.notice)
