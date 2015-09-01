@@ -65,7 +65,8 @@ def set_staff_role(id = None,role_id = None,staff_id = None,branch_id = None):
 			staff_role_object.save()
 			return staff_role_object.id
 
-	except: # TODO catch IntegrityError
+	except Exception, e: # TODO catch IntegrityError
+		print str(e)
 		return False
 
 def get_staff(id = None, role_name = None, branch_id=None):
