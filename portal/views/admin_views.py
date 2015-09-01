@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt
 from portal.db_api.auth_db import *
 from portal.db_api.academic_year_db import *
