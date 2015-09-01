@@ -23,7 +23,7 @@ Differentiation$Maths$11th$4
 Sequences And Series$Maths$11th$4
 Permutations And Combinations$Maths$11th$4
 Chemical Bonding And Molecular Structure$Chemistry$11th$4
-Thermodynamics$Chemistry$11th$4
+ThermodynamicsOfChem$Chemistry$11th$4
 Equilibrium$Chemistry$11th$4
 S And P Block$Chemistry$11th$4
 Mechanics$Physics$11th$4

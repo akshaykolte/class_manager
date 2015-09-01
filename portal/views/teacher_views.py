@@ -253,6 +253,7 @@ def view_lecture(request):
 			lecturebatch = get_lecture_batch(id = request.GET['lecturebatch'])
 			context['lecturebatch'] = lecturebatch
 			context['cur_batch_id'] = lecturebatch['batch_id']
+			context['is_done'] = lecturebatch['is_done']
 			lecture_id = lecturebatch['lecture_id']
 			lecture = get_lecture(id = lecture_id)
 			standard_id = lecture[0]['standard_id']
@@ -285,9 +286,13 @@ def view_lecture(request):
 			lecturebatch_duration = request.POST['lecturebatch_duration']
 			lecturebatch_batch = request.POST['batch']
 			lecturebatch_lecture = request.POST['lecture']
+			lecturebatch_is_done = request.POST['is_done']
+			if lecturebatch_is_done == "True":
+				lecturebatch_is_done = 1
+			elif lecturebatch_is_done == "False":
+				lecturebatch_is_done = 0
 
-
-			set_lecture_batch(id=id, name = lecturebatch_name, description = lecturebatch_description, date = lecturebatch_date , duration = lecturebatch_duration,batch_id = lecturebatch_batch,lecture_id = lecturebatch_lecture)
+			set_lecture_batch(id=id, name = lecturebatch_name, description = lecturebatch_description, date = lecturebatch_date , duration = lecturebatch_duration,batch_id = lecturebatch_batch,lecture_id = lecturebatch_lecture, is_done=lecturebatch_is_done)
 		
 			print 'Hererere'
 			return redirect('./?message=Edited Lecture batch')	

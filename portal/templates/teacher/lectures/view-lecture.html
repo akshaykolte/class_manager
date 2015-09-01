@@ -40,13 +40,13 @@
 						<th>Standard</th>
 						<th>Batch</th>
 						<th>Branch</th>
+						<th>Completed?</th>
 						<th class="col-lg-1">Link</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for lecturebatch in lecturebatches %}
 						<tr>
-							<!-- <td>{{lecturebatch.id}}</td> -->
 							<td>{{lecturebatch.date}}</td>
 							<td>{{lecturebatch.name}}</td>
 							<td>{{lecturebatch.description}}</td>
@@ -54,6 +54,11 @@
 							<td>{{lecturebatch.standard_name}}</td>
 							<td>{{lecturebatch.batch_name}}</td>
 							<td>{{lecturebatch.staff_role.branch.name}}</td>
+							{% if lecturebatch.is_done == True %}
+							<td class="text-success"><strong>Yes</strong></td>
+							{% else %}
+							<td class="text-danger"><strong>No</strong></td>
+							{% endif %}
 							<td><a href="./?lecturebatch={{lecturebatch.id}}">Edit</a></td>
 						</tr>
 					{% endfor %}
@@ -95,8 +100,17 @@
 				{% endfor %}
 			</select>
 			</br>
+			<div class="checkbox">
+            <label>
+            <strong>Lecture Completed?</strong>&nbsp;&nbsp;
+            </label>
+            <input type="radio" name="is_done" value="True" checked>&nbsp;Yes&nbsp;
+            <input type="radio" name="is_done" value="False" {% if is_done == False %} checked {% endif %}>&nbsp;No&nbsp;
+        	</div>
 			</br>
 			<input class="btn btn-default" type='submit' value='Save'>
+			</br>
+			</br>
 
 			
 
