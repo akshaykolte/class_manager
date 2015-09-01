@@ -33,3 +33,6 @@ admin.site.register(FeeTransaction)
 admin.site.register(Test)
 admin.site.register(TestBatch)
 admin.site.register(TestStaffRole)
+
+admin.site.register(Notice)
+admin.site.register(NoticeViewer)

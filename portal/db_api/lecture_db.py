@@ -214,6 +214,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['lecture_id'] = i.lecture.id
 			lecture_batch_dict['lecture_name'] = i.lecture.name
 			lecture_batch_dict['staff_role_id'] = i.staff_role.id
+			lecture_batch_dict['staff_role_name'] = i.staff_role.staff.first_name + " " + i.staff_role.staff.last_name
 			lecture_batch_dict['batch_id'] = i.batch.id
 			lecture_batch_dict['batch_name'] = i.batch.name
 			lecture_batch_dict['standard_id'] = i.batch.standard.id
