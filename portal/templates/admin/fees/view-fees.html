@@ -66,7 +66,7 @@
                             <select name="batch" class="form-control" onchange="this.form.submit()">
                                
                                 {% for batch in batches %}
-                                     <option value="{{batch.id}}"{% if batch_id == batch.id %} selected{% endif %}>{{batch.name}}&nbsp;{{batch.branch}}</option>
+                                     <option value="{{batch.id}}"{% if batch_id == batch.id %} selected{% endif %}>{{batch.name}}&nbsp;:&nbsp;{{batch.branch}}&nbsp;:&nbsp;{{batch.standard}}</option>
                                 {% endfor %}
                              </select>
                     </form>
