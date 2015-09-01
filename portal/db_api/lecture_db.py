@@ -221,6 +221,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['batch_name'] = i.batch.name
 			lecture_batch_dict['standard_id'] = i.batch.standard.id
 			lecture_batch_dict['standard_name'] = i.batch.standard.name
+			lecture_batch_dict['is_done'] = i.is_done
 
 			lecture_batch_list.append(lecture_batch_dict)
 		return lecture_batch_list

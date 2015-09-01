@@ -7,6 +7,7 @@ from portal.db_api.branch_db import *
 from portal.db_api.batch_db import *
 from portal.db_api.fee_db import *
 from portal.db_api.roles_db import *
+from portal.db_api.lecture_db import *
 
 
 def dashboard(request):
@@ -56,9 +57,7 @@ def view_fees(request):
 				context['batch_id'] = int(request.GET['batch'])
 				context['branch_id'] = int(request.GET['branch'])
 				fee_details = get_batch_fees(batch_id =  int(request.GET['batch']))
-
-				#print fee_details
-				context = {'details':auth_dict, 'fee_details':fee_details, 'batches' : batches, 'branches' : branches}
+				context['fee_details'] = fee_details
 				
 		context['page_type'] = page_type
 		print context
@@ -238,3 +237,41 @@ def assign_roles(request):
 			return redirect('./?message=Permissions modified')
 		except:
 			return redirect('./?message_error=Error modifying permission')
+
+
+
+@csrf_exempt
+def track_progress(request):
+
+	context = {}
+	auth_dict = get_user(request)
+	context['details'] = auth_dict
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_admin'] != True:
+		return Http404
+
+	branches = get_branch(id=None)
+	context['branches'] = branches
+
+	if request.method == 'GET':
+		page_type = 0
+
+		if 'branch' in request.GET:
+			page_type = 1
+			batches = get_batch(branch_id = int(request.GET['branch']))
+			context['batches'] = batches
+			context['branch_id'] = int(request.GET['branch'])
+			if 'batch' in request.GET:
+				page_type = 2
+				context['batch_id'] = int(request.GET['batch'])
+				context['branch_id'] = int(request.GET['branch'])
+				context['lecture_batches'] = get_lecture_batch(batch_id = int(request.GET['batch']))
+
+
+		context['page_type'] = page_type
+
+
+	return render(request, 'admin/track-progress.html', context)
