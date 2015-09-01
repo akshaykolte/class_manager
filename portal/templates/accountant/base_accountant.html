@@ -129,7 +129,7 @@
                         {% if details.permission_accountant == True %}
                         <li>
                             <a href="/change/?use_as=accountant">
-                                <strong>Accountant</strong>
+                                <strong>Accountant</strong> <span class="pull-right"><i class="fa fa-check"></i></span>
                             </a>
                         </li>
                         <li class="divider"></li>
@@ -145,7 +145,7 @@
                         {% if details.permission_teacher == True %}
                         <li>
                             <a href="/change/?use_as=teacher">
-                               <strong>Teacher</strong> <span class="pull-right"><i class="fa fa-check"></i></span>
+                               <strong>Teacher</strong>
                             </a>
                         </li>
                         {% endif %}
@@ -250,18 +250,6 @@
                         </li> -->
                         <li>
                             <a href="/accountant/dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-calendar-o"></i> Attendance<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="/teacher/attendance/mark-attendance/">Mark Attendance</a>
-                                </li>
-                                <li>
-                                    <a href="/teacher/attendance/view-attendance/">View Attendance</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-edit fa-fw"></i> Fees<span class="fa arrow"></span></a>

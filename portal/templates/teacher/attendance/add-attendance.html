@@ -1,0 +1,156 @@
+{% extends "teacher/base_teacher.html" %}
+
+{% block main_content%}
+<div class="row">
+
+<div class="row">
+    <div class="col-lg-12">
+    	
+        <h1 class="page-header">Add Attendance</h1>
+    </div>
+</div>
+	{% if message %}
+	    <div class="panel-body">
+	        <div class="alert alert-success alert-dismissable col-lg-8">
+	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	            {{message}}
+	        </div>
+	    </div>
+    {% elif message_error %}
+	    <div class="panel-body">
+		    <div class="alert alert-danger alert-dismissable col-lg-8">
+		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		        {{message_error}}
+		    </div>
+		</div>
+	{% endif %}
+
+<div class="col-lg-8">
+	
+	{% if page_type == 0 %}
+		<form>
+			<label><strong>Select Standard</strong></label>
+			<select name="standard" class="form-control" onchange="this.form.submit()">
+				<option>Select</option>
+				{% for standard in standards %}
+				<option value="{{standard.id}}">{{standard.name}}</option>
+				{% endfor %}
+			</select>
+		</form>
+	{% endif %}
+	
+	{% if page_type == 1 %}
+	<form>
+		<label><strong>Select Standard</strong></label>
+		<select name="standard" class="form-control" onchange="this.form.submit()">
+			{% for standard in standards %}
+			<option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+		<input type="hidden" name="standard" value="{{standard_id}}">
+			<label><strong>Select Subject</strong></label>
+			<select name="subject" class="form-control" onchange="this.form.submit()">
+				<option>Select</option>
+				{% for subject in subjects %}
+				<option value="{{subject.id}}">{{subject.name}}</option>
+				{% endfor %}
+			</select>
+			</form>
+	
+	{% endif %}
+
+	{% if page_type == 2 %}
+	<form>
+		<label><strong>Select Standard</strong></label>
+		<select name="standard" class="form-control" onchange="this.form.submit()">
+			{% for standard in standards %}
+			<option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+		<input type="hidden" name="standard" value="{{standard_id}}">
+		<label><strong>Select Subject</strong></label>
+		<select name="subject" class="form-control" onchange="this.form.submit()">
+			{% for subject in subjects %}
+			<option value="{{subject.id}}"{% if subject_id == subject.id %} selected{% endif %}>{{subject.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	</br>
+	<form action="." method="GET">
+		<input type="hidden" name="standard" value="{{standard_id}}">
+		<input type="hidden" name="subject" value="{{subject_id}}">
+		<label><strong>Select Lecture</strong></label>
+		<select name="lecture" class="form-control" onchange="this.form.submit()">
+			<option>Select</option>
+			{% for lecture in lectures %}
+			<option value="{{lecture.id}}"{% if lecture_id == lecture.id %} selected{% endif %}>{{lecture.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	
+	{% endif %}
+	{% if page_type == 3 %}
+	<form>
+		<label><strong>Select Standard</strong></label>
+		<select name="standard" class="form-control" onchange="this.form.submit()">
+			{% for standard in standards %}
+			<option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+		<input type="hidden" name="standard" value="{{standard_id}}">
+		<label><strong>Select Subject</strong></label>
+		<select name="subject" class="form-control" onchange="this.form.submit()">
+			{% for subject in subjects %}
+			<option value="{{subject.id}}"{% if subject_id == subject.id %} selected{% endif %}>{{subject.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	</br>
+	<form>
+		<input type="hidden" name="lecture" value="{{standard_id}}">
+		<label><strong>Select Lecture</strong></label>
+		<select name="lecture" class="form-control" onchange="this.form.submit()">
+			{% for lecture in lectures %}
+			<option value="{{lecture.id}}"{% if lecture_id == lecture.id %} selected{% endif %}>{{lecture.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	</br>
+	
+	<form action="." method="POST">
+		<input type="hidden" name="standard" value="{{standard_id}}">
+		<input type="hidden" name="subject" value="{{subject_id}}">
+		<input type="hidden" name="lecture" value="{{lecture_id}}">
+		<!--<input type="hidden" name="lecturebatch" value="{{lecturebatch_id}}"> -->
+		<br/>
+		{%for batch in batch_list%}
+			<label><strong> Batch: {{batch.batch.name}}   &nbsp;&nbsp; </br> Standard: {{batch.batch.standard}} &nbsp;&nbsp; </br> Branch: {{batch.batch.branch}} </strong></label>
+			<br/>
+			{%for student in batch.students %}
+			<input type="checkbox" name="batch_{{batch.batch.id}}student_{{student.id}}"> &nbsp;{{student.first_name}} {{student.last_name}}
+			<br/>
+			{%endfor%}
+			<br/>
+		{% endfor %}
+		<input class="btn btn-success" type='submit' value='Mark Attendance'>
+		<br/>
+		
+	</form>
+	
+	{% endif %}
+
+	
+
+
+</br>
+
+{% endblock %}

@@ -1,6 +1,9 @@
 from django.db import models
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
+from datetime import datetime, timedelta
+from django.db import IntegrityError
+from portal.validator.validator import PentaError
 
 class AcademicYear(models.Model):
 	year_start = models.IntegerField()
@@ -16,11 +19,13 @@ class AcademicYear(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_academic_year
 		if validate:
-			if not validate_academic_year(self):
-				raise Exception('Validation Failed')
-
-		super(AcademicYear, self).save()
-
+			validation = validate_academic_year(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(AcademicYear, self).save()
+		except IntegrityError, e:
+			PentaError(1017).raise_error()
 
 class Branch(models.Model):
 	name = models.CharField(max_length=50)
@@ -35,10 +40,13 @@ class Branch(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_branch
 		if validate:
-			if not validate_branch(self):
-				raise Exception('Validation Failed')
-
-		super(Branch, self).save()
+			validation = validate_branch(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(Branch, self).save()
+		except IntegrityError, e:
+			PentaError(1018).raise_error()
 
 class Standard(models.Model):
 	name = models.CharField(max_length=50)
@@ -52,10 +60,13 @@ class Standard(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_standard
 		if validate:
-			if not validate_standard(self):
-				raise Exception('Validation Failed')
-
-		super(Standard, self).save()
+			validation = validate_standard(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(Standard, self).save()
+		except IntegrityError, e:
+			PentaError(1019).raise_error()
 
 class Batch(models.Model):
 	name = models.CharField(max_length=50)
@@ -66,17 +77,20 @@ class Batch(models.Model):
 
 	def __str__(self):
 		return self.name + ' - ' + str(self.standard) + ' ' + str(self.branch)
-	
+
 	class Meta:
 		unique_together = (('name', 'academic_year', 'branch', 'standard',),)
 
 	def save(self, validate=True):
 		from portal.validator.validator import validate_batch
 		if validate:
-			if not validate_batch(self):
-				raise Exception('Validation Failed')
-
-		super(Batch, self).save()
+			validation = validate_batch(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(Batch, self).save()
+		except IntegrityError, e:
+			PentaError(1020).raise_error()
 
 class Student(models.Model):
 
@@ -99,10 +113,14 @@ class Student(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_student
 		if validate:
-			if not validate_student(self):
-				raise Exception('Validation Failed')
+			validation = validate_student(self)
+			if not validation:
+				validation.raise_error()
 
-		super(Student, self).save()
+		try:
+			super(Student, self).save()
+		except IntegrityError, e:
+			PentaError(1021).raise_error()
 
 class Parent(models.Model):
 
@@ -125,10 +143,13 @@ class Parent(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_parent
 		if validate:
-			if not validate_parent(self):
-				raise Exception('Validation Failed')
-
-		super(Parent, self).save()
+			validation = validate_parent(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(Parent, self).save()
+		except IntegrityError, e:
+			PentaError(1022).raise_error()
 
 class StudentParent(models.Model):
 	student = models.ForeignKey(Student)
@@ -143,10 +164,13 @@ class StudentParent(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_student_parent
 		if validate:
-			if not validate_student_parent(self):
-				raise Exception('Validation Failed')
-
-		super(StudentParent, self).save()
+			validation = validate_student_parent(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(StudentParent, self).save()
+		except IntegrityError, e:
+			PentaError(1023).raise_error()
 
 class Staff(models.Model):
 
@@ -169,10 +193,13 @@ class Staff(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_staff
 		if validate:
-			if not validate_staff(self):
-				raise Exception('Validation Failed')
-
-		super(Staff, self).save()
+			validation = validate_staff(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(Staff, self).save()
+		except IntegrityError,e:
+			PentaError(1024).raise_error()
 
 class Role(models.Model):
 	name = models.CharField(max_length=50)
@@ -186,10 +213,13 @@ class Role(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_role
 		if validate:
-			if not validate_role(self):
-				raise Exception('Validation Failed')
-
-		super(Role, self).save()
+			validation = validate_role(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(Role, self).save()
+		except IntegrityError, e:
+			PentaError(1025).raise_error()
 
 class StaffRole(models.Model):
 	role = models.ForeignKey(Role)
@@ -205,10 +235,13 @@ class StaffRole(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_staff_role
 		if validate:
-			if not validate_staff_role(self):
-				raise Exception('Validation Failed')
-
-		super(StaffRole, self).save()
+			validation = validate_staff_role(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(StaffRole, self).save()
+		except IntegrityError, e:
+			PentaError(1026).raise_error()
 
 class Subject(models.Model):
 	name = models.CharField(max_length=50)
@@ -223,10 +256,13 @@ class Subject(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_subject
 		if validate:
-			if not validate_subject(self):
-				raise Exception('Validation Failed')
-
-		super(Subject, self).save()
+			validation = validate_subject(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(Subject, self).save()
+		except IntegrityError, e:
+			PentaError(1027).raise_error()
 
 class SubjectYear(models.Model):
 	subject = models.ForeignKey(Subject)
@@ -241,10 +277,13 @@ class SubjectYear(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_subject_year
 		if validate:
-			if not validate_subject_year(self):
-				raise Exception('Validation Failed')
-
-		super(SubjectYear, self).save()
+			validation = validate_subject_year(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(SubjectYear, self).save()
+		except IntegrityError, e:
+			PentaError(1028).raise_error()
 
 class StudentBatch(models.Model):
 	student = models.ForeignKey(Student)
@@ -266,16 +305,21 @@ class StudentBatch(models.Model):
 		from portal.validator.validator import validate_student_batch
 		# print SubjectYear.objects.filter()
 		if validate:
-			if not validate_student_batch(self, subject_year_id_list):
-				raise Exception('Validation Failed')
-		super(StudentBatch, self).save()
+			validation = validate_student_batch(self, subject_year_id_list)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(StudentBatch, self).save()
+		except IntegrityError, e:
+			PentaError(1029).raise_error()
 
 @receiver(m2m_changed, sender = StudentBatch.subject_years.through)
 def student_batch_subject_years_pre_add(sender, instance, action, reverse, model, pk_set, **kwargs):
 	from portal.validator.validator import validate_student_batch
 	if action == 'pre_add':
-		if not validate_student_batch(instance, list(pk_set)):
-			raise Exception('Validation Failed')
+		validation = validate_student_batch(instance, list(pk_set))
+		if not validation:
+			validation.raise_error()
 
 class Lecture(models.Model):
 	name = models.CharField(max_length=50)
@@ -292,10 +336,13 @@ class Lecture(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_lecture
 		if validate:
-			if not validate_lecture(self):
-				raise Exception('Validation Failed')
-
-		super(Lecture, self).save()
+			validation = validate_lecture(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(Lecture, self).save()
+		except IntegrityError, e:
+			PentaError(1030).raise_error()
 
 class LectureBatch(models.Model):
 	name = models.CharField(max_length=50)
@@ -305,6 +352,7 @@ class LectureBatch(models.Model):
 	lecture = models.ForeignKey(Lecture)
 	staff_role = models.ForeignKey(StaffRole)
 	batch = models.ForeignKey(Batch)
+	is_done = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.name + ' ' + str(self.date)
@@ -315,10 +363,13 @@ class LectureBatch(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_lecture_batch
 		if validate:
-			if not validate_lecture_batch(self):
-				raise Exception('Validation Failed')
-
-		super(LectureBatch, self).save()
+			validation = validate_lecture_batch(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(LectureBatch, self).save()
+		except IntegrityError, e:
+			PentaError(1031).raise_error()
 
 class Attendance(models.Model):
 	count = models.IntegerField()
@@ -334,15 +385,18 @@ class Attendance(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_attendance
 		if validate:
-			if not validate_attendance(self):
-				raise Exception('Validation Failed')
-
-		super(Attendance, self).save()
+			validation = validate_attendance(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(Attendance, self).save()
+		except IntegrityError, e:
+			PentaError(1032).raise_error()
 
 class BaseFee(models.Model):
 	amount = models.IntegerField()
 	subject_years = models.ManyToManyField(SubjectYear)
-	
+
 	def __str__(self):
 		return str(self.subject_years.all()) + '- Rs. ' + str(self.amount)
 
@@ -351,10 +405,14 @@ class BaseFee(models.Model):
 		if validate:
 			for i in subject_years.all():
 				subject_year_id_list.append(i.id)
-			if not validate_base_fee(self, subject_year_id_list):
-				raise Exception('Validation Failed')
 
-		super(BaseFee, self).save()
+			validation = validate_base_fee(self, subject_year_id_list)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(BaseFee, self).save()
+		except IntegrityError, e:
+			PentaError(1033).raise_error()
 
 @receiver(m2m_changed, sender = BaseFee.subject_years.through)
 def base_fee_subject_years_pre_add(sender, instance, action, reverse, model, pk_set, **kwargs):
@@ -363,8 +421,10 @@ def base_fee_subject_years_pre_add(sender, instance, action, reverse, model, pk_
 		subject_year_id_list = list(pk_set)
 		for i in instance.subject_years.all():
 			subject_year_id_list.append(i.id)
-		if not validate_base_fee(instance, subject_year_id_list):
-			raise Exception('Validation Failed')
+
+		validation = validate_base_fee(instance, subject_year_id_list)
+		if not validation:
+			validation.raise_error()
 
 class FeeType(models.Model):
 	name = models.CharField(max_length=50)
@@ -378,10 +438,13 @@ class FeeType(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_fee_type
 		if validate:
-			if not validate_fee_type(self):
-				raise Exception('Validation Failed')
-
-		super(FeeType, self).save()
+			validation = validate_fee_type(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(FeeType, self).save()
+		except IntegrityError, e:
+			PentaError(1034).raise_error()
 
 class FeeTransaction(models.Model):
 	amount = models.IntegerField()
@@ -401,15 +464,18 @@ class FeeTransaction(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_fee_transaction
 		if validate:
-			if not validate_fee_transaction(self):
-				raise Exception('Validation Failed')
-
-		super(FeeTransaction, self).save()
+			validation = validate_fee_transaction(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(FeeTransaction, self).save()
+		except IntegrityError, e:
+			PentaError(1035).raise_error()
 
 class Test(models.Model):
 	subject_year = models.ForeignKey(SubjectYear)
 	name = models.CharField(max_length=50)
-	
+
 	class Meta:
 		unique_together = (('name','subject_year',),)
 
@@ -424,7 +490,7 @@ class TestBatch(models.Model):
 
 	class Meta:
 		unique_together = (('test','batch',),)
-	
+
 	def __str__(self):
 		return str(self.test)+' - '+str(self.batch)
 
@@ -441,3 +507,25 @@ class TestStaffRole(models.Model):
 		return str(self.test)+' - '+str(self.staff_role)
 
 	# save() overriding not required
+
+class Notice(models.Model):
+	title = models.CharField(max_length=200, null=False)
+	description = models.CharField(max_length=1000, blank=True, null=False)
+	uploader = models.ForeignKey(Staff, null=False)
+	expiry_date = models.DateField(blank=True, default=datetime.now()+timedelta(days=30)) # TODO: timedelta
+	important = models.BooleanField(blank=True, default=False)
+
+	def __str__(self):
+		return str(self.title) + ' - ' + str(self.uploader)
+
+class NoticeViewer(models.Model):
+	notice = models.ForeignKey(Notice, null=False)
+	for_students = models.BooleanField(default=False)
+	for_staff = models.BooleanField(default=False)
+	branch = models.ForeignKey(Branch, blank=True, null=True)
+	batch = models.ForeignKey(Batch, blank=True, null=True)
+	student = models.ForeignKey(Student, blank=True, null=True)
+	staff = models.ForeignKey(Staff, blank=True, null=True)
+
+	def __str__(self):
+		return str(self.notice)
