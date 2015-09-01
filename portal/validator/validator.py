@@ -108,9 +108,9 @@ def validate_lecture(lecture_object):
 
 def validate_lecture_batch(lecture_batch_object):
 	if lecture_batch_object.batch.academic_year != lecture_batch_object.lecture.subject_year.academic_year:
-		return PentaError('Academic year of batch and subject should match')
+		return PentaError(1010)
 	elif lecture_batch_object.staff_role.role.name != 'teacher' or (lecture_batch_object.staff_role.branch != lecture_batch_object.batch.branch):
-		return PentaError('')
+		return PentaError(1011)
 	elif lecture_batch_object.batch.standard != lecture_batch_object.lecture.subject_year.subject.standard:
 		return False
 	else:

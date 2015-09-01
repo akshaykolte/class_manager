@@ -7,3 +7,5 @@
 1007 Student already admitted to academic year
 1008 Student already admitted to academic year
 1009 An error occured
+1010 Academic year of batch and subject should match
+1011 Lecture should be assigned to teacher branch
