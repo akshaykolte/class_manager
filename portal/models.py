@@ -306,6 +306,7 @@ class LectureBatch(models.Model):
 	lecture = models.ForeignKey(Lecture)
 	staff_role = models.ForeignKey(StaffRole)
 	batch = models.ForeignKey(Batch)
+	is_done = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.name + ' ' + str(self.date)
