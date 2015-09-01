@@ -74,11 +74,8 @@
                     <br/>
                     
                     <div class="panel-body">
-                        
-                       
                         <div class="dataTable_wrapper">                            
-                            
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables">
                                 <thead>
                                     <tr>
                                         <th>Student</th>
@@ -121,6 +118,16 @@
         </div>
 
 
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
+      <script>
+    $(document).ready(function() {
+        $('#dataTables').DataTable({
+                responsive: true
+        });
+    });
+    </script>
+  
 
         
     
