@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
+from datetime import datetime, timedelta
 
 class AcademicYear(models.Model):
 	year_start = models.IntegerField()
@@ -443,11 +444,11 @@ class TestStaffRole(models.Model):
 	# save() overriding not required
 
 class Notice(models.Model):
-	title = models.CharField(max_length=200)
-	description = models.CharField(max_length=1000)
-	uploader = models.ForeignKey(Staff)
-	expiry_date = models.DateField()
-	important = models.BooleanField()
+	title = models.CharField(max_length=200, null=False)
+	description = models.CharField(max_length=1000, blank=True, null=False)
+	uploader = models.ForeignKey(Staff, null=False)
+	expiry_date = models.DateField(blank=True, default=datetime.now()+timedelta(days=30)) # TODO: timedelta
+	important = models.BooleanField(blank=True, default=False)
 
 	def __str__(self):
 		return str(self.title) + ' - ' + str(self.uploader)
