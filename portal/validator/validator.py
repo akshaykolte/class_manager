@@ -1,8 +1,13 @@
+from error_codes import ErrorCode
+
+error_object = ErrorCode()
+
 class PentaError:
 	error_string = ''
 	def __init__(self, error=None):
+		print 'going inside'
 		if error != None:
-			self.error_string = error
+			self.error_string = error_object[int(error)]
 	def __nonzero__(self):
 		if self.error_string == '':
 			return True
@@ -46,35 +51,35 @@ def validate_student_batch(student_batch_object, subject_year_id_list):
 		for subject_year_id in subject_year_id_list:
 			subject_year_object = SubjectYear.objects.get(id=subject_year_id)
 			if student_batch_object.batch.academic_year != subject_year_object.academic_year:
-				return False
+				return PentaError(1001)
 			if student_batch_object.batch.standard != subject_year_object.subject.standard:
-				return False
+				return PentaError(1002)
 			if student_batch_object.id == None:
 				# True when creating new StudentBatch object
 				if (StudentBatch.objects.filter(student = student_batch_object.student, academic_year=student_batch_object.batch.academic_year).count() + StudentBatch.objects.filter(student = student_batch_object.student, batch__academic_year=student_batch_object.batch.academic_year).count() ) > 0:
-					return False # StudentBatch of academic_year already exists
+					return PentaError(1003) # StudentBatch of academic_year already exists
 			else:
 				if (StudentBatch.objects.exclude(id=student_batch_object.id).filter(student = student_batch_object.student, academic_year=student_batch_object.batch.academic_year).count() + StudentBatch.objects.exclude(id=student_batch_object.id).filter(student = student_batch_object.student, batch__academic_year=student_batch_object.batch.academic_year).count() ) > 0:
-					return False # StudentBatch of academic_year already exists
+					return PentaError(1004) # StudentBatch of academic_year already exists
 		return PentaError()
 	elif student_batch_object.standard != None and student_batch_object.academic_year != None and student_batch_object.batch == None:
 		for subject_year_id in subject_year_id_list:
 			subject_year_object = SubjectYear.objects.get(id=subject_year_id)
 			if student_batch_object.academic_year != subject_year_object.academic_year:
-				return False
+				return PentaError(1005)
 			if student_batch_object.standard != subject_year_object.subject.standard:
-				return False
+				return PentaError(1006)
 			if student_batch_object.id == None:
 				# True when creating new StudentBatch object
 				if (StudentBatch.objects.filter(student = student_batch_object.student, academic_year=student_batch_object.academic_year).count() + StudentBatch.objects.filter(student = student_batch_object.student, batch__academic_year=student_batch_object.academic_year).count() ) > 0:
-					return False # StudentBatch of academic_year already exists
+					return PentaError(1007) # StudentBatch of academic_year already exists
 			else:
 				if (StudentBatch.objects.exclude(id=student_batch_object.id).filter(student = student_batch_object.student, academic_year=student_batch_object.academic_year).count() + StudentBatch.objects.exclude(id=student_batch_object.id).filter(student = student_batch_object.student, batch__academic_year=student_batch_object.academic_year).count() ) > 0:
-					return False # StudentBatch of academic_year already exists
+					return PentaError(1008) # StudentBatch of academic_year already exists
 
 		return PentaError()
 	else:
-		return False
+		return PentaError(1009)
 
 def validate_staff(staff_object):
 	# No special dependency
@@ -103,9 +108,9 @@ def validate_lecture(lecture_object):
 
 def validate_lecture_batch(lecture_batch_object):
 	if lecture_batch_object.batch.academic_year != lecture_batch_object.lecture.subject_year.academic_year:
-		return False
+		return PentaError('Academic year of batch and subject should match')
 	elif lecture_batch_object.staff_role.role.name != 'teacher' or (lecture_batch_object.staff_role.branch != lecture_batch_object.batch.branch):
-		return False
+		return PentaError('')
 	elif lecture_batch_object.batch.standard != lecture_batch_object.lecture.subject_year.subject.standard:
 		return False
 	else:

@@ -1,0 +1,9 @@
+1001 Academic Year of admitted subject and student should match
+1002 Standard of subject and admitted student should match
+1003 Student already admitted to the academic year
+1004 Student already admitted to the academic year
+1005 Academic year of admitted student and subject should match
+1006 Standard of admitted student and subject should match
+1007 Student already admitted to academic year
+1008 Student already admitted to academic year
+1009 An error occured
