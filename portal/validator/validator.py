@@ -5,7 +5,6 @@ error_object = ErrorCode()
 class PentaError:
 	error_string = ''
 	def __init__(self, error=None):
-		print 'going inside'
 		if error != None:
 			self.error_string = error_object[int(error)]
 	def __nonzero__(self):
