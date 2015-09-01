@@ -13,3 +13,4 @@
 1013 Student not admitted to subject
 1014 Academic year of subjects do not match
 1015 Standard of subjects do not match
+1016 Maximum one Academic Year can be set to current

@@ -16,8 +16,14 @@ class PentaError:
 	def __str__(self):
 		return self.error_string
 
+	def raise_error(self):
+		raise Exception(self.error_string)
+
 def validate_academic_year(academic_year_object):
 	# No special dependency
+	from portal.models import AcademicYear
+	if academic_year_object.is_current == True and AcademicYear.objects.filter(is_current=True).count() > 0:
+		return PentaError(1016)
 	return PentaError()
 
 def validate_branch(branch_object):
