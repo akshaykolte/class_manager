@@ -96,8 +96,10 @@
                                             <td align="center">{{i.staff_role_name}}</td> 
                                             {% if i.is_done == True %}
                                             <td class="text-success"><strong>Yes</strong></td>
-                                            {% else %}
+                                            {% elif i.is_past == True %}
                                             <td class="text-danger"><strong>No</strong></td>
+                                            {% else %}
+                                            <td class="text-warning"><strong>Upcoming</strong></td>
                                             {% endif %}
                                         </tr>
                                     {% endfor %}

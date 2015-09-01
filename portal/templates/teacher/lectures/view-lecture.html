@@ -55,10 +55,12 @@
 							<td>{{lecturebatch.batch_name}}</td>
 							<td>{{lecturebatch.staff_role.branch.name}}</td>
 							{% if lecturebatch.is_done == True %}
-							<td class="text-success"><strong>Yes</strong></td>
-							{% else %}
-							<td class="text-danger"><strong>No</strong></td>
-							{% endif %}
+	                        <td class="text-success"><strong>Yes</strong></td>
+	                        {% elif lecturebatch.is_past == True %}
+	                        <td class="text-danger"><strong>No</strong></td>
+	                        {% else %}
+	                        <td class="text-warning"><strong>Upcoming</strong></td>
+	                        {% endif %}
 							<td><a href="./?lecturebatch={{lecturebatch.id}}">Edit</a></td>
 						</tr>
 					{% endfor %}
@@ -125,7 +127,7 @@
     <script>
     $(document).ready(function() {
         $('#dataTables').DataTable({
-                responsive: true
+                "iDisplayLength":25
         });
     });
     </script>

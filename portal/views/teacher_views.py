@@ -13,6 +13,7 @@ from portal.db_api.student_db import *
 from portal.db_api.attendance_db import *
 from portal.models import *
 import datetime
+from datetime import date
 def view_profile(request):
 
 	auth_dict = get_user(request)
@@ -245,6 +246,11 @@ def view_lecture(request):
 		lecturebatches = []
 		for staff_role_id in staff_role_id_list:
 			lecturebatch = get_lecture_batch(staff_role_id = staff_role_id)
+			for l_b in lecturebatch:
+					if date.today() > l_b['date']:
+						l_b['is_past'] = True
+					else:
+						l_b['is_past'] = False
 			for i in lecturebatch:
 				lecturebatches.append(i)
 		context['lecturebatches'] = lecturebatches	
