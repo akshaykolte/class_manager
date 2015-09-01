@@ -1,5 +1,7 @@
 from django.shortcuts import render,redirect
+from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt
+from datetime import date
 from portal.db_api.auth_db import *
 from portal.db_api.academic_year_db import *
 from portal.db_api.staff_db import *
@@ -268,8 +270,15 @@ def track_progress(request):
 				page_type = 2
 				context['batch_id'] = int(request.GET['batch'])
 				context['branch_id'] = int(request.GET['branch'])
-				context['lecture_batches'] = get_lecture_batch(batch_id = int(request.GET['batch']))
+				lecture_batches = get_lecture_batch(batch_id = int(request.GET['batch']))
 
+				for l_b in lecture_batches:
+					if date.today() > l_b['date']:
+						l_b['is_past'] = True
+					else:
+						l_b['is_past'] = False
+
+				context['lecture_batches'] = lecture_batches
 
 		context['page_type'] = page_type
 

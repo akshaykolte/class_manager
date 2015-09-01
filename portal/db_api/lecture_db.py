@@ -215,6 +215,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['date'] = i.date
 			lecture_batch_dict['lecture_id'] = i.lecture.id
 			lecture_batch_dict['lecture_name'] = i.lecture.name
+			lecture_batch_dict['subject_name'] = i.lecture.subject_year.subject.name
 			lecture_batch_dict['staff_role_id'] = i.staff_role.id
 			lecture_batch_dict['staff_role_name'] = i.staff_role.staff.first_name + " " + i.staff_role.staff.last_name
 			lecture_batch_dict['batch_id'] = i.batch.id
@@ -267,10 +268,8 @@ def set_lecture_batch(id = None, name = None, description = None, date = None, d
 		if not is_none_batch_id:
 			lecture_object.batch = Batch.objects.get(id = batch_id)
 		if not is_none_is_done:
-			print is_done,'---',lecture_object
 			lecture_object.is_done = is_done
 		lecture_object.save()
-		print lecture_object.is_done," aisdias"
 		return lecture_object.id	
 
 

@@ -79,6 +79,7 @@
                                         <th>Topic</th>
                                         <th>Lecture</th>
                                         <th>Description</th>
+                                        <th>Subject</th>
                                         <th>Staff Role</th>
                                         <th>Lecture Conducted?</th>
                                         
@@ -86,16 +87,19 @@
                                 </thead>
                                 <tbody>
                                     {% for i in lecture_batches %}
-                                        <tr class="">
+                                        <tr>
                                         	<td align="center">{{i.date}}</td>
                                             <td align="center">{{i.lecture_name}}</td>
                                             <td align="center">{{i.name}}</td>
                                             <td align="center">{{i.description}}</td>
+                                            <td align="center">{{i.subject_name}}</td>
                                             <td align="center">{{i.staff_role_name}}</td> 
                                             {% if i.is_done == True %}
                                             <td class="text-success"><strong>Yes</strong></td>
-                                            {% else %}
+                                            {% elif i.is_past == True %}
                                             <td class="text-danger"><strong>No</strong></td>
+                                            {% else %}
+                                            <td class="text-warning"><strong>Upcoming</strong></td>
                                             {% endif %}
                                         </tr>
                                     {% endfor %}
@@ -117,7 +121,8 @@
       <script>
     $(document).ready(function() {
         $('#dataTables').DataTable({
-                responsive: true
+                 "iDisplayLength": 25
+                    
         });
     });
     </script>
