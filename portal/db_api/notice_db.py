@@ -1,4 +1,4 @@
-from portal.models import Notice, NoticeViewer, Staff
+from portal.models import *
 
 # uploader_id is necessary, even for edit, i.e., if id is not none.
 
@@ -32,3 +32,42 @@ def set_notice(id=None, title=None, description=None, uploader_id=None, expiry_d
 	notice_object.save()
 
 	return notice_object.id
+
+
+def upload_notice(id=None, notice_id = None, for_students = None, for_staff = None, branch_id = None, batch_id = None, student_id = None, staff_id = None):
+	is_id_none = id == None
+	is_for_students_none = for_students == None
+	is_for_staff_none = for_staff == None
+	is_branch_id_none = branch_id == None
+	is_batch_id_none = batch_id == None
+	is_student_id_none = student_id == None
+	is_staff_id_none = staff_id == None
+	if is_id_none:
+		
+		# Create new noticeviwer and save
+		print for_students
+		print for_staff
+
+		if for_students and not for_staff:
+			#student notice
+			
+			print "dffdsfds"
+			notice_object = Notice.objects.get(id = notice_id)
+			if not is_branch_id_none:
+				notice_viewer = NoticeViewer(notice = notice_object, for_students = True, for_staff = False, branch = Branch.objects.get(id = branch_id), batch = None, student = None, staff = None )
+				notice_viewer.save()
+			elif not is_batch_id_none:
+				notice_viewer = NoticeViewer(notice = notice_object, for_students = True, for_staff = False, batch = Batch.objects.get(id = batch_id), branch = None, student = None, staff = None )
+				notice_viewer.save()
+			elif not is_student_id_none:
+				notice_viewer = NoticeViewer(notice = notice_object, for_students = True, for_staff = False, student = Student.objects.get(id = student_id), branch = None, batch = None, staff = None )
+				notice_viewer.save()		
+			else:
+				notice_viewer = NoticeViewer(notice = notice_object, for_students = True, for_staff = False, student = None, branch = None, batch = None, staff = None )
+				notice_viewer.save()		
+			return notice_viewer.id
+	elif not is_id_none:
+		# TODO
+		pass
+
+		
