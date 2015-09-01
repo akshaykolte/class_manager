@@ -8,9 +8,28 @@
 1008 Student already admitted to academic year
 1009 An error occured
 1010 Academic year of batch and subject should match
-1011 Lecture should be assigned to teacher branch
+1011 Lecture should be assigned to teacher role of respective branch
 1012 Standard of batch and subject should match
 1013 Student not admitted to subject
 1014 Academic year of subjects do not match
 1015 Standard of subjects do not match
 1016 Maximum one Academic Year can be set to current
+1017 Academic Year already present
+1018 Branch already present
+1019 Standard already present
+1020 Batch already present
+1021 Student already present
+1022 Parent already present
+1023 Parent already assigned to Student
+1024 Staff already present
+1025 Role already present
+1026 Staff-Role already present
+1027 Subject already present
+1028 Subject for academic year already present
+1029 Student already assigned to batch
+1030 Topic already created
+1031 Lecture already created
+1032 Attendance already created
+1033 Base Fee already created
+1034 Fee Type already created
+1035 Transaction already present

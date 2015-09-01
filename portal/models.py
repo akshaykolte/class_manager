@@ -2,6 +2,8 @@ from django.db import models
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from datetime import datetime, timedelta
+from django.db import IntegrityError
+from portal.validator.validator import PentaError
 
 class AcademicYear(models.Model):
 	year_start = models.IntegerField()
@@ -20,9 +22,10 @@ class AcademicYear(models.Model):
 			validation = validate_academic_year(self)
 			if not validation:
 				validation.raise_error()
-
-		super(AcademicYear, self).save()
-
+		try:
+			super(AcademicYear, self).save()
+		except IntegrityError, e:
+			PentaError(1017).raise_error()
 
 class Branch(models.Model):
 	name = models.CharField(max_length=50)
@@ -40,8 +43,10 @@ class Branch(models.Model):
 			validation = validate_branch(self)
 			if not validation:
 				validation.raise_error()
-
-		super(Branch, self).save()
+		try:
+			super(Branch, self).save()
+		except IntegrityError, e:
+			PentaError(1018).raise_error()
 
 class Standard(models.Model):
 	name = models.CharField(max_length=50)
@@ -58,8 +63,10 @@ class Standard(models.Model):
 			validation = validate_standard(self)
 			if not validation:
 				validation.raise_error()
-
-		super(Standard, self).save()
+		try:
+			super(Standard, self).save()
+		except IntegrityError, e:
+			PentaError(1019).raise_error()
 
 class Batch(models.Model):
 	name = models.CharField(max_length=50)
@@ -80,8 +87,10 @@ class Batch(models.Model):
 			validation = validate_batch(self)
 			if not validation:
 				validation.raise_error()
-
-		super(Batch, self).save()
+		try:
+			super(Batch, self).save()
+		except IntegrityError, e:
+			PentaError(1020).raise_error()
 
 class Student(models.Model):
 
@@ -108,7 +117,10 @@ class Student(models.Model):
 			if not validation:
 				validation.raise_error()
 
-		super(Student, self).save()
+		try:
+			super(Student, self).save()
+		except IntegrityError, e:
+			PentaError(1021).raise_error()
 
 class Parent(models.Model):
 
@@ -134,8 +146,10 @@ class Parent(models.Model):
 			validation = validate_parent(self)
 			if not validation:
 				validation.raise_error()
-
-		super(Parent, self).save()
+		try:
+			super(Parent, self).save()
+		except IntegrityError, e:
+			PentaError(1022).raise_error()
 
 class StudentParent(models.Model):
 	student = models.ForeignKey(Student)
@@ -153,8 +167,10 @@ class StudentParent(models.Model):
 			validation = validate_student_parent(self)
 			if not validation:
 				validation.raise_error()
-
-		super(StudentParent, self).save()
+		try:
+			super(StudentParent, self).save()
+		except IntegrityError, e:
+			PentaError(1023).raise_error()
 
 class Staff(models.Model):
 
@@ -180,8 +196,10 @@ class Staff(models.Model):
 			validation = validate_staff(self)
 			if not validation:
 				validation.raise_error()
-
-		super(Staff, self).save()
+		try:
+			super(Staff, self).save()
+		except IntegrityError,e:
+			PentaError(1024).raise_error()
 
 class Role(models.Model):
 	name = models.CharField(max_length=50)
@@ -198,8 +216,10 @@ class Role(models.Model):
 			validation = validate_role(self)
 			if not validation:
 				validation.raise_error()
-
-		super(Role, self).save()
+		try:
+			super(Role, self).save()
+		except IntegrityError, e:
+			PentaError(1025).raise_error()
 
 class StaffRole(models.Model):
 	role = models.ForeignKey(Role)
@@ -218,8 +238,10 @@ class StaffRole(models.Model):
 			validation = validate_staff_role(self)
 			if not validation:
 				validation.raise_error()
-
-		super(StaffRole, self).save()
+		try:
+			super(StaffRole, self).save()
+		except IntegrityError, e:
+			PentaError(1026).raise_error()
 
 class Subject(models.Model):
 	name = models.CharField(max_length=50)
@@ -237,8 +259,10 @@ class Subject(models.Model):
 			validation = validate_subject(self)
 			if not validation:
 				validation.raise_error()
-
-		super(Subject, self).save()
+		try:
+			super(Subject, self).save()
+		except IntegrityError, e:
+			PentaError(1027).raise_error()
 
 class SubjectYear(models.Model):
 	subject = models.ForeignKey(Subject)
@@ -256,8 +280,10 @@ class SubjectYear(models.Model):
 			validation = validate_subject_year(self)
 			if not validation:
 				validation.raise_error()
-
-		super(SubjectYear, self).save()
+		try:
+			super(SubjectYear, self).save()
+		except IntegrityError, e:
+			PentaError(1028).raise_error()
 
 class StudentBatch(models.Model):
 	student = models.ForeignKey(Student)
@@ -282,7 +308,10 @@ class StudentBatch(models.Model):
 			validation = validate_student_batch(self, subject_year_id_list)
 			if not validation:
 				validation.raise_error()
-		super(StudentBatch, self).save()
+		try:
+			super(StudentBatch, self).save()
+		except IntegrityError, e:
+			PentaError(1029).raise_error()
 
 @receiver(m2m_changed, sender = StudentBatch.subject_years.through)
 def student_batch_subject_years_pre_add(sender, instance, action, reverse, model, pk_set, **kwargs):
@@ -310,8 +339,10 @@ class Lecture(models.Model):
 			validation = validate_lecture(self)
 			if not validation:
 				validation.raise_error()
-
-		super(Lecture, self).save()
+		try:
+			super(Lecture, self).save()
+		except IntegrityError, e:
+			PentaError(1030).raise_error()
 
 class LectureBatch(models.Model):
 	name = models.CharField(max_length=50)
@@ -335,8 +366,10 @@ class LectureBatch(models.Model):
 			validation = validate_lecture_batch(self)
 			if not validation:
 				validation.raise_error()
-
-		super(LectureBatch, self).save()
+		try:
+			super(LectureBatch, self).save()
+		except IntegrityError, e:
+			PentaError(1031).raise_error()
 
 class Attendance(models.Model):
 	count = models.IntegerField()
@@ -355,8 +388,10 @@ class Attendance(models.Model):
 			validation = validate_attendance(self)
 			if not validation:
 				validation.raise_error()
-
-		super(Attendance, self).save()
+		try:
+			super(Attendance, self).save()
+		except IntegrityError, e:
+			PentaError(1032).raise_error()
 
 class BaseFee(models.Model):
 	amount = models.IntegerField()
@@ -374,8 +409,10 @@ class BaseFee(models.Model):
 			validation = validate_base_fee(self, subject_year_id_list)
 			if not validation:
 				validation.raise_error()
-
-		super(BaseFee, self).save()
+		try:
+			super(BaseFee, self).save()
+		except IntegrityError, e:
+			PentaError(1033).raise_error()
 
 @receiver(m2m_changed, sender = BaseFee.subject_years.through)
 def base_fee_subject_years_pre_add(sender, instance, action, reverse, model, pk_set, **kwargs):
@@ -404,8 +441,10 @@ class FeeType(models.Model):
 			validation = validate_fee_type(self)
 			if not validation:
 				validation.raise_error()
-
-		super(FeeType, self).save()
+		try:
+			super(FeeType, self).save()
+		except IntegrityError, e:
+			PentaError(1034).raise_error()
 
 class FeeTransaction(models.Model):
 	amount = models.IntegerField()
@@ -428,8 +467,10 @@ class FeeTransaction(models.Model):
 			validation = validate_fee_transaction(self)
 			if not validation:
 				validation.raise_error()
-
-		super(FeeTransaction, self).save()
+		try:
+			super(FeeTransaction, self).save()
+		except IntegrityError, e:
+			PentaError(1035).raise_error()
 
 class Test(models.Model):
 	subject_year = models.ForeignKey(SubjectYear)
