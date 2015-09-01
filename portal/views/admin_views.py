@@ -22,7 +22,7 @@ def dashboard(request):
 	return render(request,'admin/dashboard.html', context)
 
 
-
+@csrf_exempt
 def view_fees(request):
 	auth_dict = get_user(request)
 	
@@ -46,7 +46,7 @@ def view_fees(request):
 		
 		if 'branch' in request.GET:
 			page_type = 1
-			batches = get_batch(branch_id = int(request.GET['branch']))
+			batches = get_batch(branch_id = int(request.GET.get('branch')))
 			context['batches'] = batches
 			context['branch_id'] = int(request.GET['branch'])
 			#context['student_batch_id'] = StudentBatch.objects.get(student = Student.objects.get(id = int(request.GET['student']))).id

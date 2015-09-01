@@ -19,7 +19,7 @@ def dashboard(request):
 	context['auth_dict'] = auth_dict
 	parent_object = get_parent(id = auth_dict['id'])
 	student_object = StudentParent.objects.get(parent = Parent.objects.get( id = parent_object['id'])).student
-	print student_object
+	#print student_object
 	student_object = get_student_batch(student_id = student_object.id)
 	lecture_list = []
 	context['lectures'] = []
@@ -72,7 +72,9 @@ def view_attendance(request):
 		raise Http404
 
 	page_type = 1
-	student_batch = get_student_batch(student_id=auth_dict['id'])
+	parent_object = get_parent(id = auth_dict['id'])
+	student_object = StudentParent.objects.get(parent = Parent.objects.get( id = parent_object['id'])).student
+	student_batch = get_student_batch(student_id=student_object.id)
 	subjects = student_batch['student_subjects']
 	context['subjects'] = subjects
 	if 'attendance' in request.GET:
