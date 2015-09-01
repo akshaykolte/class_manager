@@ -112,7 +112,7 @@ def validate_lecture_batch(lecture_batch_object):
 	elif lecture_batch_object.staff_role.role.name != 'teacher' or (lecture_batch_object.staff_role.branch != lecture_batch_object.batch.branch):
 		return PentaError(1011)
 	elif lecture_batch_object.batch.standard != lecture_batch_object.lecture.subject_year.subject.standard:
-		return False
+		return PentaError(1012)
 	else:
 		return PentaError()
 
@@ -121,7 +121,7 @@ def validate_attendance(attendance_object):
 	for subject_year_object in subject_year_list:
 		if subject_year_object == attendance_object.lecture_batch.lecture.subject_year:
 			return PentaError()
-	return False
+	return PentaError(1013)
 
 def validate_base_fee(base_fee_object, subject_year_id_list):
 	from portal.models import SubjectYear
@@ -132,9 +132,9 @@ def validate_base_fee(base_fee_object, subject_year_id_list):
 	for i in subject_year_id_list:
 		subject_year_object = SubjectYear.objects.get(id=i)
 		if academic_year != subject_year_object.academic_year:
-			return False
+			return PentaError(1014)
 		if standard != subject_year_object.subject.standard:
-			return False
+			return PentaError(1015)
 	return PentaError()
 
 def validate_fee_type(fee_type_object):
