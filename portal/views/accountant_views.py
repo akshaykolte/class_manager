@@ -139,10 +139,8 @@ def view_fees(request):
 			page_type = 1
 			
 			context['student_id'] = int(request.GET['student'])
+			context['student_name'] = request.GET['name']
 
-			
-		
-			
 			fee_details = get_student_fees( student_id = int(request.GET['student']) )
 			transaction_details = get_fee_transaction(id = None ,date_start = None, date_end = None, receipt_number = None, student_id = int(request.GET['student']), fee_type_id = None)
 		
@@ -358,6 +356,7 @@ def make_transaction(request):
 		if 'student_batch' in request.GET:
 			page_type = 1
 			context['student_batch_id'] = request.GET['student_batch']
+			context['student_name'] = request.GET['student_name']
 				
 			fee_types = get_fee_types()
 			context['fee_types'] = fee_types
@@ -504,6 +503,7 @@ def admit_student(request):
 		if 'student' in request.GET:
 			page_type = 0
 			context['student_id'] = request.GET['student']
+			context['student_name'] = request.GET['name']
 			academic_years = get_academic_year(id=None)
 			context['academic_years'] = academic_years	
 			if 'academic_year' in request.GET:

@@ -3,7 +3,7 @@
 {% block main_content%}
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">View/Edit Base Fees</h1>
+        <h1 class="page-header">Admit Student</h1>
     </div>
 </div>
 {% if message %}
@@ -30,27 +30,31 @@
                 {% if page_type == -1 %}
                     
                     <form>
-                    <label><strong>Enter Student ID </strong></label>
+                    <label><strong>Student Name</strong></label>
                     <div class="form-group input-group">
-                        <input type="text" name="student" class="form-control" id="chooseStudentId" onchange="this.form.submit()">
+                        <input type="text" name="name" class="form-control" id="chooseStudentName" onchange="this.form.submit()" readonly>
+                        <input type="hidden" name="student" class="form-control" id="chooseStudentId" onchange="this.form.submit()">
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button"><i class="fa fa-search" onClick="call_student_search_window('student')"></i>
+                            <button class="btn btn-default" type="button"><i class="fa fa-search" onClick="call_student_search_window('student')"> Click Here to Search Student</i>
                             </button>
                         </span>
                     </div>
+                    <input type="submit" class="btn btn-default">
                 </form>
                 {% endif %}
 
             {% if page_type == 0 %}
                         
                         <form>
-                            <label><strong>Enter Student ID</strong></label>
-                            <input type="text" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
+                            <label><strong>Student Name</strong></label>
+                            <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
+                            <input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
                         </form>
                         <br/>
 
 
                         <form>
+                            <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="student" value="{{student_id}}">
                             <label><strong>Select Academic Year</strong></label>
                             <select name="academic_year" class="form-control" onchange="this.form.submit()">
@@ -65,14 +69,16 @@
             {% if page_type == 1 %}
                          
                         <form>
-                            <label><strong>Enter Student ID</strong></label>
-                            <input type="text" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
+                            <label><strong>Student Name</strong></label>
+                            <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
+                            <input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
                         </form>
                         <br/>
 
 
                         <form>
                             <label><strong>Select Academic Year</strong></label>
+                            <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="student" value="{{student_id}}">
                             <select name="academic_year" class="form-control" onchange="this.form.submit()">
                                 {% for academic_year in academic_years %}
@@ -83,6 +89,7 @@
                         <br/>
                         
                         <form>
+                            <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="student" value="{{student_id}}">  
                             <input type="hidden" name="academic_year" value="{{academic_year_id}}">    
                                       
@@ -100,13 +107,15 @@
             {% if page_type == 2 %}
                          
                         <form>
-                            <label><strong>Enter Student ID</strong></label>
-                            <input type="text" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
+                            <label><strong>Student Name</strong></label>
+                            <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
+                            <input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
                         </form>
                         <br/>
 
 
                         <form>
+                            <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="student" value="{{student_id}}">
                             <label><strong>Select Academic Year</strong></label>
 
@@ -119,6 +128,7 @@
                         <br/>
                         
                         <form>
+                            <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="student" value="{{student_id}}">
                             <input type="hidden" name="academic_year" value="{{academic_year_id}}"> 
 
@@ -133,6 +143,7 @@
                         <br/>
                             
                          <form>
+                            <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="student" value="{{student_id}}">
                             <input type="hidden" name="academic_year" value="{{academic_year_id}}"> 
                             <input type="hidden" name="standard" value="{{standard_id}}">              
@@ -157,13 +168,15 @@
             {% if page_type == 3 %}
                        
                         <form>
-                            <label><strong>Enter Student ID</strong></label>
-                            <input type="text" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
+                            <label><strong>Student Name</strong></label>
+                            <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
+                            <input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
                         </form>
                         <br/>
 
 
                         <form>
+                            <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="student" value="{{student_id}}">
                             <label><strong>Select Academic Year</strong></label>
 
@@ -178,7 +191,8 @@
                         
                             
                         <form>
-               
+                            <input type="hidden" name="student" value="{{student_id}}">
+                            <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="academic_year" value="{{academic_year_id}}">                
                             <label><strong>Select Standard</strong></label>
                             <select name="standard" class="form-control" onchange="this.form.submit()">
@@ -192,7 +206,8 @@
                             
 
                          <form>
-                           
+                            <input type="hidden" name="student" value="{{student_id}}">
+                            <input type="hidden" name="name" value="{{student_name}}">
                              <input type="hidden" name="standard" value="{{standard_id}}">               
                             <label><strong>Select Batch</strong></label>
                             <select name="batch" class="form-control" onchange="this.form.submit()">
@@ -205,6 +220,7 @@
                             <br/>             
 
                         <form action="." method="POST">
+                            <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="student" value="{{student_id}}">
                             <input type="hidden" name="academic_year" value="{{academic_year_id}}"> 
                             <input type="hidden" name="standard" value="{{standard_id}}">               
