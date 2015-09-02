@@ -388,16 +388,20 @@ def add_attendance(request):
 
 	elif request.method == 'POST':
 		try:
+			standard = request.POST['standard']
 			lecture = request.POST['lecture']
-			lecturebatches = get_lecture_batch(lecture_id = lecture)
-			for lecturebatch in lecturebatches:
-				students = get_students(batch_id = lecturebatch['batch_id'])
+			academic_year_id = get_current_academic_year()['id']
+			batches = get_batch(academic_year_id = academic_year_id,standard_id = standard)
+			for batch in batches:
+				students = get_students(batch_id = batch['id'])
 				print 'heres'
 				for student in students:
-					if 'lecturebatch_'+str(lecturebatch['id'])+'student_'+str(student['id']) in request.POST:
+					if 'batch_'+str(batch['id'])+'student_'+str(student['id']) in request.POST:
 						print '00here123'
 						student_batch = get_student_batch(student_id = student['id'])
-						set_attendance(count = count,student_batch_id = student_batch['id'],lecture_batch_id = lecturebatch['id'])
+						lecture_batch = get_lecture_batch(batch_id = batch['id'],lecture_id = lecture)
+						print lecture_batch
+						set_attendance(count = 1,student_batch_id = student_batch['id'],lecture_batch_id = lecture_batch['id'])
 						print 'here1'
 
 

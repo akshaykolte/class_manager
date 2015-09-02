@@ -243,7 +243,7 @@ def assign_roles(request):
 
 
 @csrf_exempt
-def track_progress(request):
+def detailed_progress(request):
 
 	context = {}
 	auth_dict = get_user(request)
@@ -285,4 +285,4 @@ def track_progress(request):
 		context['page_type'] = page_type
 
 
-	return render(request, 'admin/track-progress.html', context)
+	return render(request, 'admin/track-progress/detailed-progress.html', context)
