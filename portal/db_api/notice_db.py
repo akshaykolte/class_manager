@@ -45,14 +45,14 @@ def upload_notice(id=None, notice_id = None, for_students = None, for_staff = No
 	is_student_id_none = student_id == None
 	is_staff_id_none = staff_id == None
 	if is_id_none:
-		
+
 		# Create new noticeviwer and save
 		print for_students
 		print for_staff
 
 		if for_students and not for_staff:
 			#student notice
-			
+
 			print "dffdsfds"
 			notice_object = Notice.objects.get(id = notice_id)
 			if not is_branch_id_none:
@@ -63,12 +63,12 @@ def upload_notice(id=None, notice_id = None, for_students = None, for_staff = No
 				notice_viewer.save()
 			elif not is_student_id_none:
 				notice_viewer = NoticeViewer(notice = notice_object, for_students = True, for_staff = False, student = Student.objects.get(id = student_id), branch = None, batch = None, staff = None )
-				notice_viewer.save()		
+				notice_viewer.save()
 			else:
 				notice_viewer = NoticeViewer(notice = notice_object, for_students = True, for_staff = False, student = None, branch = None, batch = None, staff = None )
-				notice_viewer.save()		
+				notice_viewer.save()
 			return notice_viewer.id
-		
+
 		elif not for_students and for_staff:
 			print "dggggggds"
 			notice_object = Notice.objects.get(id = notice_id)
@@ -79,20 +79,20 @@ def upload_notice(id=None, notice_id = None, for_students = None, for_staff = No
 				notice_viewer = NoticeViewer(notice = notice_object, for_students = False, for_staff = True, student = None, branch = None, batch = None, staff = None )
 				notice_viewer.save()
 			return notice_viewer.id
-			
+
 	elif not is_id_none:
 		# TODO
 		pass
 
-		
 
-def get_personal_notices(student_batch_id=None, staff_id=None, for_students=None, for_staff=None, notice_id=None):
+
+def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_staff=None, notice_id=None):
 		is_notice_id_none = notice_id==None
-		is_student_batch_id_none = student_batch_id==None
+		is_student_id_none = student_id==None
 		is_staff_id_none = staff_id==None
 		is_for_students_none = for_students==None
 		is_for_staff_none = for_staff==None
-		
+
 		if not is_notice_id_none:
 			personal_notice = Notice.objects.get(id=notice_id)
 			notice_object = {}
@@ -104,17 +104,17 @@ def get_personal_notices(student_batch_id=None, staff_id=None, for_students=None
 			notice_object['important'] = personal_notice.important
 			return notice_object
 
-		elif not is_student_batch_id_none:
+		elif not is_student_id_none:
 			# get all objects related to that student, i.e., his own, his batch's, his branch's
 			all_notices = []
 
 			personal_notices = []
-			student_batch_object = StudentBatch.objects.get(id=student_batch_id)
-			personal_notice_set = NoticeViewer.objects.filter(student_batch=student_batch_object)
+			# student_batch_object = StudentBatch.objects.get(student__id=student_id, batch__academic_year)
+			personal_notice_set = NoticeViewer.objects.filter(student__id=student_id).distinct()
 			for personal_notice in personal_notice_set:
 				notice_object = {}
 				notice_object['id'] = personal_notice.notice.id
-				notice_object['student_batch'] = personal_notice.student_batch
+				notice_object['student'] = personal_notice.student
 				notice_object['batch'] = personal_notice.batch
 				notice_object['branch'] = personal_notice.branch
 				notice_object['for_staff'] = personal_notice.for_staff
@@ -129,13 +129,13 @@ def get_personal_notices(student_batch_id=None, staff_id=None, for_students=None
 				personal_notices.append(notice_object)
 
 			related_batch_notices = []
-			student_batch = StudentBatch.objects.get(id=student_batch_id)
-			is_batch_none = student_batch.batch == None
-			is_academic_year_none = student_batch.academic_year == None
-			is_standard_none = student_batch.standard == None
+			# student_batch = StudentBatch.objects.get(id=student_batch_id)
+			is_batch_none = False # student_batch.batch == None
+			is_academic_year_none = False # student_batch.academic_year == None
+			is_standard_none = False # student_batch.standard == None
 
 			if not is_batch_none:
-				related_batch_notice_set = NoticeViewer.objects.filter(batch=student_batch.batch)
+				related_batch_notice_set = NoticeViewer.objects.filter(batch__studentbatch__student__id=student_id).distinct()
 
 				for related_batch_notice in related_batch_notice_set:
 					notice_object = {}
@@ -160,12 +160,12 @@ def get_personal_notices(student_batch_id=None, staff_id=None, for_students=None
 
 
 			related_branch_notices = []
-			related_branch_notice_set = NoticeViewer.objects.filter(branch=student_batch.batch.branch)
+			related_branch_notice_set = NoticeViewer.objects.filter(branch__batch__studentbatch__student__id=student_id).distinct()
 
 			for related_branch_notice in related_branch_notice_set:
 				notice_object = {}
 				notice_object['id'] = related_branch_notice.notice.id
-				notice_object['student_batch'] = related_branch_notice.student_batch
+				notice_object['student'] = related_branch_notice.student
 				notice_object['for_staff'] = related_branch_notice.for_staff
 				notice_object['for_students'] = related_branch_notice.for_students
 				notice_object['staff'] = related_branch_notice.staff
@@ -185,4 +185,3 @@ def get_batch_notices():
 
 def get_branch_notices():
 	pass
-
