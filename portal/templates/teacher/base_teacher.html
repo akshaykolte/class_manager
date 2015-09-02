@@ -118,7 +118,7 @@
 
                <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <strong>Use As</strong> &nbsp;<i class="fa fa-caret-down"></i> 
+                        <strong>Use As</strong> &nbsp;<i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu" style="width:200px;">
                         {% block use_as %}
@@ -285,11 +285,11 @@
                             <a href="#"><i class="fa fa-edit fa-fw"></i> Notices<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="/teacher/notices/add-student-notice/">Upload Student Notice</a>    
+                                    <a href="/teacher/notices/add-student-notice/">Upload Student Notice</a>
                                 </li>
-                                
+
                                 <li>
-                                    <a href="/teacher/notices/view-my-notices/">View/Edit My Notices</a>    
+                                    <a href="/teacher/notices/view-my-notices/">View/Edit My Notices</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
@@ -297,8 +297,19 @@
 
 
                         <li>
-                            <a href="http://otp.pentaflux.com"><i class="fa fa-pencil"></i> <strong>Online Test Portal</strong></a>
+                            <a href="#"><i class="fa fa-pencil"></i> Test<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/teacher/test/add-test-marks/">Add/Edit test marks</a>
+                                </li>
+
+                                <li>
+                                    <a href="http://otp.pentaflux.com">Online Test Portal</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
                         </li>
+
                         <!-- </br></br></br></br></br></br>
                         Note: See UI/startbootstrap-sb-admin-2-1.0.7/pages/tables.html to choose the right table for attendance, etc.
                         </br></br>
@@ -334,13 +345,13 @@
     <script src="/static/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
 
     <!--Datepicker Javascript-->
-   
+
 
     <!-- Morris Charts JavaScript
     <script src="/static/bower_components/raphael/raphael-min.js"></script>
     <script src="/static/bower_components/morrisjs/morris.min.js"></script>
     <script src="/static/morris-graphs/js/morris-data.js"></script -->
-    
+
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
 
@@ -349,14 +360,14 @@
             // When the document is ready
 
             $(document).ready(function () {
-                
+
                 $('#example1').datepicker({
                     format: "yyyy-mm-dd"
-                });  
+                });
                 $('#example1').datepicker('update', new Date());
-            
+
             });
-           
+
         </script>
 
 </body>

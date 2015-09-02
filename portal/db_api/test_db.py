@@ -1,12 +1,12 @@
-from portal.models import Test, TestBatch, TestStaffRole, Batch, SubjectYear, StaffRole, TestStudentBatch
+from portal.models import Test, TestBatch, TestStaffRole, Batch, SubjectYear, StaffRole, TestStudentBatch, StudentBatch
 from portal.db_api.academic_year_db import get_current_academic_year
 
-def get_test(id=None, subject_year_id=None, academic_year_id=None, batch_id=None, staff_role_id=None, standard_id=None):
+def get_test(id=None, subject_year_id=None, academic_year_id=None, batch_id=None, staff_role_id=None, standard_id=None, staff_id=None):
 	bit_list = []
-	for i in [id, subject_year_id, academic_year_id, batch_id, staff_role_id, standard_id]:
+	for i in [id, subject_year_id, academic_year_id, batch_id, staff_role_id, standard_id, staff_id]:
 		if i == None: bit_list.append('0')
 		else: bit_list.append('1')
-	if ''.join(bit_list) == '100000':
+	if ''.join(bit_list) == '1000000':
 		test_obj = Test.objects.get(id=id)
 		test = {}
 		test['id'] = test_obj.id
@@ -19,24 +19,26 @@ def get_test(id=None, subject_year_id=None, academic_year_id=None, batch_id=None
 	if academic_year_id == None:
 		academic_year_id = get_current_academic_year()['id']
 	test_list = []
-	if ''.join(bit_list) == '001001':
+	if ''.join(bit_list) == '0010010':
 		test_list = Test.objects.filter(subject_year__academic_year__id=academic_year_id, subject_year__subject__standard__id=standard_id)
-	elif ''.join(bit_list) == '001010':
+	elif ''.join(bit_list) == '0010100':
 		test_list = Test.objects.filter(subject_year__academic_year__id=academic_year_id, teststaffrole__staff_role__id=staff_role_id)
-	elif ''.join(bit_list) == '001011':
+	elif ''.join(bit_list) == '0010110':
 		test_list = Test.objects.filter(subject_year__academic_year__id=academic_year_id, teststaffrole__staff_role__id=staff_role_id, subject_year__subject__standard__id=standard_id)
-	elif ''.join(bit_list) == '000100':
+	elif ''.join(bit_list) == '0001000':
 		test_list = Test.objects.filter(testbatch__batch__id=batch_id)
-	elif ''.join(bit_list) == '000110':
+	elif ''.join(bit_list) == '0001100':
 		test_list = Test.objects.filter(testbatch__batch__id=batch_id, teststaffrole__staff_role__id=staff_role_id)
-	elif ''.join(bit_list) == '010010':
+	elif ''.join(bit_list) == '0100100':
 		test_list = Test.objects.filter(subject_year__id = subject_year_id, teststaffrole__staff_role__id=staff_role_id)
-	elif ''.join(bit_list) == '010100':
+	elif ''.join(bit_list) == '0101000':
 		test_list = Test.objects.filter(subject_year__id = subject_year_id, testbatch__batch__id=batch_id)
-	elif ''.join(bit_list) == '010110':
+	elif ''.join(bit_list) == '0101100':
 		test_list = Test.objects.filter(subject_year__id = subject_year_id, testbatch__batch__id=batch_id, teststaffrole__staff_role__id=staff_role_id)
-	elif ''.join(bit_list) == '010000':
+	elif ''.join(bit_list) == '0100000':
 		test_list = Test.objects.filter(subject_year__id = subject_year_id)
+	elif ''.join(bit_list) == '0101001':
+		test_list = Test.objects.filter(subject_year__id = subject_year_id, testbatch__batch__id=batch_id, teststaffrole__staff_role__staff__id=staff_id)
 	else:
 		raise Exception('InvalidArguments')
 	test_obj_list = []
@@ -178,10 +180,11 @@ def set_student_marks(id=None, test_id=None, student_batch_id=None, marks_obtain
 	if id == None:
 		if TestStudentBatch.objects.filter(test__id=test_id, student_batch__id=student_batch_id).exists():
 			test_student_batch_object = TestStudentBatch.objects.get(test__id=test_id, student_batch__id=student_batch_id)
+			test_student_batch_object.obtained_marks = marks_obtained
+			test_student_batch_object.save()
 		else:
-			test_student_batch_object = TestStudentBatch(test=Test.objects.get(id=test_id), student_batch=StudentBatch.objects.get(id=student_batch_id))
-		test_student_batch_object.marks_obtained = marks_obtained
-		test_student_batch_object.save()
+			test_student_batch_object = TestStudentBatch(test=Test.objects.get(id=test_id), student_batch=StudentBatch.objects.get(id=student_batch_id), obtained_marks=marks_obtained)
+			test_student_batch_object.save()
 		return test_student_batch_object.id
 	else:
 		test_student_batch_object = TestStudentBatch.objects.get(id=id)
@@ -237,3 +240,6 @@ def get_student_batch_marks(id=None, test_id=None, batch_id=None, student_batch_
 		test_student_batch['obtained_marks'] = test_student_batch_object.obtained_marks
 		student_batch_list.append(test_student_batch)
 	return student_batch_list
+
+def check_test_staff_permission(staff_id, test_id):
+	return TestStaffRole.objects.filter(staff_role__staff__id=staff_id, test__id=test_id).exists()

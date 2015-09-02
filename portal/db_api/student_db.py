@@ -303,6 +303,7 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 	if not is_none_student_id and is_none_id and is_none_batch_id and is_none_standard_id and not is_none_academic_year_id:
 		student_batch_object = StudentBatch.objects.get(student = Student.objects.get(id = student_id),batch = Batch.objects.get(academic_year = AcademicYear.objects.get(id = academic_year_id)))
 		student_batch = {}
+		student_batch['id'] = student_batch_object.id
 		student_batch['student_username'] = student_batch_object.student.username
 		student_batch['student_password'] = student_batch_object.student.password
 		student_batch['student_first_name'] = student_batch_object.student.first_name
@@ -337,6 +338,7 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 		student_batch_list = []
 		for student_batch_object in student_batch_object_list:
 			student_batch = {}
+			student_batch['id'] = student_batch_object.id
 			student_batch['student_username'] = student_batch_object.student.username
 			student_batch['student_password'] = student_batch_object.student.password
 			student_batch['student_first_name'] = student_batch_object.student.first_name
@@ -368,6 +370,7 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 		student_batch_list = []
 		for student_batch_object in student_batch_object_list:
 			student_batch = {}
+			student_batch['id'] = student_batch_object.id
 			student_batch['student_username'] = student_batch_object.student.username
 			student_batch['student_password'] = student_batch_object.student.password
 			student_batch['student_first_name'] = student_batch_object.student.first_name
@@ -397,6 +400,7 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 	if is_none_student_id and not is_none_id and is_none_batch_id and is_none_standard_id and is_none_academic_year_id:
 		student_batch_object = StudentBatch.objects.get(id=id,batch = Batch.objects.get(academic_year = AcademicYear.objects.get(id =get_current_academic_year()['id'])))
 		student_batch = {}
+		student_batch['id'] = student_batch_object.id
 		student_batch['student_username'] = student_batch_object.student.username
 		student_batch['student_password'] = student_batch_object.student.password
 		student_batch['student_first_name'] = student_batch_object.student.first_name

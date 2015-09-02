@@ -544,10 +544,11 @@ class TestStudentBatch(models.Model):
 			validation = validate_test_student_batch(self)
 			if not validation:
 				validation.raise_error()
-		try:
-			super(TestStudentBatch, self).save()
-		except IntegrityError, e:
-			PentaError(1044).raise_error()
+
+		# try:
+		super(TestStudentBatch, self).save()
+		# except IntegrityError, e:
+		# 	PentaError(1044).raise_error()
 
 class Notice(models.Model):
 	title = models.CharField(max_length=200)
