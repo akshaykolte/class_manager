@@ -1,4 +1,4 @@
-from portal.models import Test, TestBatch, TestStaffRole, Batch, SubjectYear, StaffRole
+from portal.models import Test, TestBatch, TestStaffRole, Batch, SubjectYear, StaffRole, TestStudentBatch
 from portal.db_api.academic_year_db import get_current_academic_year
 
 def get_test(id=None, subject_year_id=None, academic_year_id=None, batch_id=None, staff_role_id=None, standard_id=None):
@@ -227,7 +227,7 @@ def get_student_batch_marks(id=None, test_id=None, batch_id=None, student_batch_
 		raise Exception('InvalidArguments')
 
 	student_batch_list = []
-	for student_batch_object in student_batch_object_list:
+	for test_student_batch_object in student_batch_object_list:
 		test_student_batch = {}
 		test_student_batch['id'] = test_student_batch_object.id
 		test_student_batch['student_batch_id'] = test_student_batch_object.student_batch.id
