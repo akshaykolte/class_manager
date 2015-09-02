@@ -1,0 +1,235 @@
+{% extends "teacher/base_teacher.html" %}
+
+{% block main_content%}
+<div class="row">
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Add/Edit Test Marks</h1>
+    </div>
+</div>
+	{% if message %}
+	    <div class="panel-body">
+	        <div class="alert alert-success alert-dismissable col-lg-8">
+	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	            {{message}}
+	        </div>
+	    </div>
+    {% elif message_error %}
+	    <div class="panel-body">
+		    <div class="alert alert-danger alert-dismissable col-lg-8">
+		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		        {{message_error}}
+		    </div>
+		</div>
+	{% endif %}
+
+<div class="col-lg-8">
+
+	{% if page_type == 0 %}
+		<form>
+			<label><strong>Select Standard</strong></label>
+			<select name="standard" class="form-control" onchange="this.form.submit()">
+				<option>Select</option>
+				{% for standard in standards %}
+				<option value="{{standard.id}}">{{standard.name}}</option>
+				{% endfor %}
+			</select>
+		</form>
+	{% endif %}
+
+	{% if page_type == 1 %}
+	<form>
+		<label><strong>Select Standard</strong></label>
+		<select name="standard" class="form-control" onchange="this.form.submit()">
+			{% for standard in standards %}
+			<option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+		<input type="hidden" name="standard" value="{{standard_id}}">
+			<label><strong>Select Subject</strong></label>
+			<select name="subject" class="form-control" onchange="this.form.submit()">
+				<option>Select</option>
+				{% for subject in subjects %}
+				<option value="{{subject.id}}">{{subject.name}}</option>
+				{% endfor %}
+			</select>
+			</form>
+
+	{% endif %}
+
+	{% if page_type == 2 %}
+	<form>
+		<label><strong>Select Standard</strong></label>
+		<select name="standard" class="form-control" onchange="this.form.submit()">
+			{% for standard in standards %}
+			<option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+		<input type="hidden" name="standard" value="{{standard_id}}">
+		<label><strong>Select Subject</strong></label>
+		<select name="subject" class="form-control" onchange="this.form.submit()">
+			{% for subject in subjects %}
+			<option value="{{subject.id}}"{% if subject_id == subject.id %} selected{% endif %}>{{subject.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	</br>
+	<form action="." method="GET">
+		<input type="hidden" name="standard" value="{{standard_id}}">
+		<input type="hidden" name="subject" value="{{subject_id}}">
+		<label><strong>Select Branch</strong></label>
+		<select name="branch" class="form-control" onchange="this.form.submit()">
+			<option>Select</option>
+			{% for branch in branches %}
+			<option value="{{branch.id}}">{{branch.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+
+	{% endif %}
+
+	{% if page_type == 3 %}
+	<form>
+		<label><strong>Select Standard</strong></label>
+		<select name="standard" class="form-control" onchange="this.form.submit()">
+			{% for standard in standards %}
+			<option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+		<input type="hidden" name="standard" value="{{standard_id}}">
+		<label><strong>Select Subject</strong></label>
+		<select name="subject" class="form-control" onchange="this.form.submit()">
+			{% for subject in subjects %}
+			<option value="{{subject.id}}"{% if subject_id == subject.id %} selected{% endif %}>{{subject.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+    <input type="hidden" name="standard" value="{{standard_id}}">
+		<input type="hidden" name="subject" value="{{subject_id}}">
+		<label><strong>Select Branch</strong></label>
+		<select name="branch" class="form-control" onchange="this.form.submit()">
+			{% for branch in branches %}
+			<option value="{{branch.id}}"{% if branch_id == branch.id %} selected{% endif %}>{{branch.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+  <br/>
+  <form>
+    <input type="hidden" name="standard" value="{{standard_id}}">
+		<input type="hidden" name="subject" value="{{subject_id}}">
+    <input type="hidden" name="branch" value="{{branch_id}}">
+		<label><strong>Select Batch</strong></label>
+		<select name="batch" class="form-control" onchange="this.form.submit()">
+      <option>Select</option>
+			{% for batch in batches %}
+			<option value="{{batch.id}}"{% if batch_id == batch.id %} selected{% endif %}>{{batch.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+
+  {% endif %}
+
+  {% if page_type == 4 %}
+	<form>
+		<label><strong>Select Standard</strong></label>
+		<select name="standard" class="form-control" onchange="this.form.submit()">
+			{% for standard in standards %}
+			<option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+		<input type="hidden" name="standard" value="{{standard_id}}">
+		<label><strong>Select Subject</strong></label>
+		<select name="subject" class="form-control" onchange="this.form.submit()">
+			{% for subject in subjects %}
+			<option value="{{subject.id}}"{% if subject_id == subject.id %} selected{% endif %}>{{subject.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+    <input type="hidden" name="standard" value="{{standard_id}}">
+		<input type="hidden" name="subject" value="{{subject_id}}">
+		<label><strong>Select Branch</strong></label>
+		<select name="branch" class="form-control" onchange="this.form.submit()">
+			{% for branch in branches %}
+			<option value="{{branch.id}}"{% if branch_id == branch.id %} selected{% endif %}>{{branch.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+  <br/>
+  <form>
+    <input type="hidden" name="standard" value="{{standard_id}}">
+		<input type="hidden" name="subject" value="{{subject_id}}">
+    <input type="hidden" name="branch" value="{{branch_id}}">
+		<label><strong>Select Batch</strong></label>
+		<select name="batch" class="form-control" onchange="this.form.submit()">
+			{% for batch in batches %}
+			<option value="{{batch.id}}"{% if batch_id == batch.id %} selected{% endif %}>{{batch.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+<br/>
+  <form>
+    <input type="hidden" name="standard" value="{{standard_id}}">
+		<input type="hidden" name="subject" value="{{subject_id}}">
+    <input type="hidden" name="branch" value="{{branch_id}}">
+    <input type="hidden" name="batch" value="{{batch_id}}">
+		<label><strong>Select Test</strong></label>
+		<select name="test" class="form-control" onchange="this.form.submit()">
+      <option>Select</option>
+			{% for test in tests %}
+			<option value="{{test.id}}"{% if test_id == test.id %} selected{% endif %}>{{test.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+
+  {% endif %}
+
+
+  	{% if page_type == 5 %}
+
+  	<form action="." method="POST">
+  		<input type="hidden" name="standard" value="{{standard_id}}">
+  		<input type="hidden" name="subject" value="{{subject_id}}">
+      <input type="hidden" name="branch" value="{{branch_id}}">
+      <input type="hidden" name="batch" value="{{batch_id}}">
+      <input type="hidden" name="test" value="{{test_id}}">
+  		</br>
+  		<label><strong>Total Marks:</strong><strong>&nbsp;&nbsp;&nbsp;{{total_marks}}</strong></label>
+  		</br>
+  		</br>
+      {% for student in students %}
+    		<label><strong></strong></label>
+    		</br>
+        <label><strong>{{student.student_username}} - {{student.student_first_name}} {{student.student_last_name}} <input name="{{student.id}}" placeholder="Enter marks" class="form-control" value="{{student.marks}}"></strong></label>
+    		<br/>
+      {% endfor %}
+
+      <br/>
+      <input type="submit" class="btn btn-default" value="Save Marks">
+
+		<form>
+
+      <br/>
+	{% endif %}
+
+
+
+</br>
+
+{% endblock %}
