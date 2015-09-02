@@ -11,9 +11,11 @@ from portal.db_api.branch_db import *
 from portal.db_api.academic_year_db import *
 from portal.db_api.student_db import *
 from portal.db_api.attendance_db import *
+from portal.db_api.notice_db import *
 from portal.models import *
 import datetime
 from datetime import date
+
 def view_profile(request):
 
 	auth_dict = get_user(request)
@@ -428,3 +430,213 @@ def add_attendance(request):
 			print 'sd', e
 			return redirect('./?message_error=Error Marking Attendance')
 
+
+
+@csrf_exempt
+def add_student_notice(request):
+
+
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	context = {}
+	context['details'] = auth_dict
+
+
+	if request.method == 'GET':
+
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		page_type = 0
+		branches = get_branch(id=None)
+		all_branch={}
+		all_branch['name'] = "All Branches"
+		all_branch['id'] = 0
+		all_branches = []
+		all_branches.append(all_branch)
+		context['branches'] = all_branches + branches
+
+		if 'branch' in request.GET:
+
+
+
+			context['branch_id'] = int(request.GET['branch'])
+			if int(request.GET['branch']) :
+				page_type = 1
+				batches = get_batch(branch_id = int(request.GET['branch']))
+				all_batch={}
+				all_batch['name'] = "All Batches"
+				all_batch['id'] = 0
+				all_batch['description'] = "All batches of that branch"
+				all_batch['academic_year'] = "current_academic_year"
+				all_batch['branch'] = get_branch(id = int(request.GET['branch']))['name']
+				all_batch['standard'] = "All standards"
+				all_batches = []
+				all_batches.append(all_batch)
+				context['batches'] = all_batches + batches
+
+
+
+				if 'batch' in request.GET:
+
+					context['batch_id'] = int(request.GET['batch'])
+
+					if int(request.GET['batch']) :
+						page_type = 2
+
+						students = get_students(id = None,batch_id = int(request.GET['batch']))
+						context['students'] = students
+					else :
+						page_type = 2
+						#students = StudentBatch.objects.filter( batch__branch = Branch.objects.get(id = int(request.GET['branch']) ))
+						#context['students'] = students
+			else:
+				page_type = 2
+
+				#students = StudentBatch.objects.filter( batch__academic_year = AcademicYear.objects.get(id = get_current_academic_year()['id'] ))
+
+				#context['students'] = students
+				pass
+
+		context['page_type'] = page_type
+
+		return render(request,'teacher/notices/add-student-notice.html', context)
+
+	elif request.method == 'POST':
+		try:
+
+			title = request.POST['title']
+			description = request.POST['description']
+			expiry_date = request.POST['expiry-date']
+			is_important = request.POST['is_important']
+
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_important)
+
+			if int(request.POST['branch']):
+				if int(request.POST['batch']):
+					students = get_students(id = None,batch_id = int(request.POST['batch']))
+					student_list = []
+
+					for student in students:
+						#print student
+						#print 'student_'+str(student['id']) in request.POST
+						if 'student_'+str(student['id']) in request.POST:
+							#print subject_year
+							upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = student['id'], staff_id = None)
+
+
+
+
+
+			if not int(request.POST['branch']) :
+				print "ddd"
+				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = None, staff_id = None)
+			elif int(request.POST['branch']) and not int(request.POST['batch']):
+				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = int(request.POST['branch']) , batch_id = None, student_id = None, staff_id = None)
+
+			return redirect('./?message=Notice Uploaded')
+
+		except:
+			return redirect('./?message_error=Error While Uploading Notice')
+
+'''
+Not needed for teacher
+@csrf_exempt
+def add_staff_notice(request):
+
+
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	context = {}
+	context['details'] = auth_dict
+
+
+	if request.method == 'GET':
+
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		page_type = 0
+		branches = get_branch(id=None)
+		all_branch={}
+		all_branch['name'] = "All Branches"
+		all_branch['id'] = 0
+		all_branches = []
+		all_branches.append(all_branch)
+		context['branches'] = all_branches + branches
+
+		if 'branch' in request.GET:
+
+
+
+			context['branch_id'] = int(request.GET['branch'])
+			if int(request.GET['branch']) :
+				page_type = 1
+
+				staff = get_staff(branch_id = int(request.GET['branch']))
+				context['staff'] = staff
+
+			else:
+				page_type = 1
+
+				#students = StudentBatch.objects.filter( batch__academic_year = AcademicYear.objects.get(id = get_current_academic_year()['id'] ))
+
+				#context['students'] = students
+
+
+		context['page_type'] = page_type
+
+		return render(request,'teacher/notices/add-staff-notice.html', context)
+
+	elif request.method == 'POST':
+		try:
+
+			title = request.POST['title']
+			description = request.POST['description']
+			expiry_date = request.POST['expiry-date']
+			is_important = request.POST['is_important']
+
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_important)
+			print int(request.POST['branch'])
+			if int(request.POST['branch']):
+
+				staff = get_staff(branch_id = int(request.POST['branch']))
+				staff_list = []
+
+				for staff_object in staff:
+
+
+					if 'staff_'+str(staff_object['id']) in request.POST:
+						#print subject_year
+						upload_notice(id=None, notice_id = notice_id, for_students = False, for_staff = True, branch_id = None, batch_id = None, student_id = None, staff_id = staff_object['id'])
+
+
+
+
+
+			if not int(request.POST['branch']) :
+				#print "ddd"
+				upload_notice(id=None, notice_id = notice_id, for_students = False, for_staff = True, branch_id = None, batch_id = None, student_id = None, staff_id = None)
+
+
+
+			return redirect('./?message=Notice Uploaded')
+
+		except:
+			return redirect('./?message_error=Error While Uploading Notice')'''
