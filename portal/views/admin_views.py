@@ -275,8 +275,10 @@ def track_progress(request):
 				for l_b in lecture_batches:
 					if date.today() > l_b['date']:
 						l_b['is_past'] = True
+						l_b['difference'] = (date.today() - l_b['date']).days
 					else:
 						l_b['is_past'] = False
+						l_b['difference'] = (l_b['date'] - date.today()).days
 
 				context['lecture_batches'] = lecture_batches
 
