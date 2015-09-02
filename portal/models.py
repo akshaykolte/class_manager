@@ -512,7 +512,7 @@ class Notice(models.Model):
 	title = models.CharField(max_length=200)
 	description = models.CharField(max_length=1000, blank=True, null=False)
 	uploader = models.ForeignKey(Staff)
-	expiry_date = models.DateField(default=datetime.now()+timedelta(days=30)) # TODO: timedelta
+	expiry_date = models.DateField(default=datetime.now()+timedelta(days=30))
 	important = models.BooleanField(default=False)
 
 	def __str__(self):

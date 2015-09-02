@@ -6,6 +6,7 @@ from portal.db_api.auth_db import *
 from portal.db_api.attendance_db import *
 from portal.db_api.lecture_db import *
 from portal.db_api.attendance_reports_db import *
+from portal.db_api.notice_db import *
 
 def dashboard(request):
 	auth_dict = get_user(request)
@@ -19,9 +20,9 @@ def dashboard(request):
 	context['auth_dict'] = auth_dict
 	student_object = get_student_batch(student_id = auth_dict['id'])
 	lecture_list = []
-	context['lectures'] = []
-	for subject_year in student_object['student_subjects']:
-		context['lectures'] += get_lecture(subject_year_id = subject_year['id'])
+	print student_object
+	context['lectures'] = get_lecture_batch(batch_id = student_object['student_batch_id'])
+	context['notices'] = get_personal_notices(student_id=auth_dict['id'])
 	return render(request,'student/dashboard.html', context)
 
 def view_profile(request):
@@ -52,7 +53,7 @@ def edit_profile(request):
 		raise Http404
 
 	details = get_students(id=auth_dict['id'])
-	
+
 	context['auth_dict'] =auth_dict
 	context['staff_details'] = details
 
@@ -112,7 +113,7 @@ def change_password(request):
 		raise Http404
 	if 'message' in request.GET:
 		context['message'] = request.GET['message']
-	
+
 	elif 'message_error' in request.GET:
 		context['message_error'] = request.GET['message_error']
 
@@ -131,4 +132,3 @@ def change_password_submit(request):
 		return redirect('/student/profile/change-password/?message=Password Successfully Changed')
 	else:
 		return redirect('/student/profile/change-password/?message_error=Password Change Failed')
-

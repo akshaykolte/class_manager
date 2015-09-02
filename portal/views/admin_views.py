@@ -307,7 +307,28 @@ def graphical_overview(request):
 		if 'standard' in request.GET:
 			page_type = 1
 			context['standard_id'] = int(request.GET['standard'])
-			print 'aksjb'
+			batch_list = get_batch(academic_year_id=get_current_academic_year()['id'], standard_id=int(request.GET['standard']))
+			context['batch_list'] = batch_list
+			lecturebatch_list = []
+			for batch in batch_list:
+				total_counter = 0
+				done_counter = 0
+				lecture_batch = {}
+				lecture_batch['lec_bat'] = get_lecture_batch(batch_id=batch['id'])
+				for i in lecture_batch['lec_bat']:
+					batch_name = i['batch_name']
+					branch_name = i['branch_name']
+					total_counter += 1
+					if i['is_done'] == 1:
+						done_counter += 1
+				lecture_batch['total_counter'] = total_counter
+				lecture_batch['done_counter'] = done_counter
+				lecture_batch['batch_name'] = batch_name
+				lecture_batch['branch_name'] = branch_name
+
+
+				lecturebatch_list.append(lecture_batch)
+			context['lecturebatches'] = lecturebatch_list
 		
 		context['page_type'] = page_type
 
