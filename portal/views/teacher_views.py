@@ -359,16 +359,16 @@ def add_attendance(request):
 						for i in batch:
 							batches.append(i)
 					context['batches'] = batches
-					
-					# for batch in batch_list:
-					# 	lecturebatch = get_lecture_batch(batch_id = batch['id'],lecture_id = context['lecture_id'])
-					# 	for i in lecturebatch:
-					# 		lecturebatches.append(i)
-					
-					# context['lecturebatches'] = lecturebatches
+					lecturebatches = []
 
+					for batch in batches:
+						lecturebatch = get_lecture_batch(batch_id = batch['id'],lecture_id = context['lecture_id'])
+						for i in lecturebatch:
+					 		lecturebatches.append(i)
+					
+					context['lecturebatches'] = lecturebatches
+					
 					batch_list = []
-
 					for batch in batches:
 						batch_dict={}
 						batch_id = batch['id']
@@ -376,9 +376,19 @@ def add_attendance(request):
 						batch_dict['batch'] = batch
 						batch_dict['students'] = students
 						batch_list.append(batch_dict)
-					if not batch_list:
-						page_type = 2
-					context['batch_list'] = batch_list
+						context['batch_list'] = batch_list
+						
+					'''if not batch_list:
+						page_type = 2'''
+					print "here123"
+					if 'lecturebatch' in request.GET:
+						print 'HERERE'
+						print  request.GET['lecturebatch']
+						page_type=4
+						context['lecturebatch_id'] = int(request.GET['lecturebatch'])
+
+						
+
 
 
 		
@@ -387,9 +397,13 @@ def add_attendance(request):
 		return render(request, 'teacher/attendance/add-attendance.html', context)
 
 	elif request.method == 'POST':
+		
 		try:
 			standard = request.POST['standard']
 			lecture = request.POST['lecture']
+			lecturebatch = request.POST['lecturebatch']
+			print lecturebatch
+			print 'her234'
 			academic_year_id = get_current_academic_year()['id']
 			batches = get_batch(academic_year_id = academic_year_id,standard_id = standard)
 			for batch in batches:
@@ -399,9 +413,8 @@ def add_attendance(request):
 					if 'batch_'+str(batch['id'])+'student_'+str(student['id']) in request.POST:
 						print '00here123'
 						student_batch = get_student_batch(student_id = student['id'])
-						lecture_batch = get_lecture_batch(batch_id = batch['id'],lecture_id = lecture)
-						print lecture_batch
-						set_attendance(count = 1,student_batch_id = student_batch['id'],lecture_batch_id = lecture_batch['id'])
+						print lecturebatch
+						set_attendance(count = 1,student_batch_id = student_batch['id'],lecture_batch_id = lecturebatch)
 						print 'here1'
 
 
