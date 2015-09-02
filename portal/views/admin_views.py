@@ -310,7 +310,9 @@ def graphical_overview(request):
 			batch_list = get_batch(academic_year_id=get_current_academic_year()['id'], standard_id=int(request.GET['standard']))
 			context['batch_list'] = batch_list
 			lecturebatch_list = []
+			count_list = {}
 			for batch in batch_list:
+				lec_list = {}
 				total_counter = 0
 				done_counter = 0
 				lecture_batch = {}
@@ -318,17 +320,31 @@ def graphical_overview(request):
 				for i in lecture_batch['lec_bat']:
 					batch_name = i['batch_name']
 					branch_name = i['branch_name']
+					
+					if not i['lecture_name'] in lec_list:
+						lec_list[i['lecture_name']] = {'total_counter':0, 'done_counter':0}
+					
 					total_counter += 1
+					lec_list[i['lecture_name']]['total_counter'] += 1
+					
 					if i['is_done'] == 1:
 						done_counter += 1
+						lec_list[i['lecture_name']]['done_counter'] += 1
+
 				lecture_batch['total_counter'] = total_counter
 				lecture_batch['done_counter'] = done_counter
 				lecture_batch['batch_name'] = batch_name
 				lecture_batch['branch_name'] = branch_name
+				lecture_batch['lec_list'] = lec_list
+				for k,v in lec_list.items():
+					if not k in count_list:
+						count_list[k] = []
 
+					count_list[k].append(v)
 
 				lecturebatch_list.append(lecture_batch)
 			context['lecturebatches'] = lecturebatch_list
+			context['count_list'] = count_list
 		
 		context['page_type'] = page_type
 
