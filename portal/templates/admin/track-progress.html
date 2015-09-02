@@ -97,9 +97,9 @@
                                             {% if i.is_done == True %}
                                             <td class="text-success"><strong>Yes</strong></td>
                                             {% elif i.is_past == True %}
-                                            <td class="text-danger"><strong>Deadline passed {{i.difference}} days ago</strong></td>
+                                            <td class="text-danger"><strong>Deadline passed <u>{{i.difference}} days</u> ago</strong></td>
                                             {% else %}
-                                            <td class="text-warning"><strong>Upcoming in {{i.difference}} days</strong></td>
+                                            <td class="text-warning"><strong>Upcoming in <u>{{i.difference}} days </u></strong></td>
                                             {% endif %}
                                         </tr>
                                     {% endfor %}
