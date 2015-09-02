@@ -243,7 +243,7 @@ def assign_roles(request):
 
 
 @csrf_exempt
-def track_progress(request):
+def detailed_progress(request):
 
 	context = {}
 	auth_dict = get_user(request)
@@ -275,12 +275,14 @@ def track_progress(request):
 				for l_b in lecture_batches:
 					if date.today() > l_b['date']:
 						l_b['is_past'] = True
+						l_b['difference'] = (date.today() - l_b['date']).days
 					else:
 						l_b['is_past'] = False
+						l_b['difference'] = (l_b['date'] - date.today()).days
 
 				context['lecture_batches'] = lecture_batches
 
 		context['page_type'] = page_type
 
 
-	return render(request, 'admin/track-progress.html', context)
+	return render(request, 'admin/track-progress/detailed-progress.html', context)

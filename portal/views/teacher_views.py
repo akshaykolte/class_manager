@@ -249,8 +249,10 @@ def view_lecture(request):
 			for l_b in lecturebatch:
 					if date.today() > l_b['date']:
 						l_b['is_past'] = True
+						l_b['difference'] = (date.today() - l_b['date']).days
 					else:
 						l_b['is_past'] = False
+						l_b['difference'] = (l_b['date'] - date.today()).days
 			for i in lecturebatch:
 				lecturebatches.append(i)
 		context['lecturebatches'] = lecturebatches	
