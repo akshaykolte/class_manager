@@ -68,6 +68,18 @@ def upload_notice(id=None, notice_id = None, for_students = None, for_staff = No
 				notice_viewer = NoticeViewer(notice = notice_object, for_students = True, for_staff = False, student = None, branch = None, batch = None, staff = None )
 				notice_viewer.save()		
 			return notice_viewer.id
+		
+		elif not for_students and for_staff:
+			print "dggggggds"
+			notice_object = Notice.objects.get(id = notice_id)
+			if not is_staff_id_none:
+				notice_viewer = NoticeViewer(notice = notice_object, for_students = False, for_staff = True, student = None, branch = None, batch = None, staff = Staff.objects.get(id = staff_id ) )
+				notice_viewer.save()
+			else:
+				notice_viewer = NoticeViewer(notice = notice_object, for_students = False, for_staff = True, student = None, branch = None, batch = None, staff = None )
+				notice_viewer.save()
+			return notice_viewer.id
+			
 	elif not is_id_none:
 		# TODO
 		pass

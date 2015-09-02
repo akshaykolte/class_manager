@@ -33,3 +33,8 @@
 1033 Base Fee already created
 1034 Fee Type already created
 1035 Transaction already present
+1036 Notice can not be created for both student and teacher
+1037 Notice should be created for either student or teacher
+1038 Student notice can be created either for all branch, single branch, single batch or a particular student
+1039 Staff notice can be created either for a particular staff
+1040 Notice already created for the student/staff

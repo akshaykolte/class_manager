@@ -149,3 +149,30 @@ def validate_fee_type(fee_type_object):
 def validate_fee_transaction(fee_transaction_object):
 	# No special dependency
 	return PentaError()
+
+def validate_notice_viewer(notice_viewer_object):
+	if notice_viewer_object.for_staff == True and notice_viewer_object.for_students == True:
+		return PentaError(1036)
+	if notice_viewer_object.for_staff == False and notice_viewer_object.for_students == False:
+		return PentaError(1037)
+	if notice_viewer_object.for_students == True:
+		count = 0
+		if notice_viewer_object.batch == None:
+			count += 1
+		if notice_viewer_object.student == None:
+			count += 1
+		if notice_viewer_object.branch == None:
+			count += 1
+		if count > 1:
+			return PentaError(1038)
+	if notice_viewer_object.for_staff == True:
+		count = 0
+		if notice_viewer_object.batch == None:
+			count += 1
+		if notice_viewer_object.staff == None:
+			count += 1
+		if notice_viewer_object.branch == None:
+			count += 1
+		if count > 1:
+			return PentaError(1039)
+	return PentaError()
