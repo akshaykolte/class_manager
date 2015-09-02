@@ -173,3 +173,67 @@ def delete_test_of_staff_role(id=None, test_id=None, staff_id=None):
 	elif test_id != None and staff_id != None:
 		# 011
 		TestStaffRole.objects.filter(test__id=test_id, staff_role__staff__id=staff_id).delete()
+
+def set_student_marks(id=None, test_id=None, student_batch_id=None, marks_obtained=None):
+	if id == None:
+		if TestStudentBatch.objects.filter(test__id=test_id, student_batch__id=student_batch_id).exists():
+			test_student_batch_object = TestStudentBatch.objects.get(test__id=test_id, student_batch__id=student_batch_id)
+		else:
+			test_student_batch_object = TestStudentBatch(test=Test.objects.get(id=test_id), student_batch=StudentBatch.objects.get(id=student_batch_id))
+		test_student_batch_object.marks_obtained = marks_obtained
+		test_student_batch_object.save()
+		return test_student_batch_object.id
+	else:
+		test_student_batch_object = TestStudentBatch.objects.get(id=id)
+		test_student_batch_object.marks_obtained = marks_obtained
+		test_student_batch_object.save()
+		return test_student_batch_object.id
+
+def get_student_batch_marks(id=None, test_id=None, batch_id=None, student_batch_id=None):
+	# valid combinations: 1000, 0101, 0001, 0010, 0110
+
+	if id != None and test_id == None and batch_id == None and student_batch_id == None:
+		# 1000
+		test_student_batch_object = TestStudentBatch.objects.get(id=id)
+		test_student_batch = {}
+		test_student_batch['id'] = test_student_batch_object.id
+		test_student_batch['student_batch_id'] = test_student_batch_object.student_batch.id
+		test_student_batch['student_name'] = test_student_batch_object.student_batch.student.first_name + ' ' + test_student_batch_object.student_batch.student.last_name
+		test_student_batch['batch_id'] = test_student_batch_object.student_batch.batch.id
+		test_student_batch['batch_name'] = test_student_batch_object.student_batch.batch.name
+		test_student_batch['obtained_marks'] = test_student_batch_object.obtained_marks
+		return test_student_batch
+	elif id == None and test_id != None and batch_id == None and student_batch_id != None:
+		# 0101
+		test_student_batch_object = TestStudentBatch.objects.get(test__id=test_id, student_batch__id=student_batch_id)
+		test_student_batch = {}
+		test_student_batch['id'] = test_student_batch_object.id
+		test_student_batch['student_batch_id'] = test_student_batch_object.student_batch.id
+		test_student_batch['student_name'] = test_student_batch_object.student_batch.student.first_name + ' ' + test_student_batch_object.student_batch.student.last_name
+		test_student_batch['batch_id'] = test_student_batch_object.student_batch.batch.id
+		test_student_batch['batch_name'] = test_student_batch_object.student_batch.batch.name
+		test_student_batch['obtained_marks'] = test_student_batch_object.obtained_marks
+		return test_student_batch
+	elif id == None and test_id == None and batch_id == None and student_batch_id != None:
+		# 0001
+		student_batch_object_list = TestStudentBatch.objects.filter(student_batch__id=student_batch_id)
+	elif id == None and test_id == None and batch_id != None and student_batch_id == None:
+		# 0010
+		student_batch_object_list = TestStudentBatch.objects.filter(student_batch__batch__id=batch_id)
+	elif id == None and test_id != None and batch_id != None and student_batch_id == None:
+		# 0110
+		student_batch_object_list = TestStudentBatch.objects.filter(student_batch__batch__id=batch_id, test__id=test_id)
+	else:
+		raise Exception('InvalidArguments')
+
+	student_batch_list = []
+	for student_batch_object in student_batch_object_list:
+		test_student_batch = {}
+		test_student_batch['id'] = test_student_batch_object.id
+		test_student_batch['student_batch_id'] = test_student_batch_object.student_batch.id
+		test_student_batch['student_name'] = test_student_batch_object.student_batch.student.first_name + ' ' + test_student_batch_object.student_batch.student.last_name
+		test_student_batch['batch_id'] = test_student_batch_object.student_batch.batch.id
+		test_student_batch['batch_name'] = test_student_batch_object.student_batch.batch.name
+		test_student_batch['obtained_marks'] = test_student_batch_object.obtained_marks
+		student_batch_list.append(test_student_batch)
+	return student_batch_list
