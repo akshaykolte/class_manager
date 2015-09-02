@@ -37,12 +37,14 @@
     <![endif]-->
 
 	<script>
-		function select_student(student_id){
+		function select_student(student_id, student_name){
 			opener.document.getElementById('chooseStudentId').value = student_id;
+			opener.document.getElementById('chooseStudentName').value = student_name;
 			self.close();
 		}
 		function select_student_batch(student_id){
 			opener.document.getElementById('chooseStudentBatchId').value = student_id;
+			opener.document.getElementById('chooseStudentName').value = student_name;
 			self.close();
 		}
 	</script>
@@ -97,7 +99,7 @@
 									{% if type == 'studentbatch' %}
 										<td><a href=".?student={{student.id}}&type={{type}}">Details</a></td>
 									{% elif type == 'student' %}
-										<td><a href="javascript:select_student({{student.id}});">Choose</a></td>
+										<td><a href="javascript:select_student({{student.id}}, '{{student.first_name}} {{student.last_name}}');">Choose</a></td>
 									{% endif %}
 								</tr>
 							{% endfor %}
