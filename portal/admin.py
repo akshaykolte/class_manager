@@ -15,7 +15,7 @@ admin.site.register(Subject)
 admin.site.register(SubjectYear)
 
 class StudentBatchCustom(admin.ModelAdmin):
-	
+
 	def save_model(self, request, obj, form, change):
 		subject_year_id_list = map(int,request.POST.getlist('subject_years'))
 		# No validations through save
@@ -36,3 +36,5 @@ admin.site.register(TestStaffRole)
 
 admin.site.register(Notice)
 admin.site.register(NoticeViewer)
+
+admin.site.register(TestStudentBatch)
