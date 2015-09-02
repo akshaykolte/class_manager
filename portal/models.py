@@ -509,17 +509,17 @@ class TestStaffRole(models.Model):
 	# save() overriding not required
 
 class Notice(models.Model):
-	title = models.CharField(max_length=200, null=False)
+	title = models.CharField(max_length=200)
 	description = models.CharField(max_length=1000, blank=True, null=False)
-	uploader = models.ForeignKey(Staff, null=False)
-	expiry_date = models.DateField(blank=True, default=datetime.now()+timedelta(days=30)) # TODO: timedelta
-	important = models.BooleanField(blank=True, default=False)
+	uploader = models.ForeignKey(Staff)
+	expiry_date = models.DateField(default=datetime.now()+timedelta(days=30)) # TODO: timedelta
+	important = models.BooleanField(default=False)
 
 	def __str__(self):
 		return str(self.title) + ' - ' + str(self.uploader)
 
 class NoticeViewer(models.Model):
-	notice = models.ForeignKey(Notice, null=False)
+	notice = models.ForeignKey(Notice)
 	for_students = models.BooleanField(default=False)
 	for_staff = models.BooleanField(default=False)
 	branch = models.ForeignKey(Branch, blank=True, null=True)
