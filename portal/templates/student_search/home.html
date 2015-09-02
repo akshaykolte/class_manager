@@ -38,13 +38,21 @@
 
 	<script>
 		function select_student(student_id, student_name){
-			opener.document.getElementById('chooseStudentId').value = student_id;
-			opener.document.getElementById('chooseStudentName').value = student_name;
+			try {
+				opener.document.getElementById('chooseStudentId').value = student_id;
+				opener.document.getElementById('chooseStudentName').value = student_name;
+			} catch (err){
+				
+			}
 			self.close();
 		}
-		function select_student_batch(student_id){
-			opener.document.getElementById('chooseStudentBatchId').value = student_id;
-			opener.document.getElementById('chooseStudentName').value = student_name;
+		function select_student_batch(student_id, student_name){
+			try {
+				opener.document.getElementById('chooseStudentBatchId').value = student_id;
+				opener.document.getElementById('chooseStudentName').value = student_name;
+			} catch (err){
+				
+			}
 			self.close();
 		}
 	</script>
@@ -130,7 +138,7 @@
 									<td>{{student.student_subjects.0.academic_year_name}}</td>
 									<td>{{student.student_subjects.0.standard_name}}</td>
 									{% if type == 'studentbatch' %}
-										<td><a href="javascript:select_student_batch({{student.id}});">Choose</a></td>
+										<td><a href="javascript:select_student_batch({{student.id}}, '{{student.student_first_name}} {{student.student_last_name}}');">Choose</a></td>
 									{% endif %}
 								</tr>
 							{% endfor %}
