@@ -33,32 +33,33 @@
                         {% endfor %}
                     </select>
                 </form>
-                <br/>
+                <br/><br/><br/>
 
 			<div id="bar-example"></div>
 
+<script>
 
-{% for i in lecture_batches %}
-    {{i.lecture_name}}
-    <br><br>
-{% endfor %}
+var lec_data = [
 
-<script>Morris.Bar({
-  element: 'bar-example',
-  data: [
-  	{% for i in lecture_batches %}
-    { y: '{{i.lecture_name}}', a: 200},
+	{% for i in lecturebatches %}
+    { "name": '{{i.batch_name}}-{{i.branch_name}}', "done": {{i.done_counter}}, "total":{{i.total_counter}}},
     {% endfor %}
-  ],
-  xkey: 'y',
-  ykeys: ['a'],
-  labels: ['Series A']
+];
+
+
+Morris.Bar({
+  element: 'bar-example',
+  data: lec_data,
+  xkey: 'name',
+  ykeys: ['done', 'total'],
+  labels: ['Lectures Done', 'Total Lectures'],
+  xLabelMargin: 10,
+  stacked: true
 });
+
 </script>
 
 
 {% endif %}
-
-
 
 {% endblock %}
