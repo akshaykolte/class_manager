@@ -10,6 +10,7 @@ from portal.db_api.batch_db import *
 from portal.db_api.fee_db import *
 from portal.db_api.roles_db import *
 from portal.db_api.lecture_db import *
+from portal.db_api.standard_db import *
 
 
 def dashboard(request):
@@ -286,3 +287,29 @@ def detailed_progress(request):
 
 
 	return render(request, 'admin/track-progress/detailed-progress.html', context)
+
+
+def graphical_overview(request):
+	context = {}
+	auth_dict = get_user(request)
+	context['details'] = auth_dict
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	
+	if auth_dict['permission_admin'] != True:
+		return Http404
+
+	context['standards'] = get_standard()
+	if request.method == 'GET':
+		page_type = 0
+
+		if 'standard' in request.GET:
+			page_type = 1
+			context['standard_id'] = int(request.GET['standard'])
+			print 'aksjb'
+		
+		context['page_type'] = page_type
+
+
+	return render(request, 'admin/track-progress/graphical-overview.html', context)
