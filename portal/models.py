@@ -539,6 +539,11 @@ class TestStudentBatch(models.Model):
 		return str(self.test) + ' - ' + str(self.student_batch)
 
 	def save(self, validate=True):
+		from portal.validator.validator import validate_test_student_batch
+		if validate:
+			validation = validate_test_student_batch(self)
+			if not validation:
+				validation.raise_error()
 		try:
 			super(TestStudentBatch, self).save()
 		except IntegrityError, e:
