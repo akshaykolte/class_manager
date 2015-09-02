@@ -90,7 +90,6 @@
 	   <table class="table table-bordered table-hover table-striped">
 			<thead>
 				<tr>
-					<th class="col-lg-2">#</th>
 					<th>Lecture Name</th>
 					<th class="col-lg-1">Count</th>
 					<th class="col-lg-2">Subject Name</th>
@@ -100,7 +99,6 @@
 			<tbody>
 				{% for lecture in lectures %}
 					<tr>
-						<td>{{lecture.subject_year_id}}</td>
 						<td>{{lecture.name}}</td>
 						<td>{{lecture.count}}</td>
 						<td>{{lecture.subject_name}}</td>
@@ -117,13 +115,13 @@
 	<form action='.' method="POST">
 		<input type="hidden" name="lecture" value="{{lecture.id}}">
 		<label><strong>Lecture Name</strong></label>
-		<input name="lecture_name" class="form-control" value="{{lecture.name}}">
+		<input name="lecture_name" class="form-control" value="{{lecture.0.name}}">
 		<br/>
 		<label><strong>Lecture Description</strong></label>
-		<input name="lecture_description" class="form-control" value="{{lecture.description}}">
+		<input name="lecture_description" class="form-control" value="{{lecture.0.description}}">
 		<br/>
 		<label><strong>Lecture Count</strong></label>
-		<input name="lecture_count" class="form-control" value="{{lecture.count}}">
+		<input name="lecture_count" class="form-control" value="{{lecture.0.count}}">
 		<br/>
 		<input class="btn btn-default" type='submit' value='Save'>
 	</form>

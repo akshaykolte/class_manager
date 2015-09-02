@@ -82,7 +82,15 @@
 			<label><strong>Lecture Date</strong></label>
 			<input name ="lecturebatch_date" class="form-control" value="{{lecturebatch.date}}"  id="example1"><br/>
 			<label><strong>Duration</strong></label>
-			<input name="lecturebatch_duration" class="form-control" value="{{lecturebatch.duration}}" required><br/>
+			<select name="lecture_duration" class="form-control" >
+				<option value="1 Hour" {%if lecturebatch.duration == "1 Hour"%} selected{% endif %}>1 Hour</option>
+				<option value="2 Hours"{%if lecturebatch.duration == "2 Hours"%} selected{% endif %}>2 Hours</option>
+				<option value="3 Hours"{%if lecturebatch.duration == "3 Hours"%} selected{% endif %}>3 Hours</option>
+				<option value="4 Hours"{%if lecturebatch.duration == "4 Hours"%} selected{% endif %}>4 Hours</option>
+				<option value="5 Hours"{%if lecturebatch.duration == "5 Hours"%} selected{% endif %}>5 Hours</option>
+				<option value="6 Hours"{%if lecturebatch.duration == "6 Hours"%} selected{% endif %}>6 Hours</option>
+			</select>
+			<br>
 			
 			
 			<label><strong>Select Lecture</strong></label>
