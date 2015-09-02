@@ -104,7 +104,7 @@ def get_parent(id = None,student_id = None):
 			return parent_object
 		student_parent_object = StudentParent.objects.get(student = Student.objects.get(id = student_id))
 		parent = student_parent_object.parent
-		parent_object['id'] = parent.id		
+		parent_object['id'] = parent.id
 		parent_object['username'] = parent.username
 		parent_object['password'] = parent.password
 		parent_object['first_name'] = parent.first_name
@@ -150,7 +150,7 @@ def set_student(id=None,username=None,password=None, parent_id = None,batch_id= 
 		if not is_none_batch_id:
 			student_batch_object = StudentBatch(student = student_object,batch = Batch.objects.get(id = batch_id))
 			student_batch_object.save()
-			
+
 		if not is_none_parent_id:
 			parent_object = Parent.objects.get(id=parent_id)
 			studentparent_object = StudentParent(student = student_object, parent = parent_object)
@@ -208,7 +208,7 @@ def set_parent(id=None,username = None,password = None, student_id = None, first
 			student_object = Student.objects.get(id=student_id)
 			studentparent_object = StudentParent(student = student_object, parent = parent_object)
 			studentparent_object.save()
-		
+
 		if not is_none_first_name:
 			parent_object.first_name = first_name
 		if not is_none_last_name:
@@ -259,7 +259,7 @@ def set_student_batch(id=None,student_id=None,batch_id=None,subject_year_id_list
 				student_batch_object.subject_years.add(subject_year_object)
 		student_batch_object.save()
 		return student_batch_object.id
-				
+
 
 def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=None,student_id=None, batch_assigned=True):
 	# if academic_year_id is None then academic_year_id = get_current_academic_year()['id']
@@ -283,6 +283,7 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 		student_batch['student_email'] = student_batch_object.student.email
 		student_batch['student_phone_number'] = student_batch_object.student.phone_number
 		student_batch['student_gender'] = student_batch_object.student.gender
+		student_batch['student_batch_id'] = student_batch_object.batch.id
 		student_batch['student_batch_name'] = student_batch_object.batch.name
 		student_batch['student_batch_description'] = student_batch_object.batch.description
 		subject_year_list = []
@@ -310,6 +311,7 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 		student_batch['student_email'] = student_batch_object.student.email
 		student_batch['student_phone_number'] = student_batch_object.student.phone_number
 		student_batch['student_gender'] = student_batch_object.student.gender
+		student_batch['student_batch_id'] = student_batch_object.batch.id
 		student_batch['student_batch_name'] = student_batch_object.batch.name
 		student_batch['student_batch_description'] = student_batch_object.batch.description
 		subject_year_list = []
@@ -343,6 +345,7 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 			student_batch['student_email'] = student_batch_object.student.email
 			student_batch['student_phone_number'] = student_batch_object.student.phone_number
 			student_batch['student_gender'] = student_batch_object.student.gender
+			student_batch['student_batch_id'] = student_batch_object.batch.id
 			student_batch['student_batch_name'] = student_batch_object.batch.name
 			student_batch['student_batch_description'] = student_batch_object.batch.description
 			subject_year_list = []
@@ -373,6 +376,7 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 			student_batch['student_email'] = student_batch_object.student.email
 			student_batch['student_phone_number'] = student_batch_object.student.phone_number
 			student_batch['student_gender'] = student_batch_object.student.gender
+			student_batch['student_batch_id'] = student_batch_object.batch.id
 			student_batch['student_batch_name'] = student_batch_object.batch.name
 			student_batch['student_batch_description'] = student_batch_object.batch.description
 			subject_year_list = []
@@ -401,6 +405,7 @@ def get_student_batch(id=None,batch_id=None,standard_id=None,academic_year_id=No
 		student_batch['student_email'] = student_batch_object.student.email
 		student_batch['student_phone_number'] = student_batch_object.student.phone_number
 		student_batch['student_gender'] = student_batch_object.student.gender
+		student_batch['student_batch_id'] = student_batch_object.batch.id
 		student_batch['student_batch_name'] = student_batch_object.batch.name
 		student_batch['student_batch_description'] = student_batch_object.batch.description
 		subject_year_list = []
@@ -455,7 +460,7 @@ def search_students(first_name='', last_name='', username='', email='', phone_nu
 		student_dict['email'] = i.email
 		student_dict['phone_number'] = i.phone_number
 		student_list.append(student_dict)
-	
+
 	return student_list
 
 def get_student_batch_of_student(student_id):

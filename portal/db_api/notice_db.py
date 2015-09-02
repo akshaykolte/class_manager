@@ -99,7 +99,7 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 			notice_object['id'] = personal_notice.id
 			notice_object['title'] = personal_notice.title
 			notice_object['description'] = personal_notice.description
-			notice_object['uploader'] = personal_notice.uploader
+			notice_object['uploader_name'] = personal_notice.uploader.first_name + ' ' + personal_notice.uploader.last_name
 			notice_object['expiry_date'] = personal_notice.expiry_date
 			notice_object['important'] = personal_notice.important
 			return notice_object
