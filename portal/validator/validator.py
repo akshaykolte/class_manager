@@ -157,22 +157,20 @@ def validate_notice_viewer(notice_viewer_object):
 		return PentaError(1037)
 	if notice_viewer_object.for_students == True:
 		count = 0
-		if notice_viewer_object.batch == None:
+		if notice_viewer_object.batch != None:
 			count += 1
-		if notice_viewer_object.student == None:
+		if notice_viewer_object.student != None:
 			count += 1
-		if notice_viewer_object.branch == None:
+		if notice_viewer_object.branch != None:
 			count += 1
 		if count > 1:
 			return PentaError(1038)
 	if notice_viewer_object.for_staff == True:
 		count = 0
-		if notice_viewer_object.batch == None:
-			count += 1
-		if notice_viewer_object.staff == None:
-			count += 1
-		if notice_viewer_object.branch == None:
-			count += 1
-		if count > 1:
+		if notice_viewer_object.batch != None:
+			return PentaError(1039)
+		if notice_viewer_object.staff != None:
+			pass
+		if notice_viewer_object.branch != None:
 			return PentaError(1039)
 	return PentaError()
