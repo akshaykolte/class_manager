@@ -168,7 +168,6 @@ def add_lectures(request):
 			
 			
 			if 'subject' in request.GET:
-				print "hehrheheheheheh"
 				page_type = 2
 				subject_year_dict = get_subject_year(subject_id=request.GET['subject'])
 				print subject_year_dict
