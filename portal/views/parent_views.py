@@ -6,6 +6,8 @@ from portal.db_api.auth_db import *
 from portal.db_api.attendance_db import *
 from portal.db_api.lecture_db import *
 from portal.db_api.attendance_reports_db import *
+from portal.db_api.notice_db import *
+
 
 def dashboard(request):
 	auth_dict = get_user(request)
@@ -22,10 +24,11 @@ def dashboard(request):
 	#print student_object
 	student_object = get_student_batch(student_id = student_object.id)
 	lecture_list = []
-	context['lectures'] = []
-	for subject_year in student_object['student_subjects']:
-		context['lectures'] += get_lecture(subject_year_id = subject_year['id'])
+	print student_object
+	context['lectures'] = get_lecture_batch(batch_id = student_object['student_batch_id'])
+	context['notices'] = get_personal_notices(student_id=auth_dict['id'])
 	return render(request,'parent/dashboard.html', context)
+
 
 def view_profile(request):
 	auth_dict = get_user(request)
