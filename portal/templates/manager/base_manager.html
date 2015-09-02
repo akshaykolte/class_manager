@@ -20,6 +20,9 @@
     <!-- Timeline CSS -->
     <link href="/static/dist/css/timeline.css" rel="stylesheet">
 
+       <!--Datepicker CSS -->
+    <link href="/static/datepicker/css/datepicker.css" rel="stylesheet">
+
     <!-- Custom CSS -->
     <link href="/static/dist/css/sb-admin-2.css" rel="stylesheet">
 
@@ -374,6 +377,22 @@
     
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
+
+       <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+        <script type="text/javascript">
+            // When the document is ready
+
+            $(document).ready(function () {
+                
+                $('#example1').datepicker({
+                    format: "yyyy-mm-dd"
+                });  
+                $('#example1').datepicker('update', new Date());
+            
+            });
+           
+        </script>
+
 
 </body>
 

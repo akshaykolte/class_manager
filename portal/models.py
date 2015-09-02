@@ -483,7 +483,12 @@ class Test(models.Model):
 	def __str__(self):
 		return str(self.name)+' - '+str(self.subject_year)
 
-	# save() overriding not required
+
+	def save(self, validate=True):
+		try:
+			super(Test, self).save()
+		except IntegrityError, e:
+			PentaError(1041).raise_error()
 
 class TestBatch(models.Model):
 	test = models.ForeignKey(Test)
@@ -495,7 +500,16 @@ class TestBatch(models.Model):
 	def __str__(self):
 		return str(self.test)+' - '+str(self.batch)
 
-	# save() overriding not required
+	def save(self, validate=True):
+		from portal.validator.validator import validate_test_batch
+		if validate:
+			validation = validate_test_batch(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(TestBatch, self).save()
+		except IntegrityError, e:
+			PentaError(1042).raise_error()
 
 class TestStaffRole(models.Model):
 	test = models.ForeignKey(Test)
@@ -507,9 +521,13 @@ class TestStaffRole(models.Model):
 	def __str__(self):
 		return str(self.test)+' - '+str(self.staff_role)
 
-	# save() overriding not required
+	def save(self, validate=True):
+		try:
+			super(TestStaffRole, self).save()
+		except IntegrityError, e:
+			PentaError(1043).raise_error()
 
-class TestStudent(models.Model):
+class TestStudentBatch(models.Model):
 	test = models.ForeignKey(Test)
 	student_batch = models.ForeignKey(StudentBatch)
 	obtained_marks = models.IntegerField()
@@ -518,9 +536,18 @@ class TestStudent(models.Model):
 		unique_together = (('test', 'student_batch',),)
 
 	def __str__(self):
-		return str(test) + ' - ' + str(student_batch)
+		return str(self.test) + ' - ' + str(self.student_batch)
 
-	# TODO: override save() for validations
+	def save(self, validate=True):
+		from portal.validator.validator import validate_test_student_batch
+		if validate:
+			validation = validate_test_student_batch(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(TestStudentBatch, self).save()
+		except IntegrityError, e:
+			PentaError(1044).raise_error()
 
 class Notice(models.Model):
 	title = models.CharField(max_length=200)

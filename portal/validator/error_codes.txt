@@ -38,3 +38,10 @@
 1038 Student notice can be created either for all branch, single branch, single batch or a particular student
 1039 Staff notice can be created either for a particular staff
 1040 Notice already created for the student/staff
+1041 Test already created
+1042 Test already set to batch
+1043 Test already set to staff
+1044 Student marks already set for test
+1045 Batch does not belong to same academic year as test
+1046 Batch does not belong to same standard as test
+1047 Batch of the student does not have permission for test
