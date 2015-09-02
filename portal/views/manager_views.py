@@ -675,7 +675,7 @@ def add_student_notice(request):
 	if auth_dict['logged_in'] != True:
 		raise Http404
 	
-	if auth_dict['permission_accountant'] != True:
+	if auth_dict['permission_manager'] != True:
 		raise Http404
 	
 	context = {}
@@ -791,7 +791,7 @@ def add_staff_notice(request):
 	if auth_dict['logged_in'] != True:
 		raise Http404
 	
-	if auth_dict['permission_accountant'] != True:
+	if auth_dict['permission_manager'] != True:
 		raise Http404
 	
 	context = {}
