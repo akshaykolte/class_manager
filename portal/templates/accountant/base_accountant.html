@@ -17,6 +17,9 @@
     <!-- MetisMenu CSS -->
     <link href="/static/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
 
+     <!--Datepicker CSS -->
+    <link href="/static/datepicker/css/datepicker.css" rel="stylesheet">
+
     <!-- Timeline CSS -->
     <link href="/static/dist/css/timeline.css" rel="stylesheet">
 
@@ -337,6 +340,23 @@
     
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
+
+    <!-- Datepicker -->
+    <script src="/static/datepicker/js/jquery.min.js"></script>
+        <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+        <script type="text/javascript">
+            // When the document is ready
+
+            $(document).ready(function () {
+                
+                $('#example1').datepicker({
+                    format: "yyyy-mm-dd"
+                });  
+                $('#example1').datepicker('update', new Date());
+            
+            });
+           
+        </script>
 
 </body>
 

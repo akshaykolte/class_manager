@@ -65,7 +65,8 @@
     {% endif %}
 
 	{% if page_type == 2 %}
-	
+				
+
                  <form>
                     <label><strong>Select Branch</strong></label>
                     <select name="branch" class="form-control" onchange="this.form.submit()">
@@ -77,6 +78,7 @@
                 </form>
                 <br/>
                 
+                {% if batches %}
                 <form>
                 	<input type="hidden" name="branch" value="{{branch_id}}">                
                     <label><strong>Select Batch</strong></label>
@@ -87,27 +89,46 @@
                         {% endfor %}
                     </select>
                 </form>	
-                    
+         		{% endif %}  
+
           	<form action="." method="POST">
+
 			<input type="hidden" name="branch" value="{{branch_id}}">
 			<input type="hidden" name="batch" value="{{batch_id}}">
-                    
+                 
+                {% if students %} 
                 <label><strong>Select Students</strong></label>
-				{% for student in studentss %}
+				{% for student in students %}
 					<div class="checkbox">
-						<label><input type="checkbox" name="student_{{student.id}}" value="True">{{student.first_name}} {{student.last_name}} </label>
+						<label><input type="checkbox" name="student_{{studentbatch.student.id}}" value="True">{{student.first_name}}  {{student.last_name}} </label>
 					</div>
 				{% endfor %}			
-		
+				{% endif%}
 	
-		<br/>
-	
-		<label><strong>Amount</strong></label>
-		<input name="amount" class="form-control">
-		<br/>
-		
-		<input class="btn btn-default" type='submit' value='Make Transaction'>
-	</form>
+				<br/>
+			
+				<label><strong>Notice Title</strong></label>
+				<input name="title" class="form-control" type = "text">
+				<br/>
+
+				<label><strong>Description</strong></label>
+				<textarea name="description" class="form-control" type = "textbox"></textarea>
+				<br/>
+
+				<label><strong>Expiry Date</strong></label>
+				<input name="expiry-date" class="form-control" type = "text">
+				<br/>
+				
+				<div class="checkbox">
+	            <label>
+	            <strong>Is Important?</strong>&nbsp;&nbsp;
+	            </label>
+	            <input type="radio" name="is_important" value="True" checked>&nbsp;Yes&nbsp;
+	            <input type="radio" name="is_important" value="False"  checked >&nbsp;No&nbsp;
+	        	</div>
+
+				<input class="btn btn-default" type='submit' value='Upload Notice'>
+			</form>
 
 	{% endif %}
 

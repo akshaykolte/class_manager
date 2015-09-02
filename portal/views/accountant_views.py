@@ -212,7 +212,7 @@ def add_base_fees(request):
 			subject_year_list = []
 			for subject_year in subject_years:
 				if 'subject_year_'+str(subject_year['id']) in request.POST:
-					print subject_year
+					#print subject_year
 					subject_year_list.append(subject_year['id'])
 
 			set_base_fee(amount=amount , subject_years_list = subject_year_list)
