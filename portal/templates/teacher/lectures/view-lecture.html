@@ -57,9 +57,9 @@
 							{% if lecturebatch.is_done == True %}
 	                        <td class="text-success"><strong>Yes</strong></td>
 	                        {% elif lecturebatch.is_past == True %}
-	                        <td class="text-danger"><strong>No</strong></td>
+	                        <td class="text-danger"><strong>Deadline passed <u>{{lecturebatch.difference}} days</u> ago</strong></td>
 	                        {% else %}
-	                        <td class="text-warning"><strong>Upcoming</strong></td>
+	                        <td class="text-warning"><strong>Upcoming in <u>{{lecturebatch.difference}} days</strong></td>
 	                        {% endif %}
 							<td><a href="./?lecturebatch={{lecturebatch.id}}">Edit</a></td>
 						</tr>
