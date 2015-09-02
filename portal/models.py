@@ -475,6 +475,7 @@ class FeeTransaction(models.Model):
 class Test(models.Model):
 	subject_year = models.ForeignKey(SubjectYear)
 	name = models.CharField(max_length=50)
+	total_marks = models.IntegerField()
 
 	class Meta:
 		unique_together = (('name','subject_year',),)
@@ -507,6 +508,19 @@ class TestStaffRole(models.Model):
 		return str(self.test)+' - '+str(self.staff_role)
 
 	# save() overriding not required
+
+class TestStudent(models.Model):
+	test = models.ForeignKey(Test)
+	student_batch = models.ForeignKey(StudentBatch)
+	obtained_marks = models.IntegerField()
+
+	class Meta:
+		unique_together = (('test', 'student_batch',),)
+
+	def __str__(self):
+		return str(test) + ' - ' + str(student_batch)
+
+	# TODO: override save() for validations
 
 class Notice(models.Model):
 	title = models.CharField(max_length=200)
