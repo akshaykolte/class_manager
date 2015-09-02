@@ -96,16 +96,17 @@ def set_lecture(id = None,name = None,description = None,count = None,subject_ye
 		return lecture_object.id
 
 			
-def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = None,batch_id = None):
+def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = None,batch_id = None, staff_id = None):
 	
 
 	is_none_id = id == None
 	is_none_date = date == None
 	is_none_lecture_id = lecture_id == None
 	is_none_staff_role_id = staff_role_id == None
+	is_none_staff_id = staff_id == None
 	is_none_batch_id = batch_id == None
 
-	if not is_none_id and is_none_date and is_none_lecture_id and is_none_staff_role_id and is_none_batch_id:
+	if not is_none_id and is_none_date and is_none_lecture_id and is_none_staff_role_id and is_none_batch_id and is_none_staff_id:
 		lecture_batch_dict = {}
 		lecture_batch_object = LectureBatch.objects.get(id=id)
 		lecture_batch_dict['id'] = lecture_batch_object.id
@@ -123,7 +124,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 		lecture_batch_dict['is_done'] = lecture_batch_object.is_done
 		return lecture_batch_dict
 
-	elif is_none_id and is_none_date and not is_none_lecture_id and is_none_staff_role_id and not is_none_batch_id:
+	elif is_none_id and is_none_date and not is_none_lecture_id and is_none_staff_role_id and not is_none_batch_id and is_none_staff_id:
 		lecture_batch_list = []
 		lecture_batch_object = LectureBatch.objects.filter(batch = Batch.objects.get(id = batch_id),lecture = Lecture.objects.get(id = lecture_id))
 		for i in lecture_batch_object:
@@ -143,7 +144,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_list.append(lecture_batch_dict)
 		return lecture_batch_list
 
-	elif is_none_id and not is_none_date and is_none_lecture_id and is_none_staff_role_id and is_none_batch_id:
+	elif is_none_id and not is_none_date and is_none_lecture_id and is_none_staff_role_id and is_none_batch_id and is_none_staff_id:
 		lecture_batch_list = []
 		lecture_batch_object = LectureBatch.objects.filter(date = date)
 		for i in lecture_batch_object:
@@ -163,7 +164,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_list.append(lecture_batch_dict)
 		return lecture_batch_list
 
-	if is_none_id and is_none_date and not is_none_lecture_id and is_none_staff_role_id and is_none_batch_id:
+	elif is_none_id and is_none_date and not is_none_lecture_id and is_none_staff_role_id and is_none_batch_id and is_none_staff_id:
 		lecture_batch_list = []
 		lecture_batch_object = LectureBatch.objects.filter(lecture = Lecture.objects.get(id = lecture_id))
 		for i in lecture_batch_object:
@@ -183,7 +184,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_list.append(lecture_batch_dict)
 		return lecture_batch_list
 
-	if is_none_id and is_none_date and is_none_lecture_id and not is_none_staff_role_id and is_none_batch_id:
+	elif is_none_id and is_none_date and is_none_lecture_id and not is_none_staff_role_id and is_none_batch_id and is_none_staff_id:
 		lecture_batch_list = []
 		lecture_batch_object = LectureBatch.objects.filter(staff_role = StaffRole.objects.get(id = staff_role_id))
 		for i in lecture_batch_object:
@@ -204,7 +205,28 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_list.append(lecture_batch_dict)
 		return lecture_batch_list
 
-	if is_none_id and is_none_date and is_none_lecture_id and is_none_staff_role_id and not is_none_batch_id:
+	elif is_none_id and is_none_date and not is_none_lecture_id and is_none_staff_role_id and not is_none_batch_id and not is_none_staff_id:
+		lecture_batch_list = []
+		lecture_batch_object = LectureBatch.objects.filter(staff_role__staff__id = staff_id, lecture__id=lecture_id, batch__id=batch_id)
+		for i in lecture_batch_object:
+			lecture_batch_dict={}
+			lecture_batch_dict['id'] = i.id
+			lecture_batch_dict['name'] = i.name
+			lecture_batch_dict['description'] = i.description
+			lecture_batch_dict['date'] = i.date
+			lecture_batch_dict['duration'] = i.duration
+			lecture_batch_dict['lecture_id'] = i.lecture.id
+			lecture_batch_dict['lecture_name'] = i.lecture.name
+			lecture_batch_dict['staff_role'] = i.staff_role
+			lecture_batch_dict['batch_id'] = i.batch.id
+			lecture_batch_dict['batch_name'] = i.batch.name
+			lecture_batch_dict['standard_id'] = i.batch.standard.id
+			lecture_batch_dict['standard_name'] = i.batch.standard.name
+			lecture_batch_dict['is_done'] = i.is_done
+			lecture_batch_list.append(lecture_batch_dict)
+		return lecture_batch_list
+
+	elif is_none_id and is_none_date and is_none_lecture_id and is_none_staff_role_id and not is_none_batch_id and is_none_staff_id:
 		lecture_batch_list = []
 		lecture_batch_object = LectureBatch.objects.filter(batch = Batch.objects.get(id = batch_id))
 		for i in lecture_batch_object:

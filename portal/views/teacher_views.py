@@ -362,7 +362,7 @@ def add_attendance(request):
 					lecturebatches = []
 
 					for batch in batches:
-						lecturebatch = get_lecture_batch(batch_id = batch['id'],lecture_id = context['lecture_id'])
+						lecturebatch = get_lecture_batch(staff_id=auth_dict['id'],batch_id = batch['id'],lecture_id = context['lecture_id'])
 						for i in lecturebatch:
 					 		lecturebatches.append(i)
 					
