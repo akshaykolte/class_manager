@@ -384,14 +384,16 @@ def make_transaction(request):
 			amount = request.POST['amount']
 			
 			date = request.POST['date']
+			print date
+			print "herera"
 			
 			time = request.POST['time']
 			
 			set_fee_transaction(id = None ,amount = amount, date =  date, time = time , receipt_number = receipt_number, student_batch_id = student_batch_id, fee_type_id = fee_type_id)
 		
 			return redirect('./?message=Transaction made')
-		except:
-			return redirect('./?message_error=Error. Transaction Failed.')
+		except Exception, e:
+			return redirect('./?message_error=' + str(e))
 
 
 
