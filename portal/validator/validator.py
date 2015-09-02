@@ -174,3 +174,10 @@ def validate_notice_viewer(notice_viewer_object):
 		if notice_viewer_object.branch != None:
 			return PentaError(1039)
 	return PentaError()
+
+def validate_test_batch(test_batch_object):
+	if test_batch_object.batch.academic_year != test_batch_object.test.subject_year.academic_year:
+		return PentaError(1045)
+	if test_batch_object.batch.standard != test_batch_object.test.subject_year.subject.standard:
+		return PentaError(1046)
+	return PentaError()
