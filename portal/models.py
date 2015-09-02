@@ -527,5 +527,16 @@ class NoticeViewer(models.Model):
 	student = models.ForeignKey(Student, blank=True, null=True)
 	staff = models.ForeignKey(Staff, blank=True, null=True)
 
+	def save(self, validate=True):
+		from portal.validator.validator import validate_notice_viewer
+		if validate:
+			validation = validate_notice_viewer(self)
+			if not validation:
+				validation.raise_error()
+		try:
+			super(NoticeViewer, self).save()
+		except IntegrityError, e:
+			PentaError(1040).raise_error()
+
 	def __str__(self):
 		return str(self.notice)
