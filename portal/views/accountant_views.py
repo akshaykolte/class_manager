@@ -11,7 +11,7 @@ from portal.db_api.academic_year_db import *
 from portal.db_api.standard_db import *
 from portal.db_api.subject_db import *
 from portal.db_api.notice_db import *
-
+from portal.models import Notice
 
 
 def dashboard(request):
@@ -766,4 +766,61 @@ def add_staff_notice(request):
 			return redirect('./?message=Notice Uploaded')
 
 		except:
-			return redirect('./?message_error=Error While Uploading Notice')			
+			return redirect('./?message_error=Error While Uploading Notice')	
+			
+			
+			
+			
+
+@csrf_exempt
+def view_my_notices(request):
+	auth_dict = get_user(request)
+	
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	context = {}
+	context['details'] = auth_dict
+	auth_dict
+	notices = Notice.objects.filter(uploader = Staff.objects.get(id=auth_dict['id']))	
+	context['notices'] = notices
+
+	
+
+	return render(request,'accountant/notices/view-my-notices.html', context)
+
+@csrf_exempt
+def edit_base_fees(request):
+	auth_dict = get_user(request)
+	context = {}
+
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		base_fees = get_base_fee(id = (request.GET.get('base-fee')) , subject_years_list = None,  academic_year_id=None, standard_id=None)
+		context['academic_year_id'] = request.GET.get('academic_year')
+		context['standard_id'] = request.GET.get('standard')
+		context['base_fees'] = base_fees
+		context['details'] = auth_dict
+		return render(request, 'accountant/fees/edit-base-fee.html', context)
+
+	elif request.method == 'POST':
+		try:
+			print "dfdsfsdf"
+			set_base_fee(id = (request.POST.get('base-fee')), amount=request.POST['amount'] , subject_years_list = None)  
+			print "dfdsfsdf"
+			return redirect('/accountant/fees/edit-base-fees/?academic_year='+str((request.POST.get('academic_year_id')))+'&standard='+str((request.POST.get('standard_id')))+'&base-fee='+str((request.POST.get('base-fee')))+'&message=Transaction made')
+		except:
+			return redirect('./?message_error=Error. Transaction Failed.')					

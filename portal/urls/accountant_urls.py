@@ -23,5 +23,6 @@ urlpatterns = [
 
 	url(r'^notices/add-student-notice/$', 'portal.views.accountant_views.add_student_notice'),
 	url(r'^notices/add-staff-notice/$', 'portal.views.accountant_views.add_staff_notice'),
+	url(r'^notices/view-my-notices/$', 'portal.views.accountant_views.view_my_notices'),
 
 ]
