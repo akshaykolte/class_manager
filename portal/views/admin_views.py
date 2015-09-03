@@ -522,7 +522,7 @@ def add_staff_notice(request):
 
 		context['page_type'] = page_type
 
-		return render(request,'manager/notices/add-staff-notice.html', context)
+		return render(request,'admin/notices/add-staff-notice.html', context)
 
 	elif request.method == 'POST':
 		try:
