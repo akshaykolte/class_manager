@@ -26,4 +26,5 @@ urlpatterns = [
 	#url(r'^notices/add-staff-notice/$', 'portal.views.teacher_views.add_staff_notice'),
 
     url(r'^test/add-test-marks/$', 'portal.views.teacher_views.add_test_marks'),
+    url(r'^test/view-test-marks/$', 'portal.views.teacher_views.view_test_marks'),
 ]

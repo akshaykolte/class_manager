@@ -726,3 +726,31 @@ def add_test_marks(request):
 			return redirect('./?message=Student marks added')
 		except Exception as e:
 			return redirect('./?message_error='+str(e))
+
+def view_test_marks(request):
+	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	tests = get_test(staff_id=auth_dict['id'])
+	context['tests'] = tests
+	page_type = 0
+	if 'test' in request.GET:
+		page_type = 1
+		branches = get_branch_of_teacher(auth_dict['id'])
+		context['branches'] = branches
+		context['standard'] = request.GET['standard']
+		context['subject'] = request.GET['subject']
+		context['test'] = request.GET['test']
+		if 'branch' in request.GET:
+			page_type = 2
+			context['branch_id'] = int(request.GET['branch'])
+			context['branch'] = request.GET['branch']
+			batches =  get_batch(branch_id=request.GET['branch'], standard_id=request.GET['standard'])
+			context['batches'] = batches
+	context['page_type'] = page_type
+	return render(request, 'teacher/test/view_test_marks.html', context)
