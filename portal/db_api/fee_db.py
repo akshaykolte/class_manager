@@ -326,6 +326,7 @@ def get_student_fees(student_id = None):
 	total['discount'] = 0
 	total['base_fees'] = 0
 	total['total_fees'] = 0
+	total['fine'] = 0
 	total['fees_remaining'] = 0
 	for  student_batch_object in student_batch_objects:
 
@@ -356,8 +357,11 @@ def get_student_fees(student_id = None):
 		if(i.fee_type.name == 'discount'):
 			total['discount'] = total['discount'] + i.amount
 
+		if(i.fee_type.name == 'fine'):
+			total['fine'] = total['fine'] + i.amount
+
 	total['total_fees'] = total['base_fees'] - total['discount']
-	total['fees_remaining'] = total['total_fees'] - total['total_fees_paid']
+	total['fees_remaining'] = total['total_fees'] - total['total_fees_paid'] + total['fine']
 	fee_list.append(total)
 	return fee_list
 
