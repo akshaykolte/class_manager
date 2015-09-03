@@ -14,7 +14,7 @@
 
 # !!!!!!!!!!!!!!!!!!!!!!!!
 
-from portal.models import Student,Parent,StudentParent,Batch,StudentBatch,SubjectYear,Standard
+from portal.models import Student,Parent,StudentParent,Batch,StudentBatch,SubjectYear,Standard, Branch
 from portal.db_api.academic_year_db import *
 
 def get_students(id = None,batch_id = None):
@@ -467,9 +467,12 @@ def search_students(first_name='', last_name='', username='', email='', phone_nu
 
 	return student_list
 
-def get_student_batch_of_student(student_id):
+def get_student_batch_of_student(student_id, staff_id=None):
 	# TODO (maybe?) merge with get_student_batch()
-	student_batch = StudentBatch.objects.filter(student__id=student_id)
+	if staff_id == None:
+		student_batch = StudentBatch.objects.filter(student__id=student_id)
+	else:
+		student_batch = StudentBatch.objects.filter(student__id=student_id, batch__branch = Branch.objects.filter(staffrole__role__name__in=['manager','accountant'], staffrole__staff__id=staff_id).distinct())
 	student_batch_list = []
 	for student_batch_object in student_batch:
 		student_batch = {}
