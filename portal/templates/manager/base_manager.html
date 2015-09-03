@@ -11,6 +11,12 @@
 
     <title>PentaClass</title>
 
+    <!-- DataTables CSS -->
+    <link href="/static/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="/static/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+
     <!-- Bootstrap Core CSS -->
     <link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -118,7 +124,7 @@
 
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <strong>Use As</strong> &nbsp;<i class="fa fa-caret-down"></i> 
+                        <strong>Use As</strong> &nbsp;<i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu" style="width:200px;">
                         {% block use_as %}
@@ -293,7 +299,7 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        
+
                         <li>
 							<a href="#"><i class="fa fa-edit fa-fw"></i> Batches<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -321,24 +327,24 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-						
+
 						<li>
 							<a href="#"><i class="fa fa-edit fa-fw"></i> Notices<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-									<a href="/manager/notices/add-student-notice/">Upload Student Notice</a>	
+									<a href="/manager/notices/add-student-notice/">Upload Student Notice</a>
                                 </li>
                                 <li>
-									<a href="/manager/notices/add-staff-notice/">Upload Staff Notice</a>	
+									<a href="/manager/notices/add-staff-notice/">Upload Staff Notice</a>
                                 </li>
                                 <li>
-									<a href="/manager/notices/view-my-notices/">View/Edit My Notices</a>	
+									<a href="/manager/notices/view-my-notices/">View/Edit My Notices</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        
-                        
+
+
                         </br></br></br></br></br></br>
                         Note: See UI/startbootstrap-sb-admin-2-1.0.7/pages/tables.html to choose the right table for attendance, etc.
                         </br></br>
@@ -353,7 +359,7 @@
         </nav>
 
         <div id="page-wrapper">
-            {% block main_content %}    
+            {% block main_content %}
             {% endblock %}
         </div>
         <!-- /#page-wrapper -->
@@ -369,11 +375,16 @@
     <!-- Metis Menu Plugin JavaScript -->
     <script src="/static/bower_components/metisMenu/dist/metisMenu.min.js"></script>
 
+    <!-- DataTables JavaScript -->
+    <script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="/static/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
+
     <!-- Morris Charts JavaScript
     <script src="/static/bower_components/raphael/raphael-min.js"></script>
     <script src="/static/bower_components/morrisjs/morris.min.js"></script>
     <script src="/static/morris-graphs/js/morris-data.js"></script -->
-    
+
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
 
@@ -382,14 +393,14 @@
             // When the document is ready
 
             $(document).ready(function () {
-                
+
                 $('#example1').datepicker({
                     format: "yyyy-mm-dd"
-                });  
+                });
                 $('#example1').datepicker('update', new Date());
-            
+
             });
-           
+
         </script>
 
 

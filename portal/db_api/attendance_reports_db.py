@@ -17,7 +17,7 @@ def attendance_report(lecture_id = None, branch_id = None, student_id = None, su
 		print 'attendance_list', attendance_list
 		student_list = StudentBatch.objects.filter(batch__branch__id = branch_id)
 
-		lecture_batch_list = LectureBatch.objects.filter(lecture__id = lecture_id).values('batch__name', 'batch_id').annotate(Count('batch'))
+		lecture_batch_list = LectureBatch.objects.filter(lecture__id = lecture_id).values('batch__name', 'batch_id', 'batch__branch__name').annotate(Count('batch'))
 
 		attendance_dict = {}
 		lecture_dict = {}
