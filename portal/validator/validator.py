@@ -129,17 +129,23 @@ def validate_attendance(attendance_object):
 	return PentaError(1013)
 
 def validate_base_fee(base_fee_object, subject_year_id_list):
-	from portal.models import SubjectYear
+	from portal.models import SubjectYear, BaseFee
+	from django.db.models import Count
 	if len(subject_year_id_list) == 0:
 		return PentaError()
 	academic_year = SubjectYear.objects.get(id=subject_year_id_list[0]).academic_year
 	standard = SubjectYear.objects.get(id=subject_year_id_list[0]).subject.standard
+	base_fees = BaseFee.objects.annotate(count=Count('subject_years')).filter(subject_years=subject_year_id_list[0])
 	for i in subject_year_id_list:
+		base_fees = base_fees.filter(subject_years=i)
 		subject_year_object = SubjectYear.objects.get(id=i)
 		if academic_year != subject_year_object.academic_year:
 			return PentaError(1014)
 		if standard != subject_year_object.subject.standard:
 			return PentaError(1015)
+	base_fees = base_fees.filter(count=len(subject_year_id_list))
+	if len(base_fees) > 0:
+		return PentaError(1048)
 	return PentaError()
 
 def validate_fee_type(fee_type_object):

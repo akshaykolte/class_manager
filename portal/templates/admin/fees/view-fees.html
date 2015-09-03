@@ -90,6 +90,7 @@
                                 </thead>
                                 <tbody>
                                     {% for i in fee_details %}
+                                    {% if i.student %} 
                                         <tr class="odd gradeX">
                                             <td align="center">{{i.student}}</td>
                                             <td align="center">{{i.total_fees_paid}}</td>
@@ -99,6 +100,7 @@
                                             <td align="center">{{i.total_fees_remaining}}</td>
                                             
                                         </tr>
+                                    {% endif %} 
                                     {% endfor %}
                                     
                                    
