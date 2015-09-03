@@ -177,7 +177,7 @@
 		<input type="hidden" name="subject" value="{{subject_id}}">
 		<input type="hidden" name="lecture" value="{{lecture_id}}">
 		<label><strong>Select Lecture Batch</strong></label>
-		<select name="lecture" class="form-control" onchange="this.form.submit()">
+		<select name="lecturebatch" class="form-control" onchange="this.form.submit()">
 			{% for lecturebatch in lecturebatches %}
 			<option value="{{lecturebatch.id}}"{% if lecturebatch_id == lecturebatch.id %} selected{% endif %}>{{lecturebatch.name}}</option>
 			{% endfor %}
