@@ -792,35 +792,35 @@ def view_my_notices(request):
 	return render(request,'accountant/notices/view-my-notices.html', context)
 
 @csrf_exempt
-def edit_base_fees(request):
+def edit_my_notice(request):
 	auth_dict = get_user(request)
 	context = {}
-
+	context['details'] = auth_dict
 
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
 	if auth_dict['permission_accountant'] != True:
 		raise Http404
+	#context['notice_id'] = request.GET['notice']
 	
 	if request.method == 'GET':
 		if 'message' in request.GET:
 			context['message'] = request.GET['message']
 		elif 'message_error' in request.GET:
 			context['message_error'] = request.GET['message_error']
-
-		base_fees = get_base_fee(id = (request.GET.get('base-fee')) , subject_years_list = None,  academic_year_id=None, standard_id=None)
-		context['academic_year_id'] = request.GET.get('academic_year')
-		context['standard_id'] = request.GET.get('standard')
-		context['base_fees'] = base_fees
-		context['details'] = auth_dict
-		return render(request, 'accountant/fees/edit-base-fee.html', context)
+		notice = get_personal_notices(notice_id =(request.GET.get('notice')))	
+		context['notice'] = notice
+		context['notice_id'] = (request.GET.get('notice'))
+		
+		
+		return render(request, 'accountant/notices/edit-my-notice.html', context)
 
 	elif request.method == 'POST':
 		try:
-			print "dfdsfsdf"
-			set_base_fee(id = (request.POST.get('base-fee')), amount=request.POST['amount'] , subject_years_list = None)  
-			print "dfdsfsdf"
-			return redirect('/accountant/fees/edit-base-fees/?academic_year='+str((request.POST.get('academic_year_id')))+'&standard='+str((request.POST.get('standard_id')))+'&base-fee='+str((request.POST.get('base-fee')))+'&message=Transaction made')
+		
+			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = request.POST['is_important'])
+			
+			return redirect('/accountant/notices/view-my-notices/?message=Notice edited')
 		except:
-			return redirect('./?message_error=Error. Transaction Failed.')					
+			return redirect('./?message_error=Error. Edit Failed.')

@@ -20,6 +20,7 @@
                                     <th>Notice By</th>
                                     <th>Expiry Date</th>
                                     <th>Priority</th>
+                                    <th>Edit Notice</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -30,7 +31,7 @@
                                     <td>{{notice.uploader}}</td>
                                     <td>{{notice.expiry_date}}</td>
                                     <td>{% if notice.important == True %}High{% else %}Normal{% endif %}</td>
-                                	<td><a href ="/accountant/notices/edit-base-fees/?notice={{notice.id}}">Edit</a></td>
+                                	<td><a href ="/accountant/notices/edit-my-notice/?notice={{notice.id}}">Edit</a></td>
                                 </tr>
                               {% endfor %}
                             </tbody>
