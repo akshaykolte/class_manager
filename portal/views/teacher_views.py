@@ -311,7 +311,6 @@ def view_lecture(request):
 @csrf_exempt
 def add_attendance(request):
 	auth_dict = get_user(request)
-	context = {}
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
@@ -428,7 +427,24 @@ def add_attendance(request):
 			print 'sd', e
 			return redirect('./?message_error=Error Marking Attendance')
 
+def view_attendance(request):
+	auth_dict = get_user(request)
+	if auth_dict['logged_in'] == False:
+		raise Http404
 
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		context = {}
+
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		page_type = 0
+
+		return render(request, 'teacher/attendance/view-attendance.html', context)
 
 @csrf_exempt
 def add_student_notice(request):
