@@ -412,16 +412,12 @@ def add_attendance(request):
 				for student in students:
 					if 'batch_'+str(batch['id'])+'student_'+str(student['id']) in request.POST:
 						print '00here123'
-						student_batch = get_student_batch(student_id = student['id'])
+						student_batch = get_students(id = student['id'], subject_year_id=request.POST['subject'])
 						print lecturebatch
-						set_attendance(count = 1,student_batch_id = student_batch['id'],lecture_batch_id = lecturebatch)
+						set_attendance(count = 1,student_batch_id = student['id'],lecture_batch_id = lecturebatch)
 						print 'here1'
-
-
-
-
-
-
+					else:
+						delete_attendance(student_batch_id=student['id'], lecture_batch_id = lecturebatch)
 
 			return redirect('./?message=Attendance Marked')
 		except Exception as e:
