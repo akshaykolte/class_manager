@@ -45,3 +45,4 @@
 1045 Batch does not belong to same academic year as test
 1046 Batch does not belong to same standard as test
 1047 Batch of the student does not have permission for test
+1048 Fees of the selected subjects already added
