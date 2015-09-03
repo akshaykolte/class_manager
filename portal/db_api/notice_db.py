@@ -103,16 +103,16 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 			notice_object['expiry_date'] = personal_notice.expiry_date
 			notice_object['important'] = personal_notice.important
 			return notice_object
-		
+
 		all_notices = []
-		
+
 		if not is_student_id_none and for_students :
 			# get all objects related to that student, i.e., his own, his batch's, his branch's
-			
+
 
 			personal_notices = []
 			# student_batch_object = StudentBatch.objects.get(student__id=student_id, batch__academic_year)
-			personal_notice_set = NoticeViewer.objects.filter(student__id=student_id).distinct()
+			personal_notice_set = NoticeViewer.objects.filter(student__id=student_id, for_students=True).distinct()
 			for personal_notice in personal_notice_set:
 				notice_object = {}
 				notice_object['id'] = personal_notice.notice.id
@@ -136,8 +136,8 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 			is_academic_year_none = False # student_batch.academic_year == None
 			is_standard_none = False # student_batch.standard == None
 
-			
-			related_batch_notice_set = NoticeViewer.objects.filter(batch__studentbatch__student__id=student_id).distinct()
+
+			related_batch_notice_set = NoticeViewer.objects.filter(batch__studentbatch__student__id=student_id, for_students=True).distinct()
 
 			for related_batch_notice in related_batch_notice_set:
 				notice_object = {}
@@ -159,7 +159,7 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 
 
 			related_branch_notices = []
-			related_branch_notice_set = NoticeViewer.objects.filter(branch__batch__studentbatch__student__id=student_id).distinct()
+			related_branch_notice_set = NoticeViewer.objects.filter(branch__batch__studentbatch__student__id=student_id, for_students=True).distinct()
 
 			for related_branch_notice in related_branch_notice_set:
 				notice_object = {}
@@ -175,8 +175,8 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 				notice_object['important'] = related_branch_notice.notice.important
 
 				related_branch_notices.append(notice_object)
-			
-			
+
+
 			broadcast_notices = []
 			# student_batch_object = StudentBatch.objects.get(student__id=student_id, batch__academic_year)
 			broadcast_notice_set = NoticeViewer.objects.filter(student__id=None, branch__id = None, batch__id = None, for_students= True ).distinct()
@@ -195,7 +195,7 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 				notice_object['expiry_date'] = personal_notice.notice.expiry_date
 				notice_object['important'] = personal_notice.notice.important
 
-				broadcast_notices.append(notice_object)	
+				broadcast_notices.append(notice_object)
 
 			all_notices = personal_notices + related_batch_notices + related_branch_notices + broadcast_notices
 			return all_notices
@@ -207,7 +207,7 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 
 			personal_notices = []
 			# student_batch_object = StudentBatch.objects.get(student__id=student_id, batch__academic_year)
-			personal_notice_set = NoticeViewer.objects.filter(staff__id=staff_id).distinct()
+			personal_notice_set = NoticeViewer.objects.filter(staff__id=staff_id, for_staff=True).distinct()
 			for personal_notice in personal_notice_set:
 				notice_object = {}
 				notice_object['id'] = personal_notice.notice.id
@@ -224,12 +224,12 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 				notice_object['important'] = personal_notice.notice.important
 
 				personal_notices.append(notice_object)
-				
+
 
 
 			related_branch_notices = []
-			related_branch_notice_set = NoticeViewer.objects.filter(branch__staff_role__staff__id = staff_id,  staff__id=None, for_staff = True).distinct()
-
+			related_branch_notice_set = NoticeViewer.objects.filter(staff=None, for_staff = True).distinct()
+			print 'yolo', related_branch_notice_set
 			for related_branch_notice in related_branch_notice_set:
 				notice_object = {}
 				notice_object['id'] = related_branch_notice.notice.id
@@ -244,7 +244,7 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 				notice_object['important'] = related_branch_notice.notice.important
 
 				related_branch_notices.append(notice_object)
-				
+
 			broadcast_notices = []
 			# student_batch_object = StudentBatch.objects.get(student__id=student_id, batch__academic_year)
 			broadcast_notice_set = NoticeViewer.objects.filter(student__id=None, branch__id = None, batch__id = None, staff__id = None, for_staff= True).distinct()
@@ -266,8 +266,8 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 				broadcast_notices.append(notice_object)
 			all_notices = personal_notices + related_branch_notices
 			return all_notices
-			
-			
+
+
 def get_batch_notices():
 	pass
 

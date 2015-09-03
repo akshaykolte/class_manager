@@ -172,7 +172,6 @@ def validate_notice_viewer(notice_viewer_object):
 		if count > 1:
 			return PentaError(1038)
 	if notice_viewer_object.for_staff == True:
-		count = 0
 		if notice_viewer_object.batch != None:
 			return PentaError(1039)
 		if notice_viewer_object.staff != None:
