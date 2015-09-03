@@ -21,7 +21,7 @@ def home(request):
 	context = {}
 	if auth_dict['logged_in'] != True:
 		raise Http404
-	
+
 	if auth_dict['permission_manager'] == False and auth_dict['permission_accountant'] == False:
 		raise Http404
 
@@ -43,7 +43,7 @@ def home(request):
 		context['students'] = students
 
 	elif 'student' in request.GET:
-		students = get_student_batch_of_student(student_id=request.GET['student'])
+		students = get_student_batch_of_student(student_id=request.GET['student'], staff_id=auth_dict['id'])
 		context['students'] = students
 		page_type = 2
 
