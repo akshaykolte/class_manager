@@ -181,3 +181,9 @@ def validate_test_batch(test_batch_object):
 	if test_batch_object.batch.standard != test_batch_object.test.subject_year.subject.standard:
 		return PentaError(1046)
 	return PentaError()
+
+def validate_test_student_batch(test_student_batch_object):
+	from portal.models import TestBatch
+	if TestBatch.objects.filter(test=test_student_batch_object.test, batch=test_student_batch_object.student_batch.batch).count() == 0:
+		return PentaError(1047)
+	return PentaError()

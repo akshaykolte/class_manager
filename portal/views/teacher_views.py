@@ -11,9 +11,12 @@ from portal.db_api.branch_db import *
 from portal.db_api.academic_year_db import *
 from portal.db_api.student_db import *
 from portal.db_api.attendance_db import *
+from portal.db_api.notice_db import *
+from portal.db_api.test_db import *
 from portal.models import *
 import datetime
 from datetime import date
+
 def view_profile(request):
 
 	auth_dict = get_user(request)
@@ -25,7 +28,7 @@ def view_profile(request):
 		raise Http404
 
 	details = get_staff(id=auth_dict['id'])
-	
+
 	context['auth_dict'] =auth_dict
 	context['details'] = details
 
@@ -42,7 +45,7 @@ def edit_profile(request):
 		raise Http404
 
 	details = get_staff(id=auth_dict['id'])
-	
+
 	context['auth_dict'] =auth_dict
 	context['details'] = details
 
@@ -76,7 +79,7 @@ def change_password(request):
 		raise Http404
 	if 'message' in request.GET:
 		context['message'] = request.GET['message']
-	
+
 	elif 'message_error' in request.GET:
 		context['message_error'] = request.GET['message_error']
 
@@ -119,12 +122,12 @@ def dashboard(request):
 	if auth_dict['permission_teacher'] != True:
 		raise Http404
 
-	context['details'] = auth_dict	
+	context['details'] = auth_dict
 
 
 
 	# TODO Notices model yet to implement
-	
+
 
 
 
@@ -163,10 +166,9 @@ def add_lectures(request):
 			subjects = get_subjects(standard_id=request.GET['standard'])
 			context['subjects'] = subjects
 			context['standard_id'] = int(request.GET['standard'])
-			
-			
+
+
 			if 'subject' in request.GET:
-				print "hehrheheheheheh"
 				page_type = 2
 				subject_year_dict = get_subject_year(subject_id=request.GET['subject'])
 				print subject_year_dict
@@ -175,7 +177,7 @@ def add_lectures(request):
 
 				context['subject_id'] = int(request.GET['subject'])
 				context['lectures'] = lectures
-				
+
 				if 'lecture' in request.GET:
 					page_type = 3
 					context['lecture_id'] = int(request.GET['lecture'])
@@ -190,7 +192,7 @@ def add_lectures(request):
 							batch_list.append(i)
 					print batch_list
 					context['batches'] = batch_list
-		
+
 		context['page_type'] = page_type
 		context['details'] = auth_dict
 		return render(request, 'teacher/lectures/add-lectures.html', context)
@@ -217,8 +219,6 @@ def add_lectures(request):
 			return redirect('./?message_error=Error Adding Lecture')
 
 @csrf_exempt
-
-
 def view_lecture(request):
 	auth_dict = get_user(request)
 	context = {}
@@ -239,7 +239,7 @@ def view_lecture(request):
 		page_type = 0
 		staff_role_list = get_staff_role(staff_id = auth_dict['id'])
 		staff_role_id_list = []
-		
+
 		for staff_role in staff_role_list:
 			staff_role_id = staff_role['id']
 			staff_role_id_list.append(staff_role_id)
@@ -255,7 +255,7 @@ def view_lecture(request):
 						l_b['difference'] = (l_b['date'] - date.today()).days
 			for i in lecturebatch:
 				lecturebatches.append(i)
-		context['lecturebatches'] = lecturebatches	
+		context['lecturebatches'] = lecturebatches
 		if 'lecturebatch' in request.GET:
 			page_type = 1
 			lecturebatch = get_lecture_batch(id = request.GET['lecturebatch'])
@@ -286,7 +286,7 @@ def view_lecture(request):
 		return render(request, 'teacher/lectures/view-lecture.html', context)
 	elif request.method == 'POST':
 		try:
-		
+
 			id = request.POST['lecturebatch']
 			lecturebatch_name = request.POST['lecturebatch_name']
 			lecturebatch_description = request.POST['lecturebatch_description']
@@ -301,9 +301,9 @@ def view_lecture(request):
 				lecturebatch_is_done = 0
 
 			set_lecture_batch(id=id, name = lecturebatch_name, description = lecturebatch_description, date = lecturebatch_date , duration = lecturebatch_duration,batch_id = lecturebatch_batch,lecture_id = lecturebatch_lecture, is_done=lecturebatch_is_done)
-		
+
 			print 'Hererere'
-			return redirect('./?message=Edited Lecture batch')	
+			return redirect('./?message=Edited Lecture batch')
 		except Exception as e:
 			print 'sd', e
 			return redirect('./?message_error=Error Editing Lecture')
@@ -335,8 +335,8 @@ def add_attendance(request):
 			subjects = get_subjects(standard_id=request.GET['standard'])
 			context['subjects'] = subjects
 			context['standard_id'] = int(request.GET['standard'])
-			
-			
+
+
 			if 'subject' in request.GET:
 				page_type = 2
 				subject_year_dict = get_subject_year(subject_id=request.GET['subject'])
@@ -345,7 +345,7 @@ def add_attendance(request):
 
 				context['subject_id'] = int(request.GET['subject'])
 				context['lectures'] = lectures
-				
+
 				if 'lecture' in request.GET:
 					page_type = 3
 					context['lecture_id'] = int(request.GET['lecture'])
@@ -365,9 +365,9 @@ def add_attendance(request):
 						lecturebatch = get_lecture_batch(staff_id=auth_dict['id'],batch_id = batch['id'],lecture_id = context['lecture_id'])
 						for i in lecturebatch:
 					 		lecturebatches.append(i)
-					
+
 					context['lecturebatches'] = lecturebatches
-					
+
 					batch_list = []
 					for batch in batches:
 						batch_dict={}
@@ -377,7 +377,7 @@ def add_attendance(request):
 						batch_dict['students'] = students
 						batch_list.append(batch_dict)
 						context['batch_list'] = batch_list
-						
+
 					'''if not batch_list:
 						page_type = 2'''
 					print "here123"
@@ -387,17 +387,17 @@ def add_attendance(request):
 						page_type=4
 						context['lecturebatch_id'] = int(request.GET['lecturebatch'])
 
-						
 
 
 
-		
+
+
 		context['page_type'] = page_type
 		context['details'] = auth_dict
 		return render(request, 'teacher/attendance/add-attendance.html', context)
 
 	elif request.method == 'POST':
-		
+
 		try:
 			standard = request.POST['standard']
 			lecture = request.POST['lecture']
@@ -418,9 +418,9 @@ def add_attendance(request):
 						print 'here1'
 
 
-			
-			
-					
+
+
+
 
 
 			return redirect('./?message=Attendance Marked')
@@ -428,3 +428,329 @@ def add_attendance(request):
 			print 'sd', e
 			return redirect('./?message_error=Error Marking Attendance')
 
+
+
+@csrf_exempt
+def add_student_notice(request):
+
+
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	context = {}
+	context['details'] = auth_dict
+
+
+	if request.method == 'GET':
+
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		page_type = 0
+		branches = get_branch(id=None)
+		all_branch={}
+		all_branch['name'] = "All Branches"
+		all_branch['id'] = 0
+		all_branches = []
+		all_branches.append(all_branch)
+		context['branches'] = all_branches + branches
+
+		if 'branch' in request.GET:
+
+
+
+			context['branch_id'] = int(request.GET['branch'])
+			if int(request.GET['branch']) :
+				page_type = 1
+				batches = get_batch(branch_id = int(request.GET['branch']))
+				all_batch={}
+				all_batch['name'] = "All Batches"
+				all_batch['id'] = 0
+				all_batch['description'] = "All batches of that branch"
+				all_batch['academic_year'] = "current_academic_year"
+				all_batch['branch'] = get_branch(id = int(request.GET['branch']))['name']
+				all_batch['standard'] = "All standards"
+				all_batches = []
+				all_batches.append(all_batch)
+				context['batches'] = all_batches + batches
+
+
+
+				if 'batch' in request.GET:
+
+					context['batch_id'] = int(request.GET['batch'])
+
+					if int(request.GET['batch']) :
+						page_type = 2
+
+						students = get_students(id = None,batch_id = int(request.GET['batch']))
+						context['students'] = students
+					else :
+						page_type = 2
+						#students = StudentBatch.objects.filter( batch__branch = Branch.objects.get(id = int(request.GET['branch']) ))
+						#context['students'] = students
+			else:
+				page_type = 2
+
+				#students = StudentBatch.objects.filter( batch__academic_year = AcademicYear.objects.get(id = get_current_academic_year()['id'] ))
+
+				#context['students'] = students
+				pass
+
+		context['page_type'] = page_type
+
+		return render(request,'teacher/notices/add-student-notice.html', context)
+
+	elif request.method == 'POST':
+		try:
+
+			title = request.POST['title']
+			description = request.POST['description']
+			expiry_date = request.POST['expiry-date']
+			is_important = request.POST['is_important']
+
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_important)
+
+			if int(request.POST['branch']):
+				if int(request.POST['batch']):
+					students = get_students(id = None,batch_id = int(request.POST['batch']))
+					student_list = []
+
+					for student in students:
+						#print student
+						#print 'student_'+str(student['id']) in request.POST
+						if 'student_'+str(student['id']) in request.POST:
+							#print subject_year
+							upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = student['id'], staff_id = None)
+
+
+
+
+
+			if not int(request.POST['branch']) :
+				print "ddd"
+				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = None, staff_id = None)
+			elif int(request.POST['branch']) and not int(request.POST['batch']):
+				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = int(request.POST['branch']) , batch_id = None, student_id = None, staff_id = None)
+
+			return redirect('./?message=Notice Uploaded')
+
+		except:
+			return redirect('./?message_error=Error While Uploading Notice')
+
+'''
+Not needed for teacher
+@csrf_exempt
+def add_staff_notice(request):
+
+
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	context = {}
+	context['details'] = auth_dict
+
+
+	if request.method == 'GET':
+
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		page_type = 0
+		branches = get_branch(id=None)
+		all_branch={}
+		all_branch['name'] = "All Branches"
+		all_branch['id'] = 0
+		all_branches = []
+		all_branches.append(all_branch)
+		context['branches'] = all_branches + branches
+
+		if 'branch' in request.GET:
+
+
+
+			context['branch_id'] = int(request.GET['branch'])
+			if int(request.GET['branch']) :
+				page_type = 1
+
+				staff = get_staff(branch_id = int(request.GET['branch']))
+				context['staff'] = staff
+
+			else:
+				page_type = 1
+
+				#students = StudentBatch.objects.filter( batch__academic_year = AcademicYear.objects.get(id = get_current_academic_year()['id'] ))
+
+				#context['students'] = students
+
+
+		context['page_type'] = page_type
+
+		return render(request,'teacher/notices/add-staff-notice.html', context)
+
+	elif request.method == 'POST':
+		try:
+
+			title = request.POST['title']
+			description = request.POST['description']
+			expiry_date = request.POST['expiry-date']
+			is_important = request.POST['is_important']
+
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_important)
+			print int(request.POST['branch'])
+			if int(request.POST['branch']):
+
+				staff = get_staff(branch_id = int(request.POST['branch']))
+				staff_list = []
+
+				for staff_object in staff:
+
+
+					if 'staff_'+str(staff_object['id']) in request.POST:
+						#print subject_year
+						upload_notice(id=None, notice_id = notice_id, for_students = False, for_staff = True, branch_id = None, batch_id = None, student_id = None, staff_id = staff_object['id'])
+
+
+
+
+
+			if not int(request.POST['branch']) :
+				#print "ddd"
+				upload_notice(id=None, notice_id = notice_id, for_students = False, for_staff = True, branch_id = None, batch_id = None, student_id = None, staff_id = None)
+
+
+
+			return redirect('./?message=Notice Uploaded')
+
+		except:
+			return redirect('./?message_error=Error While Uploading Notice')'''
+
+@csrf_exempt
+def add_test_marks(request):
+	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		context = {}
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		page_type = 0
+
+		standards = get_standard()
+		context['standards'] = standards
+
+		if 'standard' in request.GET:
+			page_type = 1
+			subjects = get_subjects(standard_id=request.GET['standard'])
+			context['subjects'] = subjects
+			context['standard_id'] = int(request.GET['standard'])
+
+
+			if 'subject' in request.GET:
+				page_type = 2
+				subject_year_dict = get_subject_year(subject_id=request.GET['subject'])
+				print subject_year_dict
+
+				branches = get_branch_of_teacher(auth_dict['id'])
+
+				context['subject_id'] = int(request.GET['subject'])
+				context['branches'] = branches
+
+				if 'branch' in request.GET:
+					page_type = 3
+					context['branch_id'] = int(request.GET['branch'])
+					batches =  get_batch(branch_id=request.GET['branch'], standard_id=request.GET['standard'])
+					context['batches'] = batches
+
+					if 'batch' in request.GET:
+						page_type = 4
+						context['batch_id'] = int(request.GET['batch'])
+						context['tests'] = get_test(subject_year_id=request.GET['subject'], batch_id=request.GET['batch'], staff_id=auth_dict['id'])
+
+						if 'test' in request.GET:
+							if check_test_staff_permission(staff_id=auth_dict['id'], test_id=request.GET['test']):
+								page_type = 5
+								students = get_student_batch(batch_id=request.GET['batch'])
+								context['test_id'] = request.GET['test']
+								student_marks = get_student_batch_marks(test_id=request.GET['test'], batch_id=request.GET['batch'])
+								student_marks_dict = {}
+								for student_mark in student_marks:
+									student_marks_dict[student_mark['student_batch_id']] = student_mark['obtained_marks']
+								students_detailed = []
+								for student in students:
+									students_detailed.append(student)
+									if student['id'] in student_marks_dict:
+										students_detailed[-1]['marks'] = student_marks_dict[student['id']]
+								context['students'] = students_detailed
+							else:
+								return Http404
+
+		context['page_type'] = page_type
+		context['details'] = auth_dict
+		return render(request, 'teacher/test/add_test_marks.html', context)
+
+	elif request.method == 'POST':
+		try:
+			test_id = request.POST['test']
+			batch_id = request.POST['batch']
+			students = get_student_batch(batch_id=request.POST['batch'])
+			for student in students:
+				if str(student['id']) in request.POST:
+					try:
+						int(request.POST[str(student['id'])])
+					except:
+						continue
+					set_student_marks(test_id=test_id, student_batch_id=student['id'], marks_obtained=request.POST[str(student['id'])])
+			return redirect('./?message=Student marks added')
+		except Exception as e:
+			return redirect('./?message_error='+str(e))
+
+def view_test_marks(request):
+	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	tests = get_test(staff_id=auth_dict['id'])
+	context['tests'] = tests
+	page_type = 0
+	if 'test' in request.GET:
+		page_type = 1
+		branches = get_branch_of_teacher(auth_dict['id'])
+		context['branches'] = branches
+		context['standard'] = request.GET['standard']
+		context['subject'] = request.GET['subject']
+		context['test'] = request.GET['test']
+		if 'branch' in request.GET:
+			page_type = 2
+			context['branch_id'] = int(request.GET['branch'])
+			context['branch'] = request.GET['branch']
+			batches =  get_batch(branch_id=request.GET['branch'], standard_id=request.GET['standard'])
+			context['batches'] = batches
+	context['page_type'] = page_type
+	return render(request, 'teacher/test/view_test_marks.html', context)

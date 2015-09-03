@@ -37,12 +37,22 @@
     <![endif]-->
 
 	<script>
-		function select_staff(staff_id){
-			opener.document.getElementById('chooseStaffId').value = staff_id;
+		function select_staff(staff_id, staff_name){
+			try {
+				opener.document.getElementById('chooseStaffId').value = staff_id;
+				opener.document.getElementById('chooseStaffName').value = staff_name;
+			} catch (err){
+				
+			}
 			self.close();
 		}
 		function select_staff_batch(staff_id){
-			opener.document.getElementById('chooseStaffBatchId').value = staff_id;
+			try {
+				opener.document.getElementById('chooseStaffName').value = staff_name;
+				opener.document.getElementById('chooseStaffBatchId').value = staff_id;
+			} catch (err){
+				
+			}
 			self.close();
 		}
 	</script>
@@ -95,7 +105,7 @@
 									<td>{{staff.email}}</td>
 									<td>{{staff.phone_number}}</td>
 									{% if type == 'staff' %}
-										<td><a href="javascript:select_staff({{staff.id}});">Choose</a></td>
+										<td><a href="javascript:select_staff({{staff.id}}, '{{staff.first_name}} {{staff.last_name}}');">Choose</a></td>
 									{% endif %}
 								</tr>
 							{% endfor %}

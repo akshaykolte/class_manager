@@ -21,5 +21,7 @@ urlpatterns = [
 	url(r'^student/create-student/$', 'portal.views.accountant_views.create_student'),	
 	url(r'^student/admit-student/$', 'portal.views.accountant_views.admit_student'),	
 
+	url(r'^notices/add-student-notice/$', 'portal.views.accountant_views.add_student_notice'),
+	url(r'^notices/add-staff-notice/$', 'portal.views.accountant_views.add_staff_notice'),
 
 ]

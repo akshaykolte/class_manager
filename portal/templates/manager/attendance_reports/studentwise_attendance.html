@@ -31,22 +31,26 @@
 		<form>
 			<label><strong>Enter Student ID</strong></label>
 			<div class="form-group input-group">
-				<input type="text" name="student" class="form-control" id="chooseStudentId" onchange="this.form.submit()">
+				<input type="text" name="name" class="form-control" id="chooseStudentName" readonly>
+				<input type="hidden" name="student" id="chooseStudentId">
 				<span class="input-group-btn">
-					<button class="btn btn-default" type="button" onClick="call_student_search_window('student')"><i class="fa fa-search"> or Click here to Search Student</i>
+					<button class="btn btn-default" type="button" onClick="call_student_search_window('student')"><i class="fa fa-search">&nbsp;Click here to Search Student</i>
 					</button>
 				</span>
 			</div>
+			<input type="submit" class="btn btn-default">
 		</form>
 	{% endif %}
 	
 	{% if page_type == 2 %}
 		<form>
 			<label><strong>Enter Student ID</strong></label>
-			<input type="text" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
+			<input type="text" name="name" value="{{student_name}}" class="form-control" readonly>
+			<input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()">
 		</form>
 		<br/>
 		<form>
+			<input type="hidden" name="name" value="{{student_name}}" class="form-control" readonly>
 			<input type="hidden" name="student" value="{{student_id}}">
 			<label><strong>Select Subjects</strong></label>
 			{% for subject in subjects %}

@@ -533,9 +533,11 @@ def studentwise_attendance(request):
 		page_type = 1
 
 		if 'student' in request.GET:
+			print request.GET
 			page_type = 2
 			subject_years = get_student_batch(student_id=request.GET['student'])['student_subjects']
 			context['student_id'] = request.GET['student']
+			context['student_name'] = request.GET['name']
 			context['subjects'] = subject_years
 
 			if 'report' in request.GET:

@@ -167,16 +167,14 @@
                     </a>
                     <ul class="dropdown-menu dropdown-alerts">
                         {% block notifs %}
-                        <!-- <li>
+                        <li>
                             <a href="#">
                                 <div>
-                                    <i class="fa fa-comment fa-fw"></i> New Comment
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                    <i class="fa fa-comment fa-fw"></i> No Notifications for now.
                                 </div>
                             </a>
                         </li>
-                        <li class="divider"></li>
-                        <li>
+                        <!-- <li>
                             <a href="#">
                                 <div>
                                     <i class="fa fa-twitter fa-fw"></i> 3 New Followers
@@ -292,6 +290,22 @@
                             </ul>
                         </li>
 
+                        <li>
+                            <a href="#"><i class="fa fa-edit fa-fw"></i> Notices<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/admin/notices/add-student-notice/">Upload Student Notice</a>    
+                                </li>
+                                <li>
+                                    <a href="/admin/notices/add-staff-notice/">Upload Staff Notice</a>    
+                                </li>
+                                <li>
+                                    <a href="/admin/notices/view-my-notices/">View/Edit My Notices</a>    
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+
                         </br></br></br></br></br></br>
                         Note: See UI/startbootstrap-sb-admin-2-1.0.7/pages/tables.html to choose the right table for attendance, etc.
                         </br></br>
@@ -327,7 +341,7 @@
     <script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
     <script src="/static/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
 
-    Morris Charts JavaScript
+    <!-- Morris Charts JavaScript -->
     <script src="/static/bower_components/raphael/raphael-min.js"></script>
     <script src="/static/bower_components/morrisjs/morris.min.js"></script>
     <script src="/static/morris-graphs/js/morris-data.js"></script>
