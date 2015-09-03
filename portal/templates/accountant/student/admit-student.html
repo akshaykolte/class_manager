@@ -8,14 +8,14 @@
 </div>
 {% if message %}
         <div class="panel-body">
-            <div class="alert alert-success alert-dismissable col-lg-8">
+            <div class="alert alert-success alert-dismissable col-lg-12">
                 <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{message}}
             </div>
         </div>
     {% elif message_error %}
         <div class="panel-body">
-            <div class="alert alert-danger alert-dismissable col-lg-8">
+            <div class="alert alert-danger alert-dismissable col-lg-12">
                 <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{message_error}}
             </div>
@@ -25,7 +25,7 @@
 
 
 
-        <div class="col-lg-8">
+        <div class="col-lg-12">
 
                 {% if page_type == -1 %}
 

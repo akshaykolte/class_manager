@@ -8,26 +8,26 @@
 </div>
 {% if message %}
         <div class="panel-body">
-            <div class="alert alert-success alert-dismissable col-lg-8">
+            <div class="alert alert-success alert-dismissable col-lg-12">
                 <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{message}}
             </div>
         </div>
     {% elif message_error %}
         <div class="panel-body">
-            <div class="alert alert-danger alert-dismissable col-lg-8">
+            <div class="alert alert-danger alert-dismissable col-lg-12">
                 <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{message_error}}
             </div>
         </div>
     {% endif %}
-    
-        
 
 
-        <div class="col-lg-8">
-            
-           
+
+
+        <div class="col-lg-12">
+
+
     {% if page_type == 0 %}
                 <form>
                     <label><strong>Select Academic Year</strong></label>
@@ -39,7 +39,7 @@
                     </select>
                 </form>
     {% endif %}
-    
+
     {% if page_type == 1 %}
 
                 <form>
@@ -51,9 +51,9 @@
                     </select>
                 </form>
                 <br/>
-                
+
                 <form>
-                    <input type="hidden" name="academic_year" value="{{academic_year_id}}">                
+                    <input type="hidden" name="academic_year" value="{{academic_year_id}}">
                     <label><strong>Select Standard</strong></label>
                     <select name="standard" class="form-control" onchange="this.form.submit()">
                         <option>Select</option>
@@ -62,11 +62,11 @@
                         {% endfor %}
                     </select>
                 </form>
-            
+
     {% endif %}
 
     {% if page_type == 2 %}
-    
+
                 <form>
                     <label><strong>Select Academic Year</strong></label>
                     <select name="academic_year" class="form-control" onchange="this.form.submit()">
@@ -76,9 +76,9 @@
                     </select>
                 </form>
                 <br/>
-                
+
                 <form>
-                    <input type="hidden" name="academic_year" value="{{academic_year_id}}">                
+                    <input type="hidden" name="academic_year" value="{{academic_year_id}}">
                     <label><strong>Select Standard</strong></label>
                     <select name="standard" class="form-control" onchange="this.form.submit()">
                         <option>Select</option>
@@ -87,25 +87,25 @@
                         {% endfor %}
                     </select>
                 </form>
-                    <br/>   
-                    
+                    <br/>
 
-        
+
+
                 <div class="panel-body">
-                    
-                   
-                    <div class="dataTable_wrapper">                            
+
+
+                    <div class="dataTable_wrapper">
                         <label><strong>Base Fees of Academic Year and Standard </strong></label>
                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                                 <tr>
                                     <th>Subjects</th>
                                     <th>Amount</th>
-                                    
+
                                     <th>Edit</th>
 
 
-                                    
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -113,7 +113,7 @@
                                     <tr class="odd gradeX">
                                     <td align="center">
                                     {% for j in i.subject_years %}
-                                        
+
                                             {{j.subject}},
 
                                     {% endfor %}
@@ -122,9 +122,9 @@
                                      <td align="center"><a href ="/accountant/fees/edit-base-fees/?academic_year={{academic_year_id}}&standard={{standard_id}}&base-fee={{i.id}}">Edit</a></td>
                                     </tr>
                                 {% endfor %}
-                                
-                               
-                            
+
+
+
                             </tbody>
                         </table>
                     <!-- /.table-responsive -->
@@ -141,8 +141,8 @@
 
 
 
-        
-    
+
+
 
 
 {% endblock %}

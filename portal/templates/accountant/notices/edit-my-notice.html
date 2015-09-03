@@ -10,29 +10,29 @@
 </div>
 	{% if message %}
 	    <div class="panel-body">
-	        <div class="alert alert-success alert-dismissable col-lg-8">
+	        <div class="alert alert-success alert-dismissable col-lg-12">
 	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 	            {{message}}
 	        </div>
 	    </div>
     {% elif message_error %}
 	    <div class="panel-body">
-		    <div class="alert alert-danger alert-dismissable col-lg-8">
+		    <div class="alert alert-danger alert-dismissable col-lg-12">
 		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 		        {{message_error}}
 		    </div>
 		</div>
 	{% endif %}
 
-<div class="col-lg-8">
-	
-	
+<div class="col-lg-12">
+
+
 
           	<form action="." method="POST">
 
-	
+
 				<input type = "hidden" name="notice_id" class="form-control" value='{{notice.id}}'>
-			     
+
 				<label><strong>Notice Title</strong></label>
 				<input name="title" class="form-control" type = "text" value='{{notice.title}}'>
 				<br/>
@@ -44,7 +44,7 @@
 				<label><strong>Expiry Date</strong></label>
 				<input name="expiry-date" class="form-control" type = "text" id = "example1">
 				<br/>
-				
+
 				<div class="checkbox">
 	            <label>
 	            <strong>Is Important?</strong>&nbsp;&nbsp;
@@ -56,7 +56,7 @@
 				<input class="btn btn-default" type='submit' value='Upload Notice'>
 			</form>
 
-	
+
 
 
 

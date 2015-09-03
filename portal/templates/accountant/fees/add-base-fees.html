@@ -10,22 +10,22 @@
 </div>
 	{% if message %}
 	    <div class="panel-body">
-	        <div class="alert alert-success alert-dismissable col-lg-8">
+	        <div class="alert alert-success alert-dismissable col-lg-12">
 	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 	            {{message}}
 	        </div>
 	    </div>
     {% elif message_error %}
 	    <div class="panel-body">
-		    <div class="alert alert-danger alert-dismissable col-lg-8">
+		    <div class="alert alert-danger alert-dismissable col-lg-12">
 		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 		        {{message_error}}
 		    </div>
 		</div>
 	{% endif %}
 
-<div class="col-lg-8">
-	
+<div class="col-lg-12">
+
 	{% if page_type == 0 %}
                 <form>
                     <label><strong>Select Academic Year</strong></label>
@@ -37,7 +37,7 @@
                     </select>
                 </form>
     {% endif %}
-    
+
     {% if page_type == 1 %}
 
                 <form>
@@ -49,9 +49,9 @@
                     </select>
                 </form>
                 <br/>
-		        
+
                 <form>
-                	<input type="hidden" name="academic_year" value="{{academic_year_id}}">                
+                	<input type="hidden" name="academic_year" value="{{academic_year_id}}">
                     <label><strong>Select Standard</strong></label>
                     <select name="standard" class="form-control" onchange="this.form.submit()">
                         <option>Select</option>
@@ -60,11 +60,11 @@
                         {% endfor %}
                     </select>
                 </form>
-            
+
     {% endif %}
 
 	{% if page_type == 2 %}
-	
+
                     <form>
                     <label><strong>Select Academic Year</strong></label>
                     <select name="academic_year" class="form-control" onchange="this.form.submit()">
@@ -74,9 +74,9 @@
                     </select>
                 </form>
                 <br/>
-                
+
                 <form>
- 	                <input type="hidden" name="academic_year" value="{{academic_year_id}}">                
+ 	                <input type="hidden" name="academic_year" value="{{academic_year_id}}">
                     <label><strong>Select Standard</strong></label>
                     <select name="standard" class="form-control" onchange="this.form.submit()">
                         <option>Select</option>
@@ -85,26 +85,26 @@
                         {% endfor %}
                     </select>
                 </form>
-                    <br/>	
-                    
+                    <br/>
+
           	<form action="." method="POST">
 			<input type="hidden" name="academic_year" value="{{academic_year_id}}">
 			<input type="hidden" name="standard" value="{{standard_id}}">
-                    
+
                 <label><strong>Select Subject Years Combination</strong></label>
 				{% for subject_year in subject_years %}
 					<div class="checkbox">
 						<label><input type="checkbox" name="subject_year_{{subject_year.id}}" value="True">{{subject_year.name}} </label>
 					</div>
-				{% endfor %}			
-		
-	
+				{% endfor %}
+
+
 		<br/>
-	
+
 		<label><strong>Amount</strong></label>
 		<input name="amount" class="form-control">
 		<br/>
-		
+
 		<input class="btn btn-default" type='submit' value='Make Transaction'>
 	</form>
 

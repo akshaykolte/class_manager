@@ -10,22 +10,22 @@
 </div>
 	{% if message %}
 	    <div class="panel-body">
-	        <div class="alert alert-success alert-dismissable col-lg-8">
+	        <div class="alert alert-success alert-dismissable col-lg-12">
 	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 	            {{message}}
 	        </div>
 	    </div>
     {% elif message_error %}
 	    <div class="panel-body">
-		    <div class="alert alert-danger alert-dismissable col-lg-8">
+		    <div class="alert alert-danger alert-dismissable col-lg-12">
 		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 		        {{message_error}}
 		    </div>
 		</div>
 	{% endif %}
 
-<div class="col-lg-8">
-	
+<div class="col-lg-12">
+
 	{% if page_type == 0 %}
                 <form>
                     <label><strong>Select Branch</strong></label>
@@ -37,10 +37,10 @@
                     </select>
                 </form>
     {% endif %}
-    
+
 
 	{% if page_type == 1 %}
-				
+
 				 {% if branches %}
                  <form>
                     <label><strong>Select Branch</strong></label>
@@ -53,25 +53,25 @@
                 </form>
                 <br/>
                 {% endif %}
-                 
+
 
           	<form action="." method="POST">
 
 			<input type="hidden" name="branch" value="{{branch_id}}">
 			<input type="hidden" name="batch" value="{{batch_id}}">
-                 
+
                 {% if staff %}
-     
+
                 <label><strong>Select Staff</strong></label>
 				{% for staff_object in staff %}
 					<div class="checkbox">
 						<label><input type="checkbox" name="staff_{{staff_object.id}}" value="True">&nbsp;  {{staff_object.first_name}}  {{staff_object.last_name}} </label>
 					</div>
-				{% endfor %}			
+				{% endfor %}
 				{% endif%}
-	
+
 				<br/>
-			
+
 				<label><strong>Notice Title</strong></label>
 				<input name="title" class="form-control" type = "text">
 				<br/>
@@ -83,7 +83,7 @@
 				<label><strong>Expiry Date</strong></label>
 				<input name="expiry-date" class="form-control" type = "text" id = "example1">
 				<br/>
-				
+
 				<div class="checkbox">
 	            <label>
 	            <strong>Is Important?</strong>&nbsp;&nbsp;

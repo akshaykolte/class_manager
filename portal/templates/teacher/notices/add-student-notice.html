@@ -10,22 +10,22 @@
 </div>
 	{% if message %}
 	    <div class="panel-body">
-	        <div class="alert alert-success alert-dismissable col-lg-8">
+	        <div class="alert alert-success alert-dismissable col-lg-12">
 	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 	            {{message}}
 	        </div>
 	    </div>
     {% elif message_error %}
 	    <div class="panel-body">
-		    <div class="alert alert-danger alert-dismissable col-lg-8">
+		    <div class="alert alert-danger alert-dismissable col-lg-12">
 		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 		        {{message_error}}
 		    </div>
 		</div>
 	{% endif %}
 
-<div class="col-lg-8">
-	
+<div class="col-lg-12">
+
 	{% if page_type == 0 %}
                 <form>
                     <label><strong>Select Branch</strong></label>
@@ -37,9 +37,9 @@
                     </select>
                 </form>
     {% endif %}
-    
+
     {% if page_type == 1 %}
-    
+
                 <form>
                     <label><strong>Select Branch</strong></label>
                     <select name="branch" class="form-control" onchange="this.form.submit()">
@@ -50,9 +50,9 @@
                     </select>
                 </form>
                 <br/>
-		        
+
                 <form>
-                	<input type="hidden" name="branch" value="{{branch_id}}">                
+                	<input type="hidden" name="branch" value="{{branch_id}}">
                     <label><strong>Select Batch</strong></label>
                     <select name="batch" class="form-control" onchange="this.form.submit()">
                         <option>Select</option>
@@ -61,11 +61,11 @@
                         {% endfor %}
                     </select>
                 </form>
-            
+
     {% endif %}
 
 	{% if page_type == 2 %}
-				
+
 
                  <form>
                     <label><strong>Select Branch</strong></label>
@@ -77,10 +77,10 @@
                     </select>
                 </form>
                 <br/>
-                
+
                 {% if batches %}
                 <form>
-                	<input type="hidden" name="branch" value="{{branch_id}}">                
+                	<input type="hidden" name="branch" value="{{branch_id}}">
                     <label><strong>Select Batch</strong></label>
                     <select name="batch" class="form-control" onchange="this.form.submit()">
                         <option>Select</option>
@@ -88,25 +88,25 @@
                         <option value="{{batch.id}}" {% if batch_id == batch.id %} selected{% endif %} >{{batch.name}}&nbsp;:&nbsp;{{batch.branch}}&nbsp;:&nbsp;{{batch.standard}}</option>
                         {% endfor %}
                     </select>
-                </form>	
-         		{% endif %}  
+                </form>
+         		{% endif %}
 
           	<form action="." method="POST">
 
 			<input type="hidden" name="branch" value="{{branch_id}}">
 			<input type="hidden" name="batch" value="{{batch_id}}">
-                 
-                {% if students %} 
+
+                {% if students %}
                 <label><strong>Select Students</strong></label>
 				{% for student in students %}
 					<div class="checkbox">
 						<label><input type="checkbox" name="student_{{student.id}}" value="True">{{student.first_name}}  {{student.last_name}} </label>
 					</div>
-				{% endfor %}			
+				{% endfor %}
 				{% endif%}
-	
+
 				<br/>
-			
+
 				<label><strong>Notice Title</strong></label>
 				<input name="title" class="form-control" type = "text">
 				<br/>
@@ -118,7 +118,7 @@
 				<label><strong>Expiry Date</strong></label>
 				<input name="expiry-date" class="form-control" type = "text" id ="example1">
 				<br/>
-				
+
 				<div class="checkbox">
 	            <label>
 	            <strong>Is Important?</strong>&nbsp;&nbsp;

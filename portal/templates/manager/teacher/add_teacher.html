@@ -10,22 +10,22 @@
 </div>
 	{% if message %}
 	    <div class="panel-body">
-	        <div class="alert alert-success alert-dismissable col-lg-8">
+	        <div class="alert alert-success alert-dismissable col-lg-12">
 	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 	            {{message}}
 	        </div>
 	    </div>
     {% elif message_error %}
 	    <div class="panel-body">
-		    <div class="alert alert-danger alert-dismissable col-lg-8">
+		    <div class="alert alert-danger alert-dismissable col-lg-12">
 		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 		        {{message_error}}
 		    </div>
 		</div>
 	{% endif %}
 
-<div class="col-lg-8">
-	
+<div class="col-lg-12">
+
 	{% if page_type == 0 %}
 		<form action="." method="POST">
 			<label><strong>First Name</strong></label>
@@ -55,14 +55,14 @@
 
 			<label><strong>Password</strong></label>
 			<input name="password" class="form-control" required><br/>
-				
+
 			<label><strong>Select branches where the staff will teach</strong></label>
 			{% for branch in branches %}
 				<div class="checkbox">
 					<label><input type="checkbox" name="{{branch.id}}" value="True">{{branch.name}}</label>
 				</div>
 			{% endfor %}
-			
+
 			<input class="btn btn-default" type='submit' value='Create Teacher'>
 
 		</form>

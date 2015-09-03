@@ -9,20 +9,20 @@
 </div>
 {% if message %}
         <div class="panel-body">
-            <div class="alert alert-success alert-dismissable col-lg-8">
+            <div class="alert alert-success alert-dismissable col-lg-12">
                 <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{message}}
             </div>
         </div>
     {% elif message_error %}
         <div class="panel-body">
-            <div class="alert alert-danger alert-dismissable col-lg-8">
+            <div class="alert alert-danger alert-dismissable col-lg-12">
                 <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{message_error}}
             </div>
         </div>
     {% endif %}
-<div class="col-lg-10">
+<div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
             Edit Info
@@ -36,7 +36,7 @@
                         <tr>
                             <td style='border-top:none' align="center"><strong>Subjects</strong></td>
                             <td style='border-top:none' align="center">{% for j in base_fees.subject_years %}
-                                        
+
                                             {{j.subject}},
 
                                     {% endfor %}</td>
@@ -53,7 +53,7 @@
                             <td style='border-top:none' align="center"></td>
                             <td style='border-top:none' align="center"><input type='submit' class='btn btn-primary' style='width:250px' value='Update Info'></td>
                         </tr>
-                       
+
                     </tbody>
                 </table>
             </div>
