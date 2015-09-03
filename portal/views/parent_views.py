@@ -20,13 +20,13 @@ def dashboard(request):
 		raise Http404
 	context['auth_dict'] = auth_dict
 	parent_object = get_parent(id = auth_dict['id'])
-	student_object = StudentParent.objects.get(parent = Parent.objects.get( id = parent_object['id'])).student
+	studentobject = StudentParent.objects.get(parent = Parent.objects.get( id = parent_object['id'])).student
 	#print student_object
-	student_object = get_student_batch(student_id = student_object.id)
+	student_object = get_student_batch(student_id = studentobject.id)
 	lecture_list = []
 	print student_object
 	context['lectures'] = get_lecture_batch(batch_id = student_object['student_batch_id'])
-	context['notices'] = get_personal_notices(student_id=auth_dict['id'])
+	context['notices'] = get_personal_notices(student_id=studentobject.id, for_students =True)
 	return render(request,'parent/dashboard.html', context)
 
 
