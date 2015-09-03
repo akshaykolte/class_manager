@@ -3,6 +3,12 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^dashboard/$', 'portal.views.admin_views.dashboard'),
+    url(r'^profile/view-profile/$', 'portal.views.admin_views.view_profile'),
+    url(r'^profile/edit-profile/$', 'portal.views.admin_views.edit_profile'),
+    url(r'^profile/edit-profile/submit$', 'portal.views.admin_views.edit_profile_submit'),
+    url(r'^profile/change-password/$', 'portal.views.admin_views.change_password'),
+    url(r'^profile/change-password/submit$', 'portal.views.admin_views.change_password_submit'),
+    
     url(r'^fees/view-fees/$', 'portal.views.admin_views.view_fees'),
     url(r'^staff/add-staff/$', 'portal.views.admin_views.add_staff'),
     url(r'^staff/view-staff/$', 'portal.views.admin_views.view_staff'),

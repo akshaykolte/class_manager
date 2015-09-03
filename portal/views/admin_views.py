@@ -28,6 +28,88 @@ def dashboard(request):
 	
 	return render(request,'admin/dashboard.html', context)
 
+def view_profile(request):
+
+	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_admin'] != True:
+		raise Http404
+
+	details = get_staff(id=auth_dict['id'])
+
+	context['auth_dict'] =auth_dict
+	context['details'] = details
+
+	return render(request,'admin/profile/view-profile.html', context)
+
+def edit_profile(request):
+	auth_dict = get_user(request)
+	context = {}
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_admin'] != True:
+		raise Http404
+
+	details = get_staff(id=auth_dict['id'])
+
+	context['auth_dict'] =auth_dict
+	context['details'] = details
+
+	return render(request, 'admin/profile/edit-profile.html', context)
+
+@csrf_exempt
+def edit_profile_submit(request):
+
+	auth_dict = get_user(request)
+	context = {}
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_admin'] != True:
+		raise Http404
+
+	set_staff(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
+
+	return redirect('/admin/profile/view-profile')
+
+
+def change_password(request):
+
+	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_admin'] != True:
+		raise Http404
+	if 'message' in request.GET:
+		context['message'] = request.GET['message']
+
+	elif 'message_error' in request.GET:
+		context['message_error'] = request.GET['message_error']
+
+	return render(request,'admin/profile/change-password.html', context)
+
+@csrf_exempt
+def change_password_submit(request):
+
+	auth_dict = get_user(request)
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_admin'] != True:
+		raise Http404
+	if change_password_db(request):
+		return redirect('/admin/profile/change-password/?message=Password Successfully Changed')
+	else:
+		return redirect('/admin/profile/change-password/?message_error=Password Change Failed')
+
 
 @csrf_exempt
 def view_fees(request):
