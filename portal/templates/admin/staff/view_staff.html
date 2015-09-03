@@ -34,7 +34,7 @@
 			<input type="hidden" name="staff" class="form-control" id="chooseStaffId">
 			<span class="input-group-btn">
 			  <button class="btn btn-default" type="button" onClick="call_staff_search_window('staff')">
-				<i class="fa fa-search"> &nbsp;or search for staff</i>
+				<i class="fa fa-search"> &nbsp; Click Here to Search Staff</i>
 			  </button>
 			</span>
 		</div><br/>
@@ -43,7 +43,7 @@
 	{% elif page_type == 2%}
 	<form action="." method="POST">
 		<input type="hidden" name="staff" value="{{staff.id}}">
-		
+
 		<label><strong>First Name</strong></label>
 		<input name="first_name" class="form-control" value="{{staff.first_name}}" required><br/>
 
@@ -71,7 +71,7 @@
 
 		<label><strong>Password</strong></label>
 		<input name="password" class="form-control" value="{{staff.password}}" required><br/>
-			
+
 		<input class="btn btn-default" type='submit' value='Save'>
 
 	</form>

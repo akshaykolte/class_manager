@@ -11,6 +11,13 @@
 
     <title>PentaClass</title>
 
+    <!-- DataTables CSS -->
+    <link href="/static/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="/static/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+
+
     <!-- Bootstrap Core CSS -->
     <link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -42,7 +49,7 @@
 				opener.document.getElementById('chooseStaffId').value = staff_id;
 				opener.document.getElementById('chooseStaffName').value = staff_name;
 			} catch (err){
-				
+
 			}
 			self.close();
 		}
@@ -51,7 +58,7 @@
 				opener.document.getElementById('chooseStaffName').value = staff_name;
 				opener.document.getElementById('chooseStaffBatchId').value = staff_id;
 			} catch (err){
-				
+
 			}
 			self.close();
 		}
@@ -85,7 +92,7 @@
 				{% if page_type == 0 %}
 				<br/>
 				<h3>Select a staff</h3><br/>
-				   <table class="table table-bordered table-hover table-striped">
+				   <table class="table table-bordered table-hover table-striped" id="dataTables">
 						<thead>
 							<tr>
 								<th>#</th>
@@ -112,7 +119,7 @@
 						</tbody>
 					</table>
 				{% endif %}
-				
+
 				{% if page_type == 1 %}
 				<br/>
 				<h3>Enter Atleast one field</h3><br/>
@@ -133,13 +140,23 @@
 
 						<label><strong>Username</strong></label>
 						<input name="username" class="form-control"><br/>
-						
+
 						<input class="btn btn-default" type='submit' value='Search'>
 
 					</form>
 				{% endif %}
+        <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
 
-
+        <script>
+        $(document).ready(function() {
+            $('#dataTables').DataTable({
+                    "iDisplayLength":25,
+                    "oLanguage": {
+                      "sEmptyTable":     "No Staff Records Found"
+                    }
+            });
+        });
+        </script>
 
             {% endblock %}
         </div>
@@ -156,11 +173,16 @@
     <!-- Metis Menu Plugin JavaScript -->
     <script src="/static/bower_components/metisMenu/dist/metisMenu.min.js"></script>
 
+
+    <!-- DataTables JavaScript -->
+    <script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="/static/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
     <!-- Morris Charts JavaScript
     <script src="/static/bower_components/raphael/raphael-min.js"></script>
     <script src="/static/bower_components/morrisjs/morris.min.js"></script>
     <script src="/static/morris-graphs/js/morris-data.js"></script -->
-    
+
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
 
