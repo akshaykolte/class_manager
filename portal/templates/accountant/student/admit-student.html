@@ -21,21 +21,21 @@
             </div>
         </div>
     {% endif %}
-    
-        
+
+
 
 
         <div class="col-lg-8">
-        
+
                 {% if page_type == -1 %}
-                    
+
                     <form>
                     <label><strong>Student Name</strong></label>
                     <div class="form-group input-group">
                         <input type="text" name="name" class="form-control" id="chooseStudentName" onchange="this.form.submit()" readonly>
                         <input type="hidden" name="student" class="form-control" id="chooseStudentId" onchange="this.form.submit()">
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button"><i class="fa fa-search" onClick="call_student_search_window('student')"> Click Here to Search Student</i>
+                            <button onClick="call_student_search_window('student')" class="btn btn-default" type="button"><i class="fa fa-search"> Click Here to Search Student</i>
                             </button>
                         </span>
                     </div>
@@ -44,7 +44,7 @@
                 {% endif %}
 
             {% if page_type == 0 %}
-                        
+
                         <form>
                             <label><strong>Student Name</strong></label>
                             <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
@@ -65,9 +65,9 @@
                             </select>
                         </form>
             {% endif %}
-            
+
             {% if page_type == 1 %}
-                         
+
                         <form>
                             <label><strong>Student Name</strong></label>
                             <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
@@ -87,12 +87,12 @@
                             </select>
                         </form>
                         <br/>
-                        
+
                         <form>
                             <input type="hidden" name="name" value="{{student_name}}">
-                            <input type="hidden" name="student" value="{{student_id}}">  
-                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">    
-                                      
+                            <input type="hidden" name="student" value="{{student_id}}">
+                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">
+
                             <label><strong>Select Standard</strong></label>
                             <select name="standard" class="form-control" onchange="this.form.submit()">
                                 <option>Select</option>
@@ -101,11 +101,11 @@
                                 {% endfor %}
                             </select>
                         </form>
-                    
+
             {% endif %}
 
             {% if page_type == 2 %}
-                         
+
                         <form>
                             <label><strong>Student Name</strong></label>
                             <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
@@ -126,11 +126,11 @@
                             </select>
                         </form>
                         <br/>
-                        
+
                         <form>
                             <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="student" value="{{student_id}}">
-                            <input type="hidden" name="academic_year" value="{{academic_year_id}}"> 
+                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">
 
                             <label><strong>Select Standard</strong></label>
                             <select name="standard" class="form-control" onchange="this.form.submit()">
@@ -140,12 +140,12 @@
                             </select>
                         </form>
                         <br/>
-                            
+
                          <form>
                             <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="student" value="{{student_id}}">
-                            <input type="hidden" name="academic_year" value="{{academic_year_id}}"> 
-                            <input type="hidden" name="standard" value="{{standard_id}}">              
+                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">
+                            <input type="hidden" name="standard" value="{{standard_id}}">
                             <label><strong>Select Batch</strong></label>
                             <select name="batch" class="form-control" onchange="this.form.submit()">
                                 <option>Select Batch</option>
@@ -154,18 +154,18 @@
                                 {% endfor %}
                             </select>
                         </form>
-                            <br/>             
-                            
+                            <br/>
 
-                
-                        
+
+
+
 
             {% endif %}
 
 
 
             {% if page_type == 3 %}
-                       
+
                         <form>
                             <label><strong>Student Name</strong></label>
                             <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
@@ -186,13 +186,13 @@
                             </select>
                         </form>
                         <br/>
-                        
-                        
-                            
+
+
+
                         <form>
                             <input type="hidden" name="student" value="{{student_id}}">
                             <input type="hidden" name="name" value="{{student_name}}">
-                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">                
+                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">
                             <label><strong>Select Standard</strong></label>
                             <select name="standard" class="form-control" onchange="this.form.submit()">
                                 {% for standard in standards %}
@@ -200,13 +200,13 @@
                                 {% endfor %}
                             </select>
                         </form>
-                            <br/>  
-                            
+                            <br/>
+
 
                          <form>
                             <input type="hidden" name="student" value="{{student_id}}">
                             <input type="hidden" name="name" value="{{student_name}}">
-                             <input type="hidden" name="standard" value="{{standard_id}}">               
+                             <input type="hidden" name="standard" value="{{standard_id}}">
                             <label><strong>Select Batch</strong></label>
                             <select name="batch" class="form-control" onchange="this.form.submit()">
                                 {% for batch in batches %}
@@ -214,14 +214,14 @@
                                 {% endfor %}
                             </select>
                         </form>
-                            <br/>             
+                            <br/>
 
                         <form action="." method="POST">
                             <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="student" value="{{student_id}}">
-                            <input type="hidden" name="academic_year" value="{{academic_year_id}}"> 
-                            <input type="hidden" name="standard" value="{{standard_id}}">               
-                            <input type="hidden" name="batch" value="{{batch_id}}"> 
+                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">
+                            <input type="hidden" name="standard" value="{{standard_id}}">
+                            <input type="hidden" name="batch" value="{{batch_id}}">
 
                             <label><strong>Select Subject Years Combination</strong></label>
                             {% for subject_year in subject_years %}
@@ -231,10 +231,10 @@
                             {% endfor %}
                             <input class="btn btn-default" type='submit' value='Admit Student'>
                         </form>
-                            <br/>                 
+                            <br/>
 
-                
-                        
+
+
 
             {% endif %}
 
@@ -244,8 +244,8 @@
 
 
 
-        
-    
+
+
 
 
 {% endblock %}
