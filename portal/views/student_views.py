@@ -22,7 +22,7 @@ def dashboard(request):
 	lecture_list = []
 	print student_object
 	context['lectures'] = get_lecture_batch(batch_id = student_object['student_batch_id'])
-	context['notices'] = get_personal_notices(student_id=auth_dict['id'])
+	context['notices'] = get_personal_notices(student_id=auth_dict['id'], for_students =True)
 	return render(request,'student/dashboard.html', context)
 
 def view_profile(request):
