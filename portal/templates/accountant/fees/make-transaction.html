@@ -25,7 +25,7 @@
 	{% endif %}
 
 <div class="col-lg-8">
-		
+
 
 		{% if page_type == 0 %}
             <form>
@@ -34,7 +34,7 @@
 				<input type="text" name="student_name" class="form-control" id="chooseStudentName" readonly>
 				<input type="hidden" name="student_batch" class="form-control" id="chooseStudentBatchId" onchange="this.form.submit()">
 				<span class="input-group-btn">
-					<button class="btn btn-default" type="button"><i class="fa fa-search" onClick="call_student_search_window('studentbatch')"> Click Here to Search Student</i>
+					<button class="btn btn-default" onClick="call_student_search_window('studentbatch')" type="button"><i class="fa fa-search"> Click Here to Search Student</i>
 					</button>
 				</span>
 			</div>
@@ -43,9 +43,9 @@
         {% endif %}
 
 
-		
+
 	{% if page_type == 1 %}
-	
+
 		<form>
 				<label><strong>Student Name</strong></label>
 				<input type="text" name="student_name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
@@ -92,8 +92,8 @@
 	</form>
 	<br/>
 	<form action="." method="POST">
-	
-			
+
+
 		<input type="hidden" name="student_batch" value="{{student_batch_id}}">
 		<input type="hidden" name="fee_type" value="{{fee_type_id}}">
 
