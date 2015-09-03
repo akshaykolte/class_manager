@@ -229,7 +229,6 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 
 			related_branch_notices = []
 			related_branch_notice_set = NoticeViewer.objects.filter(staff=None, for_staff = True).distinct()
-			print 'yolo', related_branch_notice_set
 			for related_branch_notice in related_branch_notice_set:
 				notice_object = {}
 				notice_object['id'] = related_branch_notice.notice.id
