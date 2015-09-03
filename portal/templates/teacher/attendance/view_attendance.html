@@ -1,0 +1,167 @@
+{% extends "teacher/base_teacher.html" %}
+
+{% block main_content%}
+<div class="row">
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">View Attendance</h1>
+    </div>
+</div>
+	{% if message %}
+	    <div class="panel-body">
+	        <div class="alert alert-success alert-dismissable col-lg-8">
+	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	            {{message}}
+	        </div>
+	    </div>
+    {% elif message_error %}
+	    <div class="panel-body">
+		    <div class="alert alert-danger alert-dismissable col-lg-8">
+		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		        {{message_error}}
+		    </div>
+		</div>
+	{% endif %}
+
+<div class="col-lg-12">
+
+	{% if page_type == 1 %}
+		<form>
+			<label><strong>Select Branch</strong></label>
+			<select name="branch" class="form-control" onchange="this.form.submit()">
+				<option>Select</option>
+				{% for branch in branches %}
+				<option value="{{branch.id}}">{{branch.name}}</option>
+				{% endfor %}
+			</select>
+		</form>
+	{% endif %}
+
+	{% if page_type == 2 %}
+	<form>
+		<label><strong>Select Branch</strong></label>
+		<select name="branch" class="form-control" onchange="this.form.submit()">
+			{% for branch in branches %}
+			<option value="{{branch.id}}"{% if branch_id == branch.id %} selected{% endif %}>{{branch.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+		<input type="hidden" name="branch" value="{{branch_id}}">
+			<label><strong>Select Standard</strong></label>
+			<select name="standard" class="form-control" onchange="this.form.submit()">
+				<option>Select</option>
+				{% for standard in standards %}
+				<option value="{{standard.id}}">{{standard.name}}</option>
+				{% endfor %}
+			</select>
+			</form>
+	{% endif %}
+
+	{% if page_type == 3 %}
+	<form>
+		<label><strong>Select Branch</strong></label>
+		<select name="branch" class="form-control" onchange="this.form.submit()">
+			{% for branch in branches %}
+			<option value="{{branch.id}}"{% if branch_id == branch.id %} selected{% endif %}>{{branch.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form>
+		<input type="hidden" name="branch" value="{{branch_id}}">
+		<label><strong>Select Standard</strong></label>
+		<select name="standard" class="form-control" onchange="this.form.submit()">
+			{% for standard in standards %}
+			<option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+	<form action="." method="GET">
+		<input type="hidden" name="branch" value="{{branch_id}}">
+		<input type="hidden" name="standard" value="{{standard_id}}">
+		<label><strong>Select Subject</strong></label>
+		<select name="subject" class="form-control" onchange="this.form.submit()">
+			<option>Select</option>
+			{% for subject in subjects %}
+			<option value="{{subject.id}}"{% if subject_id == subject.id %} selected{% endif %}>{{subject.name}}</option>
+			{% endfor %}
+		</select>
+	</form>
+	{% endif %}
+
+	{% if page_type == 4 %}
+		<label><strong>Lectures</strong></label>
+		<br/>
+
+	   <table class="table table-bordered table-hover table-striped">
+			<thead>
+				<tr>
+					<th class="col-lg-2">#</th>
+					<th>Lecture Name</th>
+					<th class="col-lg-1">Count</th>
+					<th class="col-lg-1">Link</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for lecture in lectures %}
+					<tr>
+						<td>{{lecture.subject_year_id}}</td>
+						<td>{{lecture.name}}</td>
+						<td>{{lecture.count}}</td>
+						<td><a href="./?lecture={{lecture.id}}&branch={{branch_id}}">Report</a></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+
+	{% if page_type == 5 %}
+		<br/>
+	   <table class="table table-bordered table-hover table-striped" id="dataTables">
+			<thead>
+				<tr>
+					<th>Student</th>
+					{% for lecture in report.0 %}
+						<th>{{lecture.batch__name}} - {{lecture.batch__branch__name}}</th>
+					{% endfor %}
+				</tr>
+			</thead>
+			<tbody>
+				{% for student in report.1 %}
+					<tr>
+						{% for st in student %}
+							<td>{{st}}</td>
+						{% endfor %}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+
+
+  {% if page_type == 6 %}
+    <label><strong>{{msg}}</strong></label>
+    <br/>
+
+  {% endif %}
+
+</br>
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#dataTables').DataTable({
+            "iDisplayLength":25,
+            "oLanguage": {
+              "sEmptyTable":     "No Records Found"
+            }
+    });
+});
+</script>
+
+{% endblock %}

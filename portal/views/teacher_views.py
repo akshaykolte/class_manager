@@ -14,6 +14,7 @@ from portal.db_api.attendance_db import *
 from portal.db_api.notice_db import *
 from portal.db_api.test_db import *
 from portal.models import *
+from portal.db_api.attendance_reports_db import *
 import datetime
 from datetime import date
 
@@ -438,13 +439,30 @@ def view_attendance(request):
 	if request.method == 'GET':
 		context = {}
 
-		if 'message' in request.GET:
-			context['message'] = request.GET['message']
-		elif 'message_error' in request.GET:
-			context['message_error'] = request.GET['message_error']
-		page_type = 0
-
-		return render(request, 'teacher/attendance/view-attendance.html', context)
+		context['branches'] = get_branch_of_teacher(teacher_id=auth_dict['id'])
+		page_type = 1
+		if 'branch' in request.GET:
+			if 'lecture' in request.GET:
+				page_type = 5
+				context['report'] = attendance_report(lecture_id=request.GET['lecture'], branch_id=request.GET['branch'])
+				print 'len=', len(context['report'][1][0])
+				if len(context['report'])<1 or len(context['report'][1])<1 or len(context['report'][1][0]) <= 1:
+					page_type = 6
+					context['msg'] = 'No lectures added of the topic'
+			else:
+				page_type = 2
+				context['standards'] = get_standard()
+				context['branch_id'] = int(request.GET['branch'])
+				if 'standard' in request.GET:
+					page_type = 3
+					context['standard_id'] = int(request.GET['standard'])
+					context['subjects'] = get_subjects(standard_id=request.GET['standard'])
+					if 'subject' in request.GET:
+						page_type = 4
+						context['lectures'] = get_lecture(subject_year_id=request.GET['subject'])
+		context['details'] = auth_dict
+		context['page_type'] = page_type
+		return render(request, 'teacher/attendance/view_attendance.html', context)
 
 @csrf_exempt
 def add_student_notice(request):
