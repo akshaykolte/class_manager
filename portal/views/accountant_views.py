@@ -25,7 +25,7 @@ def dashboard(request):
 		raise Http404
 
 	context['details'] = auth_dict;
-
+	context['notices'] = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
 
 	return render(request,'accountant/dashboard.html', context)
 
