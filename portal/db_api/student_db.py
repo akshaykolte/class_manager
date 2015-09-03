@@ -17,11 +17,12 @@
 from portal.models import Student,Parent,StudentParent,Batch,StudentBatch,SubjectYear,Standard, Branch
 from portal.db_api.academic_year_db import *
 
-def get_students(id = None,batch_id = None):
+def get_students(id = None,batch_id = None, subject_year_id = None):
 	is_none_id = id == None
 	is_none_batch_id = batch_id == None
+	is_none_subject_year_id = subject_year_id == None
 
-	if not is_none_id and is_none_batch_id:
+	if not is_none_id and is_none_batch_id and is_none_subject_year_id:
 		student_object = {}
 		student = Student.objects.get(id=id)
 		student_object['id'] = student.id
@@ -35,7 +36,7 @@ def get_students(id = None,batch_id = None):
 		student_object['gender'] = student.gender
 		return student_object
 
-	elif not is_none_batch_id:
+	elif not is_none_batch_id  and is_none_subject_year_id:
 		student_list = []
 		student_batch = StudentBatch.objects.filter(batch = Batch.objects.get(id = batch_id))
 		for i in student_batch:
@@ -63,7 +64,7 @@ def get_students(id = None,batch_id = None):
 			student_dict['subjects'] = subject_year_list
 			student_list.append(student_dict)
 		return student_list
-	elif is_none_id and is_none_batch_id:
+	elif is_none_id and is_none_batch_id and is_none_subject_year_id:
 		student_list = []
 		student = Student.objects.all()
 		for i in student:
@@ -78,6 +79,35 @@ def get_students(id = None,batch_id = None):
 			student_dict['phone_number'] = i.phone_number
 			student_dict['gender'] = i.gender
 		return student_list
+	elif is_none_id and not is_none_batch_id and not is_none_subject_year_id:
+		student_list = []
+		student_batch = StudentBatch.objects.filter(batch = Batch.objects.get(id = batch_id), subject_years__id=subject_year_id)
+		for i in student_batch:
+			student_dict = {}
+			student_dict['id'] = i.student.id
+			student_dict['username'] = i.student.username
+			student_dict['password'] = i.student.password
+			student_dict['first_name'] = i.student.first_name
+			student_dict['last_name'] = i.student.last_name
+			student_dict['address'] = i.student.address
+			student_dict['email'] = i.student.email
+			student_dict['phone_number'] = i.student.phone_number
+			student_dict['gender'] = i.student.gender
+			student_dict['batch'] = i.batch
+			subject_year_list = []
+			for j in i.subject_years.all():
+				subject_year_dict={}
+				subject_year_dict['id'] = j.id
+				subject_year_dict['subject_id'] = j.subject.id
+				subject_year_dict['subject_name'] = j.subject.name
+				subject_year_dict['standard_id'] = j.subject.standard.id
+				subject_year_dict['standard_name'] = j.subject.standard.name
+				subject_year_dict['year_id'] = j.academic_year.id
+				subject_year_list.append(subject_year_dict)
+			student_dict['subjects'] = subject_year_list
+			student_list.append(student_dict)
+		return student_list
+
 
 def get_parent(id = None,student_id = None):
 	is_none_id = id == None

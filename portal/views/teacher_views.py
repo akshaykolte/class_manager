@@ -372,9 +372,12 @@ def add_attendance(request):
 					for batch in batches:
 						batch_dict={}
 						batch_id = batch['id']
-						students = get_students(batch_id = batch_id)
+						students = get_students(batch_id = batch_id, subject_year_id=request.GET['subject'])
 						batch_dict['batch'] = batch
 						batch_dict['students'] = students
+						print students
+						print ""
+						print ""
 						batch_list.append(batch_dict)
 						context['batch_list'] = batch_list
 
@@ -386,9 +389,6 @@ def add_attendance(request):
 						print  request.GET['lecturebatch']
 						page_type=4
 						context['lecturebatch_id'] = int(request.GET['lecturebatch'])
-
-
-
 
 
 
