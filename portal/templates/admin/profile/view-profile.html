@@ -20,27 +20,27 @@
                   	<tbody>
                         <tr>
                             <td style='border-top:none' align="center"><strong>Username</strong></td>
-                            <td style='border-top:none' align="center">{{details.username}}</td>
+                            <td style='border-top:none' align="center">{{staff_details.username}}</td>
                         </tr>
                         <tr>
                             <td align="center"><strong>Name</strong></td>
-                            <td align="center">{{details.first_name}}&nbsp;{{details.last_name}}</td>
+                            <td align="center">{{staff_details.first_name}}&nbsp;{{staff_details.last_name}}</td>
                         </tr>
                         <tr>
                             <td align="center"><strong>Gender</strong></td>
-                            <td align="center">{% if details.gender == 'M' or details.gender == 'm' %}Male {% elif details.gender == 'F' or details.gender == 'f' %}Female {% endif %}</td>
+                            <td align="center">{% if staff_details.gender == 'M' or staff_details.gender == 'm' %}Male {% elif staff_details.gender == 'F' or staff_details.gender == 'f' %}Female {% endif %}</td>
                         </tr>
                         <tr>
                             <td align="center"><strong>Address</strong></td>
-                            <td align="center">{{details.address}}</td>
+                            <td align="center">{{staff_details.address}}</td>
                         </tr>
                         <tr>
                             <td align="center"><strong>Email</strong></td>
-                            <td align="center">{{details.email}}</td>
+                            <td align="center">{{staff_details.email}}</td>
                         </tr>
                         <tr>
                             <td align="center"><strong>Phone Number</strong></td>
-                            <td align="center">{{details.phone_number}}</td>
+                            <td align="center">{{staff_details.phone_number}}</td>
                         </tr>
                         <tr><td></td><td></td></tr>
                         

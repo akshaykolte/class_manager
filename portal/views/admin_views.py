@@ -38,10 +38,10 @@ def view_profile(request):
 	if auth_dict['permission_admin'] != True:
 		raise Http404
 
-	details = get_staff(id=auth_dict['id'])
+	staff_details = get_staff(id=auth_dict['id'])
 
-	context['auth_dict'] =auth_dict
-	context['details'] = details
+	context['details'] =auth_dict
+	context['staff_details'] = staff_details
 
 	return render(request,'admin/profile/view-profile.html', context)
 
@@ -55,10 +55,10 @@ def edit_profile(request):
 	if auth_dict['permission_admin'] != True:
 		raise Http404
 
-	details = get_staff(id=auth_dict['id'])
+	staff_details = get_staff(id=auth_dict['id'])
 
-	context['auth_dict'] =auth_dict
-	context['details'] = details
+	context['details'] =auth_dict
+	context['staff_details'] = staff_details
 
 	return render(request, 'admin/profile/edit-profile.html', context)
 
@@ -93,6 +93,7 @@ def change_password(request):
 
 	elif 'message_error' in request.GET:
 		context['message_error'] = request.GET['message_error']
+	context['details'] = auth_dict
 
 	return render(request,'admin/profile/change-password.html', context)
 
