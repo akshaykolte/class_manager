@@ -349,6 +349,23 @@
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
 
+     <!-- Datepicker -->
+       
+        <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+        <script type="text/javascript">
+            // When the document is ready
+
+            $(document).ready(function () {
+                
+                $('#example1').datepicker({
+                    format: "yyyy-mm-dd"
+                });  
+                $('#example1').datepicker('update', new Date());
+            
+            });
+           
+        </script>
+
 </body>
 
 </html>
