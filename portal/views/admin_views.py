@@ -8,6 +8,7 @@ from portal.db_api.staff_db import *
 from portal.db_api.branch_db import *
 from portal.db_api.batch_db import *
 from portal.db_api.fee_db import *
+from portal.db_api.student_db import *
 from portal.db_api.roles_db import *
 from portal.db_api.notice_db import *
 from portal.db_api.lecture_db import *
@@ -521,7 +522,7 @@ def add_staff_notice(request):
 
 		context['page_type'] = page_type
 
-		return render(request,'admin/notices/add-staff-notice.html', context)
+		return render(request,'manager/notices/add-staff-notice.html', context)
 
 	elif request.method == 'POST':
 		try:
