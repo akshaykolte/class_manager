@@ -368,28 +368,33 @@ def add_attendance(request):
 
 					context['lecturebatches'] = lecturebatches
 
+					attendance_dict = {}
+					if 'lecturebatch' in request.GET:
+						page_type=4
+						context['lecturebatch_id'] = int(request.GET['lecturebatch'])
+						attendance_list = get_attendance(lecture_batch_id=request.GET['lecturebatch'])
+						print attendance_list, len(attendance_list)
+						for attendance in attendance_list:
+							attendance_dict[attendance['student_batch_id']] = True
+
 					batch_list = []
 					for batch in batches:
 						batch_dict={}
 						batch_id = batch['id']
 						students = get_students(batch_id = batch_id, subject_year_id=request.GET['subject'])
 						batch_dict['batch'] = batch
+						for i in xrange(len(students)):
+							if students[i]['id'] in attendance_dict:
+								students[i]['present'] = True
+							else:
+								students[i]['present'] = False
 						batch_dict['students'] = students
-						print students
-						print ""
-						print ""
 						batch_list.append(batch_dict)
 						context['batch_list'] = batch_list
 
-					'''if not batch_list:
-						page_type = 2'''
-					print "here123"
-					if 'lecturebatch' in request.GET:
-						print 'HERERE'
-						print  request.GET['lecturebatch']
-						page_type=4
-						context['lecturebatch_id'] = int(request.GET['lecturebatch'])
-
+						for s in students:
+							print s
+							print '\n\n\n\n\n\n\\n'
 
 
 		context['page_type'] = page_type

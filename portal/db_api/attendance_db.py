@@ -42,6 +42,7 @@ def get_attendance(id= None,student_batch_id=None,lecture_batch_id= None):
 		attendance['id'] = attendance_object.id
 		attendance['count'] = attendance_object.count
 		attendance['student'] = str(attendance_object.student_batch.student.first_name) + " " +str(attendance_object.student_batch.student.last_name)
+		attendance['student_batch_id'] = attendance_object.student_batch.id
 		attendance['student_batch'] = attendance_object.student_batch.batch.name
 		attendance['lecture_batch'] = attendance_object.lecture_batch.name
 		attendance['date'] = attendance_object.lecture_batch.date
@@ -58,6 +59,7 @@ def get_attendance(id= None,student_batch_id=None,lecture_batch_id= None):
 			attendance['id'] = attendance_object.id
 			attendance['count'] = attendance_object.count
 			attendance['student'] = str(attendance_object.student_batch.student.first_name) + " " +str(attendance_object.student_batch.student.last_name)
+			attendance['student_batch_id'] = attendance_object.student_batch.id
 			attendance['student_batch'] = attendance_object.student_batch.batch.name
 			attendance['lecture_batch'] = attendance_object.lecture_batch.name
 			attendance['date'] = attendance_object.lecture_batch.date
@@ -73,6 +75,7 @@ def get_attendance(id= None,student_batch_id=None,lecture_batch_id= None):
 			attendance['id'] = attendance_object.id
 			attendance['count'] = attendance_object.count
 			attendance['student'] = str(attendance_object.student_batch.student.first_name) + " " +str(attendance_object.student_batch.student.last_name)
+			attendance['student_batch_id'] = attendance_object.student_batch.id
 			attendance['student_batch'] = attendance_object.student_batch.batch.name
 			attendance['lecture_batch'] = attendance_object.lecture_batch.name
 			attendance['date'] = attendance_object.lecture_batch.date
