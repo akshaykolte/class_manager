@@ -1,5 +1,24 @@
 {% extends "teacher/base_teacher.html" %}
 
+{% block date-picker-script %}
+
+    <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        // When the document is ready
+
+        $(document).ready(function () {
+
+            $('#example1').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            var future = new Date();
+            future.setDate(future.getDate() + 30);
+            $('#example1').datepicker('update', future);
+        });
+
+    </script>
+{% endblock %}
+
 {% block main_content%}
 <div class="row">
 
@@ -81,7 +100,7 @@
 				<br/>
 
 				<label><strong>Expiry Date</strong></label>
-				<input name="expiry-date" class="form-control" type = "text">
+				<input name="expiry-date" class="form-control" type = "text" id = "example1">
 				<br/>
 
 				<div class="checkbox">

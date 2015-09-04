@@ -21,5 +21,7 @@ urlpatterns = [
 	url(r'^batches/view-batch/$', 'portal.views.manager_views.view_batch'),
 	
 	url(r'^notices/add-student-notice/$', 'portal.views.manager_views.add_student_notice'),
-	url(r'^notices/add-staff-notice/$', 'portal.views.manager_views.add_staff_notice'),	
+	url(r'^notices/add-staff-notice/$', 'portal.views.manager_views.add_staff_notice'),
+	url(r'^notices/view-my-notices/$', 'portal.views.manager_views.view_my_notices'),
+	url(r'^notices/edit-my-notice/$', 'portal.views.manager_views.edit_my_notice'),
 ]

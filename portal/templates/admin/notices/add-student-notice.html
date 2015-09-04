@@ -1,5 +1,24 @@
 {% extends "admin/base_admin.html" %}
 
+{% block date-picker-script %}
+
+    <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        // When the document is ready
+
+        $(document).ready(function () {
+
+            $('#example1').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            var future = new Date();
+            future.setDate(future.getDate() + 30);
+            $('#example1').datepicker('update', future);
+        });
+
+    </script>
+{% endblock %}
+
 {% block main_content%}
 <div class="row">
 
@@ -57,7 +76,7 @@
                     <select name="batch" class="form-control" onchange="this.form.submit()">
                         <option>Select</option>
                         {% for batch in batches %}
-                        <option value="{{batch.id}}">{{batch.name}}&nbsp;:&nbsp;{{batch.branch}}&nbsp;:&nbsp;{{batch.standard}} </option>
+                        <option value="{{batch.id}}">{{batch.name}}&nbsp;:&nbsp;{{batch.branch}}&nbsp;:&nbsp;{{batch.standard}}</option>
                         {% endfor %}
                     </select>
                 </form>
@@ -85,7 +104,7 @@
                     <select name="batch" class="form-control" onchange="this.form.submit()">
                         <option>Select</option>
                         {% for batch in batches %}
-                        <option value="{{batch.id}}" {% if batch_id == batch.id %} selected{% endif %} >{{batch.name}}&nbsp;:&nbsp;{{batch.branch}}&nbsp;:&nbsp;{{batch.standard}} </option>
+                        <option value="{{batch.id}}" {% if batch_id == batch.id %} selected{% endif %} >{{batch.name}}&nbsp;:&nbsp;{{batch.branch}}&nbsp;:&nbsp;{{batch.standard}}</option>
                         {% endfor %}
                     </select>
                 </form>

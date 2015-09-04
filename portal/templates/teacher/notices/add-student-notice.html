@@ -1,5 +1,24 @@
 {% extends "teacher/base_teacher.html" %}
 
+{% block date-picker-script %}
+
+    <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        // When the document is ready
+
+        $(document).ready(function () {
+
+            $('#example1').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            var future = new Date();
+            future.setDate(future.getDate() + 30);
+            $('#example1').datepicker('update', future);
+        });
+
+    </script>
+{% endblock %}
+
 {% block main_content%}
 <div class="row">
 
@@ -57,7 +76,7 @@
                     <select name="batch" class="form-control" onchange="this.form.submit()">
                         <option>Select</option>
                         {% for batch in batches %}
-                        <option value="{{batch.id}}">{{batch.name}}&nbsp;:&nbsp;{{batch.branch}}&nbsp;:&nbsp;{{batch.standard}} </option>
+                        <option value="{{batch.id}}">{{batch.name}}&nbsp;:&nbsp;{{batch.branch}}&nbsp;:&nbsp;{{batch.standard}}</option>
                         {% endfor %}
                     </select>
                 </form>
@@ -116,7 +135,7 @@
 				<br/>
 
 				<label><strong>Expiry Date</strong></label>
-				<input name="expiry-date" class="form-control" type = "text" id ="example1">
+				<input name="expiry-date" class="form-control" type = "text" id = "example1">
 				<br/>
 
 				<div class="checkbox">

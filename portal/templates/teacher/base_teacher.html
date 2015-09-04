@@ -356,6 +356,8 @@
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
 
+        {% block date-picker-script %}
+
         <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
         <script type="text/javascript">
             // When the document is ready
@@ -366,10 +368,10 @@
                     format: "yyyy-mm-dd"
                 });
                 $('#example1').datepicker('update', new Date());
-
             });
 
         </script>
+   {% endblock %}
 
 </body>
 
