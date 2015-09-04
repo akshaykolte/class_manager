@@ -8,7 +8,7 @@
         <h1 class="page-header">Progress</h1>
     </div>
 </div>
-        
+
             {% if page_type == 0 %}
                 <form>
                     <label><strong>Select Branch</strong></label>
@@ -40,7 +40,7 @@
                             {% endfor %}
                         </select>
                 </form>
-            
+
             {% endif %}
 
             {% if page_type == 2 %}
@@ -59,7 +59,7 @@
                         <input type="hidden" name="branch" value="{{branch_id}}">
                             <label><strong>Select Batch</strong></label>
                             <select name="batch" class="form-control" onchange="this.form.submit()">
-                               
+
                                 {% for batch in batches %}
                                      <option value="{{batch.id}}"{% if batch_id == batch.id %} selected{% endif %}>{{batch.name}}&nbsp;:&nbsp;{{batch.branch}}&nbsp;:&nbsp;{{batch.standard}}</option>
                                 {% endfor %}
@@ -68,10 +68,10 @@
 
                     <br/>
                     <div class="panel-body">
-                        
-                       
+
+
                         <div class="dataTable_wrapper">
-                            
+
                             <table class="table table-striped table-bordered table-hover" id="dataTables">
                                 <thead>
                                     <tr>
@@ -82,7 +82,7 @@
                                         <th>Subject</th>
                                         <th>Staff</th>
                                         <th>Lecture Status</th>
-                                        
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -93,7 +93,7 @@
                                             <td align="center">{{i.name}}</td>
                                             <td align="center">{{i.description}}</td>
                                             <td align="center">{{i.subject_name}}</td>
-                                            <td align="center">{{i.staff_role_name}}</td> 
+                                            <td align="center">{{i.staff_role_name}}</td>
                                             {% if i.is_done == True %}
                                             <td class="text-success"><strong>Yes</strong></td>
                                             {% elif i.is_past == True %}
@@ -103,12 +103,15 @@
                                             {% endif %}
                                         </tr>
                                     {% endfor %}
-                                    
-                                   
-                                
+
+
+
                                 </tbody>
                             </table>
                         <!-- /.table-responsive -->
+                        <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default">Export as PDF</button>
+                        <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-default">Export as Excel</button>
+                        <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-default">Export as Csv</button>
                          </div>
                         <!-- /.-->
                     </div>
@@ -122,7 +125,7 @@
     $(document).ready(function() {
         $('#dataTables').DataTable({
                  "iDisplayLength": 25
-                    
+
         });
     });
     </script>
