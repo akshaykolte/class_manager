@@ -117,7 +117,7 @@
 
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <strong>Use As</strong> &nbsp;<i class="fa fa-caret-down"></i> 
+                        <strong>Use As</strong> &nbsp;<i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu" style="width:200px;">
                         {% block use_as %}
@@ -259,14 +259,14 @@
                                 <li>
                                     <a href="/accountant/fees/view-fees/">View Fee Details</a>
                                 </li>
-                               
+
                                 <li>
                                     <a href="/accountant/fees/make-transaction/">Make Fee Transaction</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        
+
                         <li>
                             <a href="#"><i class="fa fa-edit fa-fw"></i>Students<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -276,7 +276,7 @@
                                 <li>
                                     <a href="/accountant/student/admit-student/">Admit Student to Batches</a>
                                 </li>
-                                
+
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -285,14 +285,14 @@
                         <li>
                             <a href="#"><i class="fa fa-edit fa-fw"></i>Base Fees<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                
+
                                 <li>
                                     <a href="/accountant/fees/add-base-fees/">Add Base Fees</a>
                                 </li>
                                 <li>
                                     <a href="/accountant/fees/view-base-fees/">View/Edit Base Fees</a>
                                 </li>
-                                
+
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -301,18 +301,18 @@
                             <a href="#"><i class="fa fa-edit fa-fw"></i> Notices<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="/accountant/notices/add-student-notice/">Upload Student Notice</a>    
+                                    <a href="/accountant/notices/add-student-notice/">Upload Student Notice</a>
                                 </li>
                                 <li>
-                                    <a href="/accountant/notices/add-staff-notice/">Upload Staff Notice</a>    
+                                    <a href="/accountant/notices/add-staff-notice/">Upload Staff Notice</a>
                                 </li>
                                 <li>
-                                    <a href="/accountant/notices/view-my-notices/">View/Edit My Notices</a>    
+                                    <a href="/accountant/notices/view-my-notices/">View/Edit My Notices</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                            
+
 
                         <li>
                             <a href="http://otp.pentaflux.com"><i class="fa fa-pencil"></i> <strong>Online Test Portal</strong></a>
@@ -331,8 +331,8 @@
         </nav>
 
         <div id="page-wrapper">
-            {% block main_content %}  
-  
+            {% block main_content %}
+
             {% endblock %}
         </div>
         <!-- /#page-wrapper -->
@@ -352,26 +352,28 @@
     <script src="/static/bower_components/raphael/raphael-min.js"></script>
     <script src="/static/bower_components/morrisjs/morris.min.js"></script>
     <script src="/static/morris-graphs/js/morris-data.js"></script -->
-    
+
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
 
     <!-- Datepicker -->
-       
+
+    {% block date-picker-script %}
+
         <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
         <script type="text/javascript">
             // When the document is ready
 
             $(document).ready(function () {
-                
+
                 $('#example1').datepicker({
                     format: "yyyy-mm-dd"
-                });  
+                });
                 $('#example1').datepicker('update', new Date());
-            
             });
-           
+
         </script>
+   {% endblock %}
 
 </body>
 

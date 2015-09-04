@@ -798,6 +798,7 @@ def edit_my_notice(request):
 			context['message_error'] = request.GET['message_error']
 		notice = get_personal_notices(notice_id =(request.GET.get('notice')))
 		context['notice'] = notice
+		# date_string = notice['expiry_date'].split('-')
 		context['notice_id'] = (request.GET.get('notice'))
 
 
@@ -809,7 +810,7 @@ def edit_my_notice(request):
 				is_imp = 0
 			else:
 				is_imp = 1
-			
+
 			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp)
 
 			return redirect('/accountant/notices/view-my-notices/?message=Notice edited')
