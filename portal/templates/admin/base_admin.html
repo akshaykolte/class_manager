@@ -354,20 +354,22 @@
 
      <!-- Datepicker -->
        
+        {% block date-picker-script %}
+
         <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
         <script type="text/javascript">
             // When the document is ready
 
             $(document).ready(function () {
-                
+
                 $('#example1').datepicker({
                     format: "yyyy-mm-dd"
-                });  
+                });
                 $('#example1').datepicker('update', new Date());
-            
             });
-           
+
         </script>
+   		{% endblock %}
 
 </body>
 
