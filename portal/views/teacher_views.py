@@ -123,17 +123,8 @@ def dashboard(request):
 	if auth_dict['permission_teacher'] != True:
 		raise Http404
 
-	context['details'] = auth_dict
-
-
-
-	# TODO Notices model yet to implement
-
-
-
-
-
-
+	context['details'] = auth_dict;
+	context['notices'] = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
 
 	return render(request,'teacher/dashboard.html', context)
 

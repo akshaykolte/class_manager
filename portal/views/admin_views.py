@@ -16,16 +16,17 @@ from portal.db_api.standard_db import *
 
 
 def dashboard(request):
-	context = {}
 	auth_dict = get_user(request)
-	context['details'] = auth_dict
-	
-	if auth_dict['logged_in'] != True:
+	context = {}
+	if auth_dict['logged_in'] == False:
 		raise Http404
-	
+
 	if auth_dict['permission_admin'] != True:
-		return Http404
-	
+		raise Http404
+
+	context['details'] = auth_dict;
+	context['notices'] = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
+
 	return render(request,'admin/dashboard.html', context)
 
 def view_profile(request):

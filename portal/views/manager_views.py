@@ -18,12 +18,15 @@ from django.http import Http404
 def dashboard(request):
 	auth_dict = get_user(request)
 	context = {}
-	if auth_dict['logged_in'] != True:
+	if auth_dict['logged_in'] == False:
 		raise Http404
 
 	if auth_dict['permission_manager'] != True:
 		raise Http404
-	context['details'] = auth_dict
+
+	context['details'] = auth_dict;
+	context['notices'] = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
+
 	return render(request,'manager/dashboard.html', context)
 
 
