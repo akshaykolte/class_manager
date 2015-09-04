@@ -1,0 +1,82 @@
+{% extends "manager/base_manager.html" %}
+
+{% block date-picker-script %}
+
+    <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        // When the document is ready
+
+        $(document).ready(function () {
+
+            $('#example1').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            $('#example1').datepicker('update', new Date("{{notice.expiry_date}}"));
+        });
+
+    </script>
+{% endblock %}
+
+{% block main_content%}
+
+<div class="row">
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Upload Notice</h1>
+    </div>
+</div>
+	{% if message %}
+	    <div class="panel-body">
+	        <div class="alert alert-success alert-dismissable col-lg-12">
+	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	            {{message}}
+	        </div>
+	    </div>
+    {% elif message_error %}
+	    <div class="panel-body">
+		    <div class="alert alert-danger alert-dismissable col-lg-12">
+		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		        {{message_error}}
+		    </div>
+		</div>
+	{% endif %}
+
+<div class="col-lg-12">
+
+
+
+          	<form action="." method="POST">
+
+
+				<input type = "hidden" name="notice_id" class="form-control" value='{{notice.id}}'>
+
+				<label><strong>Notice Title</strong></label>
+				<input name="title" class="form-control" type = "text" value='{{notice.title}}'>
+				<br/>
+
+				<label><strong>Description</strong></label>
+				<textarea name="description" class="form-control" type = "textbox" >{{notice.description}}</textarea>
+				<br/>
+				<label><strong>Expiry Date</strong></label>
+				<input name="expiry-date" class="form-control" type = "text" id = "example1" value="">
+				<br/>
+
+				<div class="checkbox">
+	            <label>
+	            <strong>Is Important?</strong>&nbsp;&nbsp;
+	            </label>
+	            <input type="radio" name="is_important" value="True" {% if notice.important == True %}checked {% endif %}>&nbsp;Yes&nbsp;
+	            <input type="radio" name="is_important" value="False" {% if notice.important == False %}  checked {% endif %}>&nbsp;No&nbsp;
+	        	</div>
+
+				<input class="btn btn-default" type='submit' value='Upload Notice'>
+			</form>
+
+
+
+
+
+</br>
+
+{% endblock %}

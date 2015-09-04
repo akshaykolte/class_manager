@@ -16,16 +16,17 @@ from portal.db_api.standard_db import *
 
 
 def dashboard(request):
-	context = {}
 	auth_dict = get_user(request)
-	context['details'] = auth_dict
-	
-	if auth_dict['logged_in'] != True:
+	context = {}
+	if auth_dict['logged_in'] == False:
 		raise Http404
-	
+
 	if auth_dict['permission_admin'] != True:
-		return Http404
-	
+		raise Http404
+
+	context['details'] = auth_dict;
+	context['notices'] = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
+
 	return render(request,'admin/dashboard.html', context)
 
 def view_profile(request):
@@ -517,12 +518,17 @@ def add_student_notice(request):
 	elif request.method == 'POST':
 		try:
 
+			if request.POST['is_important'] == "False":
+				is_imp = 0
+			else:
+				is_imp = 1
+
 			title = request.POST['title']
 			description = request.POST['description']
 			expiry_date = request.POST['expiry-date']
 			is_important = request.POST['is_important']
 
-			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_important)
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp)
 
 			if int(request.POST['branch']):
 				if int(request.POST['batch']):
@@ -610,12 +616,17 @@ def add_staff_notice(request):
 	elif request.method == 'POST':
 		try:
 
+			if request.POST['is_important'] == "False":
+				is_imp = 0
+			else:
+				is_imp = 1
+
 			title = request.POST['title']
 			description = request.POST['description']
 			expiry_date = request.POST['expiry-date']
 			is_important = request.POST['is_important']
 
-			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_important)
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp)
 			print int(request.POST['branch'])
 			if int(request.POST['branch']):
 
@@ -643,3 +654,65 @@ def add_staff_notice(request):
 
 		except:
 			return redirect('./?message_error=Error While Uploading Notice')
+
+
+
+
+
+@csrf_exempt
+def view_my_notices(request):
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_admin'] != True:
+		raise Http404
+	context = {}
+	context['details'] = auth_dict
+	auth_dict
+	notices = Notice.objects.filter(uploader = Staff.objects.get(id=auth_dict['id']))
+	context['notices'] = notices
+
+
+
+	return render(request,'admin/notices/view-my-notices.html', context)
+
+@csrf_exempt
+def edit_my_notice(request):
+	auth_dict = get_user(request)
+	context = {}
+	context['details'] = auth_dict
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_admin'] != True:
+		raise Http404
+	#context['notice_id'] = request.GET['notice']
+
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		notice = get_personal_notices(notice_id =(request.GET.get('notice')))
+		context['notice'] = notice
+		# date_string = notice['expiry_date'].split('-')
+		context['notice_id'] = (request.GET.get('notice'))
+
+
+		return render(request, 'admin/notices/edit-my-notice.html', context)
+
+	elif request.method == 'POST':
+		try:
+			if request.POST['is_important'] == "False":
+				is_imp = 0
+			else:
+				is_imp = 1
+
+			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp)
+
+			return redirect('/admin/notices/view-my-notices/?message=Notice edited')
+		except:
+			return redirect('./?message_error=Error. Edit Failed.')

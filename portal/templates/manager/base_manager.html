@@ -369,6 +369,8 @@
     <!-- jQuery -->
     <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
 
+    <script src="/static/js/jquery.table2excel.js"></script>
+
     <!-- Bootstrap Core JavaScript -->
     <script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
@@ -388,7 +390,9 @@
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
 
-       <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+       {% block date-picker-script %}
+
+        <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
         <script type="text/javascript">
             // When the document is ready
 
@@ -398,11 +402,10 @@
                     format: "yyyy-mm-dd"
                 });
                 $('#example1').datepicker('update', new Date());
-
             });
 
         </script>
-
+   {% endblock %}
 
 </body>
 
