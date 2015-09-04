@@ -423,9 +423,10 @@ def add_tests(request):
 	elif request.method == 'POST':
 		try:
 			test_name = request.POST['test_name']
+			test_marks = request.POST['test_marks']
 			subject_id = request.POST['subject']
-			test = set_test(name=test_name, subject_year_id=subject_id)
-
+			print "here"
+			test = set_test(name=test_name, marks=test_marks, subject_year_id=subject_id)
 			branches = get_branch_of_manager(manager_id=auth_dict['id'])
 			batches = []
 			for branch in branches:

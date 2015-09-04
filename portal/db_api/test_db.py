@@ -15,6 +15,7 @@ def get_test(id=None, subject_year_id=None, academic_year_id=None, batch_id=None
 		test['subject_year_name'] = test_obj.subject_year.subject.name + ' - ' + test_obj.subject_year.subject.standard.name
 		test['standard_id'] = test_obj.subject_year.subject.standard.id
 		test['standard_name'] = test_obj.subject_year.subject.standard.name
+		test['total_marks'] = test_obj.total_marks
 		return test
 	if academic_year_id == None:
 		academic_year_id = get_current_academic_year()['id']
@@ -52,13 +53,14 @@ def get_test(id=None, subject_year_id=None, academic_year_id=None, batch_id=None
 		test['subject_year_name'] = test_obj.subject_year.subject.name + ' - ' + test_obj.subject_year.subject.standard.name
 		test['standard_id'] = test_obj.subject_year.subject.standard.id
 		test['standard_name'] = test_obj.subject_year.subject.standard.name
+		test['total_marks'] = test_obj.total_marks
 		test_obj_list.append(test)
 	return test_obj_list
 
-def set_test(id=None, name=None, subject_year_id=None):
-	if id == None:
+def set_test(id=None, name=None, marks=None, subject_year_id=None):
+	if id == None and marks != None and subject_year_id != None:
 		# 011
-		test_obj = Test(name=name, subject_year=SubjectYear.objects.get(id=subject_year_id))
+		test_obj = Test(name=name,total_marks=marks, subject_year=SubjectYear.objects.get(id=subject_year_id))
 		test_obj.save()
 		return test_obj.id
 	else:
@@ -68,6 +70,8 @@ def set_test(id=None, name=None, subject_year_id=None):
 			test_obj.name = name
 		if subject_year_id != None:
 			test_obj.subject_year_id = subject_year_id
+		if marks != None:
+			test_obj.total_marks = marks
 		test_obj.save()
 		return test_obj.id
 

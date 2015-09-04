@@ -271,7 +271,6 @@ def view_lecture(request):
 				batch = get_batch(academic_year_id = academic_year_id,standard_id = standard_id,branch_id = branch['id'])
 				for i in batch:
 					batch_list.append(i)
-					print batch_list
 				context['batches'] = batch_list
 		context['page_type'] = page_type
 		context['details'] = auth_dict
@@ -293,11 +292,9 @@ def view_lecture(request):
 				lecturebatch_is_done = 0
 
 			set_lecture_batch(id=id, name = lecturebatch_name, description = lecturebatch_description, date = lecturebatch_date , duration = lecturebatch_duration,batch_id = lecturebatch_batch,lecture_id = lecturebatch_lecture, is_done=lecturebatch_is_done)
-
-			print 'Hererere'
 			return redirect('./?message=Edited Lecture batch')
 		except Exception as e:
-			print 'sd', e
+			print 'sds', e
 			return redirect('./?message_error=Error Editing Lecture')
 
 @csrf_exempt
@@ -827,6 +824,7 @@ def add_test_marks(request):
 def view_test_marks(request):
 	auth_dict = get_user(request)
 	context = {}
+	context['details'] = auth_dict
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
@@ -851,4 +849,3 @@ def view_test_marks(request):
 			context['batches'] = batches
 	context['page_type'] = page_type
 	return render(request, 'teacher/test/view_test_marks.html', context)
-

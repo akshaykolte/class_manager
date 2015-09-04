@@ -1,5 +1,22 @@
 {% extends "teacher/base_teacher.html" %}
 
+{% block date-picker-script %}
+
+    <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        // When the document is ready
+
+        $(document).ready(function () {
+
+            $('#example1').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            $('#example1').datepicker('update', new Date("{{lecturebatch.date}}"));
+        });
+
+    </script>
+{% endblock %}
+
 {% block main_content%}
 <div class="row">
 
@@ -66,9 +83,10 @@
 					{% endfor %}
 				</tbody>
 			</table>
-      <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default">Export as PDF</button>
-      <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-default">Export as Excel</button>
-      <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-default">Export as Csv</button>
+      <br>
+      <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-primary">Export as PDF</button>
+      <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-primary">Export as Excel</button>
+      <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-primary">Export as Csv</button>
       <br/><br/>
 		</div>
 	</div>
@@ -86,7 +104,7 @@
 			<label><strong>Lecture Date</strong></label>
 			<input name ="lecturebatch_date" class="form-control" value="{{lecturebatch.date}}"  id="example1"><br/>
 			<label><strong>Duration</strong></label>
-			<select name="lecture_duration" class="form-control" >
+			<select name="lecturebatch_duration" class="form-control" >
 				<option value="1 Hour" {%if lecturebatch.duration == "1 Hour"%} selected{% endif %}>1 Hour</option>
 				<option value="2 Hours"{%if lecturebatch.duration == "2 Hours"%} selected{% endif %}>2 Hours</option>
 				<option value="3 Hours"{%if lecturebatch.duration == "3 Hours"%} selected{% endif %}>3 Hours</option>
@@ -121,9 +139,11 @@
             <input type="radio" name="is_done" value="False" {% if is_done == False %} checked {% endif %}>&nbsp;No&nbsp;
         	</div>
 			</br>
-			<input class="btn btn-default" type='submit' value='Save'>
+			<input class="col-lg-2 btn btn-primary" type='submit' value='Save'>
 			</br>
 			</br>
+      </br>
+      </br>
 
 
 
