@@ -1,3 +1,6 @@
+100 Unknown error occured
+999 No matching object found
+1000 Incorrectly entered fields
 1001 Academic Year of admitted subject and student should match
 1002 Standard of subject and admitted student should match
 1003 Student already admitted to the academic year
@@ -46,3 +49,4 @@
 1046 Batch does not belong to same standard as test
 1047 Batch of the student does not have permission for test
 1048 Fees of the selected subjects already added
+1049 Lecture count should be an integer

@@ -12,6 +12,8 @@ from portal.db_api.batch_db import *
 from portal.db_api.notice_db import *
 from portal.db_api.attendance_reports_db import *
 from portal.db_api.student_db import *
+from django.core.exceptions import *
+from portal.validator.validator import ModelValidateError
 from django.http import Http404
 
 
@@ -132,42 +134,61 @@ def add_lectures(request):
 	if auth_dict['permission_manager'] != True:
 		raise Http404
 
+	context = {}
 	if request.method == 'GET':
-		context = {}
-		if 'message' in request.GET:
-			context['message'] = request.GET['message']
-		elif 'message_error' in request.GET:
-			context['message_error'] = request.GET['message_error']
+		try:
+			if 'message' in request.GET:
+				context['message'] = request.GET['message']
+			elif 'message_error' in request.GET:
+				context['message_error'] = request.GET['message_error']
 
-		page_type = 0
+			page_type = 0
 
-		standards = get_standard()
-		context['standards'] = standards
+			standards = get_standard()
+			context['standards'] = standards
 
-		if 'standard' in request.GET:
-			page_type = 1
-			subjects = get_subjects(standard_id=request.GET['standard'])
-			context['subjects'] = subjects
-			context['standard_id'] = int(request.GET['standard'])
-			if 'subject' in request.GET:
-				page_type = 2
-				context['subject_id'] = int(request.GET['subject'])
-		context['page_type'] = page_type
-		context['details'] = auth_dict
-		return render(request,'manager/lectures/add_lectures.html', context)
+			if 'standard' in request.GET:
+				page_type = 1
+				subjects = get_subjects(standard_id=request.GET['standard'])
+				context['subjects'] = subjects
+				context['standard_id'] = int(request.GET['standard'])
+				if 'subject' in request.GET:
+					page_type = 2
+					context['subject_id'] = int(request.GET['subject'])
+			context['page_type'] = page_type
+			context['details'] = auth_dict
+			return render(request,'manager/lectures/add_lectures.html', context)
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 	elif request.method == 'POST':
 		try:
-			subject_id = request.POST['subject']
-			lecture_name = request.POST['lecture_name']
-			lecture_description = request.POST['lecture_description']
-			lecture_count = request.POST['lecture_count']
-
+			try:
+				subject_id = request.POST['subject']
+				lecture_name = request.POST['lecture_name']
+				lecture_description = request.POST['lecture_description']
+				lecture_count = request.POST['lecture_count']
+			except:
+				PentaError(1000).raise_error()
+			if subject_id == '' or lecture_name == '' or lecture_description == '':
+				PentaError(1000).raise_error()
+			try:
+				int(lecture_count)
+			except:
+				PentaError(1049).raise_error()
 			set_lecture(name=lecture_name, description=lecture_description, count=lecture_count, subject_year_id=subject_id)
 			context['details'] = auth_dict
 			return redirect('./?message=Lecture Added')
-		except:
-			return redirect('./?message_error=Error Adding Lecture')
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except Exception, e:
+			return redirect('./?message_error='+str(e))
 
 @csrf_exempt
 def view_lectures(request):

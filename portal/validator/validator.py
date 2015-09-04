@@ -2,6 +2,9 @@ from error_codes import ErrorCode
 
 error_object = ErrorCode()
 
+class ModelValidateError(Exception):
+	pass
+
 class PentaError:
 	error_string = ''
 	def __init__(self, error=None):
@@ -16,7 +19,7 @@ class PentaError:
 		return self.error_string
 
 	def raise_error(self):
-		raise Exception(self.error_string)
+		raise ModelValidateError(self.error_string)
 
 def validate_academic_year(academic_year_object):
 	# No special dependency
