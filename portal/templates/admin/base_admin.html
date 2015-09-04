@@ -124,7 +124,7 @@
 
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <strong>Use As</strong> &nbsp;<i class="fa fa-caret-down"></i> 
+                        <strong>Use As</strong> &nbsp;<i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu" style="width:200px;">
                         {% block use_as %}
@@ -297,13 +297,13 @@
                             <a href="#"><i class="fa fa-edit fa-fw"></i> Notices<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="/admin/notices/add-student-notice/">Upload Student Notice</a>    
+                                    <a href="/admin/notices/add-student-notice/">Upload Student Notice</a>
                                 </li>
                                 <li>
-                                    <a href="/admin/notices/add-staff-notice/">Upload Staff Notice</a>    
+                                    <a href="/admin/notices/add-staff-notice/">Upload Staff Notice</a>
                                 </li>
                                 <li>
-                                    <a href="/admin/notices/view-my-notices/">View/Edit My Notices</a>    
+                                    <a href="/admin/notices/view-my-notices/">View/Edit My Notices</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
@@ -323,7 +323,7 @@
         </nav>
 
         <div id="page-wrapper">
-            {% block main_content %}    
+            {% block main_content %}
             {% endblock %}
         </div>
         <!-- /#page-wrapper -->
@@ -333,6 +333,7 @@
     <!-- jQuery -->
     <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
 
+    <script src="/static/js/jquery.table2excel.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -348,25 +349,25 @@
     <script src="/static/bower_components/raphael/raphael-min.js"></script>
     <script src="/static/bower_components/morrisjs/morris.min.js"></script>
     <script src="/static/morris-graphs/js/morris-data.js"></script>
-    
+
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
 
      <!-- Datepicker -->
-       
+
         <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
         <script type="text/javascript">
             // When the document is ready
 
             $(document).ready(function () {
-                
+
                 $('#example1').datepicker({
                     format: "yyyy-mm-dd"
-                });  
+                });
                 $('#example1').datepicker('update', new Date());
-            
+
             });
-           
+
         </script>
 
 </body>
