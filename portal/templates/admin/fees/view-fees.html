@@ -108,11 +108,13 @@
                                 </tbody>
                             </table>
                         <!-- /.table-responsive -->
+                        <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default">Export as PDF</button>
+                        <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-default">Export as Excel</button>
+                        <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-default">Export as Csv</button>
                          </div>
                         <!-- /.-->
                     </div>
                     <!-- /.panel-body -->
-
             {% endif %}
 
 
@@ -132,5 +134,5 @@
                 }
         });
     });
-    </script>  
+    </script>
 {% endblock %}
