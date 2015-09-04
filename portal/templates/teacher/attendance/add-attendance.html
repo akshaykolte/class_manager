@@ -184,7 +184,7 @@
 		</select>
 	</form>
 	</br>
-
+	<div class="col-lg-8">
 	<form action="." method="POST">
 		<input type="hidden" name="standard" value="{{standard_id}}">
 		<input type="hidden" name="subject" value="{{subject_id}}">
@@ -192,18 +192,63 @@
 		<input type="hidden" name="lecturebatch" value="{{lecturebatch_id}}">
 		<br/>
 		{%for batch in batch_list%}
-			<label><strong> Batch: {{batch.batch.name}}   &nbsp;&nbsp; </br> Standard: {{batch.batch.standard}} &nbsp;&nbsp; </br> Branch: {{batch.batch.branch}} </strong></label>
+			<label><strong> Batch: {{batch.batch.name}}   &nbsp;&nbsp; Standard: {{batch.batch.standard}} &nbsp;&nbsp; Branch: {{batch.batch.branch}} </strong></label>
 			<br/>
-			{%for student in batch.students %}
-			<input type="checkbox" name="batch_{{batch.batch.id}}student_{{student.id}}"{% if student.present == True %} checked{% endif %}> &nbsp;{{student.first_name}} {{student.last_name}}
-			<br/>
-			{%endfor%}
-			<br/>
-		{% endfor %}
+			<div class="dataTable_wrapper">
+			   	<table class="display table table-striped table-bordered table-hover" id="">
+					<thead>
+						<tr>
+							<td class="col-lg-5">Name</td>
+							<td align="center">&nbsp;&nbsp;<input type="checkbox" name="sample" class="batch_{{batch.batch.id}}">
+							<td>Current Status</td>	
+						</tr>
+					</thead>
+					<tbody>
+						{%for student in batch.students %}
+						<tr>
+							<td>{{student.first_name}} {{student.last_name}}</td>
+							<td align="center"><input class="sub_batch_{{batch.batch.id}}" type="checkbox" name="batch_{{batch.batch.id}}student_{{student.id}}"{% if student.present == True %} checked{% endif %}></td>
+							{% if student.present == True %}<td class="text-success"><strong>Present</strong></td>
+							{% else %}<td class="text-muted"><strong>Absent/Not Marked</strong></td>
+							{% endif %}
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<br><br><br><br>
+			{% endfor %}
 		<input class="btn btn-success" type='submit' value='Mark Attendance'>
 		<br/>
 
 	</form>
+
+	<!-- jQuery -->
+    <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
+    <script>
+
+	$(document).ready(function() {
+    $('table.display').DataTable({
+    	"iDisplayLength":25,
+        "oLanguage": {
+          "sEmptyTable":"No Students Found"
+        }
+
+    	});
+} );
+
+{%for batch in batch_list %}
+ $(function() {
+        $('.batch_{{batch.batch.id}}').on("click", function () { // IE<9 triggers change after blurred
+            var checked = $(this).is(':checked');
+            var $otherChecks = $('.sub_batch_{{batch.batch.id}}');
+            $otherChecks.prop('checked', checked);
+            $otherChecks.parent().toggleClass("disabled",checked);
+        });
+    });
+    {% endfor %}
+    </script>
 
 	{% endif %}
 
