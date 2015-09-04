@@ -805,8 +805,12 @@ def edit_my_notice(request):
 
 	elif request.method == 'POST':
 		try:
-
-			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = request.POST['is_important'])
+			if request.POST['is_important'] == "False":
+				is_imp = 0
+			else:
+				is_imp = 1
+			
+			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp)
 
 			return redirect('/accountant/notices/view-my-notices/?message=Notice edited')
 		except:
