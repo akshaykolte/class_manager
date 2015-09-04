@@ -27,7 +27,7 @@
 <div class="col-lg-12">
 
 	{% if page_type == 0 %}
-	   <table class="table table-bordered table-hover table-striped">
+	   <table class="table table-bordered table-hover table-striped" id="dataTables">
 			<thead>
 				<tr>
 					<th class="col-lg-2">#</th>
@@ -47,6 +47,10 @@
 				{% endfor %}
 			</tbody>
 		</table>
+    <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default">Export as PDF</button>
+    <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-default">Export as Excel</button>
+    <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-default">Export as Csv</button>
+    <br/><br/>
 	{% endif %}
 
 	{% if page_type == 1 %}
