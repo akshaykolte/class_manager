@@ -628,12 +628,17 @@ def add_student_notice(request):
 	elif request.method == 'POST':
 		try:
 
+			if request.POST['is_important'] == "False":
+				is_imp = 0
+			else:
+				is_imp = 1
+
 			title = request.POST['title']
 			description = request.POST['description']
 			expiry_date = request.POST['expiry-date']
 			is_important = request.POST['is_important']
 
-			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_important)
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp)
 
 			if int(request.POST['branch']):
 				if int(request.POST['batch']):
@@ -721,12 +726,17 @@ def add_staff_notice(request):
 	elif request.method == 'POST':
 		try:
 
+			if request.POST['is_important'] == "False":
+				is_imp = 0
+			else:
+				is_imp = 1
+
 			title = request.POST['title']
 			description = request.POST['description']
 			expiry_date = request.POST['expiry-date']
 			is_important = request.POST['is_important']
 
-			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_important)
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp)
 			print int(request.POST['branch'])
 			if int(request.POST['branch']):
 
