@@ -20,18 +20,6 @@ def dashboard(request):
 	if auth_dict['permission_student'] != True:
 		raise Http404
 	context['auth_dict'] = auth_dict
-	student_object = get_student_batch(student_id = auth_dict['id'])
-	lecture_list = []
-	#print student_object
-	lecturebatch = get_lecture_batch(batch_id = student_object['student_batch_id'])
-	for l_b in lecturebatch:
-			if date.today() > l_b['date']:
-				l_b['is_past'] = True
-				l_b['difference'] = (date.today() - l_b['date']).days
-			else:
-				l_b['is_past'] = False
-				l_b['difference'] = (l_b['date'] - date.today()).days
-	context['lectures'] = lecturebatch
 	context['notices'] = get_personal_notices(student_id=auth_dict['id'], for_students =True)
 	return render(request,'student/dashboard.html', context)
 

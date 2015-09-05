@@ -22,17 +22,6 @@ def dashboard(request):
 	context['auth_dict'] = auth_dict
 	parent_object = get_parent(id = auth_dict['id'])
 	studentobject = StudentParent.objects.get(parent = Parent.objects.get( id = parent_object['id'])).student
-	student_object = get_student_batch(student_id = studentobject.id)
-	lecture_list = []
-	lecturebatch = get_lecture_batch(batch_id = student_object['student_batch_id'])
-	for l_b in lecturebatch:
-			if date.today() > l_b['date']:
-				l_b['is_past'] = True
-				l_b['difference'] = (date.today() - l_b['date']).days
-			else:
-				l_b['is_past'] = False
-				l_b['difference'] = (l_b['date'] - date.today()).days
-	context['lectures'] = lecturebatch
 	context['notices'] = get_personal_notices(student_id=studentobject.id, for_students =True)
 	return render(request,'parent/dashboard.html', context)
 
@@ -97,6 +86,41 @@ def view_attendance(request):
 	context['page_type'] = page_type
 
 	return render(request, 'parent/attendance/view_attendance.html', context)
+
+
+
+def view_lectures(request):
+	auth_dict = get_user(request)
+	context ={}
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_parent'] != True:
+		raise Http404
+	context['auth_dict'] = auth_dict
+	parent_object = get_parent(id = auth_dict['id'])
+	studentobject = StudentParent.objects.get(parent = Parent.objects.get( id = parent_object['id'])).student
+	student_object = get_student_batch(student_id = studentobject.id)
+	lecture_list = []
+	lecturebatch = get_lecture_batch(batch_id = student_object['student_batch_id'])
+	past_lectures = []
+	upcoming_lectures = []
+	for l_b in lecturebatch:
+			if date.today() > l_b['date']:
+				l_b['is_past'] = True
+				l_b['difference'] = (date.today() - l_b['date']).days
+				past_lectures.append(l_b)
+			else:
+				l_b['is_past'] = False
+				l_b['difference'] = (l_b['date'] - date.today()).days
+				upcoming_lectures.append(l_b)
+	context['past_lectures'] = past_lectures
+	context['upcoming_lectures'] = upcoming_lectures
+	return render(request,'parent/lecture/view-lectures.html', context)
+
+
+
 
 
 @csrf_exempt
