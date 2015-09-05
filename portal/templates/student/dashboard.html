@@ -25,13 +25,13 @@
                                     <td>{{notice.title}}</td>
                                     <td>{{notice.uploader}}</td>
                                     <td>{% if notice.important == True %}High{% else %}Normal{% endif %}</td>
-                                    <td><button class="col-lg-12 btn btn-default" data-toggle="modal" data-target="#myModal">View</button>
-                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <td><button class="col-lg-12 btn btn-default" data-toggle="modal" data-target="#myModal_{{notice.id}}">View</button>
+                                    <div class="modal fade" id="myModal_{{notice.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_{{notice.id}}" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    <h4 class="modal-title" id="myModalLabel">Notice</h4>
+                                                    <h4 class="modal-title" id="myModalLabel_{{notice.id}}">Notice</h4>
                                                 </div>
                                                 <div class="modal-body">
                                                     <h2><u>{{notice.title}}</u></h2>
@@ -40,7 +40,7 @@
                                                     <br><br>
                                                     Notice From: <strong>{{notice.uploader}}</strong>
                                                     <br>
-                                                    Priority:<strong>{% if notice.important == True %}High{% else %}Normal{% endif %}</strong>
+                                                    Priority:<strong>{% if notice.important == True %} High{% else %} Normal{% endif %}</strong>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
