@@ -13,6 +13,7 @@ from portal.db_api.notice_db import *
 from portal.db_api.attendance_reports_db import *
 from portal.db_api.student_db import *
 from django.core.exceptions import *
+from django.utils.datastructures import *
 from portal.validator.validator import ModelValidateError
 from django.http import Http404
 
@@ -164,31 +165,30 @@ def add_lectures(request):
 			return redirect('./?message_error='+str(PentaError(1000)))
 		except ObjectDoesNotExist, e:
 			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))
 
 	elif request.method == 'POST':
 		try:
-			try:
-				subject_id = request.POST['subject']
-				lecture_name = request.POST['lecture_name']
-				lecture_description = request.POST['lecture_description']
-				lecture_count = request.POST['lecture_count']
-			except:
-				PentaError(1000).raise_error()
-			if subject_id == '' or lecture_name == '' or lecture_description == '':
-				PentaError(1000).raise_error()
-			try:
-				int(lecture_count)
-			except:
-				PentaError(1049).raise_error()
+			subject_id = request.POST['subject']
+			lecture_name = request.POST['lecture_name']
+			lecture_description = request.POST['lecture_description']
+			lecture_count = request.POST['lecture_count']
 			set_lecture(name=lecture_name, description=lecture_description, count=lecture_count, subject_year_id=subject_id)
 			context['details'] = auth_dict
 			return redirect('./?message=Lecture Added')
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
-			return redirect('./?message_error='+str(e))
+			return redirect('./?message_error='+str(PentaError(100)))
 
 @csrf_exempt
 def view_lectures(request):
