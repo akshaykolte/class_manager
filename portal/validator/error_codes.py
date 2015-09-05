@@ -8,5 +8,5 @@ class ErrorCode():
         except:
             pass
     def __getitem__(self, error_code):
-        error_string = 'Error Code '+str(error_code)+': '+self.error_code_dict[error_code]
+        error_string = self.error_code_dict[error_code] + ' (' + str(error_code) +')'
         return error_string

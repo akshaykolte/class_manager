@@ -40,6 +40,8 @@ class Branch(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_branch
 		if validate:
+			if self.name == '' or self.address == '':
+				PentaError(997).raise_error()
 			validation = validate_branch(self)
 			if not validation:
 				validation.raise_error()
@@ -60,6 +62,8 @@ class Standard(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_standard
 		if validate:
+			if self.name == '':
+				PentaError(997).raise_error()
 			validation = validate_standard(self)
 			if not validation:
 				validation.raise_error()
@@ -84,6 +88,8 @@ class Batch(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_batch
 		if validate:
+			if self.name == '' or self.description == '':
+				PentaError(997).raise_error()
 			validation = validate_batch(self)
 			if not validation:
 				validation.raise_error()
@@ -336,6 +342,8 @@ class Lecture(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_lecture
 		if validate:
+			if self.name == '' or self.description == '':
+				PentaError(997).raise_error()
 			validation = validate_lecture(self)
 			if not validation:
 				validation.raise_error()

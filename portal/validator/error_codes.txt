@@ -1,4 +1,6 @@
-100 Unknown error occured
+100 Unexpected error occurred
+997 Field(s) can not be blank
+998 Expected data not received
 999 No matching object found
 1000 Incorrectly entered fields
 1001 Academic Year of admitted subject and student should match
