@@ -70,7 +70,6 @@ def view_attendance(request):
 	page_type = 1
 	student_batch = get_student_batch(student_id=auth_dict['id'])
 	subjects = student_batch['student_subjects']
-	print student_batch
 	context['subjects'] = subjects
 	attendance_list = []
 	for subject in subjects:
