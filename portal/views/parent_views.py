@@ -7,7 +7,9 @@ from portal.db_api.attendance_db import *
 from portal.db_api.lecture_db import *
 from portal.db_api.attendance_reports_db import *
 from portal.db_api.notice_db import *
-
+import datetime
+from datetime import date
+	
 
 def dashboard(request):
 	auth_dict = get_user(request)
@@ -25,7 +27,15 @@ def dashboard(request):
 	student_object = get_student_batch(student_id = studentobject.id)
 	lecture_list = []
 	print student_object
-	context['lectures'] = get_lecture_batch(batch_id = student_object['student_batch_id'])
+	lecturebatch = get_lecture_batch(batch_id = student_object['student_batch_id'])
+	for l_b in lecturebatch:
+			if date.today() > l_b['date']:
+				l_b['is_past'] = True
+				l_b['difference'] = (date.today() - l_b['date']).days
+			else:
+				l_b['is_past'] = False
+				l_b['difference'] = (l_b['date'] - date.today()).days
+	context['lectures'] = lecturebatch
 	context['notices'] = get_personal_notices(student_id=studentobject.id, for_students =True)
 	return render(request,'parent/dashboard.html', context)
 
@@ -58,7 +68,7 @@ def edit_profile(request):
 		raise Http404
 
 	details = get_parent(id = auth_dict['id'])
-	
+
 	context['auth_dict'] =auth_dict
 	context['staff_details'] = details
 
@@ -105,7 +115,7 @@ def edit_profile_submit(request):
 		raise Http404
 
 	set_parent(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
-	
+
 	return redirect('/parent/profile/view-profile')
 
 
@@ -120,7 +130,7 @@ def change_password(request):
 		raise Http404
 	if 'message' in request.GET:
 		context['message'] = request.GET['message']
-	
+
 	elif 'message_error' in request.GET:
 		context['message_error'] = request.GET['message_error']
 
@@ -139,4 +149,3 @@ def change_password_submit(request):
 		return redirect('/parent/profile/change-password/?message=Password Successfully Changed')
 	else:
 		return redirect('/parent/profile/change-password/?message_error=Password Change Failed')
-

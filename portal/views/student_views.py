@@ -7,6 +7,8 @@ from portal.db_api.attendance_db import *
 from portal.db_api.lecture_db import *
 from portal.db_api.attendance_reports_db import *
 from portal.db_api.notice_db import *
+import datetime
+from datetime import date
 
 def dashboard(request):
 	auth_dict = get_user(request)
@@ -21,7 +23,15 @@ def dashboard(request):
 	student_object = get_student_batch(student_id = auth_dict['id'])
 	lecture_list = []
 	print student_object
-	context['lectures'] = get_lecture_batch(batch_id = student_object['student_batch_id'])
+	lecturebatch = get_lecture_batch(batch_id = student_object['student_batch_id'])
+	for l_b in lecturebatch:
+			if date.today() > l_b['date']:
+				l_b['is_past'] = True
+				l_b['difference'] = (date.today() - l_b['date']).days
+			else:
+				l_b['is_past'] = False
+				l_b['difference'] = (l_b['date'] - date.today()).days
+	context['lectures'] = lecturebatch
 	context['notices'] = get_personal_notices(student_id=auth_dict['id'], for_students =True)
 	return render(request,'student/dashboard.html', context)
 
