@@ -9,7 +9,6 @@ from portal.db_api.attendance_reports_db import *
 from portal.db_api.notice_db import *
 import datetime
 from datetime import date
-	
 
 def dashboard(request):
 	auth_dict = get_user(request)
@@ -23,10 +22,8 @@ def dashboard(request):
 	context['auth_dict'] = auth_dict
 	parent_object = get_parent(id = auth_dict['id'])
 	studentobject = StudentParent.objects.get(parent = Parent.objects.get( id = parent_object['id'])).student
-	#print student_object
 	student_object = get_student_batch(student_id = studentobject.id)
 	lecture_list = []
-	#print student_object
 	lecturebatch = get_lecture_batch(batch_id = student_object['student_batch_id'])
 	for l_b in lecturebatch:
 			if date.today() > l_b['date']:
