@@ -70,14 +70,18 @@ def view_attendance(request):
 	page_type = 1
 	student_batch = get_student_batch(student_id=auth_dict['id'])
 	subjects = student_batch['student_subjects']
+	print student_batch
 	context['subjects'] = subjects
-	if 'attendance' in request.GET:
-		page_type = 2
-		subjects_id_list = []
-		for subject in subjects:
-			if str(subject['id']) in request.GET:
-				subjects_id_list.append(subject['id'])
-		context['report'] = attendance_report(student_id=student_batch['id'], subjects=subjects_id_list)
+	attendance_list = []
+	for subject in subjects:
+		subject_list = []
+		subject_list.append(subject['id'])
+		attendance_dict = {}
+		attendance_dict['subject_name'] = subject['subject_name']
+		attendance_dict['subject_id'] = subject['id']
+		attendance_dict['attendance_report'] = attendance_report(student_id=student_batch['id'], subjects=subject_list)
+		attendance_list.append(attendance_dict)
+	context['report'] = attendance_list
 	context['page_type'] = page_type
 
 	return render(request, 'student/attendance/view_attendance.html', context)
