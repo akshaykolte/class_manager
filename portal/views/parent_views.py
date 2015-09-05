@@ -26,7 +26,7 @@ def dashboard(request):
 	#print student_object
 	student_object = get_student_batch(student_id = studentobject.id)
 	lecture_list = []
-	print student_object
+	#print student_object
 	lecturebatch = get_lecture_batch(batch_id = student_object['student_batch_id'])
 	for l_b in lecturebatch:
 			if date.today() > l_b['date']:

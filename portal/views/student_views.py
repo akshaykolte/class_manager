@@ -22,7 +22,7 @@ def dashboard(request):
 	context['auth_dict'] = auth_dict
 	student_object = get_student_batch(student_id = auth_dict['id'])
 	lecture_list = []
-	print student_object
+	#print student_object
 	lecturebatch = get_lecture_batch(batch_id = student_object['student_batch_id'])
 	for l_b in lecturebatch:
 			if date.today() > l_b['date']:
