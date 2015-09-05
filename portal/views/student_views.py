@@ -95,6 +95,39 @@ def view_attendance(request):
 	return render(request, 'student/attendance/view_attendance.html', context)
 
 
+
+def view_lectures(request):
+	auth_dict = get_user(request)
+	context ={}
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_student'] != True:
+		raise Http404
+	context['auth_dict'] = auth_dict
+	student_object = get_student_batch(student_id = auth_dict['id'])
+	lecture_list = []
+	lecturebatch = get_lecture_batch(batch_id = student_object['student_batch_id'])
+	past_lectures = []
+	upcoming_lectures = []
+	for l_b in lecturebatch:
+			if date.today() > l_b['date']:
+				l_b['is_past'] = True
+				l_b['difference'] = (date.today() - l_b['date']).days
+				past_lectures.append(l_b)
+			else:
+				l_b['is_past'] = False
+				l_b['difference'] = (l_b['date'] - date.today()).days
+				upcoming_lectures.append(l_b)
+	context['past_lectures'] = past_lectures
+	context['upcoming_lectures'] = upcoming_lectures
+	return render(request,'student/lecture/view-lectures.html', context)
+
+
+
+
+
 @csrf_exempt
 def edit_profile_submit(request):
 
