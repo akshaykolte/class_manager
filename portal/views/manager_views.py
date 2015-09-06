@@ -1310,12 +1310,12 @@ def edit_my_notice(request):
 
 			return redirect('/manager/notices/view-my-notices/?message=Notice edited')
 		except ModelValidateError, e:
-			return redirect('./?message_error='+str(e))
+			return redirect('../view-my-notices?message_error='+str(e))
 		except ValueError, e:
-			return redirect('./?message_error='+str(PentaError(1000)))
+			return redirect('../view-my-notices?message_error='+str(PentaError(1000)))
 		except ObjectDoesNotExist, e:
-			return redirect('./?message_error='+str(PentaError(999)))
+			return redirect('../view-my-notices?message_error='+str(PentaError(999)))
 		except MultiValueDictKeyError, e:
-			return redirect('./?message_error='+str(PentaError(998)))
+			return redirect('../view-my-notices?message_error='+str(PentaError(998)))
 		except Exception, e:
-			return redirect('./?message_error='+str(PentaError(100)))
+			return redirect('../view-my-notices?message_error='+str(PentaError(100)))

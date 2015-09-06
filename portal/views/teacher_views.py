@@ -730,8 +730,16 @@ def edit_my_notice(request):
 			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp)
 
 			return redirect('/teacher/notices/view-my-notices/?message=Notice edited')
-		except:
-			return redirect('./?message_error=Error. Edit Failed.')
+		except ModelValidateError, e:
+			return redirect('../view-my-notices?message_error='+str(e))
+		except ValueError, e:
+			return redirect('../view-my-notices?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('../view-my-notices?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('../view-my-notices?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('../view-my-notices?message_error='+str(PentaError(100)))
 
 @csrf_exempt
 def add_test_marks(request):

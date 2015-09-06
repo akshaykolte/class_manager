@@ -116,7 +116,7 @@ def change_password_submit(request):
 @csrf_exempt
 def view_fees(request):
 	auth_dict = get_user(request)
-	
+
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
@@ -129,12 +129,12 @@ def view_fees(request):
 	context['branches'] = branches
 
 	if request.method == 'GET':
-	
-		
+
+
 		page_type = 0
-		
-		
-		
+
+
+
 		if 'branch' in request.GET:
 			page_type = 1
 			batches = get_batch(branch_id = int(request.GET.get('branch')))
@@ -147,7 +147,7 @@ def view_fees(request):
 				context['branch_id'] = int(request.GET['branch'])
 				fee_details = get_batch_fees(batch_id =  int(request.GET['batch']))
 				context['fee_details'] = fee_details
-				
+
 		context['page_type'] = page_type
 		print context
 
@@ -156,13 +156,13 @@ def view_fees(request):
 @csrf_exempt
 def add_staff(request):
 	context = {}
-	
+
 	auth_dict = get_user(request)
 	context['details'] = auth_dict
 
 	if auth_dict['logged_in'] != True:
 		raise Http404
-	
+
 	if auth_dict['permission_admin'] != True:
 		return Http404
 
@@ -183,7 +183,7 @@ def add_staff(request):
 			gender = request.POST['gender']
 			username = request.POST['username']
 			password = request.POST['password']
-			
+
 			set_staff(username=username, password=password, first_name=first_name, last_name=last_name, address=address, email=email, phone_number=phone_number, gender=gender)
 			return redirect('./?message=Added Staff')
 		except:
@@ -197,7 +197,7 @@ def view_staff(request):
 
 	if auth_dict['logged_in'] != True:
 		raise Http404
-	
+
 	if auth_dict['permission_admin'] != True:
 		return Http404
 
@@ -238,7 +238,7 @@ def set_current_academic_year_view(request):
 
 	if auth_dict['logged_in'] != True:
 		raise Http404
-	
+
 	if auth_dict['permission_admin'] != True:
 		return Http404
 
@@ -270,7 +270,7 @@ def assign_roles(request):
 
 	if auth_dict['logged_in'] != True:
 		raise Http404
-	
+
 	if auth_dict['permission_admin'] != True:
 		return Http404
 
@@ -338,7 +338,7 @@ def detailed_progress(request):
 
 	if auth_dict['logged_in'] != True:
 		raise Http404
-	
+
 	if auth_dict['permission_admin'] != True:
 		return Http404
 
@@ -382,7 +382,7 @@ def graphical_overview(request):
 
 	if auth_dict['logged_in'] != True:
 		raise Http404
-	
+
 	if auth_dict['permission_admin'] != True:
 		return Http404
 
@@ -406,13 +406,13 @@ def graphical_overview(request):
 				for i in lecture_batch['lec_bat']:
 					batch_name = i['batch_name']
 					branch_name = i['branch_name']
-					
+
 					if not i['lecture_name'] in lec_list:
 						lec_list[i['lecture_name']] = {'total_counter':0, 'done_counter':0}
-					
+
 					total_counter += 1
 					lec_list[i['lecture_name']]['total_counter'] += 1
-					
+
 					if i['is_done'] == 1:
 						done_counter += 1
 						lec_list[i['lecture_name']]['done_counter'] += 1
@@ -431,7 +431,7 @@ def graphical_overview(request):
 				lecturebatch_list.append(lecture_batch)
 			context['lecturebatches'] = lecturebatch_list
 			context['count_list'] = count_list
-		
+
 		context['page_type'] = page_type
 
 
@@ -714,5 +714,13 @@ def edit_my_notice(request):
 			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp)
 
 			return redirect('/admin/notices/view-my-notices/?message=Notice edited')
-		except:
-			return redirect('./?message_error=Error. Edit Failed.')
+		except ModelValidateError, e:
+			return redirect('../view-my-notices?message_error='+str(e))
+		except ValueError, e:
+			return redirect('../view-my-notices?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('../view-my-notices?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('../view-my-notices?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('../view-my-notices?message_error='+str(PentaError(100)))
