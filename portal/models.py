@@ -121,6 +121,8 @@ class Student(models.Model):
 		if validate:
 			if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
 				PentaError(997).raise_error()
+			if self.gender != 'M' and self.gender != 'F':
+				PentaError(995).raise_error()
 			if not validate_phone_number(self.phone_number):
 				PentaError(996).raise_error()
 			validation = validate_student(self)
@@ -155,6 +157,8 @@ class Parent(models.Model):
 		if validate:
 			if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
 				PentaError(997).raise_error()
+			if self.gender != 'M' and self.gender != 'F':
+				PentaError(995).raise_error()
 			if not validate_phone_number(self.phone_number):
 				PentaError(996).raise_error()
 			validation = validate_parent(self)
@@ -209,6 +213,8 @@ class Staff(models.Model):
 		if validate:
 			if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
 				PentaError(997).raise_error()
+			if self.gender != 'M' and self.gender != 'F':
+				PentaError(995).raise_error()
 			if not validate_phone_number(self.phone_number):
 				PentaError(996).raise_error()
 			validation = validate_staff(self)

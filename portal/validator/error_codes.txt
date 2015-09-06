@@ -1,4 +1,5 @@
 100 Unexpected error occurred
+995 Please select gender
 996 Phone number should contain only digits and should be atleast 10 digits
 997 Field(s) can not be blank
 998 Expected data not received
@@ -44,7 +45,7 @@
 1038 Student notice can be created either for all branch, single branch, single batch or a particular student
 1039 Staff notice can be created either for a particular staff
 1040 Notice already created for the student/staff
-1041 Test already created
+1041 Test with the name already exists for the subject
 1042 Test already set to batch
 1043 Test already set to staff
 1044 Student marks already set for test

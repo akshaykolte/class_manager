@@ -116,7 +116,7 @@
 
 	{% if page_type == 3 %}
 	<form action='.' method="POST">
-		<input type="hidden" name="lecture" value="{{lecture.id}}">
+		<input type="hidden" name="lecture" value="{{lecture.0.id}}">
 		<label><strong>Lecture Name</strong></label>
 		<input name="lecture_name" class="form-control" value="{{lecture.0.name}}">
 		<br/>
