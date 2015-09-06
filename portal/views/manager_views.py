@@ -43,6 +43,12 @@ def view_profile(request):
 	if auth_dict['permission_manager'] != True:
 		raise Http404
 
+	if 'message' in request.GET:
+		context['message'] = request.GET['message']
+
+	elif 'message_error' in request.GET:
+		context['message_error'] = request.GET['message_error']
+
 	staff_details = get_staff(id=auth_dict['id'])
 
 	context['details'] =auth_dict
@@ -79,9 +85,21 @@ def edit_profile_submit(request):
 	if auth_dict['permission_manager'] != True:
 		raise Http404
 
-	set_staff(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
+	try:
+		set_staff(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
 
-	return redirect('/manager/profile/view-profile')
+		return redirect('/manager/profile/view-profile')
+	except ModelValidateError, e:
+		return redirect('../view-profile?message_error='+str(e))
+	except ValueError, e:
+		return redirect('../view-profile?message_error='+str(PentaError(1000)))
+	except ObjectDoesNotExist, e:
+		return redirect('../view-profile/?message_error='+str(PentaError(999)))
+	except MultiValueDictKeyError, e:
+		return redirect('../view-profile/?message_error='+str(PentaError(998)))
+	except Exception, e:
+		return redirect('../view-profile/?message_error='+str(PentaError(100)))
+
 
 
 def change_password(request):
@@ -93,6 +111,7 @@ def change_password(request):
 
 	if auth_dict['permission_manager'] != True:
 		raise Http404
+
 	if 'message' in request.GET:
 		context['message'] = request.GET['message']
 

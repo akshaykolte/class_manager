@@ -1,4 +1,5 @@
 100 Unexpected error occurred
+996 Phone number should contain only digits and should be atleast 10 digits
 997 Field(s) can not be blank
 998 Expected data not received
 999 No matching object found
@@ -52,3 +53,4 @@
 1047 Batch of the student does not have permission for test
 1048 Fees of the selected subjects already added
 1049 Lecture count should be an integer
+1050 Error adding notice
