@@ -195,7 +195,7 @@ def add_lectures(request):
 			lecture_count = request.POST['lecture_count']
 			set_lecture(name=lecture_name, description=lecture_description, count=lecture_count, subject_year_id=subject_id)
 			context['details'] = auth_dict
-			return redirect('./?message=Lecture Added')
+			return redirect('./?message=Topic Added')
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
@@ -283,7 +283,7 @@ def view_lectures(request):
 
 			set_lecture(id=lecture_id, name=lecture_name, description=lecture_description, count=lecture_count)
 			context['details'] = auth_dict
-			return redirect('./?message=Lecture Edited')
+			return redirect('./?message=Topic Saved')
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:

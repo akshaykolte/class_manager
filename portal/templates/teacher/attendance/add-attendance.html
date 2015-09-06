@@ -85,7 +85,7 @@
 	<form action="." method="GET">
 		<input type="hidden" name="standard" value="{{standard_id}}">
 		<input type="hidden" name="subject" value="{{subject_id}}">
-		<label><strong>Select Lecture</strong></label>
+		<label><strong>Select Topic</strong></label>
 		<select name="lecture" class="form-control" onchange="this.form.submit()">
 			<option>Select</option>
 			{% for lecture in lectures %}
@@ -119,7 +119,7 @@
 	<form>
 		<input type="hidden" name="standard" value="{{standard_id}}">
 		<input type="hidden" name="subject" value="{{subject_id}}">
-		<label><strong>Select Lecture</strong></label>
+		<label><strong>Select Topic</strong></label>
 		<select name="lecture" class="form-control" onchange="this.form.submit()">
 			{% for lecture in lectures %}
 			<option value="{{lecture.id}}"{% if lecture_id == lecture.id %} selected{% endif %}>{{lecture.name}}</option>
@@ -131,7 +131,7 @@
 		<input type="hidden" name="standard" value="{{standard_id}}">
 		<input type="hidden" name="subject" value="{{subject_id}}">
 		<input type="hidden" name="lecture" value="{{lecture_id}}">
-		<label><strong>Select Lecture Batch</strong></label>
+		<label><strong>Select Lecture</strong></label>
 		<select name="lecturebatch" class="form-control" onchange="this.form.submit()">
 			<option>Select</option>
 			{% for lecturebatch in lecturebatches %}
@@ -164,7 +164,7 @@
 	<form>
 		<input type="hidden" name="standard" value="{{standard_id}}">
 		<input type="hidden" name="subject" value="{{subject_id}}">
-		<label><strong>Select Lecture</strong></label>
+		<label><strong>Select Topic</strong></label>
 		<select name="lecture" class="form-control" onchange="this.form.submit()">
 			{% for lecture in lectures %}
 			<option value="{{lecture.id}}"{% if lecture_id == lecture.id %} selected{% endif %}>{{lecture.name}}</option>
@@ -176,7 +176,7 @@
 		<input type="hidden" name="standard" value="{{standard_id}}">
 		<input type="hidden" name="subject" value="{{subject_id}}">
 		<input type="hidden" name="lecture" value="{{lecture_id}}">
-		<label><strong>Select Lecture Batch</strong></label>
+		<label><strong>Select Lecture</strong></label>
 		<select name="lecturebatch" class="form-control" onchange="this.form.submit()">
 			{% for lecturebatch in lecturebatches %}
 			<option value="{{lecturebatch.id}}"{% if lecturebatch_id == lecturebatch.id %} selected{% endif %}>{{lecturebatch.name}}</option>

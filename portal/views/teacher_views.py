@@ -17,6 +17,9 @@ from portal.models import *
 from portal.db_api.attendance_reports_db import *
 import datetime
 from datetime import date
+from django.core.exceptions import *
+from django.utils.datastructures import *
+from portal.validator.validator import ModelValidateError
 
 def view_profile(request):
 
@@ -64,9 +67,20 @@ def edit_profile_submit(request):
 	if auth_dict['permission_teacher'] != True:
 		raise Http404
 
-	set_staff(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
+	try:
+		set_staff(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
 
-	return redirect('/teacher/profile/view-profile')
+		return redirect('/teacher/profile/view-profile')
+	except ModelValidateError, e:
+		return redirect('../view-profile?message_error='+str(e))
+	except ValueError, e:
+		return redirect('../view-profile?message_error='+str(PentaError(1000)))
+	except ObjectDoesNotExist, e:
+		return redirect('../view-profile/?message_error='+str(PentaError(999)))
+	except MultiValueDictKeyError, e:
+		return redirect('../view-profile/?message_error='+str(PentaError(998)))
+	except Exception, e:
+		return redirect('../view-profile/?message_error='+str(PentaError(100)))
 
 
 def change_password(request):
@@ -206,9 +220,16 @@ def add_lectures(request):
 
 
 			return redirect('./?message=Lecture Added')
-		except Exception as e:
-			print e
-			return redirect('./?message_error=Error Adding Lecture')
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 @csrf_exempt
 def view_lecture(request):
@@ -277,7 +298,6 @@ def view_lecture(request):
 		return render(request, 'teacher/lectures/view-lecture.html', context)
 	elif request.method == 'POST':
 		try:
-
 			id = request.POST['lecturebatch']
 			lecturebatch_name = request.POST['lecturebatch_name']
 			lecturebatch_description = request.POST['lecturebatch_description']
@@ -293,9 +313,16 @@ def view_lecture(request):
 
 			set_lecture_batch(id=id, name = lecturebatch_name, description = lecturebatch_description, date = lecturebatch_date , duration = lecturebatch_duration,batch_id = lecturebatch_batch,lecture_id = lecturebatch_lecture, is_done=lecturebatch_is_done)
 			return redirect('./?message=Edited Lecture batch')
-		except Exception as e:
-			print 'sds', e
-			return redirect('./?message_error=Error Editing Lecture')
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 @csrf_exempt
 def add_attendance(request):
@@ -413,9 +440,16 @@ def add_attendance(request):
 						delete_attendance(student_batch_id=student['id'], lecture_batch_id = lecturebatch)
 
 			return redirect('./?message=Attendance Marked')
-		except Exception as e:
-			print 'sd', e
-			return redirect('./?message_error=Error Marking Attendance')
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 def view_attendance(request):
 	auth_dict = get_user(request)
@@ -570,8 +604,16 @@ def add_student_notice(request):
 
 			return redirect('./?message=Notice Uploaded')
 
-		except:
-			return redirect('./?message_error=Error While Uploading Notice')
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 
 @csrf_exempt
@@ -668,12 +710,16 @@ def add_staff_notice(request):
 
 			return redirect('./?message=Notice Uploaded')
 
-		except:
-			return redirect('./?message_error=Error While Uploading Notice')
-
-
-
-
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 @csrf_exempt
 def view_my_notices(request):
@@ -695,8 +741,6 @@ def view_my_notices(request):
 	auth_dict
 	notices = Notice.objects.filter(uploader = Staff.objects.get(id=auth_dict['id']))
 	context['notices'] = notices
-
-
 
 	return render(request,'teacher/notices/view-my-notices.html', context)
 
@@ -722,7 +766,6 @@ def edit_my_notice(request):
 		context['notice'] = notice
 		# date_string = notice['expiry_date'].split('-')
 		context['notice_id'] = (request.GET.get('notice'))
-
 
 		return render(request, 'teacher/notices/edit-my-notice.html', context)
 
@@ -832,8 +875,16 @@ def add_test_marks(request):
 						continue
 					set_student_marks(test_id=test_id, student_batch_id=student['id'], marks_obtained=request.POST[str(student['id'])])
 			return redirect('./?message=Student marks added')
-		except Exception as e:
+		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 def view_test_marks(request):
 	auth_dict = get_user(request)
