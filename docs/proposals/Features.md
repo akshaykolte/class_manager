@@ -22,5 +22,5 @@
  - Integrated Distance Learning System
  - Online Test Portal
  - Leave Management System
- - Library Management System (if needed)
+ - Library Management System
  
