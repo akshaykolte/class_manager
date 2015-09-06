@@ -100,8 +100,6 @@ def edit_profile_submit(request):
 	except Exception, e:
 		return redirect('../view-profile/?message_error='+str(PentaError(100)))
 
-
-
 def change_password(request):
 
 	auth_dict = get_user(request)

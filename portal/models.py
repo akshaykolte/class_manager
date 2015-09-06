@@ -156,6 +156,13 @@ class Parent(models.Model):
 		from portal.validator.validator import validate_parent
 		if validate:
 			if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
+				print 'username', self.username
+				print 'password', self.password
+				print 'first name', self.first_name
+				print 'last name', self.last_name
+				print 'address', self.address
+				print 'email', self.email
+				print 'gender', self.gender
 				PentaError(997).raise_error()
 			if self.gender != 'M' and self.gender != 'F':
 				PentaError(995).raise_error()
