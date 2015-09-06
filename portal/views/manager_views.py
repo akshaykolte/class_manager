@@ -1243,6 +1243,7 @@ def add_staff_notice(request):
 
 @csrf_exempt
 def view_my_notices(request):
+	context = {}
 	auth_dict = get_user(request)
 
 	if auth_dict['logged_in'] == False:
@@ -1250,7 +1251,12 @@ def view_my_notices(request):
 
 	if auth_dict['permission_manager'] != True:
 		raise Http404
-	context = {}
+
+	if 'message' in request.GET:
+		context['message'] = request.GET['message']
+	elif 'message_error' in request.GET:
+		context['message_error'] = request.GET['message_error']
+
 	context['details'] = auth_dict
 	auth_dict
 	notices = Notice.objects.filter(uploader = Staff.objects.get(id=auth_dict['id']))
