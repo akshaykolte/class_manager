@@ -544,7 +544,7 @@ def admit_student(request):
 			set_student_batch(id=None,student_id = student_id, batch_id = batch_id, subject_year_id_list= subject_year_list, academic_year_id = None, standard_id = None)
 		return redirect('./?message=Transaction made')
 		'''except:
-			return redirect('./?message_error=Error. Transaction Failed.')'''
+			return redirect('./?message_error=Error. Student Admission Failed.')'''
 
 
 @csrf_exempt
