@@ -244,7 +244,7 @@ class Role(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_role
 		if validate:
-			if self.role == '':
+			if self.name == '':
 				PentaError(997).raise_error()
 			validation = validate_role(self)
 			if not validation:
