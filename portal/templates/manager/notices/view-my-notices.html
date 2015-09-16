@@ -3,7 +3,7 @@
 {% block main_content %}
 
  	</br>
- 	
+
     <!-- /.panel -->
     <div class="panel panel-default">
         <h3 class="page-header" style="margin-top:15px; margin-bottom:5px;">&nbsp;&nbsp;Notices</h3>
@@ -11,6 +11,23 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-lg-12">
+
+                  {% if message %}
+                	    <div class="panel-body">
+                	        <div class="alert alert-success alert-dismissable col-lg-12">
+                	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                	            {{message}}
+                	        </div>
+                	    </div>
+                    {% elif message_error %}
+                	    <div class="panel-body">
+                		    <div class="alert alert-danger alert-dismissable col-lg-12">
+                		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                		        {{message_error}}
+                		    </div>
+                		</div>
+                	{% endif %}
+
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover table-striped">
                             <thead>

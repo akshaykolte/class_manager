@@ -13,6 +13,9 @@ from portal.db_api.roles_db import *
 from portal.db_api.notice_db import *
 from portal.db_api.lecture_db import *
 from portal.db_api.standard_db import *
+from django.core.exceptions import *
+from django.utils.datastructures import *
+from portal.validator.validator import ModelValidateError
 
 
 def dashboard(request):
@@ -75,9 +78,20 @@ def edit_profile_submit(request):
 	if auth_dict['permission_admin'] != True:
 		raise Http404
 
-	set_staff(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
+	try:
+		set_staff(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
 
-	return redirect('/admin/profile/view-profile')
+		return redirect('/admin/profile/view-profile')
+	except ModelValidateError, e:
+		return redirect('../view-profile?message_error='+str(e))
+	except ValueError, e:
+		return redirect('../view-profile?message_error='+str(PentaError(1000)))
+	except ObjectDoesNotExist, e:
+		return redirect('../view-profile/?message_error='+str(PentaError(999)))
+	except MultiValueDictKeyError, e:
+		return redirect('../view-profile/?message_error='+str(PentaError(998)))
+	except Exception, e:
+		return redirect('../view-profile/?message_error='+str(PentaError(100)))
 
 
 def change_password(request):
@@ -116,7 +130,7 @@ def change_password_submit(request):
 @csrf_exempt
 def view_fees(request):
 	auth_dict = get_user(request)
-	
+
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
@@ -129,12 +143,7 @@ def view_fees(request):
 	context['branches'] = branches
 
 	if request.method == 'GET':
-	
-		
 		page_type = 0
-		
-		
-		
 		if 'branch' in request.GET:
 			page_type = 1
 			batches = get_batch(branch_id = int(request.GET.get('branch')))
@@ -145,24 +154,23 @@ def view_fees(request):
 				page_type = 2
 				context['batch_id'] = int(request.GET['batch'])
 				context['branch_id'] = int(request.GET['branch'])
-				fee_details = get_batch_fees(batch_id =  int(request.GET['batch']))
+				fee_details = get_batch_fees(batch_id = int(request.GET['batch']))
 				context['fee_details'] = fee_details
-				
+
 		context['page_type'] = page_type
-		print context
 
 		return render(request,'admin/fees/view-fees.html', context)
 
 @csrf_exempt
 def add_staff(request):
 	context = {}
-	
+
 	auth_dict = get_user(request)
 	context['details'] = auth_dict
 
 	if auth_dict['logged_in'] != True:
 		raise Http404
-	
+
 	if auth_dict['permission_admin'] != True:
 		return Http404
 
@@ -183,11 +191,19 @@ def add_staff(request):
 			gender = request.POST['gender']
 			username = request.POST['username']
 			password = request.POST['password']
-			
+
 			set_staff(username=username, password=password, first_name=first_name, last_name=last_name, address=address, email=email, phone_number=phone_number, gender=gender)
 			return redirect('./?message=Added Staff')
-		except:
-			return redirect('./?message_error=Error Adding Staff')
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 @csrf_exempt
 def view_staff(request):
@@ -197,7 +213,7 @@ def view_staff(request):
 
 	if auth_dict['logged_in'] != True:
 		raise Http404
-	
+
 	if auth_dict['permission_admin'] != True:
 		return Http404
 
@@ -227,8 +243,16 @@ def view_staff(request):
 			password = request.POST['password']
 			set_staff(id=id, username=username, password=password, first_name=first_name, last_name=last_name, address=address, email=email, phone_number=phone_number, gender=gender)
 			return redirect('./?message=Staff Saved')
-		except:
-			return redirect('./?message_error=Error saving staff')
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 @csrf_exempt
 def set_current_academic_year_view(request):
@@ -238,7 +262,7 @@ def set_current_academic_year_view(request):
 
 	if auth_dict['logged_in'] != True:
 		raise Http404
-	
+
 	if auth_dict['permission_admin'] != True:
 		return Http404
 
@@ -257,9 +281,20 @@ def set_current_academic_year_view(request):
 
 		return render(request, 'admin/set_current_academic_year.html', context)
 	elif request.method == 'POST':
-		current_academic_year = request.POST['current_academic_year']
-		set_current_academic_year(current_academic_year)
-		return redirect('./?message=Current academic year changed.')
+		try:
+			current_academic_year = request.POST['current_academic_year']
+			set_current_academic_year(current_academic_year)
+			return redirect('./?message=Current academic year changed.')
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 @csrf_exempt
 def assign_roles(request):
@@ -270,7 +305,7 @@ def assign_roles(request):
 
 	if auth_dict['logged_in'] != True:
 		raise Http404
-	
+
 	if auth_dict['permission_admin'] != True:
 		return Http404
 
@@ -281,35 +316,47 @@ def assign_roles(request):
 		elif 'message_error' in request.GET:
 			context['message_error'] = request.GET['message_error']
 
-		page_type = 1
-		if 'staff' in request.GET:
-			page_type = 2
-			staff_roles = get_staff_role(staff_id=request.GET['staff'])
-			branch_permissions = {}
-			branches = get_branch()
-			branch_dict = {}
-			for branch in branches:
-				branch_permissions[branch['name']] = []
-				branch_dict[branch['name']] = branch['id']
-			for staff_role in staff_roles:
-				branch_permissions[staff_role['branch_name']].append(staff_role['role'])
-			table_display = []
-			for index in branch_permissions:
-				table_display.append([])
-				table_display[-1].append(index)
-				table_display[-1].append([[1,False, branch_dict[index]], [2,False, branch_dict[index]], [3,False, branch_dict[index]]])
-				for perms in branch_permissions[index]:
-					if perms == 'teacher':
-						table_display[-1][1][0][1]=True
-					if perms == 'accountant':
-						table_display[-1][1][1][1]=True
-					if perms == 'manager':
-						table_display[-1][1][2][1]=True
-			context['table_display'] = table_display
-			context['staff'] = request.GET['staff']
-		context['page_type'] = page_type
+		try:
+			page_type = 1
+			if 'staff' in request.GET:
+				page_type = 2
+				staff_roles = get_staff_role(staff_id=request.GET['staff'])
+				branch_permissions = {}
+				branches = get_branch()
+				branch_dict = {}
+				for branch in branches:
+					branch_permissions[branch['name']] = []
+					branch_dict[branch['name']] = branch['id']
+				for staff_role in staff_roles:
+					branch_permissions[staff_role['branch_name']].append(staff_role['role'])
+				table_display = []
+				for index in branch_permissions:
+					table_display.append([])
+					table_display[-1].append(index)
+					table_display[-1].append([[1,False, branch_dict[index]], [2,False, branch_dict[index]], [3,False, branch_dict[index]]])
+					for perms in branch_permissions[index]:
+						if perms == 'teacher':
+							table_display[-1][1][0][1]=True
+						if perms == 'accountant':
+							table_display[-1][1][1][1]=True
+						if perms == 'manager':
+							table_display[-1][1][2][1]=True
+				context['table_display'] = table_display
+				context['staff'] = request.GET['staff']
+			context['page_type'] = page_type
 
-		return render(request, 'admin/staff/assign_roles.html', context)
+			return render(request, 'admin/staff/assign_roles.html', context)
+
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 	elif request.method == 'POST':
 		try:
@@ -324,21 +371,25 @@ def assign_roles(request):
 					if str(role_index)+'_'+str(branch['id']) in request.POST:
 						set_staff_role(role_id = get_role_by_name(role_name[role_index])['id'], staff_id = request.POST['staff'], branch_id=branch['id'])
 			return redirect('./?message=Permissions modified')
-		except:
-			return redirect('./?message_error=Error modifying permission')
-
-
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 @csrf_exempt
 def detailed_progress(request):
-
 	context = {}
 	auth_dict = get_user(request)
 	context['details'] = auth_dict
 
 	if auth_dict['logged_in'] != True:
 		raise Http404
-	
 	if auth_dict['permission_admin'] != True:
 		return Http404
 
@@ -346,33 +397,40 @@ def detailed_progress(request):
 	context['branches'] = branches
 
 	if request.method == 'GET':
-		page_type = 0
-
-		if 'branch' in request.GET:
-			page_type = 1
-			batches = get_batch(branch_id = int(request.GET['branch']))
-			context['batches'] = batches
-			context['branch_id'] = int(request.GET['branch'])
-			if 'batch' in request.GET:
-				page_type = 2
-				context['batch_id'] = int(request.GET['batch'])
+		try:
+			page_type = 0
+			if 'branch' in request.GET:
+				page_type = 1
+				batches = get_batch(branch_id = int(request.GET['branch']))
+				context['batches'] = batches
 				context['branch_id'] = int(request.GET['branch'])
-				lecture_batches = get_lecture_batch(batch_id = int(request.GET['batch']))
+				if 'batch' in request.GET:
+					page_type = 2
+					context['batch_id'] = int(request.GET['batch'])
+					context['branch_id'] = int(request.GET['branch'])
+					lecture_batches = get_lecture_batch(batch_id = int(request.GET['batch']))
 
-				for l_b in lecture_batches:
-					if date.today() > l_b['date']:
-						l_b['is_past'] = True
-						l_b['difference'] = (date.today() - l_b['date']).days
-					else:
-						l_b['is_past'] = False
-						l_b['difference'] = (l_b['date'] - date.today()).days
+					for l_b in lecture_batches:
+						if date.today() > l_b['date']:
+							l_b['is_past'] = True
+							l_b['difference'] = (date.today() - l_b['date']).days
+						else:
+							l_b['is_past'] = False
+							l_b['difference'] = (l_b['date'] - date.today()).days
 
-				context['lecture_batches'] = lecture_batches
-
-		context['page_type'] = page_type
-
-
-	return render(request, 'admin/track-progress/detailed-progress.html', context)
+					context['lecture_batches'] = lecture_batches
+			context['page_type'] = page_type
+			return render(request, 'admin/track-progress/detailed-progress.html', context)
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 
 def graphical_overview(request):
@@ -382,60 +440,72 @@ def graphical_overview(request):
 
 	if auth_dict['logged_in'] != True:
 		raise Http404
-	
+
 	if auth_dict['permission_admin'] != True:
 		return Http404
 
-	context['standards'] = get_standard()
-	if request.method == 'GET':
-		page_type = 0
+	try:
+		context['standards'] = get_standard()
+		if request.method == 'GET':
+			page_type = 0
 
-		if 'standard' in request.GET:
-			page_type = 1
-			context['standard_id'] = int(request.GET['standard'])
-			batch_list = get_batch(academic_year_id=get_current_academic_year()['id'], standard_id=int(request.GET['standard']))
-			context['batch_list'] = batch_list
-			lecturebatch_list = []
-			count_list = {}
-			for batch in batch_list:
-				lec_list = {}
-				total_counter = 0
-				done_counter = 0
-				lecture_batch = {}
-				lecture_batch['lec_bat'] = get_lecture_batch(batch_id=batch['id'])
-				for i in lecture_batch['lec_bat']:
-					batch_name = i['batch_name']
-					branch_name = i['branch_name']
-					
-					if not i['lecture_name'] in lec_list:
-						lec_list[i['lecture_name']] = {'total_counter':0, 'done_counter':0}
-					
-					total_counter += 1
-					lec_list[i['lecture_name']]['total_counter'] += 1
-					
-					if i['is_done'] == 1:
-						done_counter += 1
-						lec_list[i['lecture_name']]['done_counter'] += 1
+			if 'standard' in request.GET:
+				page_type = 1
+				context['standard_id'] = int(request.GET['standard'])
+				batch_list = get_batch(academic_year_id=get_current_academic_year()['id'], standard_id=int(request.GET['standard']))
+				context['batch_list'] = batch_list
+				lecturebatch_list = []
+				count_list = {}
+				for batch in batch_list:
+					lec_list = {}
+					total_counter = 0
+					done_counter = 0
+					lecture_batch = {}
+					lecture_batch['lec_bat'] = get_lecture_batch(batch_id=batch['id'])
+					for i in lecture_batch['lec_bat']:
+						batch_name = i['batch_name']
+						branch_name = i['branch_name']
 
-				lecture_batch['total_counter'] = total_counter
-				lecture_batch['done_counter'] = done_counter
-				lecture_batch['batch_name'] = batch_name
-				lecture_batch['branch_name'] = branch_name
-				lecture_batch['lec_list'] = lec_list
-				for k,v in lec_list.items():
-					if not k in count_list:
-						count_list[k] = []
+						if not i['lecture_name'] in lec_list:
+							lec_list[i['lecture_name']] = {'total_counter':0, 'done_counter':0}
 
-					count_list[k].append(v)
+						total_counter += 1
+						lec_list[i['lecture_name']]['total_counter'] += 1
 
-				lecturebatch_list.append(lecture_batch)
-			context['lecturebatches'] = lecturebatch_list
-			context['count_list'] = count_list
-		
-		context['page_type'] = page_type
+						if i['is_done'] == 1:
+							done_counter += 1
+							lec_list[i['lecture_name']]['done_counter'] += 1
+
+					lecture_batch['total_counter'] = total_counter
+					lecture_batch['done_counter'] = done_counter
+					lecture_batch['batch_name'] = batch_name
+					lecture_batch['branch_name'] = branch_name
+					lecture_batch['lec_list'] = lec_list
+					for k,v in lec_list.items():
+						if not k in count_list:
+							count_list[k] = []
+
+						count_list[k].append(v)
+
+					lecturebatch_list.append(lecture_batch)
+				context['lecturebatches'] = lecturebatch_list
+				context['count_list'] = count_list
+
+			context['page_type'] = page_type
 
 
-	return render(request, 'admin/track-progress/graphical-overview.html', context)
+		return render(request, 'admin/track-progress/graphical-overview.html', context)
+	except ModelValidateError, e:
+		return redirect('./?message_error='+str(e))
+	except ValueError, e:
+		return redirect('./?message_error='+str(PentaError(1000)))
+	except ObjectDoesNotExist, e:
+		return redirect('./?message_error='+str(PentaError(999)))
+	except MultiValueDictKeyError, e:
+		return redirect('./?message_error='+str(PentaError(998)))
+	except Exception, e:
+		return redirect('./?message_error='+str(PentaError(100)))
+
 
 @csrf_exempt
 def add_student_notice(request):
@@ -454,66 +524,76 @@ def add_student_notice(request):
 
 
 	if request.method == 'GET':
+		try:
+			if 'message' in request.GET:
+				context['message'] = request.GET['message']
+			elif 'message_error' in request.GET:
+				context['message_error'] = request.GET['message_error']
 
-		if 'message' in request.GET:
-			context['message'] = request.GET['message']
-		elif 'message_error' in request.GET:
-			context['message_error'] = request.GET['message_error']
+			page_type = 0
+			branches = get_branch(id=None)
+			all_branch={}
+			all_branch['name'] = "All Branches"
+			all_branch['id'] = 0
+			all_branches = []
+			all_branches.append(all_branch)
+			context['branches'] = all_branches + branches
 
-		page_type = 0
-		branches = get_branch(id=None)
-		all_branch={}
-		all_branch['name'] = "All Branches"
-		all_branch['id'] = 0
-		all_branches = []
-		all_branches.append(all_branch)
-		context['branches'] = all_branches + branches
-
-		if 'branch' in request.GET:
-
-
-
-			context['branch_id'] = int(request.GET['branch'])
-			if int(request.GET['branch']) :
-				page_type = 1
-				batches = get_batch(branch_id = int(request.GET['branch']))
-				all_batch={}
-				all_batch['name'] = "All Batches"
-				all_batch['id'] = 0
-				all_batch['description'] = "All batches of that branch"
-				all_batch['academic_year'] = "current_academic_year"
-				all_batch['branch'] = get_branch(id = int(request.GET['branch']))['name']
-				all_batch['standard'] = "All standards"
-				all_batches = []
-				all_batches.append(all_batch)
-				context['batches'] = all_batches + batches
+			if 'branch' in request.GET:
 
 
 
-				if 'batch' in request.GET:
+				context['branch_id'] = int(request.GET['branch'])
+				if int(request.GET['branch']) :
+					page_type = 1
+					batches = get_batch(branch_id = int(request.GET['branch']))
+					all_batch={}
+					all_batch['name'] = "All Batches"
+					all_batch['id'] = 0
+					all_batch['description'] = "All batches of that branch"
+					all_batch['academic_year'] = "current_academic_year"
+					all_batch['branch'] = get_branch(id = int(request.GET['branch']))['name']
+					all_batch['standard'] = "All standards"
+					all_batches = []
+					all_batches.append(all_batch)
+					context['batches'] = all_batches + batches
 
-					context['batch_id'] = int(request.GET['batch'])
 
-					if int(request.GET['batch']) :
-						page_type = 2
 
-						students = get_students(id = None,batch_id = int(request.GET['batch']))
-						context['students'] = students
-					else :
-						page_type = 2
-						#students = StudentBatch.objects.filter( batch__branch = Branch.objects.get(id = int(request.GET['branch']) ))
-						#context['students'] = students
-			else:
-				page_type = 2
+					if 'batch' in request.GET:
 
-				#students = StudentBatch.objects.filter( batch__academic_year = AcademicYear.objects.get(id = get_current_academic_year()['id'] ))
+						context['batch_id'] = int(request.GET['batch'])
 
-				#context['students'] = students
-				pass
+						if int(request.GET['batch']) :
+							page_type = 2
 
-		context['page_type'] = page_type
+							students = get_students(id = None,batch_id = int(request.GET['batch']))
+							context['students'] = students
+						else :
+							page_type = 2
+							#students = StudentBatch.objects.filter( batch__branch = Branch.objects.get(id = int(request.GET['branch']) ))
+							#context['students'] = students
+				else:
+					page_type = 2
 
-		return render(request,'admin/notices/add-student-notice.html', context)
+					#students = StudentBatch.objects.filter( batch__academic_year = AcademicYear.objects.get(id = get_current_academic_year()['id'] ))
+
+					#context['students'] = students
+					pass
+
+			context['page_type'] = page_type
+
+			return render(request,'admin/notices/add-student-notice.html', context)
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 	elif request.method == 'POST':
 		try:
@@ -551,76 +631,74 @@ def add_student_notice(request):
 				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = None, staff_id = None)
 			elif int(request.POST['branch']) and not int(request.POST['batch']):
 				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = int(request.POST['branch']) , batch_id = None, student_id = None, staff_id = None)
-
 			return redirect('./?message=Notice Uploaded')
-
-		except:
-			return redirect('./?message_error=Error While Uploading Notice')
-
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 @csrf_exempt
 def add_staff_notice(request):
-
-
 	auth_dict = get_user(request)
-
 	if auth_dict['logged_in'] != True:
 		raise Http404
-
 	if auth_dict['permission_admin'] != True:
 		raise Http404
-
 	context = {}
 	context['details'] = auth_dict
 
-
 	if request.method == 'GET':
-
 		if 'message' in request.GET:
 			context['message'] = request.GET['message']
 		elif 'message_error' in request.GET:
 			context['message_error'] = request.GET['message_error']
 
-		page_type = 0
-		branches = get_branch(id=None)
-		all_branch={}
-		all_branch['name'] = "All Branches"
-		all_branch['id'] = 0
-		all_branches = []
-		all_branches.append(all_branch)
-		context['branches'] = all_branches + branches
+		try:
+			page_type = 0
+			branches = get_branch(id=None)
+			all_branch={}
+			all_branch['name'] = "All Branches"
+			all_branch['id'] = 0
+			all_branches = []
+			all_branches.append(all_branch)
+			context['branches'] = all_branches + branches
+			if 'branch' in request.GET:
+				context['branch_id'] = int(request.GET['branch'])
+				if int(request.GET['branch']) :
+					page_type = 1
 
-		if 'branch' in request.GET:
+					staff = get_staff(branch_id = int(request.GET['branch']))
+					context['staff'] = staff
+				else:
+					page_type = 1
+					#students = StudentBatch.objects.filter( batch__academic_year = AcademicYear.objects.get(id = get_current_academic_year()['id'] ))
+					#context['students'] = students
 
-
-
-			context['branch_id'] = int(request.GET['branch'])
-			if int(request.GET['branch']) :
-				page_type = 1
-
-				staff = get_staff(branch_id = int(request.GET['branch']))
-				context['staff'] = staff
-
-			else:
-				page_type = 1
-
-				#students = StudentBatch.objects.filter( batch__academic_year = AcademicYear.objects.get(id = get_current_academic_year()['id'] ))
-
-				#context['students'] = students
-
-
-		context['page_type'] = page_type
-
-		return render(request,'admin/notices/add-staff-notice.html', context)
+			context['page_type'] = page_type
+			return render(request,'admin/notices/add-staff-notice.html', context)
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 	elif request.method == 'POST':
 		try:
-
 			if request.POST['is_important'] == "False":
 				is_imp = 0
 			else:
 				is_imp = 1
-
 			title = request.POST['title']
 			description = request.POST['description']
 			expiry_date = request.POST['expiry-date']
@@ -629,38 +707,33 @@ def add_staff_notice(request):
 			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp)
 			print int(request.POST['branch'])
 			if int(request.POST['branch']):
-
 				staff = get_staff(branch_id = int(request.POST['branch']))
 				staff_list = []
-
 				for staff_object in staff:
-
-
 					if 'staff_'+str(staff_object['id']) in request.POST:
 						#print subject_year
 						upload_notice(id=None, notice_id = notice_id, for_students = False, for_staff = True, branch_id = None, batch_id = None, student_id = None, staff_id = staff_object['id'])
-
-
-
-
 
 			if not int(request.POST['branch']) :
 				#print "ddd"
 				upload_notice(id=None, notice_id = notice_id, for_students = False, for_staff = True, branch_id = None, batch_id = None, student_id = None, staff_id = None)
 
-
-
 			return redirect('./?message=Notice Uploaded')
-
-		except:
-			return redirect('./?message_error=Error While Uploading Notice')
-
-
-
-
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 @csrf_exempt
 def view_my_notices(request):
+	context = {}
+
 	auth_dict = get_user(request)
 
 	if auth_dict['logged_in'] == False:
@@ -668,7 +741,12 @@ def view_my_notices(request):
 
 	if auth_dict['permission_admin'] != True:
 		raise Http404
-	context = {}
+
+	if 'message' in request.GET:
+		context['message'] = request.GET['message']
+	elif 'message_error' in request.GET:
+		context['message_error'] = request.GET['message_error']
+
 	context['details'] = auth_dict
 	auth_dict
 	notices = Notice.objects.filter(uploader = Staff.objects.get(id=auth_dict['id']))
@@ -714,5 +792,13 @@ def edit_my_notice(request):
 			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp)
 
 			return redirect('/admin/notices/view-my-notices/?message=Notice edited')
-		except:
-			return redirect('./?message_error=Error. Edit Failed.')
+		except ModelValidateError, e:
+			return redirect('../view-my-notices?message_error='+str(e))
+		except ValueError, e:
+			return redirect('../view-my-notices?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('../view-my-notices?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('../view-my-notices?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('../view-my-notices?message_error='+str(PentaError(100)))

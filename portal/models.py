@@ -3,7 +3,7 @@ from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from datetime import datetime, timedelta
 from django.db import IntegrityError
-from portal.validator.validator import PentaError
+from portal.validator.validator import PentaError, validate_phone_number
 
 class AcademicYear(models.Model):
 	year_start = models.IntegerField()
@@ -119,6 +119,12 @@ class Student(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_student
 		if validate:
+			if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
+				PentaError(997).raise_error()
+			if self.gender != 'M' and self.gender != 'F':
+				PentaError(995).raise_error()
+			if not validate_phone_number(self.phone_number):
+				PentaError(996).raise_error()
 			validation = validate_student(self)
 			if not validation:
 				validation.raise_error()
@@ -149,6 +155,19 @@ class Parent(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_parent
 		if validate:
+			if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
+				print 'username', self.username
+				print 'password', self.password
+				print 'first name', self.first_name
+				print 'last name', self.last_name
+				print 'address', self.address
+				print 'email', self.email
+				print 'gender', self.gender
+				PentaError(997).raise_error()
+			if self.gender != 'M' and self.gender != 'F':
+				PentaError(995).raise_error()
+			if not validate_phone_number(self.phone_number):
+				PentaError(996).raise_error()
 			validation = validate_parent(self)
 			if not validation:
 				validation.raise_error()
@@ -199,6 +218,12 @@ class Staff(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_staff
 		if validate:
+			if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
+				PentaError(997).raise_error()
+			if self.gender != 'M' and self.gender != 'F':
+				PentaError(995).raise_error()
+			if not validate_phone_number(self.phone_number):
+				PentaError(996).raise_error()
 			validation = validate_staff(self)
 			if not validation:
 				validation.raise_error()
@@ -219,6 +244,8 @@ class Role(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_role
 		if validate:
+			if self.role == '':
+				PentaError(997).raise_error()
 			validation = validate_role(self)
 			if not validation:
 				validation.raise_error()
@@ -371,6 +398,8 @@ class LectureBatch(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_lecture_batch
 		if validate:
+			if self.name == '' or self.description == '' or self.duration == '':
+				PentaError(997).raise_error()
 			validation = validate_lecture_batch(self)
 			if not validation:
 				validation.raise_error()
@@ -446,6 +475,8 @@ class FeeType(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_fee_type
 		if validate:
+			if self.name == '':
+				PentaError(997).raise_error()
 			validation = validate_fee_type(self)
 			if not validation:
 				validation.raise_error()
@@ -472,6 +503,8 @@ class FeeTransaction(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_fee_transaction
 		if validate:
+			if self.receipt_number == '':
+				PentaError(997).raise_error()
 			validation = validate_fee_transaction(self)
 			if not validation:
 				validation.raise_error()
@@ -493,6 +526,9 @@ class Test(models.Model):
 
 
 	def save(self, validate=True):
+		if validate:
+			if self.name == '':
+				PentaError(997).raise_error()
 		try:
 			super(Test, self).save()
 		except IntegrityError, e:
@@ -553,10 +589,10 @@ class TestStudentBatch(models.Model):
 			if not validation:
 				validation.raise_error()
 
-		# try:
-		super(TestStudentBatch, self).save()
-		# except IntegrityError, e:
-		# 	PentaError(1044).raise_error()
+		try:
+			super(TestStudentBatch, self).save()
+		except IntegrityError, e:
+			PentaError(1044).raise_error()
 
 class Notice(models.Model):
 	title = models.CharField(max_length=200)
@@ -568,6 +604,15 @@ class Notice(models.Model):
 
 	def __str__(self):
 		return str(self.title) + ' - ' + str(self.uploader)
+
+	def save(self, validate=True):
+		if validate:
+			if self.title == '' or self.description == '':
+				PentaError(997).raise_error()
+		try:
+			super(Notice, self).save()
+		except IntegrityError, e:
+			PentaError(1050).raise_error()
 
 class NoticeViewer(models.Model):
 	notice = models.ForeignKey(Notice)

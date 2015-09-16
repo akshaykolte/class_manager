@@ -412,17 +412,16 @@ def get_batch_fees(batch_id = None):
 
 		for studentbatch in studentbatches:
 			subject_years = studentbatch.subject_years.all()
-			basefees = get_base_fee(id = None , subject_years_list = subject_years)
-			print basefees
-			for basefee in basefees :
-				total['base_fees'] = total['base_fees'] + basefee.amount
-
-
+			try:
+				basefees = get_base_fee(id = None , subject_years_list = subject_years)
+				# print basefees
+				for basefee in basefees :
+					total['base_fees'] = total['base_fees'] + basefee.amount
+			except:
+				# temporary implementation
+				pass
 
 		for i in fee_transaction:
-
-
-
 			total['student'] = i.student_batch.student.first_name + ' ' + i.student_batch.student.last_name
 			total['student_id'] = i.student_batch.student.id
 			if(i.fee_type.name == 'payment'):

@@ -220,7 +220,7 @@ def set_parent(id=None,username = None,password = None, student_id = None, first
 	is_none_gender = gender == None
 
 	if is_none_id:
-		parent_object = Parent(first_name = first_name,last_name = last_name, address = address, email = email, phone_number = phone_number, gender = gender)
+		parent_object = Parent(first_name = first_name,last_name = last_name, address = address, email = email, phone_number = phone_number, gender = gender, username=username, password=password)
 		parent_object.save()
 		if not is_none_student_id:
 			student_object = Student.objects.get(id=student_id)
