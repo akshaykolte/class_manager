@@ -543,8 +543,8 @@ def add_student_notice(request):
 			description = request.POST['description']
 			expiry_date = request.POST['expiry-date']
 			is_important = request.POST['is_important']
-
-			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp)
+			document = request.FILES['myfile'] 
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp, document = document)
 
 			if int(request.POST['branch']):
 				if int(request.POST['batch']):

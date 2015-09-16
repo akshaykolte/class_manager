@@ -564,6 +564,7 @@ class Notice(models.Model):
 	uploader = models.ForeignKey(Staff)
 	expiry_date = models.DateField(default=datetime.now()+timedelta(days=30))
 	important = models.BooleanField(default=False)
+	document = models.FileField(upload_to='documents/%Y/%m/%d')
 
 	def __str__(self):
 		return str(self.title) + ' - ' + str(self.uploader)

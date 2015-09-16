@@ -3,7 +3,7 @@ from portal.db_api.academic_year_db import get_current_academic_year
 
 # uploader_id is necessary, even for edit, i.e., if id is not none.
 
-def set_notice(id = None, title=None, description=None, uploader_id=None, expiry_date=None, important=None):
+def set_notice(id = None, title=None, description=None, uploader_id=None, expiry_date=None, important=None, document = None):
 	is_id_none = id == None
 	is_title_none = title==None
 	is_description_none = description==None
@@ -15,7 +15,7 @@ def set_notice(id = None, title=None, description=None, uploader_id=None, expiry
 		
 		# Create new notice and save
 		uploader = Staff.objects.get(id=uploader_id)
-		notice_object = Notice(title=title, description=description, uploader=uploader, expiry_date=expiry_date, important=important)
+		notice_object = Notice(title=title, description=description, uploader=uploader, expiry_date=expiry_date, important=important, document = document)
 		notice_object.save()
 
 	elif not is_id_none:

@@ -110,7 +110,7 @@
                 </form>
          		{% endif %}
 
-          	<form action="." method="POST">
+          	<form action="." method="POST" enctype="multipart/form-data">
 
 			<input type="hidden" name="branch" value="{{branch_id}}">
 			<input type="hidden" name="batch" value="{{batch_id}}">
@@ -137,15 +137,29 @@
 				<label><strong>Expiry Date</strong></label>
 				<input name="expiry-date" class="form-control" type = "text" id = "example1">
 				<br/>
-
+				
+				<label>
+	            <strong>Upload File</strong></label><br/>
+	            <span style = "">
+ 				<input  type="file" name="myfile" />
+   				
+   				</span>		
+			
 				<div class="checkbox">
 	            <label>
-	            <strong>Is Important?</strong>&nbsp;&nbsp;
+	            <strong>Is Notice Important?</strong>&nbsp;&nbsp;
 	            </label>
 	            <input type="radio" name="is_important" value="True" checked>&nbsp;Yes&nbsp;
 	            <input type="radio" name="is_important" value="False"  checked >&nbsp;No&nbsp;
 	        	</div>
-
+				
+				<br/>
+			
+				
+				
+   				
+   				<br/>
+   				<br/>
 				<input class="btn btn-primary" type='submit' value='Upload Notice'>
 			</form>
 
