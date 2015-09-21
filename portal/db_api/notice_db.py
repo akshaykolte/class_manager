@@ -34,7 +34,7 @@ def set_notice(id = None, title=None, description=None, uploader_id=None, expiry
 			if not is_important_none:
 				notice_object.important = important
 	notice_object.save()
-	print notice_object.important
+
 	return notice_object.id
 
 
