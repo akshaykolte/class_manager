@@ -12,6 +12,8 @@ urlpatterns = [
 	
 	url(r'^fees/view-fees/$', 'portal.views.accountant_views.view_fees'),
 	url(r'^fees/make-transaction/$', 'portal.views.accountant_views.make_transaction'),
+	url(r'^fees/view-transaction/$', 'portal.views.accountant_views.view_transaction'),
+
 
 	url(r'^fees/add-base-fees/$', 'portal.views.accountant_views.add_base_fees'),	
 	url(r'^fees/view-base-fees/$', 'portal.views.accountant_views.view_base_fees'),	

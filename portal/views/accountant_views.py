@@ -15,6 +15,13 @@ from portal.models import Notice
 from django.core.exceptions import *
 from django.utils.datastructures import *
 from portal.validator.validator import ModelValidateError
+import cStringIO as StringIO
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from django.template import Context
+from django.http import HttpResponse
+from cgi import escape
+
 
 def dashboard(request):
 
@@ -433,7 +440,7 @@ def make_transaction(request):
 			fee_type_id = request.POST['fee_type']
 
 			print fee_type_id
-			receipt_number = request.POST['receipt_number']
+			#receipt_number = request.POST['receipt_number']
 
 			amount = request.POST['amount']
 
@@ -443,9 +450,9 @@ def make_transaction(request):
 
 			time = request.POST['time']
 
-			set_fee_transaction(id = None ,amount = amount, date =  date, time = time , receipt_number = receipt_number, student_batch_id = student_batch_id, fee_type_id = fee_type_id)
+			transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, time = time , student_batch_id = student_batch_id, fee_type_id = fee_type_id)
 
-			return redirect('./?message=Transaction made')
+			return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id))
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
@@ -456,6 +463,44 @@ def make_transaction(request):
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))
+
+def render_to_pdf(template_src, context_dict):
+    template = get_template(template_src)
+    context = Context(context_dict)
+    html  = template.render(context)
+    result = StringIO.StringIO()
+
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
+
+
+def view_transaction(request):
+	context = {}
+
+	auth_dict = get_user(request)
+	context['details'] = auth_dict
+
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+
+	if 'transaction' in request.GET:
+		context['transaction_id'] = request.GET['transaction']
+	elif 'message_error' in request.GET:
+		context['message_error'] = request.GET['message_error']
+	context['transaction_details'] = get_fee_transaction(id = request.GET['transaction'])
+	return render_to_pdf(
+           'accountant/fees/view-transaction.html',
+            context
+        )
+
+
+	
 
 @csrf_exempt
 def create_student(request):
