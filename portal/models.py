@@ -490,21 +490,19 @@ class FeeTransaction(models.Model):
 	date = models.DateField()
 	time = models.TimeField()
 	timestamp = models.DateTimeField(auto_now_add=True)
-	receipt_number = models.CharField(max_length=50)
 	student_batch = models.ForeignKey(StudentBatch)
 	fee_type = models.ForeignKey(FeeType)
 
 	def __str__(self):
 		return str(self.student_batch) + ':' + str(self.fee_type) + '- Rs. ' + str(self.amount)
 
+	pass
 	class Meta:
-		unique_together = (('receipt_number',),)
+		unique_together = ()
 
 	def save(self, validate=True):
 		from portal.validator.validator import validate_fee_transaction
 		if validate:
-			if self.receipt_number == '':
-				PentaError(997).raise_error()
 			validation = validate_fee_transaction(self)
 			if not validation:
 				validation.raise_error()

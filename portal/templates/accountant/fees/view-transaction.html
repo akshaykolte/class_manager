@@ -1,0 +1,94 @@
+<html>
+<head>
+<title>PentaFlux Solutions</title>
+<style type="text/css">
+<!--
+body {
+  font-family:Tahoma;
+  font-size:2;
+}
+
+img {
+  border:0;
+}
+
+#page {
+  width:800px;
+  margin:0 auto;
+  padding:15px;
+
+}
+
+#logo {
+  float:left;
+  margin-left:250px;
+}
+
+#address {
+  height:181px;
+  margin-left:0px; 
+}
+
+table {
+  width:100%;
+}
+
+td {
+padding:5px;
+}
+
+tr.odd {
+  background:#e1ffe1;
+}
+-->
+</style>
+</head>
+<body>
+<div id="page">
+
+   
+    <div id="logo">
+    <img src="/class_manager/portal/static/firmlogo.png"></a>
+  </div>
+ 
+  
+  <div id="address">
+
+    <p>Your Firm's Name<br />
+    <a href="mailto:youremail@somewhere.com">yourfirmsemail@somewhere.com</a>
+    <br /><br />
+    Receipt No. {{transaction_details.id}}<br />
+    Created on {{transaction_details.date}} {{transaction_details.time}}<br />
+    </p>
+  </div><!--end address-->
+
+  <div id="content">
+    <p>
+      <strong>Customer Details</strong><br />
+      Name: {{transaction_details.student.first_name}} {{transaction_details.student.last_name}}<br />
+      Email: {{transaction_details.student.email}}<br />
+      Payment Type: {{transaction_details.fee_type}}    </p>
+    <hr>
+    <table>
+      <tr><td><strong>Description</strong></td><td><strong>Qty</strong></td><td><strong>Payment Method</strong></td><td><strong>Amount</strong></td></tr>
+      <tr class="odd"><td>{{transaction_details.fee_type}} type </td><td>1</td><td>Cash</td><td>{{transaction_details.amount}}</td></tr>              <tr><td>&nbsp;</td><td>&nbsp;</td><td><strong>Total</strong></td><td><strong>{{transaction_details.amount}}/-</strong></td></tr>
+
+    </table>
+    <hr>
+    <p>
+      Thank you for your Transaction!  This transaction will appear on your billing statement as "Your Company".<br />
+      If you have any questions, please feel free to contact us at <a href="mailto:youremail@somewhere.com">youremail@somewhere.com</a>.
+    </p>
+
+    <hr>
+    <p>
+      <center><small>This communication is for the exclusive use of the addressee and may contain proprietary, confidential or privileged information. If you are not the intended recipient any use, copying, disclosure, dissemination or distribution is strictly prohibited.
+      <br /><br />
+      &copy; Your Firm All Rights Reserved
+      </small></center>
+    </p>
+  </div><!--end content-->
+</div><!--end page-->
+</body>
+
+</html>

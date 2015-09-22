@@ -162,31 +162,30 @@ def get_base_fee(id = None , subject_years_list = None, academic_year_id=None, s
 
 		return base_fee_object'''
 
-def set_fee_transaction(id = None ,amount=None ,date = None, time = None, receipt_number = None, student_batch_id = None, fee_type_id = None):
+def set_fee_transaction(id = None ,amount=None ,date = None, time = None, student_batch_id = None, fee_type_id = None):
 	is_none_id = id == None
 	is_none_amount = amount == None
 	is_none_date = date == None
 	is_none_time = time == None
-	is_none_receipt_number = receipt_number == None
+	
 	is_none_student_batch_id = student_batch_id == None
 	is_none_fee_type_id = fee_type_id == None
 
 	if is_none_id:
 		student_batch_object = StudentBatch.objects.get(id = student_batch_id)
 		fee_type_object = FeeType.objects.get(id = fee_type_id)
-		fee_transaction_object = FeeTransaction(amount = amount, date = date, time = time, receipt_number = receipt_number, student_batch = student_batch_object, fee_type = fee_type_object)
+		fee_transaction_object = FeeTransaction(amount = amount, date = date, time = time, student_batch = student_batch_object, fee_type = fee_type_object)
 		fee_transaction_object.save()
 
-		return True
+		return fee_transaction_object.id
 
 	else :
 		raise Exception('You cannot edit a fee transaction')
 
-def get_fee_transaction(id = None ,date_start = None, date_end = None, receipt_number = None, student_id = None, fee_type_id = None):
+def get_fee_transaction(id = None ,date_start = None, date_end = None, student_id = None, fee_type_id = None):
 	is_none_id = id == None
 	is_none_date_start = date_start == None
 	is_none_date_end = date_end == None
-	is_none_receipt_number = receipt_number == None
 	is_none_fee_type_id = fee_type_id == None
 	is_none_student_id = student_id == None
 
@@ -219,7 +218,6 @@ def get_fee_transaction(id = None ,date_start = None, date_end = None, receipt_n
 		for i in fee_transaction:
 			fee_dict = {}
 			fee_dict['id'] = i.id
-			fee_dict['receipt_number'] = i.receipt_number
 			fee_dict['amount'] = i.amount
 			fee_dict['date'] = i.date
 			fee_dict['time'] = i.time
@@ -269,7 +267,7 @@ def get_fee_transaction(id = None ,date_start = None, date_end = None, receipt_n
 		fee_dict['date'] = i.date
 		fee_dict['time'] = i.time
 		fee_dict['timestamp'] = i.timestamp
-		fee_dict['student'] = i.student
+		fee_dict['student'] = i.student_batch.student
 		fee_dict['fee_type'] = i.fee_type
 
 		return fee_dict
