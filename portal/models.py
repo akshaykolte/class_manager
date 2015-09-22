@@ -497,21 +497,19 @@ class FeeTransaction(models.Model):
 		return str(self.student_batch) + ':' + str(self.fee_type) + '- Rs. ' + str(self.amount)
 
 	pass
-	'''class Meta:
-		unique_together = (('receipt_number',),)
+	class Meta:
+		unique_together = ()
 
 	def save(self, validate=True):
 		from portal.validator.validator import validate_fee_transaction
 		if validate:
-			if self.receipt_number == '':
-				PentaError(997).raise_error()
 			validation = validate_fee_transaction(self)
 			if not validation:
 				validation.raise_error()
 		try:
 			super(FeeTransaction, self).save()
 		except IntegrityError, e:
-			PentaError(1035).raise_error()'''
+			PentaError(1035).raise_error()
 
 class Test(models.Model):
 	subject_year = models.ForeignKey(SubjectYear)
