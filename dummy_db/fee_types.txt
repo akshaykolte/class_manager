@@ -1,4 +1,4 @@
-Payment
-Discount
-Fine
-Base Fee
+payment
+discount
+fine
+base fee

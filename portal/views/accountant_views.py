@@ -153,7 +153,7 @@ def view_fees(request):
 				context['student_id'] = int(request.GET['student'])
 				context['student_name'] = request.GET['name']
 				fee_details = get_student_fees( student_id = int(request.GET['student']) )
-				transaction_details = get_fee_transaction(id = None ,date_start = None, date_end = None, receipt_number = None, student_id = int(request.GET['student']), fee_type_id = None)
+				transaction_details = get_fee_transaction(id = None ,date_start = None, date_end = None, student_id = int(request.GET['student']), fee_type_id = None)
 				#print fee_details
 				context['fee_details'] = fee_details
 				context['transaction_details'] = transaction_details

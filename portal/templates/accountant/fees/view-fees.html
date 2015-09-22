@@ -95,7 +95,10 @@
                                 {% for i in transaction_details %}
                                     <tr class="odd gradeX">
                                         <td align="center">{{i.student_batch}}</td>
-                                        <td align="center">{{i.fee_type}}</td>
+                                        <td align="center">{%if i.fee_type.name == 'payment'%}Payment{%endif%}
+                                                        {%if i.fee_type.name == 'discount'%}Discount{%endif%}
+                                                        {%if i.fee_type.name == 'base fee'%}Base Fee{%endif%}
+                                                        {%if i.fee_type.name == 'fine'%}Fine{%endif%}</td>
                                         <td align="center">{{i.amount}}</td>
                                         <td align="center">{{i.receipt_number}}</td>
                                         <td align="center">{{i.academic_year}}</td>

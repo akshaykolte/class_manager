@@ -61,7 +61,10 @@
 				<select name="fee_type" class="form-control" onchange="this.form.submit()">
 					<option>Select</option>
 					{% for fee_type in fee_types %}
-						<option value="{{fee_type.id}}">{{fee_type.name}}</option>
+						<option value="{{fee_type.id}}">{%if fee_type.name == 'payment'%}Payment{%endif%}
+														{%if fee_type.name == 'discount'%}Discount{%endif%}
+														{%if fee_type.name == 'base fee'%}Base Fee{%endif%}
+														{%if fee_type.name == 'fine'%}Fine{%endif%}</option>
 					{% endfor %}
 				</select>
 		</form>
@@ -86,7 +89,10 @@
 		<label><strong>Select Fee Type</strong></label>
 		<select name="fee_type" class="form-control" onchange="this.form.submit()">
 			{% for fee_type in fee_types %}
-			<option value="{{fee_type.id}}"{% if fee_type_id == fee_type.id %} selected{% endif %}>{{fee_type.name}}</option>
+			<option value="{{fee_type.id}}"{% if fee_type_id == fee_type.id %} selected{% endif %}>{%if fee_type.name == 'payment'%}Payment{%endif%}
+														{%if fee_type.name == 'discount'%}Discount{%endif%}
+														{%if fee_type.name == 'base fee'%}Base Fee{%endif%}
+														{%if fee_type.name == 'fine'%}Fine{%endif%}</option>
 			{% endfor %}
 		</select>
 	</form>
