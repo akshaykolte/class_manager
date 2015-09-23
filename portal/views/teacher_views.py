@@ -27,6 +27,7 @@ from django.contrib import admin
 from django.http import HttpResponse
 import mimetypes
 import os
+import urllib
 
 def respond_as_attachment(request):
 
