@@ -80,7 +80,7 @@
                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                                 <tr>
-                                    <th>Student</th>
+                                    <th>Student Batch</th>
                                     <th>Fee Type</th>
                                     <th>Amount</th>
                                     <th>Receipt Number</th>
@@ -94,14 +94,14 @@
                             <tbody>
                                 {% for i in transaction_details %}
                                     <tr class="odd gradeX">
-                                        <td align="center">{{i.student_batch}}</td>
+                                        <td align="center">{% if i.student_batch.batch %} {{i.student_batch.batch}} {% else %} Not Assigned {% endif %}</td>
                                         <td align="center">{%if i.fee_type.name == 'payment'%}Payment{%endif%}
                                                         {%if i.fee_type.name == 'discount'%}Discount{%endif%}
                                                         {%if i.fee_type.name == 'base fee'%}Base Fee{%endif%}
                                                         {%if i.fee_type.name == 'fine'%}Fine{%endif%}</td>
                                         <td align="center">{{i.amount}}</td>
-                                        <td align="center">{{i.receipt_number}}</td>
-                                        <td align="center">{{i.academic_year}}</td>
+                                        <td align="center">{{i.id}}</td>
+                                        <td align="center">{{i.academic_year.year_start}} - {{i.academic_year.year_end}}</td>
                                         <td align="center">{{i.date}}</td>
                                         <td align="center">{{i.time}}</td>
                                     </tr>
