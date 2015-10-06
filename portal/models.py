@@ -488,7 +488,6 @@ class FeeType(models.Model):
 class FeeTransaction(models.Model):
 	amount = models.IntegerField()
 	date = models.DateField()
-	time = models.TimeField()
 	timestamp = models.DateTimeField(auto_now_add=True)
 	student_batch = models.ForeignKey(StudentBatch)
 	fee_type = models.ForeignKey(FeeType)
