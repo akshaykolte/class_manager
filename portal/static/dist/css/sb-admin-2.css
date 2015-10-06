@@ -100,6 +100,7 @@ body {
 
 .sidebar ul li a.active {
     background-color: #eee;
+    color:#23527c;
 }
 
 .sidebar .arrow {
@@ -289,6 +290,7 @@ table.dataTable thead .sorting:after {
     padding-bottom: 10px;
     border: 1px solid #ddd;
     background-color: #eee!important;
+    color:#23527c;
 }
 
 .show-grid {
