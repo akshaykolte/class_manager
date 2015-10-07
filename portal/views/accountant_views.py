@@ -435,22 +435,22 @@ def make_transaction(request):
 			student_batch_object = StudentBatch.objects.get(id = request.POST['student_batch'])
 			student_batch_id = student_batch_object.id
 
-			print student_batch_id
+			#print student_batch_id
 
 			fee_type_id = request.POST['fee_type']
 
-			print fee_type_id
+			#print fee_type_id
 			#receipt_number = request.POST['receipt_number']
 
 			amount = request.POST['amount']
 
 			date = request.POST['date']
-			print date
-			print "herera"
+			#print date
+			#print "herera"
 
-			time = request.POST['time']
+			#time = request.POST['time']
 
-			transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, time = time , student_batch_id = student_batch_id, fee_type_id = fee_type_id)
+			transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_batch_id = student_batch_id, fee_type_id = fee_type_id)
 
 			return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id))
 		except ModelValidateError, e:

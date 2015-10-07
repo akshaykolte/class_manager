@@ -826,21 +826,26 @@ def edit_my_notice(request):
 		notice = get_personal_notices(notice_id =(request.GET.get('notice')))
 		context['notice'] = notice
 		# date_string = notice['expiry_date'].split('-')
-		context['notice_id'] = (request.GET.get('notice'))
 
 		return render(request, 'teacher/notices/edit-my-notice.html', context)
 
 	elif request.method == 'POST':
-		try:
-			if request.POST['is_important'] == "False":
-				is_imp = 0
-			else:
-				is_imp = 1
+		#try:
+		if request.POST['is_important'] == "False":
+			is_imp = 0
+		else:
+			is_imp = 1
+		print "+++++++++++++++++===========++++++++++++++++++++++++++"
+		print request.FILES['myfile']
+		if len(request.FILES) > 0:
+			document = request.FILES['myfile']
+		else:
+			document = None
+		
+		set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp, document = document)
 
-			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp)
-
-			return redirect('/teacher/notices/view-my-notices/?message=Notice edited')
-		except ModelValidateError, e:
+		return redirect('/teacher/notices/view-my-notices/?message=Notice edited')
+	'''except ModelValidateError, e:
 			return redirect('../view-my-notices?message_error='+str(e))
 		except ValueError, e:
 			return redirect('../view-my-notices?message_error='+str(PentaError(1000)))
@@ -850,7 +855,7 @@ def edit_my_notice(request):
 			return redirect('../view-my-notices?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('../view-my-notices?message_error='+str(PentaError(100)))
-
+'''
 @csrf_exempt
 def add_test_marks(request):
 	auth_dict = get_user(request)
