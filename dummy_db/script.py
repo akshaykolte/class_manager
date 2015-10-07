@@ -408,11 +408,34 @@ def insert_lecture_batches():
 					staff_it+=1
 					staff_it%=staff_role_length
 	print ""
+
+def insert_notices():
+	print "Adding Notices...",
+	
+	
+	staff_list = Staff.objects.all()
+	staff_length = len(staff_list)
+	f = open("dummy_db/notice.txt", "r+")
+	notices = f.readlines()
+	for i,n in enumerate(notices):
+		add_progress(i,len(notices))
+		line = n.split('$')
+		title = line[0]
+		description = line[1]
+		staff_index = random.randint(0,staff_length-1)
+		if not Notice.objects.filter(title=title,description=description).exists():
+			notice_object = Notice(title = title,description = description,uploader = staff_list[staff_index])
+			notice_object.save()
+	print ""
+
 	
 def insert_base_fees():
 
 	print "Adding Base Fees...",
-
+	if BaseFee.objects.filter().exists():
+		add_progress(99,100)
+		print ""
+		return
 	ays = AcademicYear.objects.all()
 	standards = Standard.objects.all()
 	length = len(ays)
@@ -434,42 +457,59 @@ def insert_base_fees():
 						base_fee_object.subject_years.add(perm)
 
 	print ""
+
+
+def insert_tests():
+	print "Adding tests..."
+	subject_year_list = SubjectYear.objects.all()
+	a ="unit_test"
 	
+	for n,i in enumerate(subject_year_list):
+		x = a + str(n)
+		test_object = Test(subject_year = i,name = x,total_marks = 100)
+		test_object.save()
 
-insert_academic_years()
-insert_branches()
-insert_roles()
-insert_fee_types()
-insert_standards()
-insert_batches()
-insert_subjects()
-insert_subject_years()
+	print ""
 
-# print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
-# n = int(raw_input())
 
-# while n > 105 and n < 0:
-# 	print "Maximum exceeded, enter again."
-# 	print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
-# 	n = int(raw_input())
 
-insert_students()
-insert_parents()
-assign_student_parent()
-insert_student_batches()
+# insert_academic_years()
+# insert_branches()
+# insert_roles()
+# insert_fee_types()
+# insert_standards()
+# insert_batches()
+# insert_subjects()
+# insert_subject_years()
 
-# print "How many staffs do you want to enter?(MAX = 100)"
-# n = int(raw_input())
+# # print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
+# # n = int(raw_input())
 
-# while n > 100 and n < 0:
-# 	print "Maximum exceeded, enter again."
-# 	print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
-# 	n = int(raw_input())
+# # while n > 105 and n < 0:
+# # 	print "Maximum exceeded, enter again."
+# # 	print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
+# # 	n = int(raw_input())
 
-insert_staff()
-insert_staff_role()
-insert_lectures()
-insert_lecture_batches()
+# insert_students()
+# insert_parents()
+# assign_student_parent()
+# insert_student_batches()
 
+# # print "How many staffs do you want to enter?(MAX = 100)"
+# # n = int(raw_input())
+
+# # while n > 100 and n < 0:
+# # 	print "Maximum exceeded, enter again."
+# # 	print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
+# # 	n = int(raw_input())
+
+# insert_staff()
+# insert_staff_role()
+# insert_lectures()
+# insert_lecture_batches()
+
+#insert_notices()
+#insert_attendance()
+insert_tests()
 # insert_base_fees()
 
