@@ -21,8 +21,8 @@ from django.template.loader import get_template
 from django.template import Context
 from django.http import HttpResponse
 from cgi import escape
-
-
+import time
+from portal.models import *
 def dashboard(request):
 
 	auth_dict = get_user(request)
@@ -626,10 +626,37 @@ def admit_student(request):
 					print subject_year
 					subject_year_list.append(subject_year['id'])
 			if batch_id == '-1':
-				set_student_batch(id=None,student_id = student_id, batch_id = None, subject_year_id_list= subject_year_list, academic_year_id = academic_year_id, standard_id = standard_id)
+			
+				student_batch_id = set_student_batch(id=None,student_id = student_id, batch_id = None, subject_year_id_list= subject_year_list, academic_year_id = academic_year_id, standard_id = standard_id)
+				#Creating base fee transaction after admission
+				subject_years = StudentBatch.objects.get(id = student_batch_id).subject_years.all()
+				basefees = get_base_fee(id = None , subject_years_list = subject_years)
+				total = {}
+				total['base_fees'] = 0
+				for basefee in basefees :
+					#print basefee
+					total['base_fees'] = total['base_fees'] + basefee.amount
+			
+				date = (time.strftime("%Y-%m-%d"))
+				transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_batch_id = student_batch_id, fee_type_id = FeeType.objects.get(name = 'base fee').id)
 			else:
-				set_student_batch(id=None,student_id = student_id, batch_id = batch_id, subject_year_id_list= subject_year_list, academic_year_id = None, standard_id = None)
+				student_batch_id = set_student_batch(id=None,student_id = student_id, batch_id = batch_id, subject_year_id_list= subject_year_list, academic_year_id = None, standard_id = None)
+				#Creating base fee transaction after admission
+				subject_years = StudentBatch.objects.get(id = student_batch_id).subject_years.all()
+				basefees = get_base_fee(id = None , subject_years_list = subject_years)
+				total = {}
+				total['base_fees'] = 0
+				for basefee in basefees :
+					#print basefee
+					total['base_fees'] = total['base_fees'] + basefee.amount
+			
+				date = (time.strftime("%Y-%m-%d"))
+				transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_batch_id = student_batch_id, fee_type_id = FeeType.objects.get(name = 'base fee').id )
+		
+		
 			return redirect('./?message=Student Admitted')
+		
+		
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
@@ -640,7 +667,7 @@ def admit_student(request):
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))
-
+	
 
 @csrf_exempt
 def add_student_notice(request):
