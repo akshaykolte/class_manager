@@ -473,43 +473,42 @@ def insert_tests():
 
 
 
-# insert_academic_years()
-# insert_branches()
-# insert_roles()
-# insert_fee_types()
-# insert_standards()
-# insert_batches()
-# insert_subjects()
-# insert_subject_years()
+insert_academic_years()
+insert_branches()
+insert_roles()
+insert_fee_types()
+insert_standards()
+insert_batches()
+insert_subjects()
+insert_subject_years()
 
-# # print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
-# # n = int(raw_input())
+print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
+n = int(raw_input())
 
-# # while n > 105 and n < 0:
-# # 	print "Maximum exceeded, enter again."
-# # 	print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
-# # 	n = int(raw_input())
+while n > 105 and n < 0:
+	print "Maximum exceeded, enter again."
+	print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
+	n = int(raw_input())
 
-# insert_students()
-# insert_parents()
-# assign_student_parent()
-# insert_student_batches()
+insert_students()
+insert_parents()
+assign_student_parent()
+insert_student_batches()
 
-# # print "How many staffs do you want to enter?(MAX = 100)"
-# # n = int(raw_input())
+print "How many staffs do you want to enter?(MAX = 100)"
+n = int(raw_input())
 
-# # while n > 100 and n < 0:
-# # 	print "Maximum exceeded, enter again."
-# # 	print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
-# # 	n = int(raw_input())
+while n > 100 and n < 0:
+	print "Maximum exceeded, enter again."
+	print "How many Students and Parents you want to enter do you want to enter?(MAX = 105)"
+	n = int(raw_input())
 
-# insert_staff()
-# insert_staff_role()
-# insert_lectures()
-# insert_lecture_batches()
-
-#insert_notices()
-#insert_attendance()
+insert_staff()
+insert_staff_role()
+insert_lectures() 
+insert_lecture_batches()
+insert_notices()
+insert_attendance()
 insert_tests()
-# insert_base_fees()
+insert_base_fees()
 
