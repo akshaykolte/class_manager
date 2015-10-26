@@ -326,7 +326,7 @@ def get_student_fees(student_id = None):
 	total['total_fees'] = 0
 	total['fine'] = 0
 	total['fees_remaining'] = 0
-	for  student_batch_object in student_batch_objects:
+	'''for  student_batch_object in student_batch_objects:
 
 
 		subject_years = student_batch_object.subject_years.all()
@@ -341,7 +341,7 @@ def get_student_fees(student_id = None):
 			#print basefee
 			total['base_fees'] = total['base_fees'] + basefee.amount
 
-
+	'''
 	fee_transaction = FeeTransaction.objects.filter(student_batch__student__id = student_id)
 	#print fee_transaction
 	for i in fee_transaction:
@@ -349,6 +349,10 @@ def get_student_fees(student_id = None):
 
 		total['student'] = i.student_batch.student.first_name + ' ' + i.student_batch.student.last_name
 		total['student_id'] = student_id
+
+		if(i.fee_type.name == 'base fee'):
+			total['base_fees'] = total['base_fees'] + i.amount
+
 		if(i.fee_type.name == 'payment'):
 			total['total_fees_paid'] = total['total_fees_paid'] + i.amount
 
