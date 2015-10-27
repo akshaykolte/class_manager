@@ -63,15 +63,15 @@
 				<label><strong>Expiry Date</strong></label>
 				<input name="expiry-date" class="form-control" type = "text" id = "example1">
 				<br/>
-				
+
 				<label>
 	            <strong>Change Uploaded File</strong></label><br/>
 	            <span style = "">
  				<input  type="file" name="myfile" />
-   				
+
    				</span>
-   				
-   				
+
+
 				<div class="checkbox">
 	            <label>
 	            <strong>Is Important?</strong>&nbsp;&nbsp;
@@ -80,7 +80,7 @@
 	            <input type="radio" name="is_important" value="False" {% if notice.important == False %}  checked {% endif %}>&nbsp;No&nbsp;
 	        	</div>
 
-				<input class="btn btn-default" type='submit' value='Upload Notice'>
+				<input class="btn btn-default btn-red" type='submit' value='Upload Notice'>
 			</form>
 
 
