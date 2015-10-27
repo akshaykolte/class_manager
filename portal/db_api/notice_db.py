@@ -10,6 +10,7 @@ def set_notice(id = None, title=None, description=None, uploader_id=None, expiry
 	is_uploader_id_none = uploader_id==None
 	is_expiry_date_none = expiry_date==None
 	is_important_none = important==None
+	is_document_none = document==None
 	
 	if is_id_none:
 		
@@ -33,6 +34,11 @@ def set_notice(id = None, title=None, description=None, uploader_id=None, expiry
 				notice_object.expiry_date = expiry_date
 			if not is_important_none:
 				notice_object.important = important
+			#if not is_document_none:
+				
+			notice_object.document = document				
+			#print "###########################################################"
+			#print document	
 	notice_object.save()
 
 	return notice_object.id

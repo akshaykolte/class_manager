@@ -16,6 +16,7 @@
 
 from portal.models import Student,Parent,StudentParent,Batch,StudentBatch,SubjectYear,Standard, Branch
 from portal.db_api.academic_year_db import *
+from django.db.models import Q
 
 def get_students(id = None,batch_id = None, subject_year_id = None):
 	is_none_id = id == None
@@ -502,7 +503,7 @@ def get_student_batch_of_student(student_id, staff_id=None):
 	if staff_id == None:
 		student_batch = StudentBatch.objects.filter(student__id=student_id)
 	else:
-		student_batch = StudentBatch.objects.filter(student__id=student_id, batch__branch = Branch.objects.filter(staffrole__role__name__in=['manager','accountant'], staffrole__staff__id=staff_id).distinct())
+		student_batch = StudentBatch.objects.filter(Q(student__id=student_id, batch__branch = Branch.objects.filter(staffrole__role__name__in=['manager','accountant'], staffrole__staff__id=staff_id).distinct()) | (Q(student__id=student_id, batch = None)))
 	student_batch_list = []
 	for student_batch_object in student_batch:
 		student_batch = {}

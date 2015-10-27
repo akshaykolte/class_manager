@@ -1,44 +1,23 @@
-{% extends "accountant/base_accountant.html" %}
+{% extends "student/base_student.html" %}
 
 {% block main_content%}
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Fees</h1>
+        <h1 class="page-header">Fee Status</h1>
     </div>
 </div>
 
         <div class="col-lg-12">
 
+            
             {% if page_type == 0 %}
-                <form>
-                <label><strong>Student Name</strong></label>
-                <div class="form-group input-group">
-                    <input type="text" name="name" class="form-control" id="chooseStudentName" onchange="this.form.submit()" readonly>
-                    <input type="hidden" name="student" class="form-control" id="chooseStudentId" onchange="this.form.submit()">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" onClick="call_student_search_window('student')" type="button"><i class="fa fa-search"> Click here to Search Student</i>
-                        </button>
-                    </span>
-                </div>
-                <br>
-                <input type="submit" class="btn btn-default">
-                 </form>
 
-            {% endif %}
-            {% if page_type == 1 %}
-
-                <form>
-                <label><strong>Student Name</strong></label>
-                <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
-                <input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
-                </form>
-                <br/>
-
-                <div class="panel-body">
+              
+            	<div class="panel-body">
 
 
                     <div class="dataTable_wrapper">
-                        <label><strong>Total Fee Summary of Student</strong></label>
+                        <label><strong>Total Fee Summary</strong></label>
                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                                 <tr>
@@ -76,7 +55,7 @@
 
 
                     <div class="dataTable_wrapper">
-                        <label><strong> Fee Transactions of Student</strong></label>
+                        <label><strong> All Fee Transactions</strong></label>
                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                                 <tr>
@@ -93,7 +72,7 @@
                             </thead>
                             <tbody>
                                 {% for i in transaction_details %}
-                                    {% if i.fee_type.name != 'base fee' %}
+                                	{% if i.fee_type.name != 'base fee' %}
                                     <tr class="odd gradeX">
                                         <td align="center">{% if i.student_batch.batch %} {{i.student_batch.batch}} {% else %} Not Assigned {% endif %}</td>
                                         <td align="center">{%if i.fee_type.name == 'payment'%}Payment{%endif%}

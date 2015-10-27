@@ -623,45 +623,48 @@ def add_student_notice(request):
 		return render(request,'teacher/notices/add-student-notice.html', context)
 
 	elif request.method == 'POST':
-		try:
+		# try:
 
-			if request.POST['is_important'] == "False":
-				is_imp = 0
-			else:
-				is_imp = 1
+		if request.POST['is_important'] == "False":
+			is_imp = 0
+		else:
+			is_imp = 1
 
-			title = request.POST['title']
-			description = request.POST['description']
-			expiry_date = request.POST['expiry-date']
-			is_important = request.POST['is_important']
-			document = request.FILES['myfile'] 
-			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp, document = document)
+		title = request.POST['title']
+		description = request.POST['description']
+		expiry_date = request.POST['expiry-date']
+		is_important = request.POST['is_important']
+		if len(request.FILES) > 0:
+			document = request.FILES['myfile']
+		else:
+			document = None
+		notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp, document = document)
 
-			if int(request.POST['branch']):
-				if int(request.POST['batch']):
-					students = get_students(id = None,batch_id = int(request.POST['batch']))
-					student_list = []
+		if int(request.POST['branch']):
+			if int(request.POST['batch']):
+				students = get_students(id = None,batch_id = int(request.POST['batch']))
+				student_list = []
 
-					for student in students:
-						#print student
-						#print 'student_'+str(student['id']) in request.POST
-						if 'student_'+str(student['id']) in request.POST:
-							#print subject_year
-							upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = student['id'], staff_id = None)
-
-
+				for student in students:
+					#print student
+					#print 'student_'+str(student['id']) in request.POST
+					if 'student_'+str(student['id']) in request.POST:
+						#print subject_year
+						upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = student['id'], staff_id = None)
 
 
 
-			if not int(request.POST['branch']) :
-				#print "ddd"
-				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = None, staff_id = None)
-			elif int(request.POST['branch']) and not int(request.POST['batch']):
-				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = int(request.POST['branch']) , batch_id = None, student_id = None, staff_id = None)
 
-			return redirect('./?message=Notice Uploaded')
 
-		except ModelValidateError, e:
+		if not int(request.POST['branch']) :
+			#print "ddd"
+			upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = None, staff_id = None)
+		elif int(request.POST['branch']) and not int(request.POST['batch']):
+			upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = int(request.POST['branch']) , batch_id = None, student_id = None, staff_id = None)
+
+		return redirect('./?message=Notice Uploaded')
+
+		'''except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
 			return redirect('./?message_error='+str(PentaError(1000)))
@@ -671,6 +674,7 @@ def add_student_notice(request):
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))
+		'''
 
 
 @csrf_exempt
@@ -822,21 +826,26 @@ def edit_my_notice(request):
 		notice = get_personal_notices(notice_id =(request.GET.get('notice')))
 		context['notice'] = notice
 		# date_string = notice['expiry_date'].split('-')
-		context['notice_id'] = (request.GET.get('notice'))
 
 		return render(request, 'teacher/notices/edit-my-notice.html', context)
 
 	elif request.method == 'POST':
-		try:
-			if request.POST['is_important'] == "False":
-				is_imp = 0
-			else:
-				is_imp = 1
+		#try:
+		if request.POST['is_important'] == "False":
+			is_imp = 0
+		else:
+			is_imp = 1
+		print "+++++++++++++++++===========++++++++++++++++++++++++++"
+		print request.FILES['myfile']
+		if len(request.FILES) > 0:
+			document = request.FILES['myfile']
+		else:
+			document = None
+		
+		set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp, document = document)
 
-			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp)
-
-			return redirect('/teacher/notices/view-my-notices/?message=Notice edited')
-		except ModelValidateError, e:
+		return redirect('/teacher/notices/view-my-notices/?message=Notice edited')
+	'''except ModelValidateError, e:
 			return redirect('../view-my-notices?message_error='+str(e))
 		except ValueError, e:
 			return redirect('../view-my-notices?message_error='+str(PentaError(1000)))
@@ -846,7 +855,7 @@ def edit_my_notice(request):
 			return redirect('../view-my-notices?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('../view-my-notices?message_error='+str(PentaError(100)))
-
+'''
 @csrf_exempt
 def add_test_marks(request):
 	auth_dict = get_user(request)
