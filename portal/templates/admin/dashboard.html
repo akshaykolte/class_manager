@@ -30,7 +30,7 @@
                                             <td>{{notice.title}}</td>
                                             <td>{{notice.uploader}}</td>
                                             <td>{% if notice.important == True %}High{% else %}Normal{% endif %}</td>
-                                            <td><button class="col-lg-12 btn btn-default" data-toggle="modal" data-target="#myModal_{{notice.id}}">View</button>
+                                            <td><button class="col-lg-12 btn btn-default btn-red" data-toggle="modal" data-target="#myModal_{{notice.id}}">View</button>
                                             <div class="modal fade" id="myModal_{{notice.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_{{notice.id}}" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
@@ -48,7 +48,7 @@
                                                             Priority:<strong>{% if notice.important == True %} High{% else %} Normal{% endif %}</strong>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-default btn-red" data-dismiss="modal">Close</button>
                                                         </div>
                                                     </div>
                                                     <!-- /.modal-content -->

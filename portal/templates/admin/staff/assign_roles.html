@@ -33,12 +33,12 @@
 			<input type="text" class="form-control" id="chooseStaffName" readonly>
 			<input type="hidden" name="staff" class="form-control" id="chooseStaffId">
 			<span class="input-group-btn">
-			  <button class="btn btn-default" type="button" onClick="call_staff_search_window('staff')">
+			  <button class="btn btn-default btn-red" type="button" onClick="call_staff_search_window('staff')">
 				<i class="fa fa-search"> &nbsp;or search for staff</i>
 			  </button>
 			</span>
 		</div><br/>
-		<input type="submit" class="btn btn-default" value="Edit Staff">
+		<input type="submit" class="btn btn-default btn-red" value="Edit Staff">
 	</form>
 	{% elif page_type == 2%}
 		<label><strong>Staff Permissions</strong></label>
@@ -68,7 +68,7 @@
 			</tbody>
 		</table>
 
-	   <input type="submit" value="Save" class="btn btn-default">
+	   <input type="submit" value="Save" class="btn btn-default btn-red">
 		</form>
 	{% endif %}
 {% endblock %}

@@ -165,6 +165,10 @@ body {
     color: #f0ad4e;
 }
 
+.btn-red {
+    background-color: #D66368;
+    color: #fff;
+}
 .btn-danger.btn-outline {
     color: #d9534f;
 }
