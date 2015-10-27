@@ -34,11 +34,11 @@
 				<input type="text" name="name" class="form-control" id="chooseStudentName" readonly>
 				<input type="hidden" name="student" id="chooseStudentId">
 				<span class="input-group-btn">
-					<button class="btn btn-default" type="button" onClick="call_student_search_window('student')"><i class="fa fa-search">&nbsp;Click here to Search Student</i>
+					<button class="btn btn-default btn-red" type="button" onClick="call_student_search_window('student')"><i class="fa fa-search">&nbsp;Click here to Search Student</i>
 					</button>
 				</span>
 			</div>
-			<input type="submit" class="btn btn-default">
+			<input type="submit" class="btn btn-default btn-red">
 		</form>
 	{% endif %}
 
@@ -59,7 +59,7 @@
 				</div>
 			{% endfor %}
 			<input type="hidden" name="report" value="get">
-			<input class="btn btn-default" type="submit" value="Get Report">
+			<input class="btn btn-default btn-red" type="submit" value="Get Report">
 		</form>
 	{% endif %}
 
@@ -85,9 +85,9 @@
 				{% endfor %}
 			</tbody>
 		</table>
-    <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default">Export as PDF</button>
-    <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-default">Export as Excel</button>
-    <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-default">Export as Csv</button>
+    <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
+    <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
+    <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
 	{% endif %}
 
 	{% if page_type == 4 %}

@@ -105,9 +105,9 @@
 				{% endfor %}
 			</tbody>
 		</table>
-    <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-primary">Export as PDF</button>
-    <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-primary">Export as Excel</button>
-    <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-primary">Export as Csv</button>
+    <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-primary btn-red">Export as PDF</button>
+    <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-primary btn-red">Export as Excel</button>
+    <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-primary btn-red">Export as Csv</button>
     <br/><br/>
 	{% endif %}
 
@@ -178,7 +178,7 @@
 			</div>
 
 
-			<input class="col-lg-2 btn btn-primary" type='submit' value='Save'>
+			<input class="col-lg-2 btn btn-primary btn-red" type='submit' value='Save'>
 		</form>
     <br><br><br>
 	{% endif %}
