@@ -3,6 +3,22 @@
 
 <head>
 
+    <style>
+        .white, .white a {
+          color: #fff;
+        }
+        .blue-back, .blue-back a {
+            background-color: #4A777A;
+            border-color: #4A777A;
+        }
+        .divider-custom, .divider-custom li {
+             background-color:#23527C; !important
+        }
+        .nav-tabs li a{
+            background-color: #D66368;
+            color: #fff;
+        }
+    </style>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,10 +56,10 @@
 
 <body>
 
-    <div id="wrapper">
+    <div class="blue-back" id="wrapper">
 
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <nav style="margin-bottom:0px;background-color:#4A777A;border-color:#5A878A;" class="navbar navbar-default navbar-static-top white blue-back" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -51,7 +67,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand">Your Firm's Logo</a>
+                <a style="color:#fff;" class="navbar-brand white">Your Firm's Logo</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -60,12 +76,12 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-alerts">
+                    <ul style="background-color:#4A777A" class="dropdown-menu dropdown-alerts">
                         {% block notifs %}
                         <li>
                             <a href="#">
-                                <div>
-                                    <i class="fa fa-comment fa-fw"></i> No Notifications for now.
+                                <div class="white">
+                                    <i class="fa fa-comment fa-fw white"></i> No Notifications for now.
                                 </div>
                             </a>
                         </li>
@@ -75,16 +91,16 @@
                 </li>
                 <!-- /.dropdown -->
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    <a class="dropdown-toggle white" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw white"></i>  <i class="fa fa-caret-down white"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href="/student/profile/view-profile/"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                    <ul style="background-color:#4A777A" class="dropdown-menu dropdown-user">
+                        <li><a href="/student/profile/view-profile/"><i class="fa fa-user fa-fw white"></i><strong class="white"> User Profile</strong></a>
                         </li>
-                        <li><a href="/student/profile/change-password/"><i class="fa fa-gear fa-fw"></i> Change Password</a>
+                        <li><a href="/student/profile/change-password/"><i class="fa fa-gear fa-fw white"></i><strong class="white"> Change Password</strong></a>
                         </li>
-                        <li class="divider"></li>
-                        <li><a href="/../../../logout/"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li style="background-color:#23527C;" class="divider-custom divider"></li>
+                        <li><a href="/../../../logout/"><i class="fa fa-sign-out fa-fw white"></i><strong class="white"> Logout</strong></a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -95,19 +111,19 @@
 
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
-                     <ul class="nav" id="side-menu">
-                        <li>
+                    <ul style="border-color:#4A777A;" class="nav" id="side-menu">
+                       <li style="border-color:#4A777A;">
                             <a href="/student/dashboard/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
-                        <li>
+                        <li style="border-color:#4A777A;">
                             <a href="/student/attendance/view-attendance/"><i class="fa fa-calendar-o"></i>&nbsp;&nbsp;Attendance</a>
                             <!-- /.nav-second-level -->
                         </li>
-                        <li>
+                        <li style="border-color:#4A777A;">
                             <a href="/student/lecture/view-lectures"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Lectures</a>
                             <!-- /.nav-second-level -->
                         </li>
-                        <li>
+                        <li style="border-color:#4A777A;">
                             <a href="/student/fees/view-fees"><i class="fa fa-money"></i>&nbsp;&nbsp;Fee Status</a>
                             <!-- /.nav-second-level -->
                         </li>

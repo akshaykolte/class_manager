@@ -522,7 +522,7 @@ insert_staff_role()
 insert_lectures() 
 insert_lecture_batches()
 insert_notices()
-#insert_attendance()
+insert_attendance()
 insert_tests()
 insert_base_fees()'''
 insert_transactions()

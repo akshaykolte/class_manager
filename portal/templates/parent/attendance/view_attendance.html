@@ -53,9 +53,9 @@
 
    </tbody>
  </table>
-  <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default">Export as PDF</button>
-  <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({type:'excel',escape:'false'});" class="btn btn-default">Export as Excel</button>
-  <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({type:'csv',escape:'false'});" class="btn btn-default">Export as Csv</button>
+  <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
+  <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
+  <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
   <br/><br/>
 
   {% endfor %}
@@ -125,7 +125,7 @@
 		<label><strong>Lecture Count</strong></label>
 		<input name="lecture_count" class="form-control" value="{{lecture.count}}">
 		<br/>
-		<input class="btn btn-default" type='submit' value='Save'>
+		<input class="btn btn-default btn-red" type='submit' value='Save'>
 	</form>
 
 	{% endif %}

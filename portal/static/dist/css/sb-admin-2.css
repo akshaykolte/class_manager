@@ -100,6 +100,7 @@ body {
 
 .sidebar ul li a.active {
     background-color: #eee;
+    color:#23527c;
 }
 
 .sidebar .arrow {
@@ -164,6 +165,10 @@ body {
     color: #f0ad4e;
 }
 
+.btn-red {
+    background-color: #D66368;
+    color: #fff;
+}
 .btn-danger.btn-outline {
     color: #d9534f;
 }
@@ -289,6 +294,7 @@ table.dataTable thead .sorting:after {
     padding-bottom: 10px;
     border: 1px solid #ddd;
     background-color: #eee!important;
+    color:#23527c;
 }
 
 .show-grid {

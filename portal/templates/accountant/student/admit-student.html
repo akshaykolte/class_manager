@@ -30,11 +30,11 @@
                         <input type="text" name="name" class="form-control" id="chooseStudentName" onchange="this.form.submit()" readonly>
                         <input type="hidden" name="student" class="form-control" id="chooseStudentId" onchange="this.form.submit()">
                         <span class="input-group-btn">
-                            <button onClick="call_student_search_window('student')" class="btn btn-default" type="button"><i class="fa fa-search"> Click Here to Search Student</i>
+                            <button onClick="call_student_search_window('student')" class="btn btn-default btn-red" type="button"><i class="fa fa-search"> Click Here to Search Student</i>
                             </button>
                         </span>
                     </div>
-                    <input type="submit" class="btn btn-default">
+                    <input type="submit" class="btn btn-default btn-red">
                 </form>
                 {% endif %}
 
@@ -225,7 +225,7 @@
                                     <label><input type="checkbox" name="subject_year_{{subject_year.id}}" value="True">{{subject_year.name}} </label>
                                 </div>
                             {% endfor %}
-                            <input class="btn btn-default" type='submit' value='Admit Student'>
+                            <input class="btn btn-default btn-red" type='submit' value='Admit Student'>
                         </form>
                             <br/>
 
