@@ -122,6 +122,15 @@
 	{% if page_type == 5 %}
 		<label><strong>Topicwise Report</strong></label>
 		<br/>
+        <div style="float:right;">
+            <form>
+                <input type="hidden" name="branch" value="{{branch}}">
+                <input type="hidden" name="lecture" value="{{lecture}}">
+                <input type="hidden" name="detailed" value="{% if old_table %}False{% else %}True{% endif %}">
+                <input value="{% if old_table %}See Simplified Report{% else %}See Detailed Report{% endif %}" class="btn btn-default btn-red" type="submit">
+            </form>
+            <br/>
+        </div>
 	   <table class="table table-bordered table-hover table-striped" id="dataTables">
 			<thead>
 				<tr>
@@ -133,6 +142,7 @@
                     {% else %}
                         <th>Attended</th>
                         <th>Total</th>
+                        <th>Percentage</th>
                         <th>Link</th>
                     {% endif %}
 				</tr>

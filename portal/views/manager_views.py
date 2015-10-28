@@ -733,12 +733,17 @@ def lecturewise_attendance(request):
 					# less work, much wow ;)
 					old_table = False
 
+					if 'detailed' in request.GET and request.GET['detailed'] == 'True':
+						old_table = True
+
 					context['report'] = attendance_report(lecture_id=request.GET['lecture'], branch_id=request.GET['branch'], old_table=old_table)
 					print 'len=', len(context['report'][1][0])
 					if len(context['report'])<1 or len(context['report'][1])<1 or len(context['report'][1][0]) <= 1:
 						page_type = 6
 						context['msg'] = 'No lectures added of the topic'
 					context['old_table'] = old_table
+					context['branch'] = request.GET['branch']
+					context['lecture'] = request.GET['lecture']
 
 				else:
 					page_type = 2

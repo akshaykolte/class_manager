@@ -55,7 +55,7 @@ def attendance_report(lecture_id = None, branch_id = None, student_id = None, su
 			if TABLE_1:
 				report_table.append([ '' for i in range(len(lecture_dict))])
 			if not TABLE_1:
-				report_table.append([[0,0],0])
+				report_table.append([[0,0, 0.0],0])
 			if TABLE_1:
 				for lec in xrange(len(lecture_batch_list)):
 					report_table[-1][lec] = '-/'+str(lecture_batch_list[lec]['batch__count'])
@@ -65,6 +65,7 @@ def attendance_report(lecture_id = None, branch_id = None, student_id = None, su
 				if not TABLE_1:
 					report_table[-1][0][0] += attendance['lecture_batch__batch__count']
 					report_table[-1][0][1] = lecture_dict[attendance['lecture_batch__batch__id']][1]
+					report_table[-1][0][2] = float(report_table[-1][0][0]*100.0)/report_table[-1][0][1]
 			if TABLE_1:
 				report_table[-1] = [student.student.first_name+' '+student.student.last_name] + report_table[-1]
 			if not TABLE_1:
@@ -75,7 +76,7 @@ def attendance_report(lecture_id = None, branch_id = None, student_id = None, su
 			report_list[0] = lecture_batch_list
 			print report_list[0]
 		if not TABLE_1:
-			report_list[0] = ['Attended', 'Total']
+			report_list[0] = ['Attended', 'Total', 'Percentage']
 		report_list[1] = report_table
 
 		print report_list
