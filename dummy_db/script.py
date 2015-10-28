@@ -435,6 +435,15 @@ def insert_notices():
 		if not Notice.objects.filter(title=title,description=description).exists():
 			notice_object = Notice(title = title,description = description,uploader = staff_list[staff_index])
 			notice_object.save()
+			for_students = random.randint(0,1)
+			if for_students:
+				if not NoticeViewer.objects.filter(notice=notice_object, for_students=True):
+					notice_viewer_obj = NoticeViewer(notice=notice_object, for_students=True)
+					notice_viewer_obj.save()
+			else:
+				if not NoticeViewer.objects.filter(notice=notice_object, for_staff=True):
+					notice_viewer_obj = NoticeViewer(notice=notice_object, for_staff=True)
+					notice_viewer_obj.save()
 	print ""
 
 
