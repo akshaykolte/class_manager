@@ -7,7 +7,7 @@
         .white, .white a {
           color: #fff;
         }
-        .blue-back, .blue-back a {
+        .blue-back{
             background-color: #4A777A;
             border-color: #4A777A;
         }
@@ -121,7 +121,7 @@
 									{% if type == 'studentbatch' %}
 										<td><a href=".?student={{student.id}}&type={{type}}">Details</a></td>
 									{% elif type == 'student' %}
-										<td><a class="white" href="javascript:select_student({{student.id}}, '{{student.first_name}} {{student.last_name}}');">Choose</a></td>
+										<td><a href="javascript:select_student({{student.id}}, '{{student.first_name}} {{student.last_name}}');">Choose</a></td>
 									{% endif %}
 								</tr>
 							{% endfor %}
@@ -152,7 +152,7 @@
 									<td>{{student.student_subjects.0.academic_year_name}}</td>
 									<td>{{student.student_subjects.0.standard_name}}</td>
 									{% if type == 'studentbatch' %}
-										<td><a class="white" href="javascript:select_student_batch({{student.id}}, '{{student.student_first_name}} {{student.student_last_name}}');">Choose</a></td>
+										<td><a href="javascript:select_student_batch({{student.id}}, '{{student.student_first_name}} {{student.student_last_name}}');">Choose</a></td>
 									{% endif %}
 								</tr>
 							{% endfor %}
