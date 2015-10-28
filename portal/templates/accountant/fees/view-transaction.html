@@ -18,6 +18,11 @@ img {
   padding:15px;
 
 }
+#signature{
+
+	float:left;
+	margin-left:470px;
+}
 
 #logo {
   float:left;
@@ -54,7 +59,7 @@ tr.odd {
   
   <div id="address">
 
-    <p>Your Firm's Name<br />
+    <p><b><font size ="6">Your Firm's Name</font></b><br />
     <a href="mailto:youremail@somewhere.com">yourfirmsemail@somewhere.com</a>
     <br /><br />
     Receipt No. {{transaction_details.id}}<br />
@@ -71,10 +76,14 @@ tr.odd {
     <hr>
     <table>
       <tr><td><strong>Description</strong></td><td><strong>Qty</strong></td><td><strong>Payment Method</strong></td><td><strong>Amount</strong></td></tr>
-      <tr class="odd"><td>{{transaction_details.fee_type}} type </td><td>1</td><td>Cash</td><td>{{transaction_details.amount}}</td></tr>              <tr><td>&nbsp;</td><td>&nbsp;</td><td><strong>Total</strong></td><td><strong>{{transaction_details.amount}}/-</strong></td></tr>
+      <tr class="odd"><td>{{transaction_details.fee_type}} type </td><td>1</td><td>Cash</td><td>{{transaction_details.amount}}</td></tr>              <tr><td>&nbsp;</td><td>&nbsp;</td><td><strong>Total</strong></td><td><strong>&#8377;{{transaction_details.amount}}/-</strong></td></tr>
 
     </table>
+
     <hr>
+    </br>
+    </br>
+    <p id = "signature" >Signature:_____________</p>
     <p>
       Thank you for your Transaction!  This transaction will appear on your billing statement as "Your Company".<br />
       If you have any questions, please feel free to contact us at <a href="mailto:youremail@somewhere.com">youremail@somewhere.com</a>.
