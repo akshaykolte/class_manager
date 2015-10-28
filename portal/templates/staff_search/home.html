@@ -7,7 +7,7 @@
         .white, .white a {
           color: #fff;
         }
-        .blue-back, .blue-back a {
+        .blue-back {
             background-color: #4A777A;
             border-color: #4A777A;
         }
@@ -121,7 +121,7 @@
 									<td>{{staff.email}}</td>
 									<td>{{staff.phone_number}}</td>
 									{% if type == 'staff' %}
-										<td><a class="white" href="javascript:select_staff({{staff.id}}, '{{staff.first_name}} {{staff.last_name}}');">Choose</a></td>
+										<td><a href="javascript:select_staff({{staff.id}}, '{{staff.first_name}} {{staff.last_name}}');">Choose</a></td>
 									{% endif %}
 								</tr>
 							{% endfor %}
