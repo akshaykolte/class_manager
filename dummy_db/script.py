@@ -293,6 +293,7 @@ def insert_student_batches():
 				amount = 12000
 			if not FeeTransaction.objects.filter(student_batch = stud_bat_obj,amount = amount,fee_type = base_fee_object, date = datetime.datetime.now()).exists():
 				transaction_object = FeeTransaction(student_batch = stud_bat_obj,amount = amount,fee_type = base_fee_object, date = datetime.datetime.now())
+				transaction_object.save()
 			for i in range(rn):
 				stud_bat_obj.subject_years.add(subject_year_list[i].id)
 
@@ -483,20 +484,23 @@ def insert_tests():
 
 def insert_transactions():
 	print"Adding Transactions...",
-	if FeeTransaction.objects.filter().exists():
-		add_progress(99,100)
-		print ""
-		return
 	student_batches = StudentBatch.objects.all()
-	feetypes = FeeType.objects.all()
+	payment_type = FeeType.objects.get(name="payment")
+	base_fee_type = FeeType.objects.get(name="base fee")
 	length = len(student_batches)
 	for i,n in enumerate(student_batches):
 		add_progress(i,length)
-		j = random.randint(0,3)
-		k = random.randint(1,10)
-		amount = 1000*k
-		if not FeeTransaction.objects.filter(student_batch = n,amount = amount,fee_type = feetypes[j], date = datetime.datetime.now()).exists():
-			transaction_object = FeeTransaction(student_batch = n,amount = amount,fee_type = feetypes[j], date = datetime.datetime.now())
+		amount = random.randint(1,10)
+		amount *= 1000
+		present_payment_done = 0
+		fee_objects = FeeTransaction.objects.filter(student_batch=n, fee_type=payment_type)
+		for fee_obj in fee_objects:
+			present_payment_done += fee_obj.amount
+		base_fee_obj = FeeTransaction.objects.get(student_batch=n, fee_type=base_fee_type)
+		if present_payment_done + amount > base_fee_obj.amount:
+			amount = base_fee_obj.amount - present_payment_done
+		if amount != 0:
+			transaction_object = FeeTransaction(student_batch = n,amount = amount,fee_type = payment_type, date = datetime.datetime.now())
 			transaction_object.save()
 
 	print ""
@@ -530,5 +534,6 @@ insert_attendance()
 insert_tests()
 # insert_base_fees()
 insert_transactions()
+
 endtime = datetime.datetime.now()
 print "Time taken: ",str((endtime-starttime).seconds)+"."+str((endtime-starttime).microseconds)[0:3],"seconds\n"
