@@ -67,28 +67,34 @@
 		<label><strong>Studetwise Attendance</strong></label>
 		<br/>
 
-	   <table class="table table-bordered table-hover table-striped" id="dataTables">
-			<thead>
-				<tr>
-					<th>Lecture/Subject</th>
-					<th>Attended</th>
-					<th>Total</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for rep in report %}
-					<tr>
-						{% for r in rep %}
-						<td>{{r}}</td>
-						{% endfor %}
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-    <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
-    <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
-    <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
-	{% endif %}
+        {% for rep in report %}
+        <h2>{{rep.subject_name}}</h2>
+    	   <table class="display table table-bordered table-hover table-striped" id="dataTables_{{rep.subject_id}}">
+    			<thead>
+    				<tr>
+    					<th class="col-lg-6">Lecture</th>
+    					<th class="col-lg-3">Attended</th>
+    					<th class="col-lg-3">Total</th>
+    				</tr>
+    			</thead>
+    			<tbody>
+
+    						{% for r in rep.attendance_report %}
+                <tr>
+    						<td>{{r.0}}</td>
+                <td>{{r.1}}</td>
+                <td>{{r.2}}</td>
+                </tr>
+    						{% endfor %}
+
+    			</tbody>
+    		</table>
+        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
+        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
+        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
+        <br/><br/>
+
+        {% endfor %}	{% endif %}
 
 	{% if page_type == 4 %}
 		<label><strong>Lectures</strong></label>

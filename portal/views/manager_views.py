@@ -775,6 +775,11 @@ def studentwise_attendance(request):
 		raise Http404
 
 	if request.method == "GET":
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
 		try:
 			page_type = 1
 
@@ -786,14 +791,21 @@ def studentwise_attendance(request):
 				context['student_name'] = request.GET['name']
 				context['subjects'] = subject_years
 
-				if 'report' in request.GET:
-					page_type = 3
-					subject_years = get_student_batch(student_id=request.GET['student'])['student_subjects']
-					subjects = []
-					for subject_year in subject_years:
-						if str(subject_year['id']) in request.GET:
-							subjects.append(subject_year['id'])
-					context['report'] = attendance_report(student_id=request.GET['student'], subjects=subjects)
+				report_list = []
+				page_type = 3
+				subject_years = get_student_batch(student_id=request.GET['student'])['student_subjects']
+				subjects = []
+				student_batch_id = get_student_batch(student_id=request.GET['student'])['id']
+				for subject_year in subject_years:
+					subject_list = []
+					subject_list.append(subject_year['id'])
+					attendance_dict = {}
+					attendance_dict['subject_name'] = subject_year['subject_name']
+					attendance_dict['subject_id'] = subject_year['id']
+					attendance_dict['attendance_report'] = attendance_report(student_id=student_batch_id, subjects=subject_list)
+					report_list.append(attendance_dict)
+
+				context['report'] = report_list
 
 			context['page_type'] = page_type
 			return render(request, 'manager/attendance_reports/studentwise_attendance.html', context)

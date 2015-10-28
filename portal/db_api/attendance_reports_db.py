@@ -68,7 +68,6 @@ def attendance_report(lecture_id = None, branch_id = None, student_id = None, su
 	if ''.join(bit_list) == '00110':
 		if len(subjects) == 1:
 			subject_id = subjects[0]
-
 			lectures = Lecture.objects.filter(subject_year__id = subject_id, lecturebatch__batch = StudentBatch.objects.get(id=student_id).batch).annotate(Count('lecturebatch'))
 			lectures_dict = {}
 			for lecture in lectures:
