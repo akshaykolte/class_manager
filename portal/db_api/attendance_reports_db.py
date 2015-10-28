@@ -4,7 +4,7 @@ from django.db.models import Count, IntegerField, Case, When
 '''
 		student_id here refers to id of StudentBatch
 '''
-def attendance_report(lecture_id = None, branch_id = None, student_id = None, subjects = None, batch_id = None):
+def attendance_report(lecture_id = None, branch_id = None, student_id = None, subjects = None, batch_id = None, old_table=False):
 	# Valid cases: 11000, 00110, 00001
 	bit_list = []
 	for i in [lecture_id, branch_id, student_id, subjects, batch_id]:
@@ -13,8 +13,8 @@ def attendance_report(lecture_id = None, branch_id = None, student_id = None, su
 	if ''.join(bit_list) == '11000':
 		attendance_list = Attendance.objects.filter(lecture_batch__lecture__id = lecture_id, student_batch__batch__branch__id=branch_id).values('student_batch__student__first_name', 'student_batch__student__last_name', 'student_batch__id', 'lecture_batch__batch__name', 'lecture_batch__batch__id').annotate(Count('lecture_batch__batch'))
 
-		print ''
-		print 'attendance_list', attendance_list
+		# print ''
+		# print 'attendance_list', attendance_list
 		student_list = StudentBatch.objects.filter(batch__branch__id = branch_id)
 
 		lecture_batch_list = LectureBatch.objects.filter(lecture__id = lecture_id).values('batch__name', 'batch_id', 'batch__branch__name').annotate(Count('batch'))
@@ -47,22 +47,38 @@ def attendance_report(lecture_id = None, branch_id = None, student_id = None, su
 		print ''
 		'''
 
-
 		report_table = []
 
+		TABLE_1 = old_table
+
 		for student in student_list:
-			report_table.append([ '' for i in range(len(lecture_dict))])
-			for lec in xrange(len(lecture_batch_list)):
-				report_table[-1][lec] = '-/'+str(lecture_batch_list[lec]['batch__count'])
+			if TABLE_1:
+				report_table.append([ '' for i in range(len(lecture_dict))])
+			if not TABLE_1:
+				report_table.append([[0,0],0])
+			if TABLE_1:
+				for lec in xrange(len(lecture_batch_list)):
+					report_table[-1][lec] = '-/'+str(lecture_batch_list[lec]['batch__count'])
 			for attendance in attendance_dict[student.id]:
-				report_table[-1][ lecture_dict[attendance['lecture_batch__batch__id']][0] ] = str(attendance['lecture_batch__batch__count'])+'/'+str(lecture_dict[attendance['lecture_batch__batch__id']][1])
-			report_table[-1] = [student.student.first_name+' '+student.student.last_name] + report_table[-1]
-
-
+				if TABLE_1:
+					report_table[-1][ lecture_dict[attendance['lecture_batch__batch__id']][0] ] = str(attendance['lecture_batch__batch__count'])+'/'+str(lecture_dict[attendance['lecture_batch__batch__id']][1])
+				if not TABLE_1:
+					report_table[-1][0][0] += attendance['lecture_batch__batch__count']
+					report_table[-1][0][1] = lecture_dict[attendance['lecture_batch__batch__id']][1]
+			if TABLE_1:
+				report_table[-1] = [student.student.first_name+' '+student.student.last_name] + report_table[-1]
+			if not TABLE_1:
+				report_table[-1][0] = [student.student.first_name+' '+student.student.last_name] + report_table[-1][0]
+				report_table[-1][1] = student.student.id
 		report_list = [[],[]]
-		report_list[0] = lecture_batch_list
+		if TABLE_1:
+			report_list[0] = lecture_batch_list
+			print report_list[0]
+		if not TABLE_1:
+			report_list[0] = ['Attended', 'Total']
 		report_list[1] = report_table
 
+		print report_list
 		return report_list
 
 	if ''.join(bit_list) == '00110':

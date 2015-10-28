@@ -727,11 +727,19 @@ def lecturewise_attendance(request):
 			if 'branch' in request.GET:
 				if 'lecture' in request.GET:
 					page_type = 5
-					context['report'] = attendance_report(lecture_id=request.GET['lecture'], branch_id=request.GET['branch'])
+
+					# old_table is a magic variable :P
+					# change it to True to show a detailed view of the attendance
+					# less work, much wow ;)
+					old_table = False
+
+					context['report'] = attendance_report(lecture_id=request.GET['lecture'], branch_id=request.GET['branch'], old_table=old_table)
 					print 'len=', len(context['report'][1][0])
 					if len(context['report'])<1 or len(context['report'][1])<1 or len(context['report'][1][0]) <= 1:
 						page_type = 6
 						context['msg'] = 'No lectures added of the topic'
+					context['old_table'] = old_table
+
 				else:
 					page_type = 2
 					context['standards'] = get_standard()
@@ -806,7 +814,6 @@ def studentwise_attendance(request):
 					report_list.append(attendance_dict)
 
 				context['report'] = report_list
-
 			context['page_type'] = page_type
 			return render(request, 'manager/attendance_reports/studentwise_attendance.html', context)
 

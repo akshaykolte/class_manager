@@ -126,17 +126,30 @@
 			<thead>
 				<tr>
 					<th>Student</th>
-					{% for lecture in report.0 %}
-						<th>{{lecture.batch__name}} - {{lecture.batch__branch__name}}</th>
-					{% endfor %}
+                    {% if old_table %}
+    					{% for lecture in report.0 %}
+    						<th>{{lecture.batch__name}} - {{lecture.batch__branch__name}}</th>
+    					{% endfor %}
+                    {% else %}
+                        <th>Attended</th>
+                        <th>Total</th>
+                        <th>Link</th>
+                    {% endif %}
 				</tr>
 			</thead>
 			<tbody>
 				{% for student in report.1 %}
 					<tr>
-						{% for st in student %}
-							<td>{{st}}</td>
-						{% endfor %}
+                        {% if old_table %}
+                            {% for st in student %}
+                                <td>{{st}}</td>
+                            {% endfor %}
+                        {% else %}
+    						{% for st in student.0 %}
+    							<td>{{st}}</td>
+    						{% endfor %}
+                            <td><a style="background:transparent;color:#0645AD;" class="hyperlink-default" href="../studentwise-attendance/?name={{student.0.0}}&student={{student.1}}">Details</a></td>
+                        {% endif %}
 					</tr>
 				{% endfor %}
 			</tbody>
