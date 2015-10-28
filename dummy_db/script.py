@@ -470,9 +470,23 @@ def insert_tests():
 		test_object.save()
 
 	print ""
+def insert_transactions():
+	print"Adding Transactions..."
+	student_batches = StudentBatch.objects.all()
+	feetypes = FeeType.objects.all()
+	length = len(student_batches)
+	for i,n in enumerate(student_batches):
+		add_progress(i,length)
+		j = random.randint(0,3)
+		k = random.randint(1,10)
+		amount = 1000*k
+		transaction_object = FeeTransaction(student_batch = n,amount = amount,fee_type = feetypes[j], date = datetime.datetime.now())
+		transaction_object.save()
+	
 
+	print ""
 
-
+'''
 insert_academic_years()
 insert_branches()
 insert_roles()
@@ -508,7 +522,8 @@ insert_staff_role()
 insert_lectures() 
 insert_lecture_batches()
 insert_notices()
-insert_attendance()
+#insert_attendance()
 insert_tests()
-insert_base_fees()
+insert_base_fees()'''
+insert_transactions()
 
