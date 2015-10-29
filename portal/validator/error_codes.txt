@@ -55,3 +55,4 @@
 1048 Fees of the selected subjects already added
 1049 Lecture count should be an integer
 1050 Error adding notice
+1051 Atleast one subject year must be selected
