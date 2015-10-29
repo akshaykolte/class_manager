@@ -199,17 +199,20 @@ def attendance_report(lecture_id = None, branch_id = None, student_id = None, su
 
 		'''
 
-		report_table = [subject_name_list, []]
+		report_table = [subject_name_list + [['Total', 0]], []]
 
 		students = StudentBatch.objects.filter(batch__id=batch_id)
 
 		for student in students:
 			report_table[1].append([0 for i in range(len(subject_name_list))])
+			sm = [0,0]
 			for subject in subject_dict:
 				report_table[1][-1][subject_dict[subject][2]] = '-/'+str(subject_dict[subject][1])
+				sm[1] += subject_dict[subject][1]
 			if student.id in attendance_dict:
 				for attendance in attendance_dict[student.id]:
 					report_table[1][-1][subject_dict[attendance['lecture_batch__lecture__subject_year__id']][2]] = report_table[1][-1][subject_dict[attendance['lecture_batch__lecture__subject_year__id']][2]].replace('-', str(attendance['count__count']))
+					sm[0] += attendance['count__count']
 			report_table[1][-1] = [student.student.first_name+' '+student.student.last_name] + report_table[1][-1]
-
+			report_table[1][-1].append(str(sm[0])+'/'+str(sm[1]))
 		return report_table
