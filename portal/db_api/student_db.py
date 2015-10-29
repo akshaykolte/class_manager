@@ -276,7 +276,7 @@ def set_student_batch(id=None,student_id=None,batch_id=None,subject_year_id_list
 			# subject_year_list (and other similar multi-fields) to save
 			# data in the overriden functions
 			PentaError(1051).raise_error()
-		student_batch_object.save()
+		student_batch_object.save(validate = True, subject_year_id_list = subject_year_id_list)
 		if not is_none_subject_year_id_list:
 			for subject_year_id in subject_year_id_list:
 				subject_year_object = SubjectYear.objects.get(id = subject_year_id)
