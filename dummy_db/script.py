@@ -489,7 +489,7 @@ def insert_tests():
 	length = len(subject_year_list)
 	for i,n in enumerate(subject_year_list):
 		add_progress(i, length)
-		x = a + str(n)
+		x = a + str(i)
 		if not Test.objects.filter(subject_year = n,name = x).exists():
 			test_object = Test(subject_year = n,name = x,total_marks = 100)
 			test_object.save()
