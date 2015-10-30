@@ -462,13 +462,15 @@ def insert_base_fees():
 		add_progress(i,length)
 		for std in standards:
 			sub_years = SubjectYear.objects.filter(subject__standard__id=std.id, academic_year__id=ay.id)
-			k=2
-			for i in xrange(1,k+1):
+			k=3
+			for i in xrange(k,0,-1):
 				for p in combinations(sub_years, i):
 					if i == 1:
 						amount = 5000
 					elif i == 2:
 						amount = 8000
+					elif i == 3:
+						amount = 12000
 					base_fee_object = BaseFee(amount=amount)
 					base_fee_object.save()
 					for perm in p :
@@ -518,31 +520,30 @@ def insert_attendance():
 	pass
 
 
-print "Insert Base Fees manually"
 starttime = datetime.datetime.now()
-insert_academic_years()
-insert_branches()
-insert_roles()
-insert_fee_types()
-insert_standards()
-insert_batches()
-insert_subjects()
-insert_subject_years()
-
-insert_students()
-insert_parents()
-assign_student_parent()
-insert_student_batches()
-
-insert_staff()
-insert_staff_role()
-insert_lectures()
-insert_lecture_batches()
-insert_notices()
-insert_attendance()
-insert_tests()
-# insert_base_fees()
-insert_transactions()
+# insert_academic_years()
+# insert_branches()
+# insert_roles()
+# insert_fee_types()
+# insert_standards()
+# insert_batches()
+# insert_subjects()
+# insert_subject_years()
+#
+# insert_students()
+# insert_parents()
+# assign_student_parent()
+# insert_student_batches()
+#
+# insert_staff()
+# insert_staff_role()
+# insert_lectures()
+# insert_lecture_batches()
+# insert_notices()
+# insert_attendance()
+# insert_tests()
+insert_base_fees()
+# insert_transactions()
 
 endtime = datetime.datetime.now()
 print "Time taken: ",str((endtime-starttime).seconds)+"."+str((endtime-starttime).microseconds)[0:3],"seconds\n"
