@@ -6,7 +6,7 @@ class ModelValidateError(Exception):
 	pass
 
 def validate_phone_number(phone_number):
-	return True	#Remove this while deploying. It is done for dummy_db since it has phone numbers of random length and contains special characters. 
+	return True	#Remove this while deploying. It is done for dummy_db since it has phone numbers of random length and contains special characters.
 	if type(phone_number) != str and type(phone_number) != unicode:
 		return False
 	if len(phone_number) < 10 or len(phone_number) > 15:
@@ -68,6 +68,8 @@ def validate_student_parent(student_parent_object):
 
 def validate_student_batch(student_batch_object, subject_year_id_list):
 	# print student_batch_object, subject_year_id_list
+	if len(subject_year_id_list)==0:
+		return PentaError(1051)
 	from portal.models import SubjectYear, StudentBatch
 	if student_batch_object.standard == None and student_batch_object.academic_year == None and student_batch_object.batch != None:
 		for subject_year_id in subject_year_id_list:
