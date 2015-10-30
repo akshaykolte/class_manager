@@ -940,6 +940,7 @@ def add_test_marks(request):
 							page_type = 4
 							students = get_student_batch(batch_id=request.GET['batch'])
 							context['test_id'] = request.GET['test']
+							context['batch_id'] = request.GET['batch']
 							student_marks = get_student_batch_marks(test_id=request.GET['test'], batch_id=request.GET['batch'])
 							student_marks_dict = {}
 							for student_mark in student_marks:
@@ -962,6 +963,7 @@ def add_test_marks(request):
 			test_id = request.POST['test']
 			batch_id = request.POST['batch']
 			students = get_student_batch(batch_id=request.POST['batch'])
+			print test_id, batch_id, students
 			for student in students:
 				if str(student['id']) in request.POST:
 					try:
