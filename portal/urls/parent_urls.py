@@ -15,4 +15,11 @@ urlpatterns = [
     url(r'^dashboard/$', 'portal.views.parent_views.dashboard'),
     url(r'^attendance/view-attendance/$', 'portal.views.parent_views.view_attendance'),
     url(r'^lecture/view-lectures/$', 'portal.views.parent_views.view_lectures'),
+
+    #Fees
+    url(r'^fees/view-fees/$', 'portal.views.parent_views.view_fees'),
+
+    #Marks
+    url(r'^test/view-marks/$', 'portal.views.parent_views.view_marks'),
+
 ]
