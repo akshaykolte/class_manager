@@ -91,19 +91,54 @@
 		<input name="test_marks" class="form-control">
     <br/>
 		<label><strong>Select batches which can give the test</strong></label>
-		{% for batch in batches %}
-			<div class="checkbox">
-				<label><input type="checkbox" name="batch_{{batch.id}}" value="True">{{batch.name}} - {{batch.standard}} {{batch.branch}}</label>
-			</div>
-		{% endfor %}
+        <div class="dataTable_wrapper">
+            <table class="display table table-striped table-bordered table-hover" id="">
+                <thead>
+                    <tr>
+                        <td><b>Batch Name</b></td>
+                        <td><b>Branch Name</b></td>
+                        <td align="center">&nbsp;&nbsp;<input type="checkbox" name="sample" class="batch_check">
+                        <!-- <td>Current Status</td> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for batch in batches %}
+                    <tr>
+                        <td>{{batch.name}} {{batch.standard}}</td>
+                        <td>{{batch.branch}}</td>
+                        <td align="center"><input class="sub_batch_check" type="checkbox" name="batch_{{batch.id}}" value="True"></td>
+                    </tr>
+            		{% endfor %}
+                </tbody>
+            </table>
+        </div>
 		<br/>
 
 		<label><strong>Select teachers who have access to the test</strong></label>
-		{% for teacher in teachers %}
-			<div class="checkbox">
-				<label><input type="checkbox" name="teacher_{{teacher.id}}" value="True">{{teacher.username}} - {{teacher.first_name}} {{teacher.last_name}}</label>
-			</div>
-		{% endfor %}
+
+        <div class="dataTable_wrapper">
+            <table class="display table table-striped table-bordered table-hover" id="">
+                <thead>
+                    <tr>
+                        <td><b>Teacher username</b></td>
+                        <td><b>Teacher Name</b></td>
+                        <td align="center">&nbsp;&nbsp;<input type="checkbox" name="sample" class="teacher_check">
+                        <!-- <td>Current Status</td> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for teacher in teachers %}
+                    <tr>
+                        <td>{{teacher.username}}</td>
+                        <td>{{teacher.first_name}} {{teacher.last_name}}</td>
+                        <td align="center"><input class="sub_teacher_check" type="checkbox" name="teacher_{{teacher.id}}" value="True"></td>
+                    </tr>
+            		{% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
 		<br/>
 
 		<input class="btn btn-default btn-red" type='submit' value='Create Test'>
@@ -111,6 +146,40 @@
 
 	{% endif %}
 
+    <!-- jQuery -->
+    <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
+    <script>
+
+        	$(document).ready(function() {
+            $('table.display').DataTable({
+            	"iDisplayLength":25,
+                "oLanguage": {
+                  "sEmptyTable":"No Students Found"
+                }
+
+            	});
+        } );
+
+         $(function() {
+            $('.batch_check').on("click", function () { // IE<9 triggers change after blurred
+                var checked = $(this).is(':checked');
+                var $otherChecks = $('.sub_batch_check');
+                $otherChecks.prop('checked', checked);
+                $otherChecks.parent().toggleClass("disabled",checked);
+            });
+        });
+
+        $(function() {
+           $('.teacher_check').on("click", function () { // IE<9 triggers change after blurred
+               var checked = $(this).is(':checked');
+               var $otherChecks = $('.sub_teacher_check');
+               $otherChecks.prop('checked', checked);
+               $otherChecks.parent().toggleClass("disabled",checked);
+           });
+       });
+
+    </script>
 
 
 </br>
