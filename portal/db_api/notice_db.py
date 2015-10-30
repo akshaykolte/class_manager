@@ -11,21 +11,21 @@ def set_notice(id = None, title=None, description=None, uploader_id=None, expiry
 	is_expiry_date_none = expiry_date==None
 	is_important_none = important==None
 	is_document_none = document==None
-	
+
 	if is_id_none:
-		
+
 		# Create new notice and save
 		uploader = Staff.objects.get(id=uploader_id)
 		notice_object = Notice(title=title, description=description, uploader=uploader, expiry_date=expiry_date, important=important, document = document)
 		notice_object.save()
 
 	elif not is_id_none:
-		
+
 		notice_object = Notice.objects.get(id=id)
 		if uploader_id != notice_object.uploader.id: # Uploader cannot be modified
 			return None
 		else:
-			
+
 			if not is_title_none:
 				notice_object.title = title
 			if not is_description_none:
@@ -35,10 +35,10 @@ def set_notice(id = None, title=None, description=None, uploader_id=None, expiry
 			if not is_important_none:
 				notice_object.important = important
 			#if not is_document_none:
-				
-			notice_object.document = document				
+
+			notice_object.document = document
 			#print "###########################################################"
-			#print document	
+			#print document
 	notice_object.save()
 
 	return notice_object.id
@@ -111,6 +111,7 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 			notice_object['uploader_name'] = personal_notice.uploader.first_name + ' ' + personal_notice.uploader.last_name
 			notice_object['expiry_date'] = personal_notice.expiry_date
 			notice_object['important'] = personal_notice.important
+			notice_object['document'] = personal_notice.document
 			return notice_object
 
 		all_notices = []
@@ -136,7 +137,7 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 				notice_object['uploader'] = personal_notice.notice.uploader
 				notice_object['expiry_date'] = personal_notice.notice.expiry_date
 				notice_object['important'] = personal_notice.notice.important
-
+				notice_object['document'] = personal_notice.notice.document
 				personal_notices.append(notice_object)
 
 			related_batch_notices = []
@@ -162,6 +163,7 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 				notice_object['uploader'] = related_batch_notice.notice.uploader
 				notice_object['expiry_date'] = related_batch_notice.notice.expiry_date
 				notice_object['important'] = related_batch_notice.notice.important
+				notice_object['document'] = related_batch_notice.notice.document
 
 				related_batch_notices.append(notice_object)
 
@@ -182,6 +184,7 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 				notice_object['uploader'] = related_branch_notice.notice.uploader
 				notice_object['expiry_date'] = related_branch_notice.notice.expiry_date
 				notice_object['important'] = related_branch_notice.notice.important
+				notice_object['document'] = related_branch_notice.notice.document
 
 				related_branch_notices.append(notice_object)
 
@@ -203,6 +206,7 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 				notice_object['uploader'] = personal_notice.notice.uploader
 				notice_object['expiry_date'] = personal_notice.notice.expiry_date
 				notice_object['important'] = personal_notice.notice.important
+				notice_object['document'] = personal_notice.notice.document
 
 				broadcast_notices.append(notice_object)
 
@@ -231,6 +235,8 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 				notice_object['uploader'] = personal_notice.notice.uploader
 				notice_object['expiry_date'] = personal_notice.notice.expiry_date
 				notice_object['important'] = personal_notice.notice.important
+				notice_object['document'] = personal_notice.notice.document
+
 
 				personal_notices.append(notice_object)
 
@@ -250,6 +256,8 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 				notice_object['uploader'] = related_branch_notice.notice.uploader
 				notice_object['expiry_date'] = related_branch_notice.notice.expiry_date
 				notice_object['important'] = related_branch_notice.notice.important
+				notice_object['document'] = related_branch_notice.notice.document
+
 
 				related_branch_notices.append(notice_object)
 
@@ -270,6 +278,8 @@ def get_personal_notices(student_id=None, staff_id=None, for_students=None, for_
 				notice_object['uploader'] = personal_notice.notice.uploader
 				notice_object['expiry_date'] = personal_notice.notice.expiry_date
 				notice_object['important'] = personal_notice.notice.important
+				notice_object['document'] = personal_notice.notice.document
+
 
 				broadcast_notices.append(notice_object)
 			all_notices = personal_notices + related_branch_notices

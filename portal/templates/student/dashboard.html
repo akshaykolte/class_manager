@@ -41,6 +41,9 @@
                                                     Notice From: <strong>{{notice.uploader}}</strong>
                                                     <br>
                                                     Priority:<strong>{% if notice.important == True %} High{% else %} Normal{% endif %}</strong>
+                                                    <br>
+                                                    {% if notice.document %}<a style="background:transparent;color:#0645AD;" class="hyperlink-default" href ="/teacher/download/?doc={{notice.document}}">Download{% else %} Nothing to Download {%endif%}</a>
+
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-default btn-red" data-dismiss="modal">Close</button>
