@@ -492,10 +492,45 @@ def insert_tests():
 		x = a + str(i)
 
 		if not Test.objects.filter(subject_year = n,name = x).exists():
-			if n.academic_year.is_current== True:
+			if n.academic_year.is_current == True:
 				test_object = Test(subject_year = n,name = x,total_marks = 100)
 				test_object.save()
 	print ""
+
+def insert_test_batch():
+	print "Adding Test Batches...",
+	tests = Test.objects.all()
+	length = len(tests)
+	for i,test in enumerate(tests):
+		add_progress(i, length)
+		academic_year = test.subject_year.academic_year
+		batches = Batch.objects.filter(academic_year=academic_year)
+		for batch in batches:
+			if not TestBatch.objects.filter(test = test, batch = batch).exists():
+				if test.subject_year.subject.standard == batch.standard:
+					test_batch_object = TestBatch(test = test, batch = batch)
+					test_batch_object.save()
+	print ""
+
+def insert_test_student_batch():
+	print "Adding Test StudentBatches...",
+	testbatches = TestBatch.objects.all()
+	length = len(testbatches)
+	for i,testbatch in enumerate(testbatches):
+		add_progress(i,length)
+		batch = testbatch.batch
+		studentbatches = StudentBatch.objects.filter(batch = batch)
+		for student_batch in studentbatches:
+			subject_year_list = student_batch.subject_years
+			for i in subject_year_list.all():
+				if i == testbatch.test.subject_year:
+					if not TestStudentBatch.objects.filter(student_batch = student_batch,test = testbatch.test).exists():
+						test_student_batch = TestStudentBatch(student_batch = student_batch,test = testbatch.test, obtained_marks = random.randint(testbatch.test.total_marks/2,testbatch.test.total_marks))
+						test_student_batch.save()
+	print ""
+
+	
+
 
 
 def insert_transactions():
@@ -522,24 +557,11 @@ def insert_transactions():
 	print ""
 
 
-def insert_test_batch():
-	print "Adding Test Batches...",
-	tests = Test.objects.all()
-	length = len(tests)
-	for i,test in enumerate(tests):
-		add_progress(i, length)
-		academic_year = test.subject_year.academic_year
-		batches = Batch.objects.filter(academic_year=academic_year)
-		for batch in batches:
-			if not TestBatch.objects.filter(test = test, batch = batch).exists():
-				if test.subject_year.subject.standard == batch.standard:
-					test_batch_object = TestBatch(test = test, batch = batch)
-					test_batch_object.save()
-	print ""
 
 def insert_attendance():
 	pass
 
+	
 
 starttime = datetime.datetime.now()
 insert_academic_years()
@@ -564,8 +586,11 @@ insert_notices()
 insert_attendance()
 insert_tests()
 insert_test_batch()
+insert_test_student_batch()
+
 insert_base_fees()
 insert_transactions()
+
 
 endtime = datetime.datetime.now()
 print "Time taken: ",str((endtime-starttime).seconds)+"."+str((endtime-starttime).microseconds)[0:3],"seconds\n"
