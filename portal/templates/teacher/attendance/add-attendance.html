@@ -135,7 +135,7 @@
 		<select name="lecturebatch" class="form-control" onchange="this.form.submit()">
 			<option>Select</option>
 			{% for lecturebatch in lecturebatches %}
-			<option value="{{lecturebatch.id}}"{% if lecturebatch_id == lecturebatch.id %} selected{% endif %}>{{lecturebatch.name}}</option>
+			<option value="{{lecturebatch.id}}"{% if lecturebatch_id == lecturebatch.id %} selected{% endif %}>{{lecturebatch.name}} - {{lecturebatch.batch_name}} {{lecturebatch.branch_name}}</option>
 			{% endfor %}
 		</select>
 	</form>
@@ -179,7 +179,7 @@
 		<label><strong>Select Lecture</strong></label>
 		<select name="lecturebatch" class="form-control" onchange="this.form.submit()">
 			{% for lecturebatch in lecturebatches %}
-			<option value="{{lecturebatch.id}}"{% if lecturebatch_id == lecturebatch.id %} selected{% endif %}>{{lecturebatch.name}}</option>
+            <option value="{{lecturebatch.id}}"{% if lecturebatch_id == lecturebatch.id %} selected{% endif %}>{{lecturebatch.name}} - {{lecturebatch.batch_name}} {{lecturebatch.branch_name}}</option>
 			{% endfor %}
 		</select>
 	</form>

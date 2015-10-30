@@ -32,11 +32,11 @@ def get_lecture(id = None, subject_year_id = None):
 		lecture_obj['standard_name'] = lecture.subject_year.subject.standard.name
 		lecture_list.append(lecture_obj)
 		return lecture_list
-	
+
 	elif is_none_id and not is_none_subject_year_id:
 
 		lecture_object = Lecture.objects.filter(subject_year=(SubjectYear.objects.get(id=subject_year_id)))
-		
+
 
 		for i in lecture_object:
 			# Commented because of error
@@ -95,9 +95,9 @@ def set_lecture(id = None,name = None,description = None,count = None,subject_ye
 		lecture_object.save()
 		return lecture_object.id
 
-			
+
 def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = None,batch_id = None, staff_id = None):
-	
+
 
 	is_none_id = id == None
 	is_none_date = date == None
@@ -220,6 +220,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 			lecture_batch_dict['staff_role'] = i.staff_role
 			lecture_batch_dict['batch_id'] = i.batch.id
 			lecture_batch_dict['batch_name'] = i.batch.name
+			lecture_batch_dict['branch_name'] = i.batch.branch.name
 			lecture_batch_dict['standard_id'] = i.batch.standard.id
 			lecture_batch_dict['standard_name'] = i.batch.standard.name
 			lecture_batch_dict['is_done'] = i.is_done
@@ -249,7 +250,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 
 			lecture_batch_list.append(lecture_batch_dict)
 		return lecture_batch_list
-			
+
 
 
 
@@ -293,6 +294,4 @@ def set_lecture_batch(id = None, name = None, description = None, date = None, d
 		if not is_none_is_done:
 			lecture_object.is_done = is_done
 		lecture_object.save()
-		return lecture_object.id	
-
-
+		return lecture_object.id

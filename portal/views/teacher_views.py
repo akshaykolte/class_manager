@@ -524,11 +524,20 @@ def view_attendance(request):
 		if 'branch' in request.GET:
 			if 'lecture' in request.GET:
 				page_type = 5
-				context['report'] = attendance_report(lecture_id=request.GET['lecture'], branch_id=request.GET['branch'])
-				print 'len=', len(context['report'][1][0])
+
+				old_table = False
+
+				if 'detailed' in request.GET and request.GET['detailed'] == 'True':
+					old_table = True
+
+				context['report'] = attendance_report(lecture_id=request.GET['lecture'], branch_id=request.GET['branch'], old_table=old_table)
+				# print 'len=', len(context['report'][1][0])
 				if len(context['report'])<1 or len(context['report'][1])<1 or len(context['report'][1][0]) <= 1:
 					page_type = 6
 					context['msg'] = 'No lectures added of the topic'
+				context['old_table'] = old_table
+				context['branch'] = request.GET['branch']
+				context['lecture'] = request.GET['lecture']
 			else:
 				page_type = 2
 				context['standards'] = get_standard()
@@ -572,7 +581,7 @@ def add_student_notice(request):
 		all_branch={}
 		all_branch['name'] = "All Branches"
 		all_branch['id'] = 0
-		
+
 		all_branches = []
 		all_branches.append(all_branch)
 		context['branches'] = all_branches + branches
@@ -842,7 +851,7 @@ def edit_my_notice(request):
 			document = request.FILES['myfile']
 		else:
 			document = None
-		
+
 		set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp, document = document)
 
 		return redirect('/teacher/notices/view-my-notices/?message=Notice edited')
@@ -892,7 +901,7 @@ def add_test_marks(request):
 				print subject_year_dict
 
 				branches = get_branch_of_teacher(auth_dict['id'])
-				
+
 				all_batches = []
 				index = 0
 				for branch in branches:
@@ -907,16 +916,16 @@ def add_test_marks(request):
 						all_batches.append(cur_batch)
 						index += 1
 
-				context['all_batches'] = all_batches				
+				context['all_batches'] = all_batches
 				context['subject_id'] = int(request.GET['subject'])
 
 				if 'branch' in request.GET:
 					page_type = 3
 					branch_batch_id = int(request.GET['branch'])
 					branch_batch = all_batches[branch_batch_id]
-					
+
 					print branch_batch
-					
+
 					branch_id = branch_batch['branch_id']
 					batch_id = branch_batch['batch_id']
 					context['branch_batch_id'] = branch_batch_id
@@ -930,11 +939,11 @@ def add_test_marks(request):
 					#	page_type = 4
 					#	#context['batch_id'] = int(request.GET['batch'])
 					tests = get_test(subject_year_id=request.GET['subject'], batch_id=batch_id, staff_id=auth_dict['id'])
-					
+
 					print 'subject_year_id='+str(request.GET['subject'])+', batch_id=' + str(batch_id) + ', staff_id=' + str(auth_dict['id'])
 					print tests
 					context['tests'] = tests
-					
+
 					if 'test' in request.GET:
 						if check_test_staff_permission(staff_id=auth_dict['id'], test_id=request.GET['test']):
 							page_type = 4

@@ -120,25 +120,46 @@
 	{% endif %}
 
 	{% if page_type == 5 %}
+    <div style="float:right;">
+        <form>
+            <input type="hidden" name="branch" value="{{branch}}">
+            <input type="hidden" name="lecture" value="{{lecture}}">
+            <input type="hidden" name="detailed" value="{% if old_table %}False{% else %}True{% endif %}">
+            <input value="{% if old_table %}See Simplified Attendance{% else %}See Detailed Attendance{% endif %}" class="btn btn-default btn-red" type="submit">
+        </form>
+        <br/>
+    </div>
 		<br/>
 	   <table class="table table-bordered table-hover table-striped" id="dataTables">
-			<thead>
-				<tr>
-					<th>Student</th>
-					{% for lecture in report.0 %}
-						<th>{{lecture.batch__name}} - {{lecture.batch__branch__name}}</th>
-					{% endfor %}
-				</tr>
-			</thead>
-			<tbody>
-				{% for student in report.1 %}
-					<tr>
-						{% for st in student %}
-							<td>{{st}}</td>
-						{% endfor %}
-					</tr>
-				{% endfor %}
-			</tbody>
+           <thead>
+               <tr>
+                   <th>Student</th>
+                   {% if old_table %}
+                       {% for lecture in report.0 %}
+                           <th>{{lecture.batch__name}} - {{lecture.batch__branch__name}}</th>
+                       {% endfor %}
+                   {% else %}
+                       <th>Attended</th>
+                       <th>Total</th>
+                       <th>Percentage</th>
+                   {% endif %}
+               </tr>
+           </thead>
+           <tbody>
+               {% for student in report.1 %}
+                   <tr>
+                       {% if old_table %}
+                           {% for st in student %}
+                               <td>{{st}}</td>
+                           {% endfor %}
+                       {% else %}
+                           {% for st in student.0 %}
+                               <td>{{st}}</td>
+                           {% endfor %}
+                       {% endif %}
+                   </tr>
+               {% endfor %}
+           </tbody>
 		</table>
     <br>
     <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-primary btn-red">Export as PDF</button>

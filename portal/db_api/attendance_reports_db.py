@@ -74,12 +74,12 @@ def attendance_report(lecture_id = None, branch_id = None, student_id = None, su
 		report_list = [[],[]]
 		if TABLE_1:
 			report_list[0] = lecture_batch_list
-			print report_list[0]
+			# print report_list[0]
 		if not TABLE_1:
 			report_list[0] = ['Attended', 'Total', 'Percentage']
 		report_list[1] = report_table
 
-		print report_list
+		# print report_list
 		return report_list
 
 	if ''.join(bit_list) == '00110':
