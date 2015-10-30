@@ -490,9 +490,11 @@ def insert_tests():
 	for i,n in enumerate(subject_year_list):
 		add_progress(i, length)
 		x = a + str(i)
+
 		if not Test.objects.filter(subject_year = n,name = x).exists():
-			test_object = Test(subject_year = n,name = x,total_marks = 100)
-			test_object.save()
+			if n.academic_year.is_current== True:
+				test_object = Test(subject_year = n,name = x,total_marks = 100)
+				test_object.save()
 	print ""
 
 
@@ -517,6 +519,22 @@ def insert_transactions():
 			transaction_object = FeeTransaction(student_batch = n,amount = amount,fee_type = payment_type, date = datetime.datetime.now())
 			transaction_object.save()
 
+	print ""
+
+
+def insert_test_batch():
+	print "Adding Test Batches...",
+	tests = Test.objects.all()
+	length = len(tests)
+	for i,test in enumerate(tests):
+		add_progress(i, length)
+		academic_year = test.subject_year.academic_year
+		batches = Batch.objects.filter(academic_year=academic_year)
+		for batch in batches:
+			if not TestBatch.objects.filter(test = test, batch = batch).exists():
+				if test.subject_year.subject.standard == batch.standard:
+					test_batch_object = TestBatch(test = test, batch = batch)
+					test_batch_object.save()
 	print ""
 
 def insert_attendance():
@@ -545,6 +563,7 @@ insert_lecture_batches()
 insert_notices()
 insert_attendance()
 insert_tests()
+insert_test_batch()
 insert_base_fees()
 insert_transactions()
 
