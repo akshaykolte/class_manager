@@ -196,6 +196,48 @@ def dashboard(request):
 
 	context['details'] = auth_dict;
 	context['notices'] = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
+	
+	# List of lectures of teacher for dashboard
+	staff_role_list = get_staff_role(staff_id = auth_dict['id'])
+	staff_role_id_list = []
+
+	for staff_role in staff_role_list:
+		staff_role_id = staff_role['id']
+		staff_role_id_list.append(staff_role_id)
+	lecturebatches = []
+	for staff_role_id in staff_role_id_list:
+		lecturebatch = get_lecture_batch(staff_role_id = staff_role_id)
+		for l_b in lecturebatch:
+				if date.today() > l_b['date']:
+					l_b['is_past'] = True
+					l_b['difference'] = (date.today() - l_b['date']).days
+				else:
+					l_b['is_past'] = False
+					l_b['difference'] = (l_b['date'] - date.today()).days
+		for i in lecturebatch:
+			lecturebatches.append(i)
+	
+	lecs = []
+	for lecturebatch in lecturebatches:
+		context['cur_batch_id'] = lecturebatch['batch_id']
+		if not lecturebatch['is_done']: # only taking lectures that are not done yet.
+			lecture_id = lecturebatch['lecture_id']
+			lecture = get_lecture(id = lecture_id)
+			standard_id = lecture[0]['standard_id']
+			subject_year_id = lecture[0]['subject_year_id']
+			lectures = get_lecture(subject_year_id = subject_year_id)
+			#print lecturebatch['batch_name'], lecturebatch['staff_role'].branch
+			
+			for lec in lectures:
+				cur_lec = {}
+				for x in lec:
+					cur_lec[x] = lec[x]
+				cur_lec['batch_name'] = lecturebatch['batch_name']
+				cur_lec['branch_name'] = lecturebatch['staff_role'].branch.name
+				cur_lec['date'] = lecturebatch['date']
+				lecs.append(cur_lec)
+				
+	context['lectures'] = lecs
 
 	return render(request,'teacher/dashboard.html', context)
 
