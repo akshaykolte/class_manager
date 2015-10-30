@@ -49,7 +49,7 @@
                                     <td>{{notice.expiry_date}}</td>
                                     <td>{% if notice.important == True %}High{% endif %} {% if notice.important == False %}Normal{% endif %}</td>
                                     <td>{% if notice.document %} {{notice.document}} {% else %} No Files attached {%endif%}</td>
-                                    <td>{% if notice.document %}<a href ="/teacher/download/?doc={{notice.document}}">Download{% else %} Nothing to Download {%endif%}</a></td>
+                                    <td>{% if notice.document %}<a style="background:transparent;color:#0645AD;" class="hyperlink-default" href ="/teacher/download/?doc={{notice.document}}">Download{% else %} Nothing to Download {%endif%}</a></td>
                                 	<td><a style="background:transparent;color:#0645AD;" class="hyperlink-default" href ="/teacher/notices/edit-my-notice/?notice={{notice.id}}">Edit</a></td>
                                 </tr>
                               {% endfor %}

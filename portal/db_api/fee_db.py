@@ -166,8 +166,8 @@ def set_fee_transaction(id = None ,amount=None ,date = None, student_batch_id = 
 	is_none_id = id == None
 	is_none_amount = amount == None
 	is_none_date = date == None
-	
-	
+
+
 	is_none_student_batch_id = student_batch_id == None
 	is_none_fee_type_id = fee_type_id == None
 
@@ -323,8 +323,9 @@ def get_student_fees(student_id = None):
 	total['total_fees_paid'] =0
 	total['discount'] = 0
 	total['base_fees'] = 0
+	total['extra_charges'] = 0
 	total['total_fees'] = 0
-	total['fine'] = 0
+	#total['fine'] = 0
 	total['fees_remaining'] = 0
 	'''for  student_batch_object in student_batch_objects:
 
@@ -353,17 +354,20 @@ def get_student_fees(student_id = None):
 		if(i.fee_type.name == 'base fee'):
 			total['base_fees'] = total['base_fees'] + i.amount
 
+		if(i.fee_type.name == 'extra charges'):
+			total['extra_charges'] = total['extra_charges'] + i.amount
+
 		if(i.fee_type.name == 'payment'):
 			total['total_fees_paid'] = total['total_fees_paid'] + i.amount
 
 		if(i.fee_type.name == 'discount'):
 			total['discount'] = total['discount'] + i.amount
 
-		if(i.fee_type.name == 'fine'):
-			total['fine'] = total['fine'] + i.amount
+		'''if(i.fee_type.name == 'fine'):
+			total['fine'] = total['fine'] + i.amount'''
 
-	total['total_fees'] = total['base_fees'] - total['discount']
-	total['fees_remaining'] = total['total_fees'] - total['total_fees_paid'] + total['fine']
+	total['total_fees'] = total['base_fees'] + total['extra_charges'] - total['discount']
+	total['fees_remaining'] = total['total_fees'] - total['total_fees_paid']
 	fee_list.append(total)
 	return fee_list
 

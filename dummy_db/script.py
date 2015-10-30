@@ -415,7 +415,18 @@ def insert_lecture_batches():
 						staff_it%=staff_role_length
 
 					if not LectureBatch.objects.filter(name=lecture.name+" "+str(i+1), lecture=lecture, batch=batch).exists():
-						lecture_batch_obj = LectureBatch(name=lecture.name+" "+str(i+1), description="Temporary Description", date=datetime.datetime.strptime("2015-08-31", "%Y-%m-%d").date(), duration="2 Hours", lecture=lecture, staff_role=staff_role_list[staff_it%staff_role_length], batch=batch)
+						month = int(datetime.date.today().strftime("%m"))
+						date = int(datetime.date.today().strftime("%d")) + random.randint(-5,5)
+						if(date == 28):
+							date += 1
+						if(date > 28):
+							month += 1
+
+						if(date < 0):
+							month -= 1
+
+						date %= 28
+						lecture_batch_obj = LectureBatch(name=lecture.name+" "+str(i+1), description="Temporary Description", date=datetime.datetime.strptime("2015-"+str(month)+"-"+str(date), "%Y-%m-%d").date(), duration="2 Hours", lecture=lecture, staff_role=staff_role_list[staff_it%staff_role_length], batch=batch, is_done=random.randint(0,1))
 						lecture_batch_obj.save()
 					staff_it+=1
 					staff_it%=staff_role_length
@@ -489,11 +500,48 @@ def insert_tests():
 	length = len(subject_year_list)
 	for i,n in enumerate(subject_year_list):
 		add_progress(i, length)
-		x = a + str(n)
+		x = a + str(i)
+
 		if not Test.objects.filter(subject_year = n,name = x).exists():
-			test_object = Test(subject_year = n,name = x,total_marks = 100)
-			test_object.save()
+			if n.academic_year.is_current == True:
+				test_object = Test(subject_year = n,name = x,total_marks = 100)
+				test_object.save()
 	print ""
+
+def insert_test_batch():
+	print "Adding Test Batches...",
+	tests = Test.objects.all()
+	length = len(tests)
+	for i,test in enumerate(tests):
+		add_progress(i, length)
+		academic_year = test.subject_year.academic_year
+		batches = Batch.objects.filter(academic_year=academic_year)
+		for batch in batches:
+			if not TestBatch.objects.filter(test = test, batch = batch).exists():
+				if test.subject_year.subject.standard == batch.standard:
+					test_batch_object = TestBatch(test = test, batch = batch)
+					test_batch_object.save()
+	print ""
+
+def insert_test_student_batch():
+	print "Adding Test StudentBatches...",
+	testbatches = TestBatch.objects.all()
+	length = len(testbatches)
+	for i,testbatch in enumerate(testbatches):
+		add_progress(i,length)
+		batch = testbatch.batch
+		studentbatches = StudentBatch.objects.filter(batch = batch)
+		for student_batch in studentbatches:
+			subject_year_list = student_batch.subject_years
+			for i in subject_year_list.all():
+				if i == testbatch.test.subject_year:
+					if not TestStudentBatch.objects.filter(student_batch = student_batch,test = testbatch.test).exists():
+						test_student_batch = TestStudentBatch(student_batch = student_batch,test = testbatch.test, obtained_marks = random.randint(testbatch.test.total_marks/2,testbatch.test.total_marks))
+						test_student_batch.save()
+	print ""
+
+
+
 
 
 def insert_transactions():
@@ -519,8 +567,11 @@ def insert_transactions():
 
 	print ""
 
+
+
 def insert_attendance():
 	pass
+
 
 
 starttime = datetime.datetime.now()
@@ -545,8 +596,12 @@ insert_lecture_batches()
 insert_notices()
 insert_attendance()
 insert_tests()
+insert_test_batch()
+insert_test_student_batch()
+
 insert_base_fees()
 insert_transactions()
+
 
 endtime = datetime.datetime.now()
 print "Time taken: ",str((endtime-starttime).seconds)+"."+str((endtime-starttime).microseconds)[0:3],"seconds\n"
