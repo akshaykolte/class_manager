@@ -116,9 +116,11 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 		lecture_batch_dict['duration'] = lecture_batch_object.duration
 		lecture_batch_dict['lecture_id'] = lecture_batch_object.lecture.id
 		lecture_batch_dict['lecture_name'] = lecture_batch_object.lecture.name
+		lecture_batch_dict['lecture_batch_name'] = lecture_batch_object.name
 		lecture_batch_dict['staff_role_id'] = lecture_batch_object.staff_role.id
 		lecture_batch_dict['batch_id'] = lecture_batch_object.batch.id
 		lecture_batch_dict['batch_name'] = lecture_batch_object.batch.name
+		lecture_batch_dict['branch_name'] = lecture_batch_object.batch.branch.name
 		lecture_batch_dict['standard_id'] = lecture_batch_object.batch.standard.id
 		lecture_batch_dict['standard_name'] = lecture_batch_object.batch.standard.name
 		lecture_batch_dict['is_done'] = lecture_batch_object.is_done

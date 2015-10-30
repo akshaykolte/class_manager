@@ -142,7 +142,9 @@
 
 	{% endif %}
 	{% if page_type == 4 %}
-	<form>
+
+    <!-- Commented for a better UX -->
+	<!-- <form>
 		<label><strong>Select Standard</strong></label>
 		<select name="standard" class="form-control" onchange="this.form.submit()">
 			{% for standard in standards %}
@@ -183,42 +185,86 @@
 			{% endfor %}
 		</select>
 	</form>
-	</br>
+	</br> -->
+
 	<form action="." method="POST">
 		<input type="hidden" name="standard" value="{{standard_id}}">
 		<input type="hidden" name="subject" value="{{subject_id}}">
 		<input type="hidden" name="lecture" value="{{lecture_id}}">
 		<input type="hidden" name="lecturebatch" value="{{lecturebatch_id}}">
-		<br/>
-		{%for batch in batch_list%}
-			<label><strong> Batch: {{batch.batch.name}}   &nbsp;&nbsp; Standard: {{batch.batch.standard}} &nbsp;&nbsp; Branch: {{batch.batch.branch}} </strong></label>
-			<br/>
-			<div class="dataTable_wrapper">
-			   	<table class="display table table-striped table-bordered table-hover" id="">
-					<thead>
-						<tr>
-							<td class="col-lg-5">Name</td>
-							<td align="center">&nbsp;&nbsp;<input type="checkbox" name="sample" class="batch_{{batch.batch.id}}">
-							<td>Current Status</td>
-						</tr>
-					</thead>
-					<tbody>
-						{%for student in batch.students %}
-						<tr>
-							<td>{{student.first_name}} {{student.last_name}}</td>
-							<td align="center"><input class="sub_batch_{{batch.batch.id}}" type="checkbox" name="batch_{{batch.batch.id}}student_{{student.id}}"{% if student.present == True %} checked{% endif %}></td>
-							{% if student.present == True %}<td class="text-success"><strong>Present</strong></td>
-							{% else %}<td class="text-muted"><strong>Absent/Not Marked</strong></td>
-							{% endif %}
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-			<br>
-			{% endfor %}
-		<input class="col-lg-3 btn btn-primary btn-red" type='submit' value='Mark Attendance'>
-		<br/>
+
+        <!-- <ul class="nav nav-tabs nav-justified">
+          <li class="active">
+              <a href="#service-one" data-toggle="tab">
+                  <i class="fa fa-chevron-circle-right"></i> Lol <br/> ss
+              </a>
+          </li>
+          <li class>
+              <a href="#service-two" data-toggle="tab">
+                  <i class="fa fa-chevron-circle-right"></i> Rofl
+              </a>
+          </li>
+        </ul>
+
+        <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade active in" id="service-one">
+                        <h1>Lolz</h1>
+                    </div>
+                    <div class="tab-pane fade in" id="service-two">
+                        <h1>Roflz</h1>
+                    </div>
+        </div> -->
+
+        <h3>Select all students who attended {{current_lecture_batch.lecture_batch_name}} lecture of {{current_lecture_batch.batch_name}} {{current_lecture_batch.branch_name}}</h3>
+        <br/>
+        <div class="col-md-3">
+            <br/><br/><br/>
+            <ul class="nav nav-tabs nav-stacked">
+              {% for batch in batch_list %}
+                  <li {% if batch.batch.id == current_lecture_batch.batch_id %}class="active"{% endif %} >
+                      <a href="#service-{{batch.batch.id}}" data-toggle="tab">
+                          <i class="fa fa-chevron-circle-right"></i>
+                          Students of {{batch.batch.name}} <br/> {{batch.batch.branch}}
+                      </a>
+                  </li>
+              {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <div id="myTabContent" class="tab-content">
+        		{%for batch in batch_list %}
+                    <div class="tab-pane fade {% if batch.batch.id == current_lecture_batch.batch_id %}active{% endif %} in" id="service-{{batch.batch.id}}">
+            			<label><strong> Batch: {{batch.batch.name}}   &nbsp;&nbsp; Standard: {{batch.batch.standard}} &nbsp;&nbsp; Branch: {{batch.batch.branch}} </strong></label>
+            			<br/>
+            			<div class="dataTable_wrapper">
+            			   	<table class="display table table-striped table-bordered table-hover" id="">
+            					<thead>
+            						<tr>
+            							<td class="col-lg-5">Name</td>
+            							<td align="center">&nbsp;&nbsp;<input type="checkbox" name="sample" class="batch_{{batch.batch.id}}">
+            							<td>Current Status</td>
+            						</tr>
+            					</thead>
+            					<tbody>
+            						{%for student in batch.students %}
+            						<tr>
+            							<td>{{student.first_name}} {{student.last_name}}</td>
+            							<td align="center"><input class="sub_batch_{{batch.batch.id}}" type="checkbox" name="batch_{{batch.batch.id}}student_{{student.id}}"{% if student.present == True %} checked{% endif %}></td>
+            							{% if student.present == True %}<td class="text-success"><strong>Present</strong></td>
+            							{% else %}<td class="text-muted"><strong>Absent/Not Marked</strong></td>
+            							{% endif %}
+            						</tr>
+            						{% endfor %}
+            					</tbody>
+            				</table>
+            			</div>
+            			<br>
+                        <input class="col-lg-3 btn btn-primary btn-red" type='submit' value='Mark Attendance'>
+                		<br/>
+                    </div>
+    			{% endfor %}
+            </div>
+        </div>
     <br/>
     <br/>
 

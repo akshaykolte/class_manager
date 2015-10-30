@@ -444,6 +444,7 @@ def add_attendance(request):
 					if 'lecturebatch' in request.GET:
 						page_type=4
 						context['lecturebatch_id'] = int(request.GET['lecturebatch'])
+						context['current_lecture_batch'] = get_lecture_batch(id=int(request.GET['lecturebatch']))
 						attendance_list = get_attendance(lecture_batch_id=request.GET['lecturebatch'])
 						print attendance_list, len(attendance_list)
 						for attendance in attendance_list:
@@ -463,11 +464,6 @@ def add_attendance(request):
 						batch_dict['students'] = students
 						batch_list.append(batch_dict)
 						context['batch_list'] = batch_list
-
-						for s in students:
-							print s
-							print '\n\n\n\n\n\n\\n'
-
 
 		context['page_type'] = page_type
 		context['details'] = auth_dict
