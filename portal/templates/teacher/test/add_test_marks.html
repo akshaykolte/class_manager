@@ -95,7 +95,7 @@
 		function get_batch(obj) {
 			var branch_batch = document.getElementById("branch_batch");
 			var branch_batch_id = branch_batch.options[branch_batch.selectedIndex].value;
-			obj.form.submit();		
+			obj.form.submit();
 		}
 		</script>
 	</form>
@@ -159,8 +159,11 @@
       <input type="hidden" name="branch" value="{{branch_id}}">
       <input type="hidden" name="batch" value="{{batch_id}}">
       <input type="hidden" name="test" value="{{test_id}}">
-  		</br>
-  		<h4><label><strong>Total Marks:</strong><strong>&nbsp;&nbsp;&nbsp;{{tests.0.total_marks}} Marks</strong></label></h4>
+        <h4><label><strong>Test:</strong><strong>&nbsp;&nbsp;&nbsp;{{test.name}}</strong></label></h4>
+        <h4><label><strong>Subject:</strong><strong>&nbsp;&nbsp;&nbsp;{{test.subject_year_name}}</strong></label></h4>
+        <h4><label><strong>Batch:</strong><strong>&nbsp;&nbsp;&nbsp;{{batch.name}} - {{batch.branch}}</strong></label></h4>
+  		<h4><label><strong>Total Marks:</strong><strong>&nbsp;&nbsp;&nbsp;{{test.total_marks}} Marks</strong></label></h4>
+        <br/>
       <table class="table table-striped table-bordered table-hover" id="dataTables">
        <thead>
          <tr>

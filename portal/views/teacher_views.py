@@ -927,17 +927,8 @@ def add_test_marks(request):
 					context['branch_batch_id'] = branch_batch_id
 					context['branch_id'] = branch_id
 					context['batch_id'] = batch_id
-					#context['branch_id'] = int(request.GET['branch']) DONE
-					#batches =  get_batch(branch_id=request.GET['branch'], standard_id=request.GET['standard'])
-					#context['batches'] = batches
-
-					#if 'batch' in request.GET:
-					#	page_type = 4
-					#	#context['batch_id'] = int(request.GET['batch'])
 					tests = get_test(subject_year_id=request.GET['subject'], batch_id=batch_id, staff_id=auth_dict['id'])
 
-					print 'subject_year_id='+str(request.GET['subject'])+', batch_id=' + str(batch_id) + ', staff_id=' + str(auth_dict['id'])
-					print tests
 					context['tests'] = tests
 
 					if 'test' in request.GET:
@@ -946,6 +937,7 @@ def add_test_marks(request):
 							students = get_student_batch(batch_id=request.GET['batch'])
 							context['test_id'] = request.GET['test']
 							context['batch_id'] = request.GET['batch']
+							context['batch'] = get_batch(id=request.GET['batch'])
 							student_marks = get_student_batch_marks(test_id=request.GET['test'], batch_id=request.GET['batch'])
 							student_marks_dict = {}
 							for student_mark in student_marks:
@@ -956,6 +948,7 @@ def add_test_marks(request):
 								if student['id'] in student_marks_dict:
 									students_detailed[-1]['marks'] = student_marks_dict[student['id']]
 							context['students'] = students_detailed
+							context['test'] = get_test(id=request.GET['test'])
 						else:
 							return Http404
 
