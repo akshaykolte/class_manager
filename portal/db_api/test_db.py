@@ -247,6 +247,9 @@ def get_student_batch_marks(id=None, test_id=None, batch_id=None, student_batch_
 		test_student_batch['student_name'] = test_student_batch_object.student_batch.student.first_name + ' ' + test_student_batch_object.student_batch.student.last_name
 		test_student_batch['batch_id'] = test_student_batch_object.student_batch.batch.id
 		test_student_batch['batch_name'] = test_student_batch_object.student_batch.batch.name
+		test_student_batch['test_name'] = test_student_batch_object.test.name
+		test_student_batch['total_marks'] = test_student_batch_object.test.total_marks
+		test_student_batch['subject_name'] = test_student_batch_object.test.subject_year.subject.name
 		test_student_batch['obtained_marks'] = test_student_batch_object.obtained_marks
 		student_batch_list.append(test_student_batch)
 	return student_batch_list

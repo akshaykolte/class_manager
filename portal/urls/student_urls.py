@@ -15,7 +15,11 @@ urlpatterns = [
     url(r'^dashboard/$', 'portal.views.student_views.dashboard'),
     url(r'^attendance/view-attendance/$', 'portal.views.student_views.view_attendance'),
     url(r'^lecture/view-lectures/$', 'portal.views.student_views.view_lectures'),
-    
+
     #Fees
     url(r'^fees/view-fees/$', 'portal.views.student_views.view_fees'),
+
+    #Marks
+    url(r'^test/view-marks/$', 'portal.views.student_views.view_marks'),
+
 ]

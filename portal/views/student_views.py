@@ -8,8 +8,13 @@ from portal.db_api.lecture_db import *
 from portal.db_api.fee_db import *
 from portal.db_api.attendance_reports_db import *
 from portal.db_api.notice_db import *
+from portal.db_api.test_db import *
 import datetime
 from datetime import date
+from django.core.exceptions import *
+from django.utils.datastructures import *
+from portal.validator.validator import ModelValidateError
+
 
 def dashboard(request):
 	auth_dict = get_user(request)
@@ -18,7 +23,7 @@ def dashboard(request):
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
-	
+
 	context['auth_dict'] = auth_dict
 	context['notices'] = get_personal_notices(student_id=auth_dict['id'], for_students =True)
 	return render(request,'student/dashboard.html', context)
@@ -30,7 +35,7 @@ def view_profile(request):
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
-	
+
 	details = get_students(id = auth_dict['id'])
 	context['auth_dict'] = auth_dict
 	context['details'] = details
@@ -45,7 +50,7 @@ def edit_profile(request):
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
-	
+
 	details = get_students(id=auth_dict['id'])
 
 	context['auth_dict'] =auth_dict
@@ -60,7 +65,7 @@ def view_attendance(request):
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
-	
+
 	page_type = 1
 	student_batch = get_student_batch(student_id=auth_dict['id'])
 	subjects = student_batch['student_subjects']
@@ -120,7 +125,7 @@ def edit_profile_submit(request):
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
-	
+
 	set_student(id = auth_dict['id'], first_name = request.POST['first_name'], last_name = request.POST['last_name'], address = request.POST['address'], email = request.POST['email'], phone_number = request.POST['phone_number'], gender = request.POST['gender'])
 
 	return redirect('/student/profile/view-profile')
@@ -152,9 +157,9 @@ def change_password_submit(request):
 		return redirect('/student/profile/change-password/?message=Password Successfully Changed')
 	else:
 		return redirect('/student/profile/change-password/?message_error=Password Change Failed')
-		
-		
-		
+
+
+
 #Fees-------------------------------------------------------------
 
 def view_fees(request):
@@ -168,7 +173,7 @@ def view_fees(request):
 	if request.method == 'GET':
 		try:
 			page_type = 0
-			
+
 			fee_details = get_student_fees( student_id = auth_dict['id'] )
 			transaction_details = get_fee_transaction(id = None ,date_start = None, date_end = None, student_id = auth_dict['id'], fee_type_id = None)
 			#print fee_details
@@ -189,4 +194,38 @@ def view_fees(request):
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))
-		
+
+def view_marks(request):
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] == False or auth_dict['permission_student'] == False:
+		raise Http404
+
+	context = {}
+	context['details'] = auth_dict
+
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		# Useless error handling: redirect loop, commented
+		# try:
+
+		page_type = 1
+		marks_list = get_student_batch_marks(student_batch_id = get_student_batch(student_id=auth_dict['id'])['id'])
+		context['page_type'] = page_type
+		context['marks_list'] = marks_list
+		return render(request,'student/test/view_marks.html', context)
+
+		# except ModelValidateError, e:
+		# 	return redirect('./?message_error='+str(e))
+		# except ValueError, e:
+		# 	return redirect('./?message_error='+str(PentaError(1000)))
+		# except ObjectDoesNotExist, e:
+		# 	return redirect('./?message_error='+str(PentaError(999)))
+		# except MultiValueDictKeyError, e:
+		# 	return redirect('./?message_error='+str(PentaError(998)))
+		# except Exception, e:
+		# 	return redirect('./?message_error='+str(PentaError(100)))
