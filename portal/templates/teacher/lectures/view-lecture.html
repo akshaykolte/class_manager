@@ -44,52 +44,141 @@
 <div class="col-lg-12">
 
 	{% if page_type == 0 %}
-	<div class="panel-body">
-    	<div class="dataTable_wrapper">
-		   <table class="table table-striped table-bordered table-hover" id="dataTables">
-				<thead>
-					<tr>
-						<!-- <th class="col-lg-1">#</th> -->
-						<th>Date</th>
-						<th class="col-lg-2">Lecture Name</th>
-						<th>Description</th>
-						<th>Duration</th>
-						<th>Standard</th>
-						<th>Batch</th>
-						<th>Branch</th>
-						<th>Status</th>
-						<th class="col-lg-1">Link</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for lecturebatch in lecturebatches %}
-						<tr>
-							<td>{{lecturebatch.date}}</td>
-							<td>{{lecturebatch.name}}</td>
-							<td>{{lecturebatch.description}}</td>
-							<td>{{lecturebatch.duration}}</td>
-							<td>{{lecturebatch.standard_name}}</td>
-							<td>{{lecturebatch.batch_name}}</td>
-							<td>{{lecturebatch.staff_role.branch.name}}</td>
-							{% if lecturebatch.is_done == True %}
-	                        <td class="text-success"><strong>Yes</strong></td>
-	                        {% elif lecturebatch.is_past == True %}
-	                        <td class="text-danger"><strong>Deadline passed <u>{{lecturebatch.difference}} days</u> ago</strong></td>
-	                        {% else %}
-	                        <td class="text-warning"><strong>Upcoming in <u>{{lecturebatch.difference}} days</strong></td>
-	                        {% endif %}
-							<td><a style="background:transparent;color:#0645AD;" class="hyperlink-default" href="./?lecturebatch={{lecturebatch.id}}">Edit</a></td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-      <br>
-      <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-primary btn-red">Export as PDF</button>
-      <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-primary btn-red">Export as Excel</button>
-      <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-primary btn-red">Export as Csv</button>
-      <br/><br/>
-		</div>
-	</div>
+  <div class="panel panel-default">
+        <h3 class="page-header" style="margin-top:15px; margin-bottom:5px;">&nbsp;&nbsp;Upcoming Lectures</h3>
+  	<div class="panel-body">
+      	<div class="dataTable_wrapper">
+  		   <table class="table table-striped table-bordered table-hover" id="dataTables">
+  				<thead>
+  					<tr>
+  						<!-- <th class="col-lg-1">#</th> -->
+  						<th>Date</th>
+  						<th class="col-lg-2">Lecture Name</th>
+  						<th>Description</th>
+  						<th>Duration</th>
+  						<th>Standard</th>
+  						<th>Batch</th>
+  						<th>Branch</th>
+  						<th>Status</th>
+  						<th class="col-lg-1">Link</th>
+  					</tr>
+  				</thead>
+  				<tbody>
+  					{% for lecturebatch in lecturebatches %}
+            {% if lecturebatch.is_done == False and lecturebatch.is_past == False %}
+  						<tr>
+  							<td>{{lecturebatch.date}}</td>
+  							<td>{{lecturebatch.name}}</td>
+  							<td>{{lecturebatch.description}}</td>
+  							<td>{{lecturebatch.duration}}</td>
+  							<td>{{lecturebatch.standard_name}}</td>
+  							<td>{{lecturebatch.batch_name}}</td>
+  							<td>{{lecturebatch.staff_role.branch.name}}</td>
+  		          <td class="text-warning"><strong>Upcoming in <u>{{lecturebatch.difference}} days</strong></td>
+  							<td><a style="background:transparent;color:#0645AD;" class="hyperlink-default" href="./?lecturebatch={{lecturebatch.id}}">Edit</a></td>
+  						</tr>
+              {% endif %}
+  					{% endfor %}
+  				</tbody>
+  			</table>
+        <br>
+        <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-primary btn-red">Export as PDF</button>
+        <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-primary btn-red">Export as Excel</button>
+        <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-primary btn-red">Export as Csv</button>
+        <br/><br/>
+  		</div>
+  	</div>
+  </div>
+
+
+  <div class="panel panel-default">
+        <h3 class="page-header" style="margin-top:15px; margin-bottom:5px;">&nbsp;&nbsp;Past Lectures</h3>
+  	<div class="panel-body">
+      	<div class="dataTable_wrapper">
+  		   <table class="table table-striped table-bordered table-hover" id="dataTables2">
+  				<thead>
+  					<tr>
+  						<!-- <th class="col-lg-1">#</th> -->
+  						<th>Date</th>
+  						<th class="col-lg-2">Lecture Name</th>
+  						<th>Description</th>
+  						<th>Duration</th>
+  						<th>Standard</th>
+  						<th>Batch</th>
+  						<th>Branch</th>
+  						<th>Status</th>
+  						<th class="col-lg-1">Link</th>
+  					</tr>
+  				</thead>
+  				<tbody>
+  					{% for lecturebatch in lecturebatches %}
+            {% if lecturebatch.is_past == True %}
+  						<tr>
+  							<td>{{lecturebatch.date}}</td>
+  							<td>{{lecturebatch.name}}</td>
+  							<td>{{lecturebatch.description}}</td>
+  							<td>{{lecturebatch.duration}}</td>
+  							<td>{{lecturebatch.standard_name}}</td>
+  							<td>{{lecturebatch.batch_name}}</td>
+  							<td>{{lecturebatch.staff_role.branch.name}}</td>
+  		          <td class="text-danger"><strong>Deadline past <u>{{lecturebatch.difference}} days ago</strong></td>
+  							<td><a style="background:transparent;color:#0645AD;" class="hyperlink-default" href="./?lecturebatch={{lecturebatch.id}}">Edit</a></td>
+  						</tr>
+              {% endif %}
+  					{% endfor %}
+  				</tbody>
+  			</table>
+        <br>
+        <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-primary btn-red">Export as PDF</button>
+        <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-primary btn-red">Export as Excel</button>
+        <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-primary btn-red">Export as Csv</button>
+        <br/><br/>
+  		</div>
+  	</div>
+  </div>
+
+
+  <div class="panel panel-default">
+        <h3 class="page-header" style="margin-top:15px; margin-bottom:5px;">&nbsp;&nbsp;Conducted Lectures</h3>
+  	<div class="panel-body">
+      	<div class="dataTable_wrapper">
+  		   <table class="table table-striped table-bordered table-hover" id="dataTables3">
+  				<thead>
+  					<tr>
+  						<!-- <th class="col-lg-1">#</th> -->
+  						<th>Date</th>
+  						<th class="col-lg-2">Lecture Name</th>
+  						<th>Description</th>
+  						<th>Duration</th>
+  						<th>Standard</th>
+  						<th>Batch</th>
+  						<th>Branch</th>
+  					</tr>
+  				</thead>
+  				<tbody>
+  					{% for lecturebatch in lecturebatches %}
+            {% if lecturebatch.is_done == True %}
+  						<tr>
+  							<td>{{lecturebatch.date}}</td>
+  							<td>{{lecturebatch.name}}</td>
+  							<td>{{lecturebatch.description}}</td>
+  							<td>{{lecturebatch.duration}}</td>
+  							<td>{{lecturebatch.standard_name}}</td>
+  							<td>{{lecturebatch.batch_name}}</td>
+  							<td>{{lecturebatch.staff_role.branch.name}}</td>
+  		        </tr>
+              {% endif %}
+  					{% endfor %}
+  				</tbody>
+  			</table>
+        <br>
+        <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-primary btn-red">Export as PDF</button>
+        <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-primary btn-red">Export as Excel</button>
+        <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-primary btn-red">Export as Csv</button>
+        <br/><br/>
+  		</div>
+  	</div>
+  </div>
 	{% endif %}
 
 	{% if page_type == 1 %}
@@ -158,7 +247,23 @@
     <script>
     $(document).ready(function() {
         $('#dataTables').DataTable({
-                "iDisplayLength":25,
+                "iDisplayLength":10,
+                "oLanguage": {
+                  "sEmptyTable":     "No Lectures Found"
+                }
+        });
+    });
+    $(document).ready(function() {
+        $('#dataTables2').DataTable({
+                "iDisplayLength":10,
+                "oLanguage": {
+                  "sEmptyTable":     "No Lectures Found"
+                }
+        });
+    });
+    $(document).ready(function() {
+        $('#dataTables3').DataTable({
+                "iDisplayLength":10,
                 "oLanguage": {
                   "sEmptyTable":     "No Lectures Found"
                 }
