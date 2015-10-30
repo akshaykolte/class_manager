@@ -85,17 +85,24 @@
 		<input type="hidden" name="standard" value="{{standard_id}}">
 		<input type="hidden" name="subject" value="{{subject_id}}">
 		<label><strong>Select Branch</strong></label>
-		<select name="branch" class="form-control" onchange="this.form.submit()">
+		<select id="branch_batch" name="branch" class="form-control" onchange="get_batch(this)"> <!-- Branch Batch Splitting here-->
 			<option>Select</option>
-			{% for branch in branches %}
-			<option value="{{branch.id}}">{{branch.name}}</option>
+			{% for batch in all_batches %}
+			<option value="{{batch.id}}">{{batch.branch_name}} - {{batch.batch_name}}</option>
 			{% endfor %}
 		</select>
+		<script>
+		function get_batch(obj) {
+			var branch_batch = document.getElementById("branch_batch");
+			var branch_batch_id = branch_batch.options[branch_batch.selectedIndex].value;
+			obj.form.submit();		
+		}
+		</script>
 	</form>
 
 	{% endif %}
 
-	{% if page_type == 3 %}
+  {% if page_type == 3 %}
 	<form>
 		<label><strong>Select Standard</strong></label>
 		<select name="standard" class="form-control" onchange="this.form.submit()">
@@ -120,69 +127,12 @@
 		<input type="hidden" name="subject" value="{{subject_id}}">
 		<label><strong>Select Branch</strong></label>
 		<select name="branch" class="form-control" onchange="this.form.submit()">
-			{% for branch in branches %}
-			<option value="{{branch.id}}"{% if branch_id == branch.id %} selected{% endif %}>{{branch.name}}</option>
+			{% for batch in all_batches %}
+			<option value="{{batch.id}}"{% if branch_batch_id == batch.id %} selected{% endif %}>{{batch.branch_name}} - {{batch.batch_name}}</option>
 			{% endfor %}
 		</select>
 	</form>
   <br/>
-  <form>
-    <input type="hidden" name="standard" value="{{standard_id}}">
-		<input type="hidden" name="subject" value="{{subject_id}}">
-    <input type="hidden" name="branch" value="{{branch_id}}">
-		<label><strong>Select Batch</strong></label>
-		<select name="batch" class="form-control" onchange="this.form.submit()">
-      <option>Select</option>
-			{% for batch in batches %}
-			<option value="{{batch.id}}"{% if batch_id == batch.id %} selected{% endif %}>{{batch.name}}</option>
-			{% endfor %}
-		</select>
-	</form>
-
-  {% endif %}
-
-  {% if page_type == 4 %}
-	<form>
-		<label><strong>Select Standard</strong></label>
-		<select name="standard" class="form-control" onchange="this.form.submit()">
-			{% for standard in standards %}
-			<option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}}</option>
-			{% endfor %}
-		</select>
-	</form>
-	<br/>
-	<form>
-		<input type="hidden" name="standard" value="{{standard_id}}">
-		<label><strong>Select Subject</strong></label>
-		<select name="subject" class="form-control" onchange="this.form.submit()">
-			{% for subject in subjects %}
-			<option value="{{subject.id}}"{% if subject_id == subject.id %} selected{% endif %}>{{subject.name}}</option>
-			{% endfor %}
-		</select>
-	</form>
-	<br/>
-	<form>
-    <input type="hidden" name="standard" value="{{standard_id}}">
-		<input type="hidden" name="subject" value="{{subject_id}}">
-		<label><strong>Select Branch</strong></label>
-		<select name="branch" class="form-control" onchange="this.form.submit()">
-			{% for branch in branches %}
-			<option value="{{branch.id}}"{% if branch_id == branch.id %} selected{% endif %}>{{branch.name}}</option>
-			{% endfor %}
-		</select>
-	</form>
-  <br/>
-  <form>
-    <input type="hidden" name="standard" value="{{standard_id}}">
-		<input type="hidden" name="subject" value="{{subject_id}}">
-    <input type="hidden" name="branch" value="{{branch_id}}">
-		<label><strong>Select Batch</strong></label>
-		<select name="batch" class="form-control" onchange="this.form.submit()">
-			{% for batch in batches %}
-			<option value="{{batch.id}}"{% if batch_id == batch.id %} selected{% endif %}>{{batch.name}}</option>
-			{% endfor %}
-		</select>
-	</form>
 <br/>
   <form>
     <input type="hidden" name="standard" value="{{standard_id}}">
@@ -201,7 +151,7 @@
   {% endif %}
 
 
-  	{% if page_type == 5 %}
+  	{% if page_type == 4 %}
 <div class="col-lg-12">
   	<form action="." method="POST">
   		<input type="hidden" name="standard" value="{{standard_id}}">
