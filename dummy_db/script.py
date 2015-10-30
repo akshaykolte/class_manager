@@ -6,8 +6,11 @@ import sys, math, random, datetime
 
 
 def add_progress(i,length):
+	num = int(float((i+1)*100)/length)
+	if(num > 100):
+		num = 100
 	sys.stdout.write('\r')
-	sys.stdout.write("\t\t\t\t\t%d%%" % int(float((i+1)*100)/length))
+	sys.stdout.write("\t\t\t\t\t%d%%" % num)
 	sys.stdout.flush()
 
 
@@ -301,10 +304,10 @@ def insert_student_batches():
 
 	print ""
 
-def insert_staff(n=100):
+def insert_staff(n=20):
 
 	print "Adding Staff...",
-	n+=1
+	n += 1
 	f = open("dummy_db/staffs.txt", "r+")
 	staff_list = f.readlines()
 	length = n-1
