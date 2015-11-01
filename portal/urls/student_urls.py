@@ -22,4 +22,7 @@ urlpatterns = [
     #Marks
     url(r'^test/view-marks/$', 'portal.views.student_views.view_marks'),
 
+    #download
+    url(r'^download/$', 'portal.views.student_views.respond_as_attachment'),
+
 ]
