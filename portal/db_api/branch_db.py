@@ -58,3 +58,17 @@ def get_branch_of_teacher(teacher_id):
 		branch_obj['name'] = staff_role.branch.name
 		branch_list.append(branch_obj)
 	return branch_list
+
+def get_branch_of_accountant(accountant_id):
+	is_none_accountant_id = accountant_id==None
+	try:
+		staff_roles = StaffRole.objects.filter(role__name='accountant', staff__id=accountant_id)
+		branch_list = []
+		for staff_role in staff_roles:
+			branch_obj = {}
+			branch_obj['id'] = staff_role.branch.id
+			branch_obj['name'] = staff_role.branch.name
+			branch_list.append(branch_obj)
+		return branch_list
+	except:
+		raise Exception('Some error in branch_db: get_branch_of_accountant()')

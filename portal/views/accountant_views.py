@@ -91,9 +91,61 @@ def dashboard(request):
 	if auth_dict['permission_accountant'] != True:
 		raise Http404
 
-	context['details'] = auth_dict;
-	context['notices'] = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
-
+	context['details'] = auth_dict
+	
+	# All notices
+	notices = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
+	context['notices'] = notices
+	
+	# Latest Maximum 10 Notices received in past 1 week. (Min(10, number of notices overall))
+	# Only considering expiry date uptil now.
+	# Later the expiry date, newer is document.
+	# NOTE: This metric is not correct. Need to consider date/time of uploading,
+	#       for which we will have to add timestamp of upload.
+	notice_list = []
+	for notice in notices:
+		cur_notice = {}
+		cur_notice['title'] = notice['title']
+		cur_notice['description'] = notice['description']
+		cur_notice['uploader'] = notice['uploader']
+		cur_notice['important'] = notice['important']
+		cur_notice['document'] = notice['document']
+		cur_notice['expiry_date'] = notice['expiry_date']
+		notice_list.append(cur_notice)
+	
+	sorted_notices = sorted(notice_list, reverse=True, key=lambda x: x['expiry_date'])
+	context['latest_notices'] = sorted_notices[:min(len(sorted_notices) + 1, 10)]
+	
+	# All transactions that accountant is responsible for
+	branches_of_accountant = get_branch_of_accountant(accountant_id=auth_dict['id'])
+	batches_of_accountant = []
+	for branch in branches_of_accountant:
+		branch_id = branch['id']
+		batches = get_batch(branch_id = branch_id)
+		for batch in batches:
+			batches_of_accountant.append(batch)
+	
+	transactions = []
+	
+	for batch in batches_of_accountant:
+		fees = get_batch_fees(batch_id = batch['id'])
+		for fee in fees:
+			transactions.append(fee)
+	
+	print transactions
+	
+	# 10 Latest Transactions
+	sorted_transactions = sorted(transactions, reverse=True, key=lambda x: x['date'])
+	latest_transactions = sorted_transactions[:min(len(sorted_transactions) + 1, 10)]
+	context['latest_transactions'] = latest_transactions
+		
+	# Pending Fee transactions
+	pending_transactions = []
+	for transaction in transactions:
+		if transaction['total_fees_remaining'] > 0:
+			pending_transactions.append(transaction)
+	context['pending_transactions'] = pending_transactions
+	
 	return render(request,'accountant/dashboard.html', context)
 
 def view_profile(request):
