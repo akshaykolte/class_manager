@@ -113,9 +113,14 @@ def dashboard(request):
 				pass
 			else: # Adding only upcoming lectures
 				l_b['is_past'] = False
-				l_b['difference'] = (l_b['date'] - date.today()).days
-				upcoming_lectures.append(l_b)
+				if (l_b['date'] - date.today()).days <= 7:
+					upcoming_lectures.append(l_b)
 	context['lectures'] = upcoming_lectures
+	
+	# 10 Latest lectures
+	sorted_lectures = sorted(upcoming_lectures, key=lambda x: x['date'])
+	latest_lectures = sorted_lectures[:min(len(sorted_lectures) + 1, 10)]
+	context['latest_lectures'] = latest_lectures
 	
 	return render(request,'student/dashboard.html', context)
 
