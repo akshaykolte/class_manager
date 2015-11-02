@@ -45,37 +45,41 @@ def get_user(request):
 
 		elif Student.objects.filter(username=username,password=password).exists():
 			student_obj = Student.objects.get(username=username,password=password)
-			request.session['user']['logged_in'] = True
-			request.session['user']['login_type']='student'
 
-			request.session['user']['permission_admin'] = False
-			request.session['user']['permission_manager'] = False
-			request.session['user']['permission_teacher'] = False
-			request.session['user']['permission_accountant'] = False
-			request.session['user']['permission_parent'] = False
+			if StudentBatch.objects.filter(student = student_obj,academic_year = AcademicYear.objects.get(is_current = True)).exists() or StudentBatch.objects.filter(student = student_obj,batch__academic_year = AcademicYear.objects.get(is_current = True)).exists():
+				request.session['user']['logged_in'] = True
+				request.session['user']['login_type']='student'
 
-			request.session['user']['permission_student'] = True
-			request.session['user']['id'] = student_obj.id
-			request.session['user']['first_name'] = student_obj.first_name
-			request.session['user']['last_name'] = student_obj.last_name
-			request.session.modified = True
+				request.session['user']['permission_admin'] = False
+				request.session['user']['permission_manager'] = False
+				request.session['user']['permission_teacher'] = False
+				request.session['user']['permission_accountant'] = False
+				request.session['user']['permission_parent'] = False
+
+				request.session['user']['permission_student'] = True
+				request.session['user']['id'] = student_obj.id
+				request.session['user']['first_name'] = student_obj.first_name
+				request.session['user']['last_name'] = student_obj.last_name
+				request.session.modified = True
 
 
 		elif Parent.objects.filter(username=username,password=password).exists():
 			parent_obj = Parent.objects.get(username=username,password=password)
-			request.session['user']['logged_in'] = True
-			request.session['user']['login_type']='parent'
 
-			
-			request.session['user']['permission_admin'] = False
-			request.session['user']['permission_manager'] = False
-			request.session['user']['permission_teacher'] = False
-			request.session['user']['permission_accountant'] = False
-			request.session['user']['permission_student'] = False
+			if StudentBatch.objects.filter(student = StudentParent.objects.get(parent = parent_obj).student ,academic_year = AcademicYear.objects.get(is_current = True)).exists() or StudentBatch.objects.filter(student = StudentParent.objects.get(parent = parent_obj).student, batch__academic_year = AcademicYear.objects.get(is_current = True)).exists():
+				request.session['user']['logged_in'] = True
+				request.session['user']['login_type']='parent'
 
-			request.session['user']['permission_parent'] = True
-			request.session['user']['id'] = parent_obj.id
-			request.session.modified = True
+				
+				request.session['user']['permission_admin'] = False
+				request.session['user']['permission_manager'] = False
+				request.session['user']['permission_teacher'] = False
+				request.session['user']['permission_accountant'] = False
+				request.session['user']['permission_student'] = False
+
+				request.session['user']['permission_parent'] = True
+				request.session['user']['id'] = parent_obj.id
+				request.session.modified = True
 
 	if not 'user' in request.session:
 		request.session['user'] = {'logged_in':False}
