@@ -24,4 +24,6 @@ urlpatterns = [
 	url(r'^notices/add-staff-notice/$', 'portal.views.manager_views.add_staff_notice'),
 	url(r'^notices/view-my-notices/$', 'portal.views.manager_views.view_my_notices'),
 	url(r'^notices/edit-my-notice/$', 'portal.views.manager_views.edit_my_notice'),
+
+	url(r'^download/$', 'portal.views.manager_views.respond_as_attachment'),
 ]

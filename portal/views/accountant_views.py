@@ -23,6 +23,64 @@ from django.http import HttpResponse
 from cgi import escape
 import time
 from portal.models import *
+import datetime
+from datetime import date
+from django.conf.urls.static import static
+from django.conf import settings
+from django.conf.urls import include, patterns, url
+from django.contrib import admin
+import mimetypes
+import os
+import urllib
+
+def respond_as_attachment(request):
+
+	auth_dict = get_user(request)
+	context = {}
+	context['details'] = auth_dict
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	#context['notice_id'] = request.GET['notice']
+
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		file_path = 'media/' + request.GET.get('doc')
+		print file_path
+
+		fp = open(file_path, 'rb')
+		response = HttpResponse(fp.read())
+		fp.close()
+		print os.path.basename(file_path)
+		original_filename = os.path.basename(file_path)
+		type, encoding = mimetypes.guess_type(original_filename)
+		if type is None:
+		    type = 'application/octet-stream'
+		response['Content-Type'] = type
+		response['Content-Length'] = str(os.stat(file_path).st_size)
+		if encoding is not None:
+		    response['Content-Encoding'] = encoding
+
+		# To inspect details for the below code, see http://greenbytes.de/tech/tc2231/
+		if u'WebKit' in request.META['HTTP_USER_AGENT']:
+		    # Safari 3.0 and Chrome 2.0 accepts UTF-8 encoded string directly.
+		    filename_header = 'filename=%s' % original_filename.encode('utf-8')
+		elif u'MSIE' in request.META['HTTP_USER_AGENT']:
+		    # IE does not support internationalized filename at all.
+		    # It can only recognize internationalized URL, so we do the trick via routing rules.
+		    filename_header = ''
+		else:
+		    # For others like Firefox, we follow RFC2231 (encoding extension in HTTP headers).
+		    filename_header = 'filename*=UTF-8\'\'%s' % urllib.quote(original_filename.encode('utf-8'))
+		response['Content-Disposition'] = 'attachment; ' + filename_header
+		return response
+
 def dashboard(request):
 
 	auth_dict = get_user(request)
@@ -966,7 +1024,12 @@ def edit_my_notice(request):
 			else:
 				is_imp = 1
 
-			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp)
+			if len(request.FILES) > 0:
+				document = request.FILES['myfile']
+			else:
+				document = None
+
+			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp, document = document)
 
 			return redirect('/accountant/notices/view-my-notices/?message=Notice edited')
 		except ModelValidateError, e:
