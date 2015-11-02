@@ -242,13 +242,12 @@ def dashboard(request):
 	lecs = []
 	for lecturebatch in lecturebatches:
 		context['cur_batch_id'] = lecturebatch['batch_id']
-		if not lecturebatch['is_done']: # only taking lectures that are not done yet.
+		if not lecturebatch['is_past']: # only taking lectures that are not done yet.
 			lecture_id = lecturebatch['lecture_id']
 			lecture = get_lecture(id = lecture_id)
 			standard_id = lecture[0]['standard_id']
 			subject_year_id = lecture[0]['subject_year_id']
 			lectures = get_lecture(subject_year_id = subject_year_id)
-			#print lecturebatch['batch_name'], lecturebatch['staff_role'].branch
 			
 			for lec in lectures:
 				cur_lec = {}
@@ -260,7 +259,12 @@ def dashboard(request):
 				lecs.append(cur_lec)
 				
 	context['lectures'] = lecs
-
+	
+	# 10 Latest lectures
+	sorted_lectures = sorted(lecs, key=lambda x: x['date'])
+	latest_lectures = sorted_lectures[:min(len(sorted_lectures) + 1, 10)]
+	context['latest_lectures'] = latest_lectures
+	
 	return render(request,'teacher/dashboard.html', context)
 
 
