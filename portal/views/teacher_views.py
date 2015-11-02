@@ -686,6 +686,7 @@ def add_student_notice(request):
 				document = request.FILES['myfile']
 			else:
 				document = None
+
 			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp, document = document)
 
 			if int(request.POST['branch']):
@@ -792,8 +793,12 @@ def add_staff_notice(request):
 			description = request.POST['description']
 			expiry_date = request.POST['expiry-date']
 			is_important = request.POST['is_important']
+			if len(request.FILES) > 0:
+				document = request.FILES['myfile']
+			else:
+				document = None
 
-			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp)
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp, document = document)
 			print int(request.POST['branch'])
 			if int(request.POST['branch']):
 
@@ -878,22 +883,22 @@ def edit_my_notice(request):
 		return render(request, 'teacher/notices/edit-my-notice.html', context)
 
 	elif request.method == 'POST':
-		#try:
-		if request.POST['is_important'] == "False":
-			is_imp = 0
-		else:
-			is_imp = 1
-		print "+++++++++++++++++===========++++++++++++++++++++++++++"
-		print request.FILES['myfile']
-		if len(request.FILES) > 0:
-			document = request.FILES['myfile']
-		else:
-			document = None
+		try:
+			if request.POST['is_important'] == "False":
+				is_imp = 0
+			else:
+				is_imp = 1
+			#print "+++++++++++++++++===========++++++++++++++++++++++++++"
+			#print request.FILES['myfile']
+			if len(request.FILES) > 0:
+				document = request.FILES['myfile']
+			else:
+				document = None
 
-		set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp, document = document)
+			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp, document = document)
 
-		return redirect('/teacher/notices/view-my-notices/?message=Notice edited')
-	'''except ModelValidateError, e:
+			return redirect('/teacher/notices/view-my-notices/?message=Notice edited')
+		except ModelValidateError, e:
 			return redirect('../view-my-notices?message_error='+str(e))
 		except ValueError, e:
 			return redirect('../view-my-notices?message_error='+str(PentaError(1000)))
@@ -903,7 +908,7 @@ def edit_my_notice(request):
 			return redirect('../view-my-notices?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('../view-my-notices?message_error='+str(PentaError(100)))
-'''
+
 @csrf_exempt
 def add_test_marks(request):
 	auth_dict = get_user(request)
