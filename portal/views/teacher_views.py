@@ -242,7 +242,8 @@ def dashboard(request):
 	lecs = []
 	for lecturebatch in lecturebatches:
 		context['cur_batch_id'] = lecturebatch['batch_id']
-		if not lecturebatch['is_past']: # only taking lectures that are not done yet.
+		# only taking lectures that are not done yet.
+		if not lecturebatch['is_past'] and lecturebatch['difference'] <= 7:
 			lecture_id = lecturebatch['lecture_id']
 			lecture = get_lecture(id = lecture_id)
 			standard_id = lecture[0]['standard_id']
