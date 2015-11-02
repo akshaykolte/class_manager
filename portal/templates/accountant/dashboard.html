@@ -15,14 +15,14 @@
     </div>
     <!-- /.row -->
     <ul class="nav nav-tabs">
-      <li class="active"><a data-toggle="tab" href="#latest_transactions">Latest Transactions</a></li>
-      <li><a data-toggle="tab" href="#pending_transactions">Pending Transactions</a></li>
+      <li class="active"><a data-toggle="tab" href="#latest_lectures">Latest Transactions</a></li>
+      <li><a data-toggle="tab" href="#week_lectures">Pending Transactions</a></li>
       <li><a data-toggle="tab" href="#latest_notices">Latest Notices</a></li>
       <li><a data-toggle="tab" href="#all_notices">All Notices</a></li>
     </ul>
 
 <div class="tab-content">
-  <div id="latest_transactions" class="tab-pane fade in active">
+  <div id="latest_lectures" class="tab-pane fade in active">
       <div class="row">
         <div class="panel-body">
         <div class="dataTable_wrapper">
@@ -52,7 +52,7 @@
        </div>
   </div>
     
-  <div id="pending_transactions" class="tab-pane fade in">
+  <div id="week_lectures" class="tab-pane fade in">
       <div class="row">
         <div class="panel-body">
         <div class="dataTable_wrapper">
@@ -223,13 +223,13 @@
         $('#dataTables').DataTable({
                 "iDisplayLength":5,
                 "oLanguage": {
-                  "sEmptyTable":     "No Transactions Found"
+                  "sEmptyTable":     "No Lectures Found"
                 }
         });
         $('#dataTables2').DataTable({
                 "iDisplayLength":5,
                 "oLanguage": {
-                  "sEmptyTable":     "No Transactions Found"
+                  "sEmptyTable":     "No Lectures Found"
                 }
         });
         $('#dataTables3').DataTable({
