@@ -417,7 +417,7 @@ def insert_lecture_batches():
 					if not LectureBatch.objects.filter(name=lecture.name+" "+str(i+1), lecture=lecture, batch=batch).exists():
 						month = int(datetime.date.today().strftime("%m"))
 						date = int(datetime.date.today().strftime("%d")) + random.randint(-5,5)
-						if(date == 28):
+						if(date == 28 or date == 0):
 							date += 1
 						if(date > 28):
 							month += 1
