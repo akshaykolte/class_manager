@@ -80,6 +80,20 @@ def dashboard(request):
 
 	context['auth_dict'] = auth_dict
 	context['notices'] = get_personal_notices(student_id=auth_dict['id'], for_students =True)
+	
+	student_object = get_student_batch(student_id = auth_dict['id'])
+	lecture_list = []
+	lecturebatch = get_lecture_batch(batch_id = student_object['student_batch_id'])
+	upcoming_lectures = []
+	for l_b in lecturebatch:
+			if date.today() > l_b['date']: # ignore past lectures
+				pass
+			else: # Adding only upcoming lectures
+				l_b['is_past'] = False
+				l_b['difference'] = (l_b['date'] - date.today()).days
+				upcoming_lectures.append(l_b)
+	context['lectures'] = upcoming_lectures
+	
 	return render(request,'student/dashboard.html', context)
 
 def view_profile(request):
