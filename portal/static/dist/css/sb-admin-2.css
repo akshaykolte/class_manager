@@ -358,3 +358,15 @@ table.dataTable thead .sorting:after {
 .panel-yellow a:hover {
     color: #df8a13;
 }
+
+.dropdown ul .dropdown-menu-normal:hover,
+.dropdown ul .dropdown-menu-normal a:hover
+{
+    color: #23527C !important;      /* not a good practice, try CSS Specificity */
+}
+
+ul .dropdown-menu-normal,
+ul .dropdown-menu-normal a
+{
+    color: #fff !important;         /* not a good practice, try CSS Specificity */
+}

@@ -78,10 +78,10 @@
                     </a>
                     <ul style="background-color:#4A777A" class="dropdown-menu dropdown-alerts">
                         {% block notifs %}
-                        <li>
+                        <li class="dropdown-menu-normal">
                             <a href="#">
-                                <div class="white">
-                                    <i class="fa fa-comment fa-fw white"></i> No Notifications for now.
+                                <div>
+                                    <i class="fa fa-comment fa-fw"></i><strong> No Notifications for now.</strong>
                                     </div>
                             </a>
                         </li>
@@ -91,16 +91,16 @@
                 </li>
                 <!-- /.dropdown -->
                 <li class="dropdown">
-                    <a class="dropdown-toggle white" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw white"></i>  <i class="fa fa-caret-down white"></i>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul style="background-color:#4A777A" class="dropdown-menu dropdown-user">
-                        <li><a href="/parent/profile/view-profile/"><i class="fa fa-user fa-fw white"></i><strong class="white"> User Profile</strong></a>
+                        <li class="dropdown-menu-normal"><a href="/parent/profile/view-profile/"><i class="fa fa-user fa-fw"></i><strong> User Profile</strong></a>
                         </li>
-                        <li><a href="/parent/profile/change-password/"><i class="fa fa-gear fa-fw white"></i><strong class="white"> Change Password</strong></a>
+                        <li class="dropdown-menu-normal"><a href="/parent/profile/change-password/"><i class="fa fa-gear fa-fw"></i><strong> Change Password</strong></a>
                         </li>
                         <li style="background-color:#23527C;" class="divider-custom divider"></li>
-                        <li><a href="/../../../logout/"><i class="fa fa-sign-out fa-fw white"></i><strong class="white"> Logout</strong></a>
+                        <li class="dropdown-menu-normal"><a href="/../../../logout/"><i class="fa fa-sign-out fa-fw"></i><strong> Logout</strong></a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
