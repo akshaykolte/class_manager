@@ -14,6 +14,13 @@ def add_progress(i,length):
 	sys.stdout.flush()
 
 
+# returns a random date between start_date and end_date
+def random_date(start_date, end_date):
+    delta = end_date - start_date
+    int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+    random_second = random.randrange(int_delta)
+    return start_date + timedelta(seconds=random_second)
+
 def insert_academic_years():
 	print "Adding Academic Years...",
 
@@ -415,18 +422,11 @@ def insert_lecture_batches():
 						staff_it%=staff_role_length
 
 					if not LectureBatch.objects.filter(name=lecture.name+" "+str(i+1), lecture=lecture, batch=batch).exists():
-						month = int(datetime.date.today().strftime("%m"))
-						date = int(datetime.date.today().strftime("%d")) + random.randint(-5,5)
-						if(date == 28):
-							date += 1
-						if(date > 28):
-							month += 1
 
-						if(date < 0):
-							month -= 1
-
-						date %= 28
-						lecture_batch_obj = LectureBatch(name=lecture.name+" "+str(i+1), description="Temporary Description", date=datetime.datetime.strptime("2015-"+str(month)+"-"+str(date), "%Y-%m-%d").date(), duration="2 Hours", lecture=lecture, staff_role=staff_role_list[staff_it%staff_role_length], batch=batch, is_done=random.randint(0,1))
+						start_date = datetime.datetime.now() - timedelta(days=5)
+						end_date = datetime.datetime.now() + timedelta(days=200)
+						rand_date = random_date(start_date, end_date)
+						lecture_batch_obj = LectureBatch(name=lecture.name+" "+str(i+1), description="Temporary Description", date=rand_date, duration="2 Hours", lecture=lecture, staff_role=staff_role_list[staff_it%staff_role_length], batch=batch, is_done=random.randint(0,1))
 						lecture_batch_obj.save()
 					staff_it+=1
 					staff_it%=staff_role_length
@@ -575,32 +575,31 @@ def insert_attendance():
 
 
 starttime = datetime.datetime.now()
-insert_academic_years()
-insert_branches()
-insert_roles()
-insert_fee_types()
-insert_standards()
-insert_batches()
-insert_subjects()
-insert_subject_years()
-
-insert_students()
-insert_parents()
-assign_student_parent()
-insert_student_batches()
-
-insert_staff()
-insert_staff_role()
-insert_lectures()
+# insert_academic_years()
+# insert_branches()
+# insert_roles()
+# insert_fee_types()
+# insert_standards()
+# insert_batches()
+# insert_subjects()
+# insert_subject_years()
+#
+# insert_students()
+# insert_parents()
+# assign_student_parent()
+# insert_student_batches()
+#
+# insert_staff()
+# insert_staff_role()
+# insert_lectures()
 insert_lecture_batches()
-insert_notices()
-insert_attendance()
-insert_tests()
-insert_test_batch()
-insert_test_student_batch()
-
-insert_base_fees()
-insert_transactions()
+# insert_notices()
+# insert_attendance()
+# insert_tests()
+# insert_test_batch()
+# insert_test_student_batch()
+# insert_base_fees()
+# insert_transactions()
 
 
 endtime = datetime.datetime.now()

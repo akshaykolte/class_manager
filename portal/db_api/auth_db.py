@@ -8,7 +8,7 @@ def get_user(request):
 
 		if Staff.objects.filter(username=username,password=password).exists():
 			staff_obj = Staff.objects.get(username=username,password=password)
-			
+
 			request.session['user']['logged_in'] = True
 			request.session['user']['login_type'] = 'staff'
 
@@ -25,7 +25,7 @@ def get_user(request):
 				if(staff_role_obj.role.name == 'manager'):
 					request.session['user']['permission_manager'] = True
 
-		
+
 				if(staff_role_obj.role.name == 'teacher'):
 					request.session['user']['permission_teacher'] = True
 
@@ -40,7 +40,7 @@ def get_user(request):
 
 
 			request.session['user']['id'] = staff_obj.id
-			
+
 			request.session.modified = True
 
 		elif Student.objects.filter(username=username,password=password).exists():
@@ -66,7 +66,7 @@ def get_user(request):
 			request.session['user']['logged_in'] = True
 			request.session['user']['login_type']='parent'
 
-			
+
 			request.session['user']['permission_admin'] = False
 			request.session['user']['permission_manager'] = False
 			request.session['user']['permission_teacher'] = False
@@ -91,7 +91,7 @@ def set_logout(request):
 def change_password_db(request):
 
 	if 'oldpassword' in request.POST :
-		
+
 		if request.POST['newpassword'] == request.POST['repassword']:
 			if request.session['user']['login_type']=='staff':
 				staff_obj=Staff.objects.get(id=request.session['user']['id'])
@@ -99,11 +99,11 @@ def change_password_db(request):
 					staff_obj.password=request.POST['newpassword']
 					staff_obj.save()
 					return True
-				
+
 				else:
 					#print "passwd dont match"
 					return False
-		
+
 
 			elif request.session['user']['login_type']=='parent':
 				parent_obj=Parent.objects.get(id=request.session['user']['id'])
@@ -127,12 +127,10 @@ def change_password_db(request):
 					return False
 		else:
 				#print "passwd dont match"
-				return False			
+				return False
 
 	else:
 				#print "passwd dont match"
-				return False			
+				return False
 
 	return request.session['user']
-
-		
