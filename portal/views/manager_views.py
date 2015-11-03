@@ -86,8 +86,91 @@ def dashboard(request):
 		raise Http404
 
 	context['details'] = auth_dict;
-	context['notices'] = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
+	
+	# All Notices
+	notices = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
+	context['notices'] = notices
+	
+	# Latest Maximum 10 Notices received in past 1 week. (Min(10, number of notices overall))
+	# Only considering expiry date uptil now.
+	# Later the expiry date, newer is document.
+	# NOTE: This metric is not correct. Need to consider date/time of uploading,
+	#       for which we will have to add timestamp of upload.
+	notice_list = []
+	for notice in notices:
+		cur_notice = {}
+		cur_notice['title'] = notice['title']
+		cur_notice['description'] = notice['description']
+		cur_notice['uploader'] = notice['uploader']
+		cur_notice['important'] = notice['important']
+		cur_notice['document'] = notice['document']
+		cur_notice['expiry_date'] = notice['expiry_date']
+		notice_list.append(cur_notice)
+	
+	sorted_notices = sorted(notice_list, reverse=True, key=lambda x: x['expiry_date'])
+	context['latest_notices'] = sorted_notices[:min(len(sorted_notices) + 1, 10)]
+	
+	
+	# All lectures that are happening in branches associated with manager
+	branches = get_branch_of_manager(manager_id=auth_dict['id'])
+	batches = []
+	for branch in branches:
+		branch_id = branch['id']
+		cur_batches = get_batch(branch_id = branch_id)
+		for batch in cur_batches:
+			batches.append(batch)
+	
+	lecturebatches = []
+	for batch in batches:
+		lecture_batches = get_lecture_batch(batch_id = batch['id'])
 
+		for l_b in lecture_batches:
+			if date.today() > l_b['date']: # Past lecture
+				#l_b['is_past'] = True
+				#l_b['difference'] = (date.today() - l_b['date']).days
+				pass
+			else: # Upcoming
+				l_b['is_past'] = False
+				l_b['difference'] = (l_b['date'] - date.today()).days
+				lecturebatches.append(l_b)
+	
+	
+	branch_lectures_map = {}
+	
+	for branch in branches:
+		branch_lectures_map[branch['name']] = []
+	
+	for lecturebatch in lecturebatches:
+		cur_batch_id = lecturebatch['batch_id']
+		# only taking lectures that are not done yet.
+		if not lecturebatch['is_past'] and lecturebatch['difference'] <= 7:
+			lecture_id = lecturebatch['lecture_id']
+			lecture = get_lecture(id = lecture_id)
+			standard_id = lecture[0]['standard_id']
+			subject_year_id = lecture[0]['subject_year_id']
+			lectures = get_lecture(subject_year_id = subject_year_id)
+			for lec in lectures:
+				cur_lec = {}
+				for x in lec:
+					cur_lec[x] = lec[x]
+				cur_lec['batch_name'] = lecturebatch['batch_name']
+				cur_lec['branch_name'] = lecturebatch['branch_name']
+				cur_lec['date'] = lecturebatch['date']
+				branch_lectures_map[cur_lec['branch_name']].append(cur_lec)
+	
+	for branch in branch_lectures_map:
+		lecs = sorted(branch_lectures_map[branch], key=lambda x: x['date'])
+		branch_lectures_map[branch] = lecs[:min(len(lecs), 10)]
+	
+	for branch in branch_lectures_map:
+		for lec in branch_lectures_map[branch]:
+			lec['date'] = (lec['date'].strftime("%Y-%m-%d"))
+	
+	
+	print branch_lectures_map
+	context['branch_lectures_map'] = branch_lectures_map	
+	
+	
 	return render(request,'manager/dashboard.html', context)
 
 
