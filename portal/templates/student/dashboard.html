@@ -7,11 +7,26 @@
 <div class="col-md-12">
 
     <div class="row">
-        
+
         <div class="col-md-12">
             <h3 class="page-header">Dashboard</h3>
         </div>
         <!-- /.col-lg-12 -->
+    </div>
+
+
+
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Marks
+            </div>
+            <div class="panel-body">
+                <div class="flot-chart">
+                    <div class="flot-chart-content" id="flot-line-chart"></div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- /.row -->
     <ul class="nav nav-tabs">
@@ -51,7 +66,7 @@
         </div>
        </div>
   </div>
-    
+
   <div id="week_lectures" class="tab-pane fade in">
       <div class="row">
         <div class="panel-body">
@@ -120,12 +135,12 @@
                                             <br>
                                             {{notice.description}}
                                             <br><br>
-                                            
+
                                             Notice From: <strong>{{notice.uploader}}</strong>
-                                            
+
                                             <br>
                                             Priority:<strong>{% if notice.important == True %} High{% else %} Normal{% endif %}</strong>
-                                            
+
                                             <br>
                                             {% if notice.document %}<a style="background:transparent;color:#0645AD;" class="hyperlink-default" href ="/student/download/?doc={{notice.document}}">Download{% else %} Nothing to Download {%endif%}</a>
                                             <br>
@@ -185,10 +200,10 @@
                                             {{notice.description}}
                                             <br><br>
                                             Notice From: <strong>{{notice.uploader}}</strong>
-                                            
+
                                             <br>
                                             Priority:<strong>{% if notice.important == True %} High{% else %} Normal{% endif %}</strong>
-                                            
+
                                             <br>
                                             {% if notice.document %}<a style="background:transparent;color:#0645AD;" class="hyperlink-default" href ="/student/download/?doc={{notice.document}}">Download{% else %} Nothing to Download {%endif%}</a>
                                             <br>
@@ -244,6 +259,54 @@
                   "sEmptyTable":     "No Notices Found"
                 }
         });
+    });
+    </script>
+    <script>
+    $(document).ready(function() {
+        var offset = 0;
+      var percentage = [[(new Date(2009, 12, 19)).getTime(), 70],[(new Date(2010, 6, 27)).getTime(), 90]];
+      var counter = 1
+
+      var options = {
+          series: {
+              lines: {
+                  show: true
+              },
+              points: {
+                  show: true
+              }
+          },
+          grid: {
+              hoverable: true //IMPORTANT! this is needed for tooltip to work
+          },
+          yaxis: {
+              min: 0,
+              max: 100
+          },
+          xaxis: {
+              min: (new Date(2010, 11, 10)).getTime(),
+              max: (new Date(2010, 11, 15)).getTime(),
+              mode: "time",
+              tickSize: [1, "month"],
+              monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+              tickLength: 0,
+              axisLabel: 'Month',
+          },
+          tooltip: true,
+          tooltipOpts: {
+              content: "'%s' of %x.1 is %y.4",
+              shifts: {
+                  x: -60,
+                  y: 25
+              }
+          }
+      };
+
+      var plotObj = $.plot($("#flot-line-chart"), [{
+              data: percentage,
+              label: "Marks Obtained"
+          }],
+          options);
     });
     </script>
 
