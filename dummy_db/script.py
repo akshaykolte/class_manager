@@ -422,11 +422,13 @@ def insert_lecture_batches():
 						staff_it%=staff_role_length
 
 					if not LectureBatch.objects.filter(name=lecture.name+" "+str(i+1), lecture=lecture, batch=batch).exists():
-						start_date = datetime.datetime.now() - timedelta(days=5)
-						end_date = datetime.datetime.now() + timedelta(days=200)
+						start_date = datetime.datetime.now() - timedelta(days=30)
+						end_date = datetime.datetime.now() + timedelta(days=150)
 						rand_date = random_date(start_date, end_date)
 						if rand_date < datetime.datetime.now():
-							random_done_parameter = random.randint(0,1)
+							random_done_parameter = random.randint(0,5)
+							if random_done_parameter != 0:
+								random_done_parameter = 1
 						else:
 							random_done_parameter = 0
 						lecture_batch_obj = LectureBatch(name=lecture.name+" "+str(i+1), description="Temporary Description", date=rand_date, duration="2 Hours", lecture=lecture, staff_role=staff_role_list[staff_it%staff_role_length], batch=batch, is_done=random_done_parameter)
