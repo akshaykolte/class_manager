@@ -28,11 +28,11 @@ def dashboard(request):
 	context['auth_dict'] = auth_dict
 	parent_object = get_parent(id = auth_dict['id'])
 	studentobject = StudentParent.objects.get(parent = Parent.objects.get( id = parent_object['id'])).student
-	
+
 	# All Notices
 	notices = get_personal_notices(student_id=studentobject.id, for_students =True)
 	context['notices'] = notices
-	
+
 	# Latest Maximum 10 Notices received in past 1 week. (Min(10, number of notices overall))
 	# Only considering expiry date uptil now.
 	# Later the expiry date, newer is document.
@@ -48,10 +48,10 @@ def dashboard(request):
 		cur_notice['document'] = notice['document']
 		cur_notice['expiry_date'] = notice['expiry_date']
 		notice_list.append(cur_notice)
-	
+
 	sorted_notices = sorted(notice_list, reverse=True, key=lambda x: x['expiry_date'])
 	context['latest_notices'] = sorted_notices[:min(len(sorted_notices) + 1, 10)]
-	
+
 	# All Upcoming lectures
 	student_object = get_student_batch(student_id = auth_dict['id'])
 	lecture_list = []
@@ -65,12 +65,12 @@ def dashboard(request):
 				if (l_b['date'] - date.today()).days <= 7:
 					upcoming_lectures.append(l_b)
 	context['lectures'] = upcoming_lectures
-	
+
 	# 10 Latest lectures
 	sorted_lectures = sorted(upcoming_lectures, key=lambda x: x['date'])
 	latest_lectures = sorted_lectures[:min(len(sorted_lectures) + 1, 10)]
 	context['latest_lectures'] = latest_lectures
-	
+
 	return render(request,'parent/dashboard.html', context)
 
 
@@ -117,6 +117,7 @@ def view_attendance(request):
 
 	if auth_dict['permission_parent'] != True:
 		raise Http404
+	context['auth_dict'] = auth_dict
 
 	page_type = 1
 	parent_object = get_parent(id = auth_dict['id'])
@@ -195,6 +196,7 @@ def change_password(request):
 
 	auth_dict = get_user(request)
 	context = {}
+	context['auth_dict'] = auth_dict
 	if auth_dict['logged_in'] == False:
 		raise Http404
 
@@ -237,6 +239,7 @@ def view_fees(request):
 
 	context = {}
 	context['details'] = auth_dict
+	context['auth_dict'] = auth_dict
 	if request.method == 'GET':
 		# try:
 		page_type = 0
@@ -275,6 +278,7 @@ def view_marks(request):
 
 	context = {}
 	context['details'] = auth_dict
+	context['auth_dict'] = auth_dict
 
 	if request.method == 'GET':
 		if 'message' in request.GET:
