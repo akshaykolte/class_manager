@@ -74,7 +74,7 @@
                 {% endif %}
 
 
-          	<form action="." method="POST">
+          	<form action="." method="POST" enctype="multipart/form-data">
 
 			<input type="hidden" name="branch" value="{{branch_id}}">
 			<input type="hidden" name="batch" value="{{batch_id}}">
@@ -102,6 +102,14 @@
 				<label><strong>Expiry Date</strong></label>
 				<input name="expiry-date" class="form-control" type = "text" id = "example1">
 				<br/>
+
+				<label>
+                <strong>Upload File</strong></label><br/>
+                <span style = "">
+                <input  type="file" name="myfile" />
+
+                </span>
+
 
 				<div class="checkbox">
 	            <label>

@@ -435,6 +435,12 @@ def get_batch_fees(batch_id = None):
 
 			if(i.fee_type.name == 'discount'):
 				total['discount'] = total['discount'] + i.amount
+			
+			if 'date' in total:
+				if i.date.strftime('%d/%m/%Y') > total['date']:
+					total['date'] = i.date.strftime('%d/%m/%Y')
+			else:
+				total['date'] = i.date.strftime('%d/%m/%Y')
 
 		total['total_fees'] = total['base_fees'] - total['discount']
 		total['total_fees_remaining'] = total['total_fees'] - total['total_fees_paid']

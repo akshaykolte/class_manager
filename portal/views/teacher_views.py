@@ -195,7 +195,29 @@ def dashboard(request):
 		raise Http404
 
 	context['details'] = auth_dict;
-	context['notices'] = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
+	
+	# All notices
+	notices = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
+	context['notices'] = notices
+	
+	# Latest Maximum 10 Notices received in past 1 week. (Min(10, number of notices overall))
+	# Only considering expiry date uptil now.
+	# Later the expiry date, newer is document.
+	# NOTE: This metric is not correct. Need to consider date/time of uploading,
+	#       for which we will have to add timestamp of upload.
+	notice_list = []
+	for notice in notices:
+		cur_notice = {}
+		cur_notice['title'] = notice['title']
+		cur_notice['description'] = notice['description']
+		cur_notice['uploader'] = notice['uploader']
+		cur_notice['important'] = notice['important']
+		cur_notice['document'] = notice['document']
+		cur_notice['expiry_date'] = notice['expiry_date']
+		notice_list.append(cur_notice)
+	
+	sorted_notices = sorted(notice_list, reverse=True, key=lambda x: x['expiry_date'])
+	context['latest_notices'] = sorted_notices[:min(len(sorted_notices) + 1, 10)]
 	
 	# List of lectures of teacher for dashboard
 	staff_role_list = get_staff_role(staff_id = auth_dict['id'])
@@ -220,13 +242,13 @@ def dashboard(request):
 	lecs = []
 	for lecturebatch in lecturebatches:
 		context['cur_batch_id'] = lecturebatch['batch_id']
-		if not lecturebatch['is_done']: # only taking lectures that are not done yet.
+		# only taking lectures that are not done yet.
+		if not lecturebatch['is_past'] and lecturebatch['difference'] <= 7:
 			lecture_id = lecturebatch['lecture_id']
 			lecture = get_lecture(id = lecture_id)
 			standard_id = lecture[0]['standard_id']
 			subject_year_id = lecture[0]['subject_year_id']
 			lectures = get_lecture(subject_year_id = subject_year_id)
-			#print lecturebatch['batch_name'], lecturebatch['staff_role'].branch
 			
 			for lec in lectures:
 				cur_lec = {}
@@ -238,7 +260,12 @@ def dashboard(request):
 				lecs.append(cur_lec)
 				
 	context['lectures'] = lecs
-
+	
+	# 10 Latest lectures
+	sorted_lectures = sorted(lecs, key=lambda x: x['date'])
+	latest_lectures = sorted_lectures[:min(len(sorted_lectures) + 1, 10)]
+	context['latest_lectures'] = latest_lectures
+	
 	return render(request,'teacher/dashboard.html', context)
 
 
@@ -671,48 +698,49 @@ def add_student_notice(request):
 		return render(request,'teacher/notices/add-student-notice.html', context)
 
 	elif request.method == 'POST':
-		# try:
+		try:
 
-		if request.POST['is_important'] == "False":
-			is_imp = 0
-		else:
-			is_imp = 1
+			if request.POST['is_important'] == "False":
+				is_imp = 0
+			else:
+				is_imp = 1
 
-		title = request.POST['title']
-		description = request.POST['description']
-		expiry_date = request.POST['expiry-date']
-		is_important = request.POST['is_important']
-		if len(request.FILES) > 0:
-			document = request.FILES['myfile']
-		else:
-			document = None
-		notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp, document = document)
+			title = request.POST['title']
+			description = request.POST['description']
+			expiry_date = request.POST['expiry-date']
+			is_important = request.POST['is_important']
+			if len(request.FILES) > 0:
+				document = request.FILES['myfile']
+			else:
+				document = None
 
-		if int(request.POST['branch']):
-			if int(request.POST['batch']):
-				students = get_students(id = None,batch_id = int(request.POST['batch']))
-				student_list = []
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp, document = document)
 
-				for student in students:
-					#print student
-					#print 'student_'+str(student['id']) in request.POST
-					if 'student_'+str(student['id']) in request.POST:
-						#print subject_year
-						upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = student['id'], staff_id = None)
+			if int(request.POST['branch']):
+				if int(request.POST['batch']):
+					students = get_students(id = None,batch_id = int(request.POST['batch']))
+					student_list = []
 
-
-
+					for student in students:
+						#print student
+						#print 'student_'+str(student['id']) in request.POST
+						if 'student_'+str(student['id']) in request.POST:
+							#print subject_year
+							upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = student['id'], staff_id = None)
 
 
-		if not int(request.POST['branch']) :
-			#print "ddd"
-			upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = None, staff_id = None)
-		elif int(request.POST['branch']) and not int(request.POST['batch']):
-			upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = int(request.POST['branch']) , batch_id = None, student_id = None, staff_id = None)
 
-		return redirect('./?message=Notice Uploaded')
 
-		'''except ModelValidateError, e:
+
+			if not int(request.POST['branch']) :
+				#print "ddd"
+				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = None, staff_id = None)
+			elif int(request.POST['branch']) and not int(request.POST['batch']):
+				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = int(request.POST['branch']) , batch_id = None, student_id = None, staff_id = None)
+
+			return redirect('./?message=Notice Uploaded')
+
+		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
 			return redirect('./?message_error='+str(PentaError(1000)))
@@ -722,7 +750,7 @@ def add_student_notice(request):
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))
-		'''
+		
 
 
 @csrf_exempt
@@ -792,8 +820,12 @@ def add_staff_notice(request):
 			description = request.POST['description']
 			expiry_date = request.POST['expiry-date']
 			is_important = request.POST['is_important']
+			if len(request.FILES) > 0:
+				document = request.FILES['myfile']
+			else:
+				document = None
 
-			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp)
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp, document = document)
 			print int(request.POST['branch'])
 			if int(request.POST['branch']):
 
@@ -878,22 +910,22 @@ def edit_my_notice(request):
 		return render(request, 'teacher/notices/edit-my-notice.html', context)
 
 	elif request.method == 'POST':
-		#try:
-		if request.POST['is_important'] == "False":
-			is_imp = 0
-		else:
-			is_imp = 1
-		print "+++++++++++++++++===========++++++++++++++++++++++++++"
-		print request.FILES['myfile']
-		if len(request.FILES) > 0:
-			document = request.FILES['myfile']
-		else:
-			document = None
+		try:
+			if request.POST['is_important'] == "False":
+				is_imp = 0
+			else:
+				is_imp = 1
+			#print "+++++++++++++++++===========++++++++++++++++++++++++++"
+			#print request.FILES['myfile']
+			if len(request.FILES) > 0:
+				document = request.FILES['myfile']
+			else:
+				document = None
 
-		set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp, document = document)
+			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp, document = document)
 
-		return redirect('/teacher/notices/view-my-notices/?message=Notice edited')
-	'''except ModelValidateError, e:
+			return redirect('/teacher/notices/view-my-notices/?message=Notice edited')
+		except ModelValidateError, e:
 			return redirect('../view-my-notices?message_error='+str(e))
 		except ValueError, e:
 			return redirect('../view-my-notices?message_error='+str(PentaError(1000)))
@@ -903,7 +935,7 @@ def edit_my_notice(request):
 			return redirect('../view-my-notices?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('../view-my-notices?message_error='+str(PentaError(100)))
-'''
+
 @csrf_exempt
 def add_test_marks(request):
 	auth_dict = get_user(request)

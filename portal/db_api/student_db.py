@@ -540,3 +540,18 @@ def get_student_batch_of_student(student_id, staff_id=None):
 		student_batch['student_subjects'] = subject_year_list
 		student_batch_list.append(student_batch)
 	return student_batch_list
+
+def get_student_of_parent(parent_id=None):
+	if parent_id != None:
+		student = StudentParent.objects.get(parent = Parent.objects.get( id = parent_id)).student
+	student_dict = {}
+	student_dict['id'] = student.id
+	student_dict['username'] = student.username
+	student_dict['password'] = student.password
+	student_dict['first_name'] = student.first_name
+	student_dict['last_name'] = student.last_name
+	student_dict['address'] = student.address
+	student_dict['email'] = student.email
+	student_dict['phone_number'] = student.phone_number
+	student_dict['gender'] = student.gender
+	return student_dict
