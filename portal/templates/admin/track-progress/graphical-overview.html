@@ -57,7 +57,9 @@
                                         <tr>
                                           <td align="center">{{k}}</td>
                                           {% for i in v %}
-                                          {% if i.done_counter == i.total_counter %}
+                                          {% if i.done_counter == i.total_counter and i.done_counter == 0 %}
+                                          <td class="text-muted" align="center"><strong>-</strong></td>
+                                          {% elif i.done_counter == i.total_counter %}
                                           <td class="text-success" align="center"><strong>{{i.done_counter}}/{{i.total_counter}}</strong></td>
                                           {% elif i.done_counter == 0 %}
                                           <td class="text-danger" align="center"><strong>{{i.done_counter}}/{{i.total_counter}}</strong></td>
@@ -67,9 +69,6 @@
                                           {% endfor %}
                                         </tr>
                                     {% endfor %}
-
-
-
                                 </tbody>
                             </table>
                         <!-- /.table-responsive -->
