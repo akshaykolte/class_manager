@@ -1,8 +1,9 @@
 from portal.models import *
 
 def get_user(request):
+	msg = 'Incorrect login details'
 	if 'login' in request.POST:
-		request.session['user'] = {'logged_in':False}
+		request.session['user'] = {'logged_in':False, 'msg': msg}
 		username = request.POST['username']
 		password = request.POST['password']
 
@@ -11,6 +12,7 @@ def get_user(request):
 
 			request.session['user']['logged_in'] = True
 			request.session['user']['login_type'] = 'staff'
+			request.session['user']['user_name'] = username
 
 			request.session['user']['permission_admin'] = False
 			request.session['user']['permission_manager'] = False
@@ -45,40 +47,54 @@ def get_user(request):
 
 		elif Student.objects.filter(username=username,password=password).exists():
 			student_obj = Student.objects.get(username=username,password=password)
-			request.session['user']['logged_in'] = True
-			request.session['user']['login_type']='student'
+			if StudentBatch.objects.filter(student = student_obj,academic_year = AcademicYear.objects.get(is_current = True)).exists() or StudentBatch.objects.filter(student = student_obj,batch__academic_year = AcademicYear.objects.get(is_current = True)).exists():
+				request.session['user']['user_name'] = username
+				request.session['user']['logged_in'] = True
+				request.session['user']['login_type']='student'
 
-			request.session['user']['permission_admin'] = False
-			request.session['user']['permission_manager'] = False
-			request.session['user']['permission_teacher'] = False
-			request.session['user']['permission_accountant'] = False
-			request.session['user']['permission_parent'] = False
+				request.session['user']['permission_admin'] = False
+				request.session['user']['permission_manager'] = False
+				request.session['user']['permission_teacher'] = False
+				request.session['user']['permission_accountant'] = False
+				request.session['user']['permission_parent'] = False
 
-			request.session['user']['permission_student'] = True
-			request.session['user']['id'] = student_obj.id
-			request.session['user']['first_name'] = student_obj.first_name
-			request.session['user']['last_name'] = student_obj.last_name
-			request.session.modified = True
+				request.session['user']['permission_student'] = True
+				request.session['user']['id'] = student_obj.id
+				request.session['user']['first_name'] = student_obj.first_name
+				request.session['user']['last_name'] = student_obj.last_name
+				request.session.modified = True
+			else:
+				msg = 'Sorry, you are not admitted to current academic year'
+				request.session['user']['msg'] = msg
 
 
 		elif Parent.objects.filter(username=username,password=password).exists():
 			parent_obj = Parent.objects.get(username=username,password=password)
-			request.session['user']['logged_in'] = True
-			request.session['user']['login_type']='parent'
+
+			if not StudentParent.objects.filter(parent = parent_obj).exists():
+				msg = 'No ward assigned to you, please contact the organisation'
+				request.session['user']['msg'] = msg
+			elif StudentBatch.objects.filter(student = StudentParent.objects.get(parent = parent_obj).student ,academic_year = AcademicYear.objects.get(is_current = True)).exists() or StudentBatch.objects.filter(student = StudentParent.objects.get(parent = parent_obj).student, batch__academic_year = AcademicYear.objects.get(is_current = True)).exists():
+				request.session['user']['user_name'] = username
+				request.session['user']['logged_in'] = True
+				request.session['user']['login_type']='parent'
 
 
-			request.session['user']['permission_admin'] = False
-			request.session['user']['permission_manager'] = False
-			request.session['user']['permission_teacher'] = False
-			request.session['user']['permission_accountant'] = False
-			request.session['user']['permission_student'] = False
+				request.session['user']['permission_admin'] = False
+				request.session['user']['permission_manager'] = False
+				request.session['user']['permission_teacher'] = False
+				request.session['user']['permission_accountant'] = False
+				request.session['user']['permission_student'] = False
 
-			request.session['user']['permission_parent'] = True
-			request.session['user']['id'] = parent_obj.id
-			request.session.modified = True
+				request.session['user']['permission_parent'] = True
+				request.session['user']['id'] = parent_obj.id
+				request.session.modified = True
+			else:
+				msg = 'Sorry, your ward is not admitted to current academic year'
+				request.session['user']['msg'] = msg
 
 	if not 'user' in request.session:
-		request.session['user'] = {'logged_in':False}
+		request.session['user'] = {'logged_in':False, 'msg': msg}
 		request.session.modified = True
 	return request.session['user']
 

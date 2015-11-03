@@ -575,7 +575,28 @@ def insert_transactions():
 
 
 def insert_attendance():
-	pass
+	#lecture_batches = LectureBatch.objects.all()
+	print "Adding Attendance...",
+	student_batches = StudentBatch.objects.all()	
+	length = len(student_batches)
+	for i,student_batch in enumerate(student_batches):
+		add_progress(i,length)
+		subject_year_list = student_batch.subject_years
+
+		for sub_year_obj in subject_year_list.all():
+			lecture_obj_list = Lecture.objects.filter(subject_year = sub_year_obj)
+			for lecture in lecture_obj_list:
+				lecture_batches = LectureBatch.objects.filter(lecture = lecture)
+				for lecture_batch in lecture_batches:
+					if student_batch.batch == lecture_batch.batch:
+						probability = random.randint(1,4)
+						count = random.randint(1,lecture.count)
+						if probability == 3:
+							if not Attendance.objects.filter(student_batch = student_batch,lecture_batch = lecture_batch).exists():
+								attendance_object = Attendance(student_batch = student_batch,lecture_batch = lecture_batch,count = count)
+								attendance_object.save()
+	print " "
+
 
 
 

@@ -49,7 +49,7 @@ def login(request):
 		elif auth_dict['login_type'] == 'parent':
 			return redirect('/parent/dashboard/')
 	else:
-		return render(request,'home.html', {'message':'Incorrect login details'})
+		return render(request,'home.html', {'message': auth_dict['msg'] or 'Incorrect login details' })
 
 def logout(request):
 	set_logout(request)
