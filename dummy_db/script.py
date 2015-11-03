@@ -425,7 +425,11 @@ def insert_lecture_batches():
 						start_date = datetime.datetime.now() - timedelta(days=5)
 						end_date = datetime.datetime.now() + timedelta(days=200)
 						rand_date = random_date(start_date, end_date)
-						lecture_batch_obj = LectureBatch(name=lecture.name+" "+str(i+1), description="Temporary Description", date=rand_date, duration="2 Hours", lecture=lecture, staff_role=staff_role_list[staff_it%staff_role_length], batch=batch, is_done=random.randint(0,1))
+						if rand_date < datetime.datetime.now():
+							random_done_parameter = random.randint(0,1)
+						else:
+							random_done_parameter = 0
+						lecture_batch_obj = LectureBatch(name=lecture.name+" "+str(i+1), description="Temporary Description", date=rand_date, duration="2 Hours", lecture=lecture, staff_role=staff_role_list[staff_it%staff_role_length], batch=batch, is_done=random_done_parameter)
 						lecture_batch_obj.save()
 					staff_it+=1
 					staff_it%=staff_role_length
