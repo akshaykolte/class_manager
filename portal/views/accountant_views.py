@@ -23,6 +23,64 @@ from django.http import HttpResponse
 from cgi import escape
 import time
 from portal.models import *
+import datetime
+from datetime import date
+from django.conf.urls.static import static
+from django.conf import settings
+from django.conf.urls import include, patterns, url
+from django.contrib import admin
+import mimetypes
+import os
+import urllib
+
+def respond_as_attachment(request):
+
+	auth_dict = get_user(request)
+	context = {}
+	context['details'] = auth_dict
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	#context['notice_id'] = request.GET['notice']
+
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		file_path = 'media/' + request.GET.get('doc')
+		print file_path
+
+		fp = open(file_path, 'rb')
+		response = HttpResponse(fp.read())
+		fp.close()
+		print os.path.basename(file_path)
+		original_filename = os.path.basename(file_path)
+		type, encoding = mimetypes.guess_type(original_filename)
+		if type is None:
+		    type = 'application/octet-stream'
+		response['Content-Type'] = type
+		response['Content-Length'] = str(os.stat(file_path).st_size)
+		if encoding is not None:
+		    response['Content-Encoding'] = encoding
+
+		# To inspect details for the below code, see http://greenbytes.de/tech/tc2231/
+		if u'WebKit' in request.META['HTTP_USER_AGENT']:
+		    # Safari 3.0 and Chrome 2.0 accepts UTF-8 encoded string directly.
+		    filename_header = 'filename=%s' % original_filename.encode('utf-8')
+		elif u'MSIE' in request.META['HTTP_USER_AGENT']:
+		    # IE does not support internationalized filename at all.
+		    # It can only recognize internationalized URL, so we do the trick via routing rules.
+		    filename_header = ''
+		else:
+		    # For others like Firefox, we follow RFC2231 (encoding extension in HTTP headers).
+		    filename_header = 'filename*=UTF-8\'\'%s' % urllib.quote(original_filename.encode('utf-8'))
+		response['Content-Disposition'] = 'attachment; ' + filename_header
+		return response
+
 def dashboard(request):
 
 	auth_dict = get_user(request)
@@ -33,9 +91,61 @@ def dashboard(request):
 	if auth_dict['permission_accountant'] != True:
 		raise Http404
 
-	context['details'] = auth_dict;
-	context['notices'] = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
-
+	context['details'] = auth_dict
+	
+	# All notices
+	notices = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
+	context['notices'] = notices
+	
+	# Latest Maximum 10 Notices received in past 1 week. (Min(10, number of notices overall))
+	# Only considering expiry date uptil now.
+	# Later the expiry date, newer is document.
+	# NOTE: This metric is not correct. Need to consider date/time of uploading,
+	#       for which we will have to add timestamp of upload.
+	notice_list = []
+	for notice in notices:
+		cur_notice = {}
+		cur_notice['title'] = notice['title']
+		cur_notice['description'] = notice['description']
+		cur_notice['uploader'] = notice['uploader']
+		cur_notice['important'] = notice['important']
+		cur_notice['document'] = notice['document']
+		cur_notice['expiry_date'] = notice['expiry_date']
+		notice_list.append(cur_notice)
+	
+	sorted_notices = sorted(notice_list, reverse=True, key=lambda x: x['expiry_date'])
+	context['latest_notices'] = sorted_notices[:min(len(sorted_notices) + 1, 10)]
+	
+	# All transactions that accountant is responsible for
+	branches_of_accountant = get_branch_of_accountant(accountant_id=auth_dict['id'])
+	batches_of_accountant = []
+	for branch in branches_of_accountant:
+		branch_id = branch['id']
+		batches = get_batch(branch_id = branch_id)
+		for batch in batches:
+			batches_of_accountant.append(batch)
+	
+	transactions = []
+	
+	for batch in batches_of_accountant:
+		fees = get_batch_fees(batch_id = batch['id'])
+		for fee in fees:
+			transactions.append(fee)
+	
+	print transactions
+	
+	# 10 Latest Transactions
+	sorted_transactions = sorted(transactions, reverse=True, key=lambda x: x['date'])
+	latest_transactions = sorted_transactions[:min(len(sorted_transactions) + 1, 10)]
+	context['latest_transactions'] = latest_transactions
+		
+	# Pending Fee transactions
+	pending_transactions = []
+	for transaction in transactions:
+		if transaction['total_fees_remaining'] > 0:
+			pending_transactions.append(transaction)
+	context['pending_transactions'] = pending_transactions
+	
 	return render(request,'accountant/dashboard.html', context)
 
 def view_profile(request):
@@ -760,7 +870,14 @@ def add_student_notice(request):
 			description = request.POST['description']
 			expiry_date = request.POST['expiry-date']
 			is_important = request.POST['is_important']
-			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp)
+
+			if len(request.FILES) > 0:
+				document = request.FILES['myfile']
+			else:
+				document = None
+
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp, document = document)
+			
 			if int(request.POST['branch']):
 				if int(request.POST['batch']):
 					students = get_students(id = None,batch_id = int(request.POST['batch']))
@@ -771,12 +888,15 @@ def add_student_notice(request):
 						if 'student_'+str(student['id']) in request.POST:
 							#print subject_year
 							upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = student['id'], staff_id = None)
+			
 			if not int(request.POST['branch']) :
 				#print "ddd"
 				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = None, staff_id = None)
 			elif int(request.POST['branch']) and not int(request.POST['batch']):
 				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = int(request.POST['branch']) , batch_id = None, student_id = None, staff_id = None)
+			
 			return redirect('./?message=Notice Uploaded')
+		
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
@@ -856,7 +976,14 @@ def add_staff_notice(request):
 			description = request.POST['description']
 			expiry_date = request.POST['expiry-date']
 			is_important = request.POST['is_important']
-			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp)
+
+
+			if len(request.FILES) > 0:
+				document = request.FILES['myfile']
+			else:
+				document = None
+
+			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp, document = document)
 			print int(request.POST['branch'])
 			if int(request.POST['branch']):
 				staff = get_staff(branch_id = int(request.POST['branch']))
@@ -949,7 +1076,12 @@ def edit_my_notice(request):
 			else:
 				is_imp = 1
 
-			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp)
+			if len(request.FILES) > 0:
+				document = request.FILES['myfile']
+			else:
+				document = None
+
+			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp, document = document)
 
 			return redirect('/accountant/notices/view-my-notices/?message=Notice edited')
 		except ModelValidateError, e:

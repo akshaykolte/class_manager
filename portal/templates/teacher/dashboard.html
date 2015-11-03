@@ -37,7 +37,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for lecture in lectures %}
+					{% for lecture in latest_lectures %}
 						<tr>
 							<td>{{lecture.date}}</td>
 							<td>{{lecture.name}}</td>
@@ -99,7 +99,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for notice in notices %}
+					{% for notice in latest_notices %}
 					<tr>
 						<td class="col-md-3">
 							{{notice.title}}
@@ -120,7 +120,16 @@
 											<br>
 											{{notice.description}}
 											<br><br>
+											
+											Notice From: <strong>{{notice.uploader}}</strong>
+                                            
+                                            <br>
+                                            Priority:<strong>{% if notice.important == True %} High{% else %} Normal{% endif %}</strong>
+                                            
+                                            <br>
+                                            {% if notice.document %}<a style="background:transparent;color:#0645AD;" class="hyperlink-default" href ="/teacher/download/?doc={{notice.document}}">Download{% else %} Nothing to Download {%endif%}</a>
 											<br>
+
 
 										</div>
 										<div class="modal-footer">
@@ -226,13 +235,13 @@
 		$('#dataTables3').DataTable({
                 "iDisplayLength":5,
                 "oLanguage": {
-                  "sEmptyTable":     "No Lectures Found"
+                  "sEmptyTable":     "No Notices Found"
                 }
         });
 		$('#dataTables4').DataTable({
                 "iDisplayLength":5,
                 "oLanguage": {
-                  "sEmptyTable":     "No Lectures Found"
+                  "sEmptyTable":     "No Notices Found"
                 }
         });
     });

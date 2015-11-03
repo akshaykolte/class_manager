@@ -31,14 +31,18 @@
 
     <title>Your Firm's Name</title>
 
+    <!-- DataTables CSS -->
+   <link href="/static/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+
+   <!-- DataTables Responsive CSS -->
+   <link href="/static/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+
+
     <!-- Bootstrap Core CSS -->
     <link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
     <link href="/static/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
-
-     <!--Datepicker CSS -->
-    <link href="/static/datepicker/css/datepicker.css" rel="stylesheet">
 
     <!-- Timeline CSS -->
     <link href="/static/dist/css/timeline.css" rel="stylesheet">
@@ -53,7 +57,7 @@
     <link href="/static/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <script>
     function call_student_search_window(type) {
-        window.open("/student-search/?type="+type,"name_" + Math.random(), "toolbar=1,status=1,");
+        window.open("/student-search/?type="+type,"name_" + Math.random(), "scrollbars=1");
     }
   </script>
 
@@ -64,7 +68,7 @@
     <div class="blue-back" id="wrapper">
 
         <!-- Navigation -->
-        <nav style="margin-bottom:0px;background-color:#4A777A;border-color:#5A878A;" class="navbar navbar-default navbar-static-top white blue-back" role="navigation" style="margin-bottom: 0">
+        <nav style="margin-bottom:0px;background-color:#4A777A;border-color:#fff;" class="navbar navbar-default navbar-static-top white blue-back" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -81,36 +85,36 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <strong>Use As</strong> &nbsp;<i class="fa fa-caret-down"></i>
                     </a>
-                    <ul style="background-color:#4A777A;color:#fff;" class="dropdown-menu" style="width:200px;">
+                    <ul style="background-color:#4A777A;" class="dropdown-menu" style="width:200px;">
                         {% block use_as %}
                         {% if details.permission_admin == True %}
-                        <li>
+                        <li class="dropdown-menu-normal">
                             <a href="/change/?use_as=admin">
-                                <strong class="white">Admin</strong>
+                                <strong>Admin</strong>
                             </a>
                         </li>
-                        <li style="background-color:#23527C;" class="divider-custom divider"></li>
+                        <li style="background-color:#fff;" class="divider-custom divider"></li>
                         {% endif %}
                         {% if details.permission_accountant == True %}
-                        <li>
+                        <li class="dropdown-menu-normal">
                             <a href="/change/?use_as=accountant">
-                                <strong class="white">Accountant</strong> <span class="pull-right"><i class="fa fa-check white"></i></span>
+                                <span class="pull-right"><i class="fa fa-check"></i></span> <strong>Accountant</strong>
                             </a>
                         </li>
-                        <li style="background-color:#23527C;" class="divider-custom divider"></li>
+                        <li style="background-color:#fff;" class="divider-custom divider"></li>
                         {% endif %}
                         {% if details.permission_manager == True %}
-                        <li>
+                        <li class="dropdown-menu-normal">
                             <a href="/change/?use_as=manager">
-                                <strong class="white">Manager</strong>
+                                <strong>Manager</strong>
                             </a>
                         </li>
-                        <li style="background-color:#23527C;" class="divider-custom divider"></li>
+                        <li style="background-color:#fff;" class="divider-custom divider"></li>
                         {% endif %}
                         {% if details.permission_teacher == True %}
-                        <li>
+                        <li class="dropdown-menu-normal">
                             <a href="/change/?use_as=teacher">
-                               <strong class="white">Teacher</strong>
+                               <strong>Teacher</strong>
                             </a>
                         </li>
                         {% endif %}
@@ -125,10 +129,10 @@
                     </a>
                     <ul style="background-color:#4A777A" class="dropdown-menu dropdown-alerts">
                         {% block notifs %}
-                        <li>
+                        <li class="dropdown-menu-normal">
                             <a href="#">
-                                <div class="white">
-                                    <i class="fa fa-comment fa-fw white"></i> No Notifications for now.
+                                <div>
+                                    <i class="fa fa-comment fa-fw"></i><strong> No Notifications for now.</strong>
                                 </div>
                             </a>
                         </li>
@@ -138,16 +142,16 @@
                 </li>
                 <!-- /.dropdown -->
                 <li class="dropdown">
-                    <a class="dropdown-toggle white" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw white"></i>  <i class="fa fa-caret-down white"></i>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul style="background-color:#4A777A" class="dropdown-menu dropdown-user">
-                        <li><a href="/accountant/profile/view-profile"><i class="fa fa-user fa-fw white"></i><strong class="white"> User Profile</strong></a>
+                        <li class="dropdown-menu-normal"><a href="/accountant/profile/view-profile"><i class="fa fa-user fa-fw"></i><strong> User Profile</strong></a>
                         </li>
-                        <li><a href="/accountant/profile/change-password"><i class="fa fa-gear fa-fw white"></i><strong class="white"> Change Password</strong></a>
+                        <li class="dropdown-menu-normal"><a href="/accountant/profile/change-password"><i class="fa fa-gear fa-fw"></i><strong> Change Password</strong></a>
                         </li>
-                        <li style="background-color:#23527C;" class="divider-custom divider"></li>
-                        <li><a href="../../../logout"><i class="fa fa-sign-out fa-fw white"></i><strong class="white"> Logout<strong></a>
+                        <li style="background-color:#fff;" class="divider-custom divider"></li>
+                        <li class="dropdown-menu-normal"><a href="../../../logout"><i class="fa fa-sign-out fa-fw white"></i><strong> Logout</strong></a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -237,12 +241,17 @@
     <!-- /#wrapper -->
 
     <!-- jQuery -->
+    <!-- jQuery -->
     <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
 
     <script src="/static/js/jquery.table2excel.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="/static/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
     <script src="/static/bower_components/metisMenu/dist/metisMenu.min.js"></script>
@@ -251,6 +260,21 @@
     <script src="/static/bower_components/raphael/raphael-min.js"></script>
     <script src="/static/bower_components/morrisjs/morris.min.js"></script>
     <script src="/static/morris-graphs/js/morris-data.js"></script -->
+
+    <!-- Custom Theme JavaScript -->
+    <script src="/static/dist/js/sb-admin-2.js"></script>
+
+    <!-- jquery export -->
+    <script type="text/javascript" src="/static/table_export/tableExport.js"></script>
+    <script type="text/javascript" src="/static/table_export/jquery.base64.js"></script>
+
+    <!-- png export -->
+    <script type="text/javascript" src="html2canvas.js"></script>
+
+    <!-- pdf export -->
+    <script type="text/javascript" src="/static/table_export/jspdf/libs/sprintf.js"></script>
+    <script type="text/javascript" src="/static/table_export/jspdf/jspdf.js"></script>
+    <script type="text/javascript" src="/static/table_export/jspdf/libs/base64.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
@@ -278,13 +302,6 @@
    <script type="text/javascript" src="/static/table_export/tableExport.js"></script>
    <script type="text/javascript" src="/static/table_export/jquery.base64.js"></script>
 
-   <!-- png export -->
-   <script type="text/javascript" src="html2canvas.js"></script>
-
-   <!-- pdf export -->
-   <script type="text/javascript" src="/static/table_export/jspdf/libs/sprintf.js"></script>
-   <script type="text/javascript" src="/static/table_export/jspdf/jspdf.js"></script>
-   <script type="text/javascript" src="/static/table_export/jspdf/libs/base64.js"></script>
 </body>
 
 </html>

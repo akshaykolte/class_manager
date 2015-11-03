@@ -62,7 +62,7 @@
     <div class="blue-back" id="wrapper">
 
         <!-- Navigation -->
-        <nav style="margin-bottom:0px;background-color:#4A777A;border-color:#5A878A;" class="navbar navbar-default navbar-static-top white blue-back" role="navigation" style="margin-bottom: 0">
+        <nav style="margin-bottom:0px;background-color:#4A777A;border-color:#fff;" class="navbar navbar-default navbar-static-top white blue-back" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -82,33 +82,33 @@
                     <ul style="background-color:#4A777A;color:#fff;" class="dropdown-menu" style="width:200px;">
                         {% block use_as %}
                         {% if details.permission_admin == True %}
-                        <li>
+                        <li class="dropdown-menu-normal">
                             <a href="/change/?use_as=admin">
-                                <strong class="white">Admin</strong>
+                                <strong>Admin</strong>
                             </a>
                         </li>
-                        <li style="background-color:#23527C;" class="divider-custom divider"></li>
+                        <li style="background-color:#fff;" class="divider-custom divider"></li>
                         {% endif %}
                         {% if details.permission_accountant == True %}
-                        <li>
+                        <li class="dropdown-menu-normal">
                             <a href="/change/?use_as=accountant">
-                                <strong class="white">Accountant</strong>
+                                <strong>Accountant</strong>
                             </a>
                         </li>
-                        <li style="background-color:#23527C;" class="divider-custom divider"></li>
+                        <li style="background-color:#fff;" class="divider-custom divider"></li>
                         {% endif %}
                         {% if details.permission_manager == True %}
-                        <li>
+                        <li class="dropdown-menu-normal">
                             <a href="/change/?use_as=manager">
-                                <strong class="white">Manager</strong>
+                                <strong>Manager</strong>
                             </a>
                         </li>
-                        <li style="background-color:#23527C;" class="divider-custom divider"></li>
+                        <li style="background-color:#fff;" class="divider-custom divider"></li>
                         {% endif %}
                         {% if details.permission_teacher == True %}
-                        <li>
+                        <li class="dropdown-menu-normal">
                             <a href="/change/?use_as=teacher">
-                               <strong class="white">Teacher</strong> <span class="pull-right"><i class="fa fa-check white"></i></span>
+                                <span class="pull-right"><i class="fa fa-check"></i></span> <strong>Teacher</strong>
                             </a>
                         </li>
                         {% endif %}
@@ -123,10 +123,10 @@
                     </a>
                     <ul style="background-color:#4A777A" class="dropdown-menu dropdown-alerts">
                         {% block notifs %}
-                        <li>
+                        <li class="dropdown-menu-normal">
                             <a href="#">
-                                <div class="white">
-                                    <i class="fa fa-comment fa-fw white"></i> No Notifications for now.
+                                <div>
+                                    <i class="fa fa-comment fa-fw"></i><strong> No Notifications for now.</strong>
                                 </div>
                             </a>
                         </li>
@@ -136,16 +136,16 @@
                 </li>
                 <!-- /.dropdown -->
                 <li class="dropdown">
-                    <a class="dropdown-toggle white" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw white"></i>  <i class="fa fa-caret-down white"></i>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul style="background-color:#4A777A" class="dropdown-menu dropdown-user">
-                        <li><a href="/teacher/profile/view-profile/"><i class="fa fa-user fa-fw white"></i><strong class="white"> User Profile</strong></a>
+                        <li class="dropdown-menu-normal"><a href="/teacher/profile/view-profile/"><i class="fa fa-user fa-fw"></i><strong> User Profile</strong></a>
                         </li>
-                        <li><a href="/teacher/profile/change-password/"><i class="fa fa-gear fa-fw white"></i><strong class="white"> Change Password</strong></a>
+                        <li class="dropdown-menu-normal"><a href="/teacher/profile/change-password/"><i class="fa fa-gear fa-fw"></i><strong> Change Password</strong></a>
                         </li>
-                        <li style="background-color:#23527C;" class="divider-custom divider"></li>
-                        <li><a href="/logout/"><i class="fa fa-sign-out fa-fw white"></i><strong class="white"> Logout</strong></a>
+                        <li style="background-color:#fff;" class="divider-custom divider"></li>
+                        <li class="dropdown-menu-normal"><a href="/logout/"><i class="fa fa-sign-out fa-fw"></i><strong> Logout</strong></a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->

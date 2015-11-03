@@ -11,7 +11,9 @@
             $('#example1').datepicker({
                 format: "yyyy-mm-dd"
             });
-            $('#example1').datepicker('update', new Date("{{notice.expiry_date}}"));
+            var future = new Date();
+            future.setDate(future.getDate() + 30);
+            $('#example1').datepicker('update', future);
         });
 
     </script>
@@ -46,7 +48,7 @@
 
 
 
-          	<form action="." method="POST">
+          	<form action="." method="POST" enctype="multipart/form-data">
 
 
 				<input type = "hidden" name="notice_id" class="form-control" value='{{notice.id}}'>
@@ -59,8 +61,15 @@
 				<textarea name="description" class="form-control" type = "textbox" >{{notice.description}}</textarea>
 				<br/>
 				<label><strong>Expiry Date</strong></label>
-				<input name="expiry-date" class="form-control" type = "text" id = "example1" value="">
+				<input name="expiry-date" class="form-control" type = "text" id = "example1">
 				<br/>
+				<label>
+	            
+	            <strong>Change Uploaded File</strong></label><br/>
+	            <span style = "">
+ 				<input  type="file" name="myfile" />
+
+   				</span>
 
 				<div class="checkbox">
 	            <label>

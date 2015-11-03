@@ -79,7 +79,49 @@ def dashboard(request):
 
 
 	context['auth_dict'] = auth_dict
-	context['notices'] = get_personal_notices(student_id=auth_dict['id'], for_students =True)
+	
+	# All Notices
+	notices = get_personal_notices(student_id=auth_dict['id'], for_students =True)
+	context['notices'] = notices
+	
+	# Latest Maximum 10 Notices received in past 1 week. (Min(10, number of notices overall))
+	# Only considering expiry date uptil now.
+	# Later the expiry date, newer is document.
+	# NOTE: This metric is not correct. Need to consider date/time of uploading,
+	#       for which we will have to add timestamp of upload.
+	notice_list = []
+	for notice in notices:
+		cur_notice = {}
+		cur_notice['title'] = notice['title']
+		cur_notice['description'] = notice['description']
+		cur_notice['uploader'] = notice['uploader']
+		cur_notice['important'] = notice['important']
+		cur_notice['document'] = notice['document']
+		cur_notice['expiry_date'] = notice['expiry_date']
+		notice_list.append(cur_notice)
+	
+	sorted_notices = sorted(notice_list, reverse=True, key=lambda x: x['expiry_date'])
+	context['latest_notices'] = sorted_notices[:min(len(sorted_notices) + 1, 10)]
+	
+	# All Upcoming lectures
+	student_object = get_student_batch(student_id = auth_dict['id'])
+	lecture_list = []
+	lecturebatch = get_lecture_batch(batch_id = student_object['student_batch_id'])
+	upcoming_lectures = []
+	for l_b in lecturebatch:
+			if date.today() > l_b['date']: # ignore past lectures
+				pass
+			else: # Adding only upcoming lectures
+				l_b['is_past'] = False
+				if (l_b['date'] - date.today()).days <= 7:
+					upcoming_lectures.append(l_b)
+	context['lectures'] = upcoming_lectures
+	
+	# 10 Latest lectures
+	sorted_lectures = sorted(upcoming_lectures, key=lambda x: x['date'])
+	latest_lectures = sorted_lectures[:min(len(sorted_lectures) + 1, 10)]
+	context['latest_lectures'] = latest_lectures
+	
 	return render(request,'student/dashboard.html', context)
 
 def view_profile(request):
