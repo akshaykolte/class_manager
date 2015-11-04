@@ -122,6 +122,10 @@ def dashboard(request):
 	latest_lectures = sorted_lectures[:min(len(sorted_lectures) + 1, 10)]
 	context['latest_lectures'] = latest_lectures
 
+
+	marks_list = get_student_batch_marks(student_batch_id = get_student_batch(student_id=auth_dict['id'])['id'])
+	context['marks_list'] = marks_list
+
 	return render(request,'student/dashboard.html', context)
 
 def view_profile(request):
