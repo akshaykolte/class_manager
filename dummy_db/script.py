@@ -356,7 +356,13 @@ def insert_staff_role():
 		role = role_obj[i%rsize]
 		staff = staff_obj[i]
 
-		if role.name != 'teacher':
+		if role.name == 'admin':
+			for rl in role_obj:
+				for br in branch_obj:
+					if not StaffRole.objects.filter(staff=staff, role=rl, branch=br).exists():
+						staff_role_obj = StaffRole(staff=staff, role=rl, branch=br)
+						staff_role_obj.save()
+		elif role.name != 'teacher':
 			if not StaffRole.objects.filter(staff=Staff.objects.get(id=staff.id), role=Role.objects.get(id=role.id), branch=Branch.objects.get(id=branch.id)).exists():
 
 				staff_role_obj = StaffRole(staff=Staff.objects.get(id=staff.id), role=Role.objects.get(id=role.id), branch=Branch.objects.get(id=branch.id))
@@ -577,7 +583,7 @@ def insert_transactions():
 def insert_attendance():
 	#lecture_batches = LectureBatch.objects.all()
 	print "Adding Attendance...",
-	student_batches = StudentBatch.objects.all()	
+	student_batches = StudentBatch.objects.all()
 	length = len(student_batches)
 	for i,student_batch in enumerate(student_batches):
 		add_progress(i,length)
