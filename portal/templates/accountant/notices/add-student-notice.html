@@ -1,5 +1,7 @@
 {% extends "accountant/base_accountant.html" %}
 
+{% block notices_nav %}{% endblock %}
+
 {% block date-picker-script %}
 
     <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
@@ -137,14 +139,14 @@
 				<label><strong>Expiry Date</strong></label>
 				<input name="expiry-date" class="form-control" type = "text" id = "example1">
 				<br/>
-                
+
                 <label>
                 <strong>Upload File</strong></label><br/>
                 <span style = "">
                 <input  type="file" name="myfile" />
 
                 </span>
-				
+
 
                 <div class="checkbox">
 	            <label>
