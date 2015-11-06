@@ -1,5 +1,7 @@
 {% extends "teacher/base_teacher.html" %}
 
+{% block notices_nav %}{% endblock %}
+
 {% block date-picker-script %}
 
     <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
@@ -111,7 +113,7 @@
 	            <input type="radio" name="is_important" value="False"  checked >&nbsp;No&nbsp;
 	        	</div>
 
-				<input class="btn btn-primary btn-red" type='submit' value='Upload Notice'>
+				<input class="btn btn-default btn-red" type='submit' value='Upload Notice'>
 			</form>
 
 	{% endif %}

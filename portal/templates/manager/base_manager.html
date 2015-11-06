@@ -147,7 +147,7 @@
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                        <i class="fa fa-user fa-fw"></i> <strong>{{details.first_name}}</strong>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
                     </a>
                     <ul style="background-color:#4A777A" class="dropdown-menu dropdown-user">
                         <li class="dropdown-menu-normal"><a href="/manager/profile/view-profile/"><i class="fa fa-user fa-fw"></i><strong> User Profile</strong></a>
@@ -171,8 +171,8 @@
 							<a href="/manager/dashboard/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li style="border-color:#4A777A;">
-							<a href="#"><i class="fa fa-calendar-o"></i> Syllabus<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+							<a href="#"><i class="fa fa-file-text-o fa-fw"></i> Syllabus<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block syllabus_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/manager/lectures/add-lectures/">Add Topics</a>
                                 </li>
@@ -183,8 +183,8 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li style="border-color:#4A777A;">
-							<a href="#"><i class="fa fa-edit fa-fw"></i> Teachers<span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level">
+							<a href="#"><i class="fa fa-user fa-fw"></i> Teachers<span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level {% block teachers_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/manager/teacher/add-teacher/">Add Teacher</a>
                                 </li>
@@ -196,7 +196,7 @@
                         </li>
                         <li style="border-color:#4A777A;">
 							<a href="#"><i class="fa fa-edit fa-fw"></i> Tests<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <ul class="nav nav-second-level {% block tests_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/manager/tests/add-tests/">Add Tests</a>	<!-- Also implement assign test to batch/teacher -->
                                 </li>
@@ -208,8 +208,8 @@
                         </li>
 
                         <li style="border-color:#4A777A;">
-							<a href="#"><i class="fa fa-edit fa-fw"></i> Batches<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+							<a href="#"><i class="fa fa-users fa-fw"></i> Batches<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block batches_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/manager/batches/add-batch/">Add Batches</a>
                                 </li>
@@ -220,8 +220,8 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li style="border-color:#4A777A;">
-							<a href="#"><i class="fa fa-edit fa-fw"></i> Attendance Reports<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+							<a href="#"><i class="fa fa-bar-chart fa-fw"></i> Attendance Reports<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block attendance_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/manager/attendance-reports/lecturewise-attendance/">Topicwise Attendance</a>
                                 </li>
@@ -236,8 +236,8 @@
                         </li>
 
                         <li style="border-color:#4A777A;">
-							<a href="#"><i class="fa fa-edit fa-fw"></i> Notices<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+							<a href="#"><i class="fa fa-envelope-o fa-fw"></i> Notices<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block notices_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/manager/notices/add-student-notice/">Upload Student Notice</a>
                                 </li>
@@ -307,17 +307,23 @@
    {% endblock %}
 
    <!-- jquery export -->
-   <script type="text/javascript" src="/static/table_export/tableExport.js"></script>
-   <script type="text/javascript" src="/static/table_export/jquery.base64.js"></script>
+   <!-- <script type="text/javascript" src="/static/table_export/tableExport.js"></script>
+   <script type="text/javascript" src="/static/table_export/jquery.base64.js"></script> -->
 
    <!-- png export -->
-   <script type="text/javascript" src="html2canvas.js"></script>
+   <!-- <script type="text/javascript" src="html2canvas.js"></script> -->
 
    <!-- pdf export -->
-   <script type="text/javascript" src="/static/table_export/jspdf/libs/sprintf.js"></script>
+   <!-- <script type="text/javascript" src="/static/table_export/jspdf/libs/sprintf.js"></script>
    <script type="text/javascript" src="/static/table_export/jspdf/jspdf.js"></script>
-   <script type="text/javascript" src="/static/table_export/jspdf/libs/base64.js"></script>
+   <script type="text/javascript" src="/static/table_export/jspdf/libs/base64.js"></script> -->
 
+   <script type="text/javascript" src="/static/table_export2/libs/FileSaver/FileSaver.min.js"></script>
+
+   <script type="text/javascript" src="/static/table_export2/libs/jsPDF/jspdf.min.js"></script>
+   <script type="text/javascript" src="/static/table_export2/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js"></script>
+
+   <script type="text/javascript" src="/static/table_export2/tableExport.min.js"></script>
 
 </body>
 

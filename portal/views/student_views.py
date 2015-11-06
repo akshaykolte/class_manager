@@ -79,11 +79,11 @@ def dashboard(request):
 
 
 	context['auth_dict'] = auth_dict
-	
+
 	# All Notices
 	notices = get_personal_notices(student_id=auth_dict['id'], for_students =True)
 	context['notices'] = notices
-	
+
 	# Latest Maximum 10 Notices received in past 1 week. (Min(10, number of notices overall))
 	# Only considering expiry date uptil now.
 	# Later the expiry date, newer is document.
@@ -99,10 +99,10 @@ def dashboard(request):
 		cur_notice['document'] = notice['document']
 		cur_notice['expiry_date'] = notice['expiry_date']
 		notice_list.append(cur_notice)
-	
+
 	sorted_notices = sorted(notice_list, reverse=True, key=lambda x: x['expiry_date'])
 	context['latest_notices'] = sorted_notices[:min(len(sorted_notices) + 1, 10)]
-	
+
 	# All Upcoming lectures
 	student_object = get_student_batch(student_id = auth_dict['id'])
 	lecture_list = []
@@ -116,12 +116,16 @@ def dashboard(request):
 				if (l_b['date'] - date.today()).days <= 7:
 					upcoming_lectures.append(l_b)
 	context['lectures'] = upcoming_lectures
-	
+
 	# 10 Latest lectures
 	sorted_lectures = sorted(upcoming_lectures, key=lambda x: x['date'])
 	latest_lectures = sorted_lectures[:min(len(sorted_lectures) + 1, 10)]
 	context['latest_lectures'] = latest_lectures
-	
+
+
+	marks_list = get_student_batch_marks(student_batch_id = get_student_batch(student_id=auth_dict['id'])['id'])
+	context['marks_list'] = marks_list
+
 	return render(request,'student/dashboard.html', context)
 
 def view_profile(request):
@@ -177,7 +181,7 @@ def view_attendance(request):
 		attendance_list.append(attendance_dict)
 	context['report'] = attendance_list
 	context['page_type'] = page_type
-
+	context['auth_dict'] = auth_dict
 	return render(request, 'student/attendance/view_attendance.html', context)
 
 
@@ -239,6 +243,7 @@ def change_password(request):
 
 	elif 'message_error' in request.GET:
 		context['message_error'] = request.GET['message_error']
+	context['auth_dict'] = auth_dict
 
 	return render(request,'student/profile/change-password.html', context)
 
@@ -266,6 +271,7 @@ def view_fees(request):
 
 	context = {}
 	context['details'] = auth_dict
+	context['auth_dict'] = auth_dict
 	if request.method == 'GET':
 		try:
 			page_type = 0
@@ -299,7 +305,7 @@ def view_marks(request):
 
 	context = {}
 	context['details'] = auth_dict
-
+	context['auth_dict'] = auth_dict
 	if request.method == 'GET':
 		if 'message' in request.GET:
 			context['message'] = request.GET['message']

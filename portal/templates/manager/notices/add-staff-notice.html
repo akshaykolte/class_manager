@@ -1,5 +1,7 @@
 {% extends "manager/base_manager.html" %}
 
+{% block notices_nav %}{% endblock %}
+
 {% block date-picker-script %}
 
     <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
@@ -102,7 +104,7 @@
 				<label><strong>Expiry Date</strong></label>
 				<input name="expiry-date" class="form-control" type = "text" id = "example1">
 				<br/>
-				
+
 				<label>
 	            <strong>Change Uploaded File</strong></label><br/>
 	            <span style = "">

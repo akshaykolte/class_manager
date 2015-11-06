@@ -1,5 +1,7 @@
 {% extends "manager/base_manager.html" %}
 
+{% block attendance_nav %}{% endblock %}
+
 {% block main_content%}
 <div class="row">
 
@@ -164,9 +166,9 @@
 				{% endfor %}
 			</tbody>
 		</table>
-    <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
-    <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
-    <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
+    <button onClick ="$('#dataTables').tableExport({fileName: 'Topicwise Attendance',type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
+    <button onClick ="$('#dataTables').tableExport({fileName: 'Topicwise Attendance',type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
+    <button onClick ="$('#dataTables').tableExport({fileName: 'Topicwise Attendance',type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
     <br/><br/>
 	{% endif %}
 

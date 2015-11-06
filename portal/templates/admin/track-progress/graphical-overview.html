@@ -1,5 +1,7 @@
 {% extends 'admin/base_admin.html' %}
 
+{% block progress_nav %}{% endblock %}
+
 {% block main_content %}
 <script src="/static/morris_components/raphael-min.js"></script>
 <script src="/static/morris_components/jquery-1.8.2.min.js"></script>
@@ -57,7 +59,9 @@
                                         <tr>
                                           <td align="center">{{k}}</td>
                                           {% for i in v %}
-                                          {% if i.done_counter == i.total_counter %}
+                                          {% if i.done_counter == i.total_counter and i.done_counter == 0 %}
+                                          <td class="text-muted" align="center"><strong>-</strong></td>
+                                          {% elif i.done_counter == i.total_counter %}
                                           <td class="text-success" align="center"><strong>{{i.done_counter}}/{{i.total_counter}}</strong></td>
                                           {% elif i.done_counter == 0 %}
                                           <td class="text-danger" align="center"><strong>{{i.done_counter}}/{{i.total_counter}}</strong></td>
@@ -67,15 +71,12 @@
                                           {% endfor %}
                                         </tr>
                                     {% endfor %}
-
-
-
                                 </tbody>
                             </table>
                         <!-- /.table-responsive -->
-                        <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
-                        <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
-                        <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
+                        <button onClick ="$('#dataTables').tableExport({fileName: 'Syllabus Progress', type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
+                        <button onClick ="$('#dataTables').tableExport({fileName: 'Syllabus Progress', type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
+                        <button onClick ="$('#dataTables').tableExport({fileName: 'Syllabus Progress', type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
                          </div>
                         <!-- /.-->
                     </div>

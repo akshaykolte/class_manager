@@ -1,5 +1,7 @@
 {% extends "manager/base_manager.html" %}
 
+{% block batches_nav %}{% endblock %}
+
 {% block main_content%}
 <div class="row">
 
@@ -85,9 +87,9 @@
 				{% endfor %}
 			</tbody>
 		</table>
-    <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
-    <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
-    <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
+    <button onClick ="$('#dataTables').tableExport({fileName: 'Batches',type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
+    <button onClick ="$('#dataTables').tableExport({fileName: 'Batches',type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
+    <button onClick ="$('#dataTables').tableExport({fileName: 'Batches',type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
     <br/><br/>
 
 

@@ -514,6 +514,7 @@ def graphical_overview(request):
 				context['batch_list'] = batch_list
 				lecturebatch_list = []
 				count_list = {}
+				batch_number = 0
 				for batch in batch_list:
 					lec_list = {}
 					total_counter = 0
@@ -525,7 +526,7 @@ def graphical_overview(request):
 						branch_name = i['branch_name']
 
 						if not i['lecture_name'] in lec_list:
-							lec_list[i['lecture_name']] = {'total_counter':0, 'done_counter':0}
+							lec_list[i['lecture_name']] = {'total_counter':0, 'done_counter':0, 'batch_number':batch_number}
 
 						total_counter += 1
 						lec_list[i['lecture_name']]['total_counter'] += 1
@@ -546,6 +547,24 @@ def graphical_overview(request):
 						count_list[k].append(v)
 
 					lecturebatch_list.append(lecture_batch)
+					batch_number += 1
+
+				for k,v in count_list.items():
+					for num,i in enumerate(v):
+						if i['batch_number'] != num:
+							temp_counter = num
+							while temp_counter != i['batch_number']:
+								v.insert(temp_counter, {'total_counter':0, 'done_counter':0, 'batch_number':temp_counter})
+								temp_counter += 1
+
+				for k,v in count_list.items():
+					if len(v) != 0:
+						if v[-1]['batch_number'] != batch_number:
+							temp_counter = v[-1]['batch_number'] + 1
+							while temp_counter < batch_number:
+								v.insert(temp_counter, {'total_counter':0, 'done_counter':0, 'batch_number':temp_counter})
+								temp_counter += 1
+
 				context['lecturebatches'] = lecturebatch_list
 				context['count_list'] = count_list
 

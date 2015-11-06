@@ -1,72 +1,269 @@
 {% extends "manager/base_manager.html" %}
 
 {% block main_content%}
+
 <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Dashboard</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="panel panel-default">
-                <h3 class="page-header" style="margin-top:15px; margin-bottom:5px;">&nbsp;&nbsp;Notices</h3>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Title</th>
-                                            <th>Notice By</th>
-                                            <th>Priority</th>
-                                            <th>View Notice</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                      {% for notice in notices %}
-                                        <tr>
-                                            <td>{{notice.title}}</td>
-                                            <td>{{notice.uploader}}</td>
-                                            <td>{% if notice.important == True %}High{% else %}Normal{% endif %}</td>
-                                            <td><button class="col-lg-12 btn btn-default btn-red" data-toggle="modal" data-target="#myModal_{{notice.id}}">View</button>
-                                            <div class="modal fade" id="myModal_{{notice.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_{{notice.id}}" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                            <h4 class="modal-title" id="myModalLabel_{{notice.id}}">Notice</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <h2><u>{{notice.title}}</u></h2>
-                                                            <br>
-                                                            {{notice.description}}
-                                                            <br><br>
-                                                            Notice From: <strong>{{notice.uploader}}</strong>
-                                                            <br>
-                                                            Priority:<strong>{% if notice.important == True %} High{% else %} Normal{% endif %}</strong>
-                                                             <br>
-                                                                {% if notice.document %}<a style="background:transparent;color:#0645AD;" class="hyperlink-default" href ="/manager/download/?doc={{notice.document}}">Download{% else %} Nothing to Download {%endif%}</a>
-                                                            <br>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default btn-red" data-dismiss="modal">Close</button>
-                                                        </div>
-                                                    </div>
-                                                    <!-- /.modal-content -->
-                                                </div>
-                                                <!-- /.modal-dialog -->
-                                            </div>
-                                          </td>
-                                        </tr>
-                                      {% endfor %}
-                                    </tbody>
-                                </table>
+<!-- Lecture tabs begin here -->
+<div class="col-md-12">
+    <h1 class="page-header">Dashboard</h1>
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <h3 class="page-header">Branchwise Lecturess</h3>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <ul class="nav nav-tabs">
+      {% for branch in branch_lectures_map %}
+      	  {% if forloop.counter0 == 0 %}
+      	  		<li class="active"><a data-toggle="tab" href="#{{forloop.counter0}}">{{branch}}</a></li>
+      	  {% else %}
+      	  		<li><a data-toggle="tab" href="#{{forloop.counter0}}">{{branch}}</a></li>
+      	  {% endif %}
+	      <!--<li class="active"><a data-toggle="tab" href="#latest_lectures">Latest Transactions</a></li>-->
+	      <!--<li><a data-toggle="tab" href="#week_lectures">Pending Transactions</a></li>-->
+      {% endfor %}
+    </ul>
+
+<div class="tab-content">
+  {% for branch, lectures in branch_lectures_map.items %}
+	  	{% if forloop.counter0 == 0 %}
+		  		<div id="{{forloop.counter0}}" class="tab-pane fade in active">
+		  		<div class="row">
+		        <div class="panel-body">
+		        <div class="dataTable_wrapper">
+		           <table class="table table-striped table-bordered table-hover" id="dataTables{{forloop.counter0}}">
+		                <thead>
+		                    <tr>
+		                        <th>Date</th>
+		                        <th>Topic</th>
+		                        <th>Subject</th>
+		                        <th>Batch</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                    {% for lec in lectures %}
+		                        <tr>
+		                            <td align="center">{{lec.date}}</td>
+		                            <td align="center">{{lec.name}}</td>
+		                            <td align="center">{{lec.subject_name}}</td>
+		                            <td align="center">{{lec.batch_name}}</td>
+		                        </tr>
+		                    {% endfor %}
+		                </tbody>
+		            </table>
+		         </div>
+		        </div>
+		        </div>
+		        </div>
+	      {% else %}
+	      		<div id="{{forloop.counter0}}" class="tab-pane fade in">
+		  		<div class="row">
+		        <div class="panel-body">
+		        <div class="dataTable_wrapper">
+		           <table class="table table-striped table-bordered table-hover" id="dataTables{{forloop.counter0}}">
+		                <thead>
+		                    <tr>
+		                        <th>Date</th>
+		                        <th>Topic</th>
+		                        <th>Subject</th>
+		                        <th>Batch</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                    {% for lec in lectures %}
+		                        <tr>
+		                            <td align="center">{{lec.date}}</td>
+		                            <td align="center">{{lec.name}}</td>
+		                            <td align="center">{{lec.subject_name}}</td>
+		                            <td align="center">{{lec.batch_name}}</td>
+		                        </tr>
+		                    {% endfor %}
+		                </tbody>
+		            </table>
+		         </div>
+		        </div>
+		        </div>
+		        </div>
+	  	{% endif %}
+	  {% endfor %}
+<!-- Lecture tabs end here -->
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+	<div class="row">
+        <div class="col-md-12">
+            <h3 class="page-header">Notices</h3>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <ul class="nav nav-tabs">
+      <li class="active"><a data-toggle="tab" href="#latest_notices">Latest Notices</a></li>
+      <li><a data-toggle="tab" href="#all_notices">All Notices</a></li>
+    </ul>
+<div class="tab-content">
+<!-- Notices tab begins here -->
+    <div id="latest_notices" class="tab-pane fade in active">
+      <div class="row">
+        <div class="panel-body">
+        <div class="dataTable_wrapper">
+           <table class="table table-striped table-bordered table-hover" id="dataTables9999">
+                <thead>
+                    <tr>
+                        <!-- <th class="col-lg-1">#</th> -->
+                        <th>Title</th>
+                        <th>Sent By</th>
+                        <th>View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for notice in latest_notices %}
+                    <tr>
+                        <td class="col-md-3">
+                            {{notice.title}}
+                        </td>
+                        <td class="col-md-2">
+                            {{notice.uploader}}
+                        </td>
+                        <td class="col-md-2"><button class="col-lg-12 btn btn-default btn-red" data-toggle="modal" data-target="#myModal_{{notice.id}}">View</button>
+                            <div class="modal fade" id="myModal_{{notice.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_{{notice.id}}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel_{{notice.id}}">Notice</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h2><u>{{notice.title}}</u></h2>
+                                            <br>
+                                            {{notice.description}}
+                                            <br><br>
+
+                                            Notice From: <strong>{{notice.uploader}}</strong>
+
+                                            <br>
+                                            Priority:<strong>{% if notice.important == True %} High{% else %} Normal{% endif %}</strong>
+
+                                            <br>
+                                            {% if notice.document %}<a style="background:transparent;color:#0645AD;" class="hyperlink-default" href ="/manager/download/?doc={{notice.document}}">Download{% else %} Nothing to Download {%endif%}</a>
+                                            <br>
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default btn-red" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                          </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+         </div>
+        </div>
+       </div>
+  </div>
+  <div id="all_notices" class="tab-pane fade in">
+      <div class="row">
+        <div class="panel-body">
+        <div class="dataTable_wrapper">
+           <table class="table table-striped table-bordered table-hover" id="dataTables99999">
+                <thead>
+                    <tr>
+                        <!-- <th class="col-lg-1">#</th> -->
+                        <th>Title</th>
+                        <th>Sent By</th>
+                        <th>View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for notice in notices %}
+                    <tr>
+                        <td class="col-md-3">
+                            {{notice.title}}
+                        </td>
+                        <td class="col-md-2">
+                            {{notice.uploader}}
+                        </td>
+                        <td class="col-md-2"><button class="col-lg-12 btn btn-default btn-red" data-toggle="modal" data-target="#x_myModal_{{notice.id}}">View</button>
+                            <div class="modal fade" id="x_myModal_{{notice.id}}" tabindex="-1" role="dialog" aria-labelledby="x_myModalLabel_{{notice.id}}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="x_myModalLabel_{{notice.id}}">Notice</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h2><u>{{notice.title}}</u></h2>
+                                            <br>
+                                            {{notice.description}}
+                                            <br><br>
+                                            Notice From: <strong>{{notice.uploader}}</strong>
+
+                                            <br>
+                                            Priority:<strong>{% if notice.important == True %} High{% else %} Normal{% endif %}</strong>
+
+                                            <br>
+                                            {% if notice.document %}<a style="background:transparent;color:#0645AD;" class="hyperlink-default" href ="/manager/download/?doc={{notice.document}}">Download{% else %} Nothing to Download {%endif%}</a>
+                                            <br>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default btn-red" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                          </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+         </div>
+        </div>
+       </div>
+  </div>
+</div>
+<!-- Notices COLUMN ends -->
+</div>
+</div>
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        {% for branch in branch_lectures_map %}
+        	$('#dataTables{{forloop.counter0}}').DataTable({
+                "iDisplayLength":5,
+                "oLanguage": {
+                  "sEmptyTable":     "No Lectures Found"
+                }
+        	});
+        {% endfor %}
+        $('#dataTables9999').DataTable({
+                "iDisplayLength":5,
+                "oLanguage": {
+                  "sEmptyTable":     "No Notices Found"
+                }
+        });
+        $('#dataTables99999').DataTable({
+                "iDisplayLength":5,
+                "oLanguage": {
+                  "sEmptyTable":     "No Notices Found"
+                }
+        });
+    });
+    </script>
 
 {% endblock %}

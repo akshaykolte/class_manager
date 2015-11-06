@@ -3,6 +3,8 @@ from portal.db_api.academic_year_db import get_current_academic_year
 from itertools import combinations
 from time import sleep
 import sys, math, random, datetime
+import string
+
 
 
 def add_progress(i,length):
@@ -356,7 +358,13 @@ def insert_staff_role():
 		role = role_obj[i%rsize]
 		staff = staff_obj[i]
 
-		if role.name != 'teacher':
+		if role.name == 'admin':
+			for rl in role_obj:
+				for br in branch_obj:
+					if not StaffRole.objects.filter(staff=staff, role=rl, branch=br).exists():
+						staff_role_obj = StaffRole(staff=staff, role=rl, branch=br)
+						staff_role_obj.save()
+		elif role.name != 'teacher':
 			if not StaffRole.objects.filter(staff=Staff.objects.get(id=staff.id), role=Role.objects.get(id=role.id), branch=Branch.objects.get(id=branch.id)).exists():
 
 				staff_role_obj = StaffRole(staff=Staff.objects.get(id=staff.id), role=Role.objects.get(id=role.id), branch=Branch.objects.get(id=branch.id))
@@ -422,10 +430,16 @@ def insert_lecture_batches():
 						staff_it%=staff_role_length
 
 					if not LectureBatch.objects.filter(name=lecture.name+" "+str(i+1), lecture=lecture, batch=batch).exists():
-						start_date = datetime.datetime.now() - timedelta(days=5)
-						end_date = datetime.datetime.now() + timedelta(days=200)
+						start_date = datetime.datetime.now() - timedelta(days=30)
+						end_date = datetime.datetime.now() + timedelta(days=150)
 						rand_date = random_date(start_date, end_date)
-						lecture_batch_obj = LectureBatch(name=lecture.name+" "+str(i+1), description="Temporary Description", date=rand_date, duration="2 Hours", lecture=lecture, staff_role=staff_role_list[staff_it%staff_role_length], batch=batch, is_done=random.randint(0,1))
+						if rand_date < datetime.datetime.now():
+							random_done_parameter = random.randint(0,5)
+							if random_done_parameter != 0:
+								random_done_parameter = 1
+						else:
+							random_done_parameter = 0
+						lecture_batch_obj = LectureBatch(name=lecture.name+" "+str(i+1), description="Temporary Description", date=rand_date, duration="2 Hours", lecture=lecture, staff_role=staff_role_list[staff_it%staff_role_length], batch=batch, is_done=random_done_parameter)
 						lecture_batch_obj.save()
 					staff_it+=1
 					staff_it%=staff_role_length
@@ -495,16 +509,19 @@ def insert_base_fees():
 def insert_tests():
 	print "Adding Tests...",
 	subject_year_list = SubjectYear.objects.all()
-	a ="unit_test"
+	a ="Unit Test "
 	length = len(subject_year_list)
 	for i,n in enumerate(subject_year_list):
-		add_progress(i, length)
-		x = a + str(i)
+		string.ascii_lowercase = 'abcdefgh'
+		j = list(string.ascii_lowercase)
+		for k in j:
+			add_progress(i, length)
+			x = a + str(i) + "-" +k
 
-		if not Test.objects.filter(subject_year = n,name = x).exists():
-			if n.academic_year.is_current == True:
-				test_object = Test(subject_year = n,name = x,total_marks = 100)
-				test_object.save()
+			if not Test.objects.filter(subject_year = n,name = x).exists():
+				if n.academic_year.is_current == True:
+					test_object = Test(subject_year = n,name = x,total_marks = 100)
+					test_object.save()
 	print ""
 
 def insert_test_batch():
@@ -569,7 +586,28 @@ def insert_transactions():
 
 
 def insert_attendance():
-	pass
+	#lecture_batches = LectureBatch.objects.all()
+	print "Adding Attendance...",
+	student_batches = StudentBatch.objects.all()
+	length = len(student_batches)
+	for i,student_batch in enumerate(student_batches):
+		add_progress(i,length)
+		subject_year_list = student_batch.subject_years
+
+		for sub_year_obj in subject_year_list.all():
+			lecture_obj_list = Lecture.objects.filter(subject_year = sub_year_obj)
+			for lecture in lecture_obj_list:
+				lecture_batches = LectureBatch.objects.filter(lecture = lecture)
+				for lecture_batch in lecture_batches:
+					if student_batch.batch == lecture_batch.batch:
+						probability = random.randint(1,4)
+						count = random.randint(1,lecture.count)
+						if probability == 3:
+							if not Attendance.objects.filter(student_batch = student_batch,lecture_batch = lecture_batch).exists():
+								attendance_object = Attendance(student_batch = student_batch,lecture_batch = lecture_batch,count = count)
+								attendance_object.save()
+	print " "
+
 
 
 

@@ -1,5 +1,6 @@
 {% extends "admin/base_admin.html" %}
 
+{% block progress_nav %}{% endblock %}
 
 {% block main_content %}
 
@@ -95,7 +96,7 @@
                                             <td align="center">{{i.subject_name}}</td>
                                             <td align="center">{{i.staff_role_name}}</td>
                                             {% if i.is_done == True %}
-                                            <td class="text-success"><strong>Yes</strong></td>
+                                            <td class="text-success"><strong>Lecture Conducted</strong></td>
                                             {% elif i.is_past == True %}
                                             <td class="text-danger"><strong>Deadline passed <u>{{i.difference}} days</u> ago</strong></td>
                                             {% else %}
@@ -109,9 +110,9 @@
                                 </tbody>
                             </table>
                         <!-- /.table-responsive -->
-                        <button onClick ="$('#dataTables').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
-                        <button onClick ="$('#dataTables').tableExport({type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
-                        <button onClick ="$('#dataTables').tableExport({type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
+                        <button onClick ="$('#dataTables').tableExport({fileName: 'Syllabus Progress', type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
+                        <button onClick ="$('#dataTables').tableExport({fileName: 'Syllabus Progress', type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
+                        <button onClick ="$('#dataTables').tableExport({fileName: 'Syllabus Progress', type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
                          </div>
                         <!-- /.-->
                     </div>

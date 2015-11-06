@@ -92,7 +92,7 @@
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                        <i class="fa fa-user fa-fw"></i> <strong>{{auth_dict.first_name}}</strong>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
                     </a>
                     <ul style="background-color:#4A777A" class="dropdown-menu dropdown-user">
                         <li class="dropdown-menu-normal"><a href="/student/profile/view-profile/"><i class="fa fa-user fa-fw"></i><strong> User Profile</strong></a>
@@ -116,19 +116,19 @@
                             <a href="/student/dashboard/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li style="border-color:#4A777A;">
-                            <a href="/student/attendance/view-attendance/"><i class="fa fa-calendar-o"></i>&nbsp;&nbsp;Attendance</a>
+                            <a href="/student/attendance/view-attendance/"><i class="fa fa-calendar fa-fw"></i>&nbsp;&nbsp;Attendance</a>
                             <!-- /.nav-second-level -->
                         </li>
                         <li style="border-color:#4A777A;">
-                            <a href="/student/lecture/view-lectures"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Lectures</a>
+                            <a href="/student/lecture/view-lectures"><i class="fa fa-pencil fa-fw"></i>&nbsp;&nbsp;Lectures</a>
                             <!-- /.nav-second-level -->
                         </li>
                         <li style="border-color:#4A777A;">
-                            <a href="/student/fees/view-fees"><i class="fa fa-money"></i>&nbsp;&nbsp;Fee Status</a>
+                            <a href="/student/fees/view-fees"><i class="fa fa-inr fa-fw"></i>&nbsp;&nbsp;Fee Status</a>
                             <!-- /.nav-second-level -->
                         </li>
                         <li style="border-color:#4A777A;">
-                            <a href="/student/test/view-marks"><i class="fa fa-table"></i>&nbsp;&nbsp;Test Marks</a>
+                            <a href="/student/test/view-marks"><i class="fa fa-table fa-fw"></i>&nbsp;&nbsp;Test Marks</a>
                             <!-- /.nav-second-level -->
                         </li>
                       </ul>
@@ -164,22 +164,38 @@
     <!-- Morris Charts JavaScript
     <script src="/static/bower_components/raphael/raphael-min.js"></script>
     <script src="/static/bower_components/morrisjs/morris.min.js"></script>
-    <script src="/static/morris-graphs/js/morris-data.js"></script -->
+    <script src="/static/morris-graphs/js/morris-data.js"></script-- >
+
+    <!-- Flot Charts -->
+    <script src="/static/bower_components/flot/excanvas.min.js"></script>
+    <script src="/static/bower_components/flot/jquery.flot.js"></script>
+    <script src="/static/bower_components/flot/jquery.flot.pie.js"></script>
+    <script src="/static/bower_components/flot/jquery.flot.resize.js"></script>
+    <script src="/static/bower_components/flot/jquery.flot.time.js"></script>
+    <script src="/static/bower_components/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+    <script src="/static/morris-graphs/js/flot-data.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
 
     <!-- jquery export -->
-    <script type="text/javascript" src="/static/table_export/tableExport.js"></script>
-    <script type="text/javascript" src="/static/table_export/jquery.base64.js"></script>
+    <!-- <script type="text/javascript" src="/static/table_export/tableExport.js"></script>
+    <script type="text/javascript" src="/static/table_export/jquery.base64.js"></script> -->
 
     <!-- png export -->
-    <script type="text/javascript" src="html2canvas.js"></script>
+    <!-- <script type="text/javascript" src="html2canvas.js"></script> -->
 
     <!-- pdf export -->
-    <script type="text/javascript" src="/static/table_export/jspdf/libs/sprintf.js"></script>
+    <!-- <script type="text/javascript" src="/static/table_export/jspdf/libs/sprintf.js"></script>
     <script type="text/javascript" src="/static/table_export/jspdf/jspdf.js"></script>
-    <script type="text/javascript" src="/static/table_export/jspdf/libs/base64.js"></script>
+    <script type="text/javascript" src="/static/table_export/jspdf/libs/base64.js"></script> -->
+
+    <script type="text/javascript" src="/static/table_export2/libs/FileSaver/FileSaver.min.js"></script>
+
+    <script type="text/javascript" src="/static/table_export2/libs/jsPDF/jspdf.min.js"></script>
+    <script type="text/javascript" src="/static/table_export2/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js"></script>
+
+    <script type="text/javascript" src="/static/table_export2/tableExport.min.js"></script>
 
 </body>
 

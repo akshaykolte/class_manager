@@ -143,7 +143,7 @@
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                        <i class="fa fa-user fa-fw"></i> <strong>{{details.first_name}}</strong>&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
                     </a>
                     <ul style="background-color:#4A777A" class="dropdown-menu dropdown-user">
                         <li class="dropdown-menu-normal"><a href="/accountant/profile/view-profile"><i class="fa fa-user fa-fw"></i><strong> User Profile</strong></a>
@@ -167,8 +167,8 @@
                             <a href="/accountant/dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li style="border-color:#4A777A;">
-                            <a href="#"><i class="fa fa-edit fa-fw"></i> Fees<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <a href="#"><i class="fa fa-inr fa-fw"></i> Fees<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block fees_nav %}collapse{% endblock %}">
                                 <li>
                                     <a href="/accountant/fees/view-fees/">View Fee Details</a>
                                 </li>
@@ -181,8 +181,8 @@
                         </li>
 
                         <li style="border-color:#4A777A;">
-                            <a href="#"><i class="fa fa-edit fa-fw"></i>Students<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <a href="#"><i class="fa fa-user fa-fw "></i> Students<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block students_nav %}collapse{% endblock %}">
                                 <li>
                                     <a href="/accountant/student/create-student/">Create Student Entry</a>
                                 </li>
@@ -196,8 +196,8 @@
 
 
                         <li style="border-color:#4A777A;">
-                            <a href="#"><i class="fa fa-edit fa-fw"></i>Base Fees<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <a href="#"><i class="fa fa-inr fa-fw"></i>Base Fees<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block base_fees_nav %}collapse{% endblock %}">
 
                                 <li>
                                     <a href="/accountant/fees/add-base-fees/">Add Base Fees</a>
@@ -211,8 +211,8 @@
                         </li>
 
                         <li style="border-color:#4A777A;">
-                            <a href="#"><i class="fa fa-edit fa-fw"></i> Notices<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <a href="#"><i class="fa fa-envelope-o fa-fw"></i> Notices<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block notices_nav %}collapse{% endblock %}">
                                 <li>
                                     <a href="/accountant/notices/add-student-notice/">Upload Student Notice</a>
                                 </li>
@@ -265,16 +265,23 @@
     <script src="/static/dist/js/sb-admin-2.js"></script>
 
     <!-- jquery export -->
-    <script type="text/javascript" src="/static/table_export/tableExport.js"></script>
-    <script type="text/javascript" src="/static/table_export/jquery.base64.js"></script>
+    <!-- <script type="text/javascript" src="/static/table_export/tableExport.js"></script>
+    <script type="text/javascript" src="/static/table_export/jquery.base64.js"></script> -->
 
     <!-- png export -->
-    <script type="text/javascript" src="html2canvas.js"></script>
+    <!-- <script type="text/javascript" src="html2canvas.js"></script> -->
 
     <!-- pdf export -->
-    <script type="text/javascript" src="/static/table_export/jspdf/libs/sprintf.js"></script>
+    <!-- <script type="text/javascript" src="/static/table_export/jspdf/libs/sprintf.js"></script>
     <script type="text/javascript" src="/static/table_export/jspdf/jspdf.js"></script>
-    <script type="text/javascript" src="/static/table_export/jspdf/libs/base64.js"></script>
+    <script type="text/javascript" src="/static/table_export/jspdf/libs/base64.js"></script> -->
+
+    <script type="text/javascript" src="/static/table_export2/libs/FileSaver/FileSaver.min.js"></script>
+
+    <script type="text/javascript" src="/static/table_export2/libs/jsPDF/jspdf.min.js"></script>
+    <script type="text/javascript" src="/static/table_export2/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js"></script>
+
+    <script type="text/javascript" src="/static/table_export2/tableExport.min.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
