@@ -509,14 +509,14 @@ def insert_base_fees():
 def insert_tests():
 	print "Adding Tests...",
 	subject_year_list = SubjectYear.objects.all()
-	a ="unit_test"
+	a ="Unit Test "
 	length = len(subject_year_list)
 	for i,n in enumerate(subject_year_list):
 		string.ascii_lowercase = 'abcdefgh'
 		j = list(string.ascii_lowercase)
 		for k in j:
 			add_progress(i, length)
-			x = a + str(i) + k
+			x = a + str(i) + "-" +k
 
 			if not Test.objects.filter(subject_year = n,name = x).exists():
 				if n.academic_year.is_current == True:
