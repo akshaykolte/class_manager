@@ -534,6 +534,7 @@ class Test(models.Model):
 class TestBatch(models.Model):
 	test = models.ForeignKey(Test)
 	batch = models.ForeignKey(Batch)
+	test_date = models.DateField(default=datetime.now())
 
 	class Meta:
 		unique_together = (('test','batch',),)

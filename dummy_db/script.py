@@ -3,6 +3,8 @@ from portal.db_api.academic_year_db import get_current_academic_year
 from itertools import combinations
 from time import sleep
 import sys, math, random, datetime
+import string
+
 
 
 def add_progress(i,length):
@@ -510,13 +512,16 @@ def insert_tests():
 	a ="unit_test"
 	length = len(subject_year_list)
 	for i,n in enumerate(subject_year_list):
-		add_progress(i, length)
-		x = a + str(i)
+		string.ascii_lowercase = 'abcdefgh'
+		j = list(string.ascii_lowercase)
+		for k in j:
+			add_progress(i, length)
+			x = a + str(i) + k
 
-		if not Test.objects.filter(subject_year = n,name = x).exists():
-			if n.academic_year.is_current == True:
-				test_object = Test(subject_year = n,name = x,total_marks = 100)
-				test_object.save()
+			if not Test.objects.filter(subject_year = n,name = x).exists():
+				if n.academic_year.is_current == True:
+					test_object = Test(subject_year = n,name = x,total_marks = 100)
+					test_object.save()
 	print ""
 
 def insert_test_batch():
