@@ -172,7 +172,7 @@
                         </li>
                         <li style="border-color:#4A777A;">
 							<a href="#"><i class="fa fa-calendar-o"></i> Syllabus<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <ul class="nav nav-second-level {% block syllabus_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/manager/lectures/add-lectures/">Add Topics</a>
                                 </li>
@@ -184,7 +184,7 @@
                         </li>
                         <li style="border-color:#4A777A;">
 							<a href="#"><i class="fa fa-edit fa-fw"></i> Teachers<span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level">
+							<ul class="nav nav-second-level {% block teachers_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/manager/teacher/add-teacher/">Add Teacher</a>
                                 </li>
@@ -196,7 +196,7 @@
                         </li>
                         <li style="border-color:#4A777A;">
 							<a href="#"><i class="fa fa-edit fa-fw"></i> Tests<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <ul class="nav nav-second-level {% block tests_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/manager/tests/add-tests/">Add Tests</a>	<!-- Also implement assign test to batch/teacher -->
                                 </li>
@@ -209,7 +209,7 @@
 
                         <li style="border-color:#4A777A;">
 							<a href="#"><i class="fa fa-edit fa-fw"></i> Batches<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <ul class="nav nav-second-level {% block batches_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/manager/batches/add-batch/">Add Batches</a>
                                 </li>
@@ -221,7 +221,7 @@
                         </li>
                         <li style="border-color:#4A777A;">
 							<a href="#"><i class="fa fa-edit fa-fw"></i> Attendance Reports<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <ul class="nav nav-second-level {% block attendance_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/manager/attendance-reports/lecturewise-attendance/">Topicwise Attendance</a>
                                 </li>
@@ -237,7 +237,7 @@
 
                         <li style="border-color:#4A777A;">
 							<a href="#"><i class="fa fa-edit fa-fw"></i> Notices<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <ul class="nav nav-second-level {% block notices_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/manager/notices/add-student-notice/">Upload Student Notice</a>
                                 </li>
