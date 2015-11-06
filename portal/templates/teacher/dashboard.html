@@ -3,7 +3,7 @@
 {% block main_content%}
 
 <div class="row">
-	<h2 align="center" class="page-header">Dashboard</h2>
+	<h1 class="page-header">Dashboard</h1>
 </div>
 
 <div class="row">
@@ -51,7 +51,7 @@
 					</div>
 			       </div>
 			  </div>
-				
+
 			  <div id="week_lectures" class="tab-pane fade in">
 				  <div class="row">
 				  	<div class="panel-body">
@@ -96,7 +96,7 @@
 	<div class="col-md-12">
 
 		<div class="row">
-			
+
 			<div class="col-md-12">
 				<h3 class="page-header">Notices</h3>
 			</div>
@@ -144,12 +144,12 @@
 														<br>
 														{{notice.description}}
 														<br><br>
-														
+
 														Notice From: <strong>{{notice.uploader}}</strong>
-			                                            
+
 			                                            <br>
 			                                            Priority:<strong>{% if notice.important == True %} High{% else %} Normal{% endif %}</strong>
-			                                            
+
 			                                            <br>
 			                                            {% if notice.document %}<a style="background:transparent;color:#0645AD;" class="hyperlink-default" href ="/teacher/download/?doc={{notice.document}}">Download{% else %} Nothing to Download {%endif%}</a>
 														<br>
@@ -173,7 +173,7 @@
 					</div>
 			       </div>
 			  </div>
-				
+
 			    <div id="all_notices" class="tab-pane fade in">
 					  <div class="row">
 					  	<div class="panel-body">
@@ -210,10 +210,10 @@
 															{{notice.description}}
 															<br><br>
 				                                            Notice From: <strong>{{notice.uploader}}</strong>
-				                                            
+
 				                                            <br>
 				                                            Priority:<strong>{% if notice.important == True %} High{% else %} Normal{% endif %}</strong>
-				                                            
+
 				                                            <br>
 				                                            {% if notice.document %}<a style="background:transparent;color:#0645AD;" class="hyperlink-default" href ="/teacher/download/?doc={{notice.document}}">Download{% else %} Nothing to Download {%endif%}</a>
 															<br>
