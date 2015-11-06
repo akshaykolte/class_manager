@@ -13,6 +13,8 @@ def get_user(request):
 			request.session['user']['logged_in'] = True
 			request.session['user']['login_type'] = 'staff'
 			request.session['user']['user_name'] = username
+			request.session['user']['first_name'] = staff_obj.first_name
+			request.session['user']['last_name'] = staff_obj.last_name
 
 			request.session['user']['permission_admin'] = False
 			request.session['user']['permission_manager'] = False
@@ -51,6 +53,8 @@ def get_user(request):
 				request.session['user']['user_name'] = username
 				request.session['user']['logged_in'] = True
 				request.session['user']['login_type']='student'
+				request.session['user']['first_name'] = student_obj.first_name
+				request.session['user']['last_name'] = student_obj.last_name
 
 				request.session['user']['permission_admin'] = False
 				request.session['user']['permission_manager'] = False
@@ -78,7 +82,8 @@ def get_user(request):
 				request.session['user']['user_name'] = username
 				request.session['user']['logged_in'] = True
 				request.session['user']['login_type']='parent'
-
+				request.session['user']['first_name'] = parent_obj.first_name
+				request.session['user']['last_name'] = parent_obj.last_name
 
 				request.session['user']['permission_admin'] = False
 				request.session['user']['permission_manager'] = False
