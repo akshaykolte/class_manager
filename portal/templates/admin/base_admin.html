@@ -172,7 +172,7 @@
                         </li>
                         <li style="border-color:#4A777A;">
 							<a href="#"><i class="fa fa-edit fa-fw"></i> Manage Staff<span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level">
+							<ul class="nav nav-second-level {% block staff_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/admin/staff/add-staff/">Add Staff</a>
                                 </li>
@@ -191,7 +191,7 @@
 
                         <li style="border-color:#4A777A;">
                             <a href="#"><i class="fa fa-line-chart"></i> Syllabus Progress<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <ul class="nav nav-second-level {% block progress_nav %}collapse{% endblock %}">
                                 <li>
                                     <a href="/admin/track-progress/detailed-progress/">Detailed Progress</a>
                                 </li>
@@ -203,7 +203,7 @@
 
                         <li style="border-color:#4A777A;">
                             <a href="#"><i class="fa fa-edit fa-fw"></i> Notices<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <ul class="nav nav-second-level {% block notices_nav %}collapse{% endblock %}">
                                 <li>
                                     <a href="/admin/notices/add-student-notice/">Upload Student Notice</a>
                                 </li>
