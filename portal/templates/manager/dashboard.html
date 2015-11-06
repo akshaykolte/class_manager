@@ -9,7 +9,7 @@
     <div class="row">
 
         <div class="col-md-12">
-            <h3 class="page-header">Dashboard</h3>
+            <h3 class="page-header">Branchwise Lecturess</h3>
         </div>
         <!-- /.col-lg-12 -->
     </div>
@@ -24,8 +24,6 @@
 	      <!--<li class="active"><a data-toggle="tab" href="#latest_lectures">Latest Transactions</a></li>-->
 	      <!--<li><a data-toggle="tab" href="#week_lectures">Pending Transactions</a></li>-->
       {% endfor %}
-      <li><a data-toggle="tab" href="#latest_notices">Latest Notices</a></li>
-      <li><a data-toggle="tab" href="#all_notices">All Notices</a></li>
     </ul>
 
 <div class="tab-content">
@@ -91,9 +89,25 @@
 	  	{% endif %}
 	  {% endfor %}
 <!-- Lecture tabs end here -->
-
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+	<div class="row">
+        <div class="col-md-12">
+            <h3 class="page-header">Notices</h3>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <ul class="nav nav-tabs">
+      <li class="active"><a data-toggle="tab" href="#latest_notices">Latest Notices</a></li>
+      <li><a data-toggle="tab" href="#all_notices">All Notices</a></li>
+    </ul>
+<div class="tab-content">
 <!-- Notices tab begins here -->
-    <div id="latest_notices" class="tab-pane fade in">
+    <div id="latest_notices" class="tab-pane fade in active">
       <div class="row">
         <div class="panel-body">
         <div class="dataTable_wrapper">
