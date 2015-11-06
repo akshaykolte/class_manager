@@ -7,7 +7,7 @@
 <div class="col-md-12">
 
     <div class="row">
-        
+
         <div class="col-md-12">
             <h3 class="page-header">Dashboard</h3>
         </div>
@@ -128,12 +128,12 @@
                                             <br>
                                             {{notice.description}}
                                             <br><br>
-                                            
+
                                             Notice From: <strong>{{notice.uploader}}</strong>
-                                            
+
                                             <br>
                                             Priority:<strong>{% if notice.important == True %} High{% else %} Normal{% endif %}</strong>
-                                            
+
                                             <br>
                                             {% if notice.document %}<a style="background:transparent;color:#0645AD;" class="hyperlink-default" href ="/manager/download/?doc={{notice.document}}">Download{% else %} Nothing to Download {%endif%}</a>
                                             <br>
@@ -193,10 +193,10 @@
                                             {{notice.description}}
                                             <br><br>
                                             Notice From: <strong>{{notice.uploader}}</strong>
-                                            
+
                                             <br>
                                             Priority:<strong>{% if notice.important == True %} High{% else %} Normal{% endif %}</strong>
-                                            
+
                                             <br>
                                             {% if notice.document %}<a style="background:transparent;color:#0645AD;" class="hyperlink-default" href ="/manager/download/?doc={{notice.document}}">Download{% else %} Nothing to Download {%endif%}</a>
                                             <br>

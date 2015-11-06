@@ -89,9 +89,9 @@
 
     			</tbody>
     		</table>
-        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
-        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
-        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
+        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({fileName: 'Studentwise Attendance',type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
+        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({fileName: 'Studentwise Attendance',type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
+        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({fileName: 'Studentwise Attendance',type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
         <br/><br/>
 
         {% endfor %}	{% endif %}
