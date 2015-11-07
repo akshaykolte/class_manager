@@ -2,23 +2,6 @@
 
 {% block lectures_nav %}{% endblock %}
 
-{% block date-picker-script %}
-
-    <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
-    <script type="text/javascript">
-        // When the document is ready
-
-        $(document).ready(function () {
-
-            $('#example1').datepicker({
-                format: "yyyy-mm-dd"
-            });
-            $('#example1').datepicker('update', new Date("{{lecturebatch.date}}"));
-        });
-
-    </script>
-{% endblock %}
-
 {% block main_content%}
 <div class="row">
 
