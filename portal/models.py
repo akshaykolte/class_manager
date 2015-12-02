@@ -491,6 +491,8 @@ class FeeTransaction(models.Model):
 	timestamp = models.DateTimeField(auto_now_add=True)
 	student_batch = models.ForeignKey(StudentBatch)
 	fee_type = models.ForeignKey(FeeType)
+	# TODO: uncomment the following line after finalising the Cheque model
+	# cheque = models.ForeignKey(Cheque, blank=True, null=True)
 
 	def __str__(self):
 		return str(self.student_batch) + ':' + str(self.fee_type) + '- Rs. ' + str(self.amount)
@@ -634,3 +636,38 @@ class NoticeViewer(models.Model):
 
 	def __str__(self):
 		return str(self.notice)
+
+class AttendanceDaywise(models.Model):
+	date = models.DateField()
+	student_batch = models.ForeignKey(StudentBatch)
+	attended = models.BooleanField()
+
+	class Meta:
+		unique_together = (('date', 'student_batch', ), )
+
+	def __str__(self):
+		return str(date) + ' - ' + str(student_batch)
+
+'''
+class EMI(models.Model):
+	# TODO: think about whether to use StudentBatch or Student
+	student_batch = models.ForeignKey(StudentBatch) or student = models.ForeignKey(Student)
+	amount_due = models.IntegerField()
+	time_deadline = models.DateField()
+	description = models.CharField(max_length=50, blank=True, null=True)
+
+	class Meta:
+		unique_together = (('student_batch/student', 'time_deadline'))
+
+class Cheque(models.Model):
+	# TODO: think about whether to use StudentBatch or Student
+	student_batch = models.ForeignKey(StudentBatch) or student = models.ForeignKey(Student)
+	amount = models.IntegerField()
+	cheque_date = models.DateField()
+	cleared = models.BooleanField(default=False)
+	clearance_date = models.DateField(blank=True, null=True)
+	description = models.CharField(max_length=100, blank=True, null=True)
+	cheque_number = models.CharField(max_length=30, blank=True, null=True)
+	bank_name = models.CharField(max_length=50, blank=True, null=True)
+
+'''
