@@ -22,8 +22,7 @@ def set_attendance_daywise(id = None ,attended = None, student_batch_id = None, 
 		attendance_object = AttendanceDaywise.objects.get(id = id)
 		if not is_none_attended:
 			attendance_object.attended = attended
-		if not is_none_student_batch_id:
-			attendance_object.student_batch = StudentBatch.objects.get(id=student_batch_id)
+		
 		if not is_none_date:
 			attendance_object.date = date
 		attendance_object.save()
@@ -45,7 +44,7 @@ def get_attendance_daywise(id= None,student_batch_id = None,date = None, batch_i
 		attendance['attended'] = attendance_object.attended
 		attendance['student'] = str(attendance_object.student_batch.student.first_name) + " " +str(attendance_object.student_batch.student.last_name)
 		attendance['student_batch_id'] = attendance_object.student_batch.id
-		attendance['student_batch'] = attendance_object.student_batch.batch.name
+		attendance['student_batch'] = attendance_object.student_batch.batch
 		attendance['date'] = attendance_object.date
 
 
@@ -60,7 +59,7 @@ def get_attendance_daywise(id= None,student_batch_id = None,date = None, batch_i
 			attendance['attended'] = attendance_object.attended
 			attendance['student'] = str(attendance_object.student_batch.student.first_name) + " " +str(attendance_object.student_batch.student.last_name)
 			attendance['student_batch_id'] = attendance_object.student_batch.id
-			attendance['student_batch'] = attendance_object.student_batch.batch.name
+			attendance['student_batch'] = attendance_object.student_batch.batch
 			attendance['date'] = attendance_object.date
 			attendance_list.append(attendance)
 		return attendance_list
@@ -75,7 +74,7 @@ def get_attendance_daywise(id= None,student_batch_id = None,date = None, batch_i
 			attendance['attended'] = attendance_object.attended
 			attendance['student'] = str(attendance_object.student_batch.student.first_name) + " " +str(attendance_object.student_batch.student.last_name)
 			attendance['student_batch_id'] = attendance_object.student_batch.id
-			attendance['student_batch'] = attendance_object.student_batch.batch.name
+			attendance['student_batch'] = attendance_object.student_batch.batch
 			attendance['date'] = attendance_object.date
 			attendance_list.append(attendance)
 		return attendance_list

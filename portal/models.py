@@ -646,7 +646,7 @@ class AttendanceDaywise(models.Model):
 		unique_together = (('date', 'student_batch', ), )
 
 	def __str__(self):
-		return str(date) + ' - ' + str(student_batch)
+		return str(self.date) + ' - ' + str(self.student_batch)
 
 '''
 class EMI(models.Model):

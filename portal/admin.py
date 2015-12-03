@@ -38,3 +38,4 @@ admin.site.register(Notice)
 admin.site.register(NoticeViewer)
 
 admin.site.register(TestStudentBatch)
+admin.site.register(AttendanceDaywise)
