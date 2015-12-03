@@ -1,5 +1,5 @@
 from portal.models import AttendanceDaywise,StudentBatch
-def set_attendance(id = None ,attended = None, student_batch_id = None, date = None):
+def set_attendance_daywise(id = None ,attended = None, student_batch_id = None, date = None):
 	is_none_id = id == None
 	is_none_attended = attended == None
 	is_none_student_batch_id = student_batch_id == None
@@ -32,7 +32,7 @@ def set_attendance(id = None ,attended = None, student_batch_id = None, date = N
 	else :
 		raise Exception('Wrong set of arguments')
 
-def get_attendance(id= None,student_batch_id = None,date = None, batch_id = None):
+def get_attendance_daywise(id= None,student_batch_id = None,date = None, batch_id = None):
 	is_none_id = id == None
 	is_none_student_batch_id = student_batch_id == None
 	is_none_date = date == None
@@ -80,5 +80,5 @@ def get_attendance(id= None,student_batch_id = None,date = None, batch_id = None
 			attendance_list.append(attendance)
 		return attendance_list
 
-def delete_attendance(student_batch_id = None, date = None):
+def delete_attendance_daywise(student_batch_id = None, date = None):
 	AttendanceDaywise.objects.filter(student_batch__id=student_batch_id,date = date).delete()
