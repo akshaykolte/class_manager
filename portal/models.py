@@ -669,5 +669,6 @@ class Cheque(models.Model):
 	description = models.CharField(max_length=100, blank=True, null=True)
 	cheque_number = models.CharField(max_length=30, blank=True, null=True)
 	bank_name = models.CharField(max_length=50, blank=True, null=True)
+	bank_branch_name = models.CharField(max_length=100, blank=True, null=True)
 
 '''
