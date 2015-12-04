@@ -1,4 +1,4 @@
-from portal.models import AttendanceDaywise,StudentBatch
+from portal.models import AttendanceDaywise,StudentBatch,Batch
 def set_attendance_daywise(id = None ,attended = None, student_batch_id = None, date = None):
 	is_none_id = id == None
 	is_none_attended = attended == None
@@ -11,8 +11,8 @@ def set_attendance_daywise(id = None ,attended = None, student_batch_id = None, 
 		student_batch_object = StudentBatch.objects.get(id = student_batch_id)
 		
 		if AttendanceDaywise.objects.filter(student_batch=student_batch_object, date = date).exists():
-			# attendance already marked for student_batch and lecture_batch
-			return AttendanceDaywise.objects.get(student_batch=student_batch_object, lecture_batch = lecture_batch_object).id
+			# attendance already marked for student_batch and date
+			return AttendanceDaywise.objects.get(student_batch=student_batch_object, date = date).id
 		else:
 			attendance_object = AttendanceDaywise(attended = attended, student_batch = student_batch_object, date = date)
 			attendance_object.save()
@@ -31,7 +31,7 @@ def set_attendance_daywise(id = None ,attended = None, student_batch_id = None, 
 	else :
 		raise Exception('Wrong set of arguments')
 
-def get_attendance_daywise(id= None,student_batch_id = None,date = None, batch_id = None):
+def get_attendance_daywise(id= None, student_batch_id = None, date = None, batch_id = None):
 	is_none_id = id == None
 	is_none_student_batch_id = student_batch_id == None
 	is_none_date = date == None

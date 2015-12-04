@@ -1,0 +1,270 @@
+{% extends "teacher/base_teacher.html" %}
+
+{% block notices_nav %}{% endblock %}
+
+{% block date-picker-script %}
+
+    <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        // When the document is ready
+
+        $(document).ready(function () {
+
+            $('#example1').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            var future = new Date();
+            future.setDate(future.getDate());
+            $('#example1').datepicker('update', future);
+        });
+
+    </script>
+{% endblock %}
+
+{% block main_content%}
+<div class="row">
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Upload Notice</h1>
+    </div>
+</div>
+	{% if message %}
+	    <div class="panel-body">
+	        <div class="alert alert-success alert-dismissable col-lg-12">
+	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	            {{message}}
+	        </div>
+	    </div>
+    {% elif message_error %}
+	    <div class="panel-body">
+		    <div class="alert alert-danger alert-dismissable col-lg-12">
+		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		        {{message_error}}
+		    </div>
+		</div>
+	{% endif %}
+
+<div class="col-lg-12">
+
+	{% if page_type == 0 %}
+                <form>
+                    <label><strong>Select Branch</strong></label>
+                    <select name="branch" class="form-control" onchange="this.form.submit()">
+                        <option>Select</option>
+                        {% for branch in branches %}
+                        <option value="{{branch.id}}">{{branch.name}} </option>
+                        {% endfor %}
+                    </select>
+                </form>
+    {% endif %}
+
+    {% if page_type == 1 %}
+
+        <form>
+                    <label><strong>Select Branch</strong></label>
+                    <select name="branch" class="form-control" onchange="this.form.submit()">
+                        <option>Select</option>
+                        {% for branch in branches %}
+                        <option value="{{branch.id}}" {% if branch_id == branch.id %} selected{% endif %}>{{branch.name}} </option>
+                        {% endfor %}
+                    </select>
+         </form>
+        <br/>
+
+
+        <form>
+            <input type="hidden" name="branch" value="{{branch_id}}">
+            <label><strong>Select Standard</strong></label>
+            <select name="standard" class="form-control" onchange="this.form.submit()">
+                <option>Select</option>
+                {% for standard in standards %}
+                <option value="{{standard.id}}">{{standard.name}}</option>
+                {% endfor %}
+            </select>
+        </form>
+
+
+    {% endif %}
+
+    {% if page_type == 2 %}
+
+        <form>
+            
+            <label><strong>Select Branch</strong></label>
+            <select name="branch" class="form-control" onchange="this.form.submit()">
+                <option>Select</option>
+                {% for branch in branches %}
+                <option value="{{branch.id}}" {% if branch_id == branch.id %} selected{% endif %}>{{branch.name}} </option>
+                {% endfor %}
+            </select>
+         </form>
+        <br/>
+
+
+        <form>
+            <input type="hidden" name="branch" value="{{branch_id}}">
+            
+            <label><strong>Select Standard</strong></label>
+            <select name="standard" class="form-control" onchange="this.form.submit()">
+                {% for standard in standards %}
+                    <option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}}</option>
+                {% endfor %}
+            </select>
+        </form>
+    
+        <br/>
+        <form>
+            <input type="hidden" name="branch" value="{{branch_id}}">
+            <input type="hidden" name="standard" value="{{standard_id}}">
+               
+                <label><strong>Select Batch</strong></label>
+                    <select name="batch" class="form-control" onchange="this.form.submit()">
+                        <option>Select</option>
+                        {% for batch in batches %}
+                        <option value="{{batch.id}}">{{batch.name}}&nbsp;:&nbsp;{{batch.branch}}&nbsp;:&nbsp;{{batch.standard}}</option>
+                        {% endfor %}
+                    </select>
+        </form>
+
+
+    {% endif %}
+
+
+    {% if page_type == 3 %}
+
+        <form>
+            
+            <label><strong>Select Branch</strong></label>
+            <select name="branch" class="form-control" onchange="this.form.submit()">
+                <option>Select</option>
+                {% for branch in branches %}
+                <option value="{{branch.id}}" {% if branch_id == branch.id %} selected{% endif %}>{{branch.name}} </option>
+                {% endfor %}
+            </select>
+         </form>
+        <br/>
+
+
+        <form>
+            <input type="hidden" name="branch" value="{{branch_id}}">
+            
+            <label><strong>Select Standard</strong></label>
+            <select name="standard" class="form-control" onchange="this.form.submit()">
+                {% for standard in standards %}
+                    <option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}}</option>
+                {% endfor %}
+            </select>
+        </form>
+    
+        <br/>
+        <form>
+            <input type="hidden" name="branch" value="{{branch_id}}">
+            <input type="hidden" name="standard" value="{{standard_id}}">
+               
+                <label><strong>Select Batch</strong></label>
+                    <select name="batch" class="form-control" onchange="this.form.submit()">
+                        <option>Select</option>
+                        {% for batch in batches %}
+                        <option value="{{batch.id}}" {% if batch_id == batch.id %} selected{% endif %} >{{batch.name}}&nbsp;:&nbsp;{{batch.branch}}&nbsp;:&nbsp;{{batch.standard}}</option>
+                        {% endfor %}
+                    </select>
+        </form>
+
+        <form>
+            <input type="hidden" name="branch" value="{{branch_id}}">
+            <input type="hidden" name="standard" value="{{standard_id}}">
+            <input type="hidden" name="batch" value="{{batch_id}}">
+
+                <label><strong>Select Date</strong></label>
+                <input name="date" class="form-control"  type = "text" id = "example1">
+                <br/>
+
+            <input class="col-lg-3 btn btn-default btn-red"  onchange="this.form.submit()" type='submit' value='Mark Attendance'>    
+        </form>
+
+    {% endif %}    
+
+
+    {% if page_type == 4 %}
+
+        <form action="." method="POST">
+            <input type="hidden" name="branch" value="{{branch_id}}">
+            <input type="hidden" name="standard" value="{{standard_id}}">
+            <input type="hidden" name="batch" value="{{batch_id}}">
+            <input type="hidden" name="date" value="{{date}}">
+
+            <h3>Select all students who attended </h3>
+                <br/>
+                
+                <div class="col-md-9">
+                    <div id="myTabContent" class="tab-content">
+                        
+                            <div>
+                                <label><strong> Batch: {{batchname}}   &nbsp;&nbsp; Standard: {{standardname}} &nbsp;&nbsp; Branch: {{branchname}} </strong></label>
+                                <br/>
+                                <br/>
+                                <div class="dataTable_wrapper">
+                                    <table class="display table table-striped table-bordered table-hover" id="">
+                                        <thead>
+                                            <tr>
+                                                <td class="col-lg-5">Name</td>
+                                                <td align="center">&nbsp;&nbsp;<input type="checkbox" name="sample" class="batch_{{batch_id}}">
+                                                <td>Current Status</td>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {%for i in batch_list %}
+                                        <tr>
+                                            <td>{{i.first_name}} {{i.last_name}}</td>
+                                            <td align="center"><input class="sub_batch_{{i.id}}" type="checkbox" name="batch_{{i.batch.id}}student_{{i.id}}"{% if i.present == True %} checked{% endif %}></td>
+                                            {% if i.present == True %}<td class="text-success"><strong>Present</strong></td>
+                                            {% else %}<td class="text-muted"><strong>Absent/Not Marked</strong></td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br>
+                                <input class="col-lg-3 btn btn-default btn-red" type='submit' value='Mark Attendance'>
+                                <br/>
+                            </div>
+                        
+                    </div>
+                </div>
+            <br/>
+            <br/>
+    </form>
+
+
+        <!-- jQuery -->
+            <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
+            <script>
+
+            $(document).ready(function() {
+            $('table.display').DataTable({
+                "iDisplayLength":25,
+                "oLanguage": {
+                  "sEmptyTable":"No Students Found"
+                }
+
+                });
+        } );
+
+        {%for i in batch_list %}
+         $(function() {
+                $('.batch_{{batch_id}}').on("click", function () { // IE<9 triggers change after blurred
+                    var checked = $(this).is(':checked');
+                    var $otherChecks = $('.sub_batch_{{i.id}}');
+                    $otherChecks.prop('checked', checked);
+                    $otherChecks.parent().toggleClass("disabled",checked);
+                });
+            });
+            {% endfor %}
+            </script>
+
+    {% endif %}        
+{% endblock %}
