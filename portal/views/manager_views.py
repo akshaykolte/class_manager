@@ -86,11 +86,11 @@ def dashboard(request):
 		raise Http404
 
 	context['details'] = auth_dict;
-	
+
 	# All Notices
 	notices = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
 	context['notices'] = notices
-	
+
 	# Latest Maximum 10 Notices received in past 1 week. (Min(10, number of notices overall))
 	# Only considering expiry date uptil now.
 	# Later the expiry date, newer is document.
@@ -106,11 +106,11 @@ def dashboard(request):
 		cur_notice['document'] = notice['document']
 		cur_notice['expiry_date'] = notice['expiry_date']
 		notice_list.append(cur_notice)
-	
+
 	sorted_notices = sorted(notice_list, reverse=True, key=lambda x: x['expiry_date'])
 	context['latest_notices'] = sorted_notices[:min(len(sorted_notices) + 1, 10)]
-	
-	
+
+
 	# All lectures that are happening in branches associated with manager
 	branches = get_branch_of_manager(manager_id=auth_dict['id'])
 	batches = []
@@ -119,7 +119,7 @@ def dashboard(request):
 		cur_batches = get_batch(branch_id = branch_id)
 		for batch in cur_batches:
 			batches.append(batch)
-	
+
 	lecturebatches = []
 	for batch in batches:
 		lecture_batches = get_lecture_batch(batch_id = batch['id'])
@@ -133,13 +133,13 @@ def dashboard(request):
 				l_b['is_past'] = False
 				l_b['difference'] = (l_b['date'] - date.today()).days
 				lecturebatches.append(l_b)
-	
-	
+
+
 	branch_lectures_map = {}
-	
+
 	for branch in branches:
 		branch_lectures_map[branch['name']] = []
-	
+
 	for lecturebatch in lecturebatches:
 		cur_batch_id = lecturebatch['batch_id']
 		# only taking lectures that are not done yet.
@@ -157,20 +157,20 @@ def dashboard(request):
 				cur_lec['branch_name'] = lecturebatch['branch_name']
 				cur_lec['date'] = lecturebatch['date']
 				branch_lectures_map[cur_lec['branch_name']].append(cur_lec)
-	
+
 	for branch in branch_lectures_map:
 		lecs = sorted(branch_lectures_map[branch], key=lambda x: x['date'])
 		branch_lectures_map[branch] = lecs[:min(len(lecs), 10)]
-	
+
 	for branch in branch_lectures_map:
 		for lec in branch_lectures_map[branch]:
 			lec['date'] = (lec['date'].strftime("%Y-%m-%d"))
-	
-	
+
+
 	print branch_lectures_map
-	context['branch_lectures_map'] = branch_lectures_map	
-	
-	
+	context['branch_lectures_map'] = branch_lectures_map
+
+
 	return render(request,'manager/dashboard.html', context)
 
 
@@ -862,6 +862,10 @@ def lecturewise_attendance(request):
 		raise Http404
 
 	if request.method == "GET":
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
 		try:
 			context['branches'] = get_branch_of_manager(manager_id=auth_dict['id'])
 			page_type = 1
@@ -988,6 +992,10 @@ def batchwise_attendance(request):
 		raise Http404
 
 	if request.method == "GET":
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
 		try:
 			page_type = 1
 			context['branches'] = get_branch_of_manager(manager_id=auth_dict['id'])
@@ -1250,7 +1258,7 @@ def add_student_notice(request):
 			description = request.POST['description']
 			expiry_date = request.POST['expiry-date']
 			is_important = request.POST['is_important']
-			
+
 			if len(request.FILES) > 0:
 				document = request.FILES['myfile']
 			else:
@@ -1491,7 +1499,7 @@ def edit_my_notice(request):
 				document = request.FILES['myfile']
 			else:
 				document = None
-				
+
 			set_notice(id = request.POST['notice_id'], title = request.POST['title'], description = request.POST['description'], uploader_id = auth_dict['id'] , expiry_date = request.POST['expiry-date'], important = is_imp, document = document)
 
 			return redirect('/manager/notices/view-my-notices/?message=Notice edited')
@@ -1505,3 +1513,97 @@ def edit_my_notice(request):
 			return redirect('../view-my-notices?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('../view-my-notices?message_error='+str(PentaError(100)))
+
+def daywise_studentwise_attendance(request):
+
+	'''
+			TODO: important: fix the UX for selecting student id and then selecting subjects
+	'''
+	context = {}
+
+	auth_dict = get_user(request)
+	context['details'] = auth_dict
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+	if request.method == "GET":
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		try:
+			page_type = 1
+
+			if 'student' in request.GET:
+				page_type = 2
+				context['student_id'] = request.GET['student']
+				context['student_name'] = request.GET['name']
+				page_type = 3
+				student_batch_id = get_student_batch(student_id=request.GET['student'])['id']
+				context['report'] = daywise_attendance_report(student_batch_id = student_batch_id)
+			context['page_type'] = page_type
+			return render(request, 'manager/daywise_attendance_reports/studentwise_attendance.html', context)
+
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
+
+def daywise_batchwise_attendance(request):
+
+	context = {}
+
+	auth_dict = get_user(request)
+	context['details'] = auth_dict
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+	if request.method == "GET":
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		try:
+			page_type = 1
+			context['branches'] = get_branch_of_manager(manager_id=auth_dict['id'])
+
+			if 'batch' in request.GET:
+				page_type = 4
+				context['report'] = daywise_attendance_report(batch_id=request.GET['batch'])
+			elif 'branch' in request.GET:
+				page_type = 2
+				context['branch_id'] = int(request.GET['branch'])
+				context['standards'] = get_standard()
+
+				if 'standard' in request.GET:
+					page_type = 3
+					context['standard_id'] = int(request.GET['standard'])
+					context['batches'] = get_batch(branch_id=request.GET['branch'], standard_id=request.GET['standard'])
+
+			context['page_type'] = page_type
+			return render(request, 'manager/daywise_attendance_reports/batchwise_attendance.html', context)
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))

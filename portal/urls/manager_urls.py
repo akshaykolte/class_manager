@@ -17,9 +17,11 @@ urlpatterns = [
 	url(r'^attendance-reports/lecturewise-attendance/$', 'portal.views.manager_views.lecturewise_attendance'),
 	url(r'^attendance-reports/studentwise-attendance/$', 'portal.views.manager_views.studentwise_attendance'),
 	url(r'^attendance-reports/batchwise-attendance/$', 'portal.views.manager_views.batchwise_attendance'),
+	url(r'^daywise-attendance-reports/studentwise-attendance/$', 'portal.views.manager_views.daywise_studentwise_attendance'),
+	url(r'^daywise-attendance-reports/batchwise-attendance/$', 'portal.views.manager_views.daywise_batchwise_attendance'),
 	url(r'^batches/add-batch/$', 'portal.views.manager_views.add_batch'),
 	url(r'^batches/view-batch/$', 'portal.views.manager_views.view_batch'),
-	
+
 	url(r'^notices/add-student-notice/$', 'portal.views.manager_views.add_student_notice'),
 	url(r'^notices/add-staff-notice/$', 'portal.views.manager_views.add_staff_notice'),
 	url(r'^notices/view-my-notices/$', 'portal.views.manager_views.view_my_notices'),

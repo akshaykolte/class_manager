@@ -1,0 +1,153 @@
+{% extends "manager/base_manager.html" %}
+
+{% block attendance_nav %}{% endblock %}
+
+{% block main_content%}
+
+<div class="row">
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Studentwise Attendance</h1>
+    </div>
+</div>
+	{% if message %}
+	    <div class="panel-body">
+	        <div class="alert alert-success alert-dismissable col-lg-12">
+	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	            {{message}}
+	        </div>
+	    </div>
+    {% elif message_error %}
+	    <div class="panel-body">
+		    <div class="alert alert-danger alert-dismissable col-lg-12">
+		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		        {{message_error}}
+		    </div>
+		</div>
+	{% endif %}
+
+<div class="col-lg-12">
+
+	{% if page_type == 1 %}
+		<form>
+			<label><strong>Enter Student ID</strong></label>
+			<div class="form-group input-group">
+				<input type="text" name="name" class="form-control" id="chooseStudentName" readonly>
+				<input type="hidden" name="student" id="chooseStudentId">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="button" onClick="call_student_search_window('student')"><i class="fa fa-search">&nbsp;Click here to Search Student</i>
+					</button>
+				</span>
+			</div>
+			<input type="submit" class="btn btn-default btn-red">
+		</form>
+	{% endif %}
+
+	{% if page_type == 2 %}
+		<form>
+			<label><strong>Enter Student ID</strong></label>
+			<input type="text" name="name" value="{{student_name}}" class="form-control" readonly>
+			<input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()">
+		</form>
+		<br/>
+		<form>
+			<input type="hidden" name="name" value="{{student_name}}" class="form-control" readonly>
+			<input type="hidden" name="student" value="{{student_id}}">
+			<label><strong>Select Subjects</strong></label>
+			{% for subject in subjects %}
+				<div class="checkbox">
+					<label><input type="checkbox" name="{{subject.id}}" value="True" checked> {{subject.subject_name}}</label>
+				</div>
+			{% endfor %}
+			<input type="hidden" name="report" value="get">
+			<input class="btn btn-default btn-red" type="submit" value="Get Report">
+		</form>
+	{% endif %}
+
+	{% if page_type == 3 %}
+
+        <h2>Attendance for {{student_name}}</h2>
+    	   <table class="display table table-bordered table-hover table-striped" id="dataTables_{{rep.subject_id}}">
+    			<thead>
+    				<tr>
+    					<th class="col-lg-6">Date</th>
+    					<th class="col-lg-3">Attended</th>
+    				</tr>
+    			</thead>
+    			<tbody>
+
+    						{% for r in report %}
+                                <tr>
+            						<td>{{r.0}}</td>
+                                    {% if r.1 == True %}
+                                        <td style="color:#226422"><b>P</b></td>
+                                    {% else %}
+                                        <td style="color:#ee4444"><b>A</b></td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+
+    			</tbody>
+    		</table>
+        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({fileName: 'Studentwise Attendance',type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
+        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({fileName: 'Studentwise Attendance',type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
+        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({fileName: 'Studentwise Attendance',type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
+        <br/><br/>
+
+        {% endif %}
+
+	{% if page_type == 4 %}
+		<label><strong>Lectures</strong></label>
+		<br/>
+
+	   <table class="table table-bordered table-hover table-striped">
+			<thead>
+				<tr>
+					<th class="col-lg-2">#</th>
+					<th>Lecture Name</th>
+					<th class="col-lg-1">Count</th>
+					<th class="col-lg-1">Link</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for lecture in lectures %}
+					<tr>
+						<td>{{lecture.subject_year_id}}</td>
+						<td>{{lecture.name}}</td>
+						<td>{{lecture.count}}</td>
+						<td><a href="./?lecture={{lecture.id}}&branch={{branch_id}}">Report</a></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+
+	{% if page_type == 5 %}
+		<label><strong>Studentwise Report</strong></label>
+		<br/>
+
+	   <table class="table table-bordered table-hover table-striped">
+			<thead>
+				<tr>
+					<th>Student</th>
+					{% for lecture in report.0 %}
+						<th>{{lecture.batch__name}}</th>
+					{% endfor %}
+				</tr>
+			</thead>
+			<tbody>
+				{% for student in report.1 %}
+					<tr>
+						{% for st in student %}
+							<td>{{st}}</td>
+						{% endfor %}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+
+</br>
+
+{% endblock %}
