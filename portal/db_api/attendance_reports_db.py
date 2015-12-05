@@ -1,5 +1,5 @@
 from portal.models import Attendance, StudentBatch, LectureBatch, Lecture, SubjectYear, Batch, AttendanceDaywise
-from django.db.models import Count, IntegerField, Case, When
+from django.db.models import Count, IntegerField, Case, When, Max, Min
 
 '''
 		student_id here refers to id of StudentBatch
@@ -217,24 +217,35 @@ def attendance_report(lecture_id = None, branch_id = None, student_id = None, su
 			report_table[1][-1].append(str(sm[0])+'/'+str(sm[1]))
 		return report_table
 
-def daywise_attendance_report(student_batch_id = None, batch_id = None):
-	# valid cases: 10, 01
-	if student_batch_id == None and batch_id != None:
-		attendance_query_total = AttendanceDaywise.objects.filter(student_batch__batch__id = batch_id).values('student_batch__id', 'student_batch__student__first_name', 'student_batch__student__last_name').annotate(Count('date'))
-		attendance_query_present = AttendanceDaywise.objects.filter(student_batch__batch__id = batch_id, attended = True).values('student_batch__id', 'student_batch__student__first_name', 'student_batch__student__last_name').annotate(Count('date'))
+def daywise_attendance_report(student_batch_id = None, batch_id = None, start_date = None, end_date = None):
+	# valid cases: 1011, 0111
+	print start_date, end_date
+	if student_batch_id == None and batch_id != None and start_date != None and end_date != None:
+		attendance_query_total = AttendanceDaywise.objects.filter(student_batch__batch__id = batch_id, date__gte = start_date, date__lte = end_date).values('student_batch__id', 'student_batch__student__first_name', 'student_batch__student__last_name').annotate(Count('date'))
+		attendance_query_present = AttendanceDaywise.objects.filter(student_batch__batch__id = batch_id, attended = True, date__gte = start_date, date__lte = end_date).values('student_batch__id', 'student_batch__student__first_name', 'student_batch__student__last_name').annotate(Count('date'))
 		attendance_dict = {}
 		for attendance_obj in attendance_query_total:
-			attendance_dict[attendance_obj['student_batch__id']] = attendance_obj['date__count']
+			attendance_dict[attendance_obj['student_batch__id']] = [attendance_obj['student_batch__student__first_name'] + ' ' + attendance_obj['student_batch__student__last_name'], 0, attendance_obj['date__count'], '0%']
 		for attendance_obj in attendance_query_present:
-			attendance_dict[attendance_obj['student_batch__id']] = [attendance_obj['student_batch__student__first_name'] + ' ' + attendance_obj['student_batch__student__last_name'], attendance_obj['date__count'], attendance_dict[attendance_obj['student_batch__id']] , str(int(round(100*float(attendance_obj['date__count'])/(attendance_dict[attendance_obj['student_batch__id']]))))+'%']
+			attendance_dict[attendance_obj['student_batch__id']] = [attendance_obj['student_batch__student__first_name'] + ' ' + attendance_obj['student_batch__student__last_name'], attendance_obj['date__count'], attendance_dict[attendance_obj['student_batch__id']][2] , str(int(round(100*float(attendance_obj['date__count'])/(attendance_dict[attendance_obj['student_batch__id']][2]))))+'%']
 		attendance_list = []
 		for attendance_dict_obj in attendance_dict:
 			attendance_list.append(attendance_dict[attendance_dict_obj] + [attendance_dict_obj])
-		print attendance_list
 		return attendance_list
-	elif student_batch_id != None and batch_id == None:
-		attendance_query = AttendanceDaywise.objects.filter(student_batch__id = student_batch_id)
+	elif student_batch_id != None and batch_id == None and start_date != None and end_date != None:
+		attendance_query = AttendanceDaywise.objects.filter(student_batch__id = student_batch_id, date__gte = start_date, date__lte = end_date)
 		attendance_list = []
 		for attendance_obj in attendance_query:
 			attendance_list.append([attendance_obj.date, attendance_obj.attended])
 		return attendance_list
+
+def get_min_max_date(student_batch_id = None, batch_id = None):
+	# valid cases: 10, 01
+	date_dict = {}
+	if student_batch_id == None and batch_id != None:
+		date_dict['start_date'] = str(AttendanceDaywise.objects.filter(student_batch__batch__id = batch_id).aggregate(Min('date'))['date__min'])[:10]
+		date_dict['end_date'] = str(AttendanceDaywise.objects.filter(student_batch__batch__id = batch_id).aggregate(Max('date'))['date__max'])[:10]
+	elif student_batch_id != None and batch_id == None:
+		date_dict['start_date'] = str(AttendanceDaywise.objects.filter(student_batch__id = student_batch_id).aggregate(Min('date'))['date__min'])[:10]
+		date_dict['end_date'] = str(AttendanceDaywise.objects.filter(student_batch__id = student_batch_id).aggregate(Max('date'))['date__max'])[:10]
+	return date_dict

@@ -2,6 +2,32 @@
 
 {% block attendance_nav %}{% endblock %}
 
+{% block date-picker-script %}
+
+ <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+ <script type="text/javascript">
+     // When the document is ready
+
+     $(document).ready(function () {
+
+         $('#from_date_id').datepicker({
+             format: "yyyy-mm-dd"
+         });
+         $('#from_date_id').datepicker('update', new Date("{{dates.start_date}}"));
+     });
+
+     $(document).ready(function () {
+
+         $('#end_date_id').datepicker({
+             format: "yyyy-mm-dd"
+         });
+         $('#end_date_id').datepicker('update', new Date("{{dates.end_date}}"));
+     });
+
+ </script>
+{% endblock %}
+
+
 {% block main_content%}
 <div class="row">
 
@@ -96,8 +122,30 @@
 	{% endif %}
 
 	{% if page_type == 4 %}
-		<label><strong>Batchwise Report</strong></label>
-		<br/>
+    <h2>{{batch_obj.name}} - {{batch_obj.standard}} {{batch_obj.branch}}</h2>
+    <form>
+        <input type="hidden" name="branch" value="{{branch_id}}">
+        <input type="hidden" name="batch" value="{{batch_id}}">
+        <input type="hidden" name="standard" value="{{standard_id}}">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon3">From Date </span>
+                  <input name ="from_date" class="form-control"id="from_date_id">
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon3">To Date </span>
+                  <input name ="to_date" class="form-control"id="end_date_id">
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <input type="submit" class="btn btn-default btn-red" value="Go">
+            </div>
+        </div>
+        <br/>
+    </form>
 
 	   <table class="table table-bordered table-hover table-striped" id="dataTables">
 			<thead>
@@ -116,7 +164,7 @@
                         <td>{{student.1}}</td>
                         <td>{{student.2}}</td>
                         <td>{{student.3}}</td>
-                        <td><a style="background:transparent;color:#0645AD;" href="../studentwise-attendance/?name={{student.0}}&student={{student.4}}">Details</a></td>
+                        <td><a style="background:transparent;color:#0645AD;" href="../studentwise-attendance/?name={{student.0}}&student={{student.4}}&from_date={{dates.start_date}}&to_date={{dates.end_date}}">Details</a></td>
 					</tr>
 				{% endfor %}
 			</tbody>

@@ -2,6 +2,31 @@
 
 {% block attendance_nav %}{% endblock %}
 
+{% block date-picker-script %}
+
+ <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+ <script type="text/javascript">
+     // When the document is ready
+
+     $(document).ready(function () {
+
+         $('#from_date_id').datepicker({
+             format: "yyyy-mm-dd"
+         });
+         $('#from_date_id').datepicker('update', new Date("{{dates.start_date}}"));
+     });
+
+     $(document).ready(function () {
+
+         $('#end_date_id').datepicker({
+             format: "yyyy-mm-dd"
+         });
+         $('#end_date_id').datepicker('update', new Date("{{dates.end_date}}"));
+     });
+
+ </script>
+{% endblock %}
+
 {% block main_content%}
 
 <div class="row">
@@ -68,7 +93,31 @@
 	{% if page_type == 3 %}
 
         <h2>Attendance for {{student_name}}</h2>
-    	   <table class="display table table-bordered table-hover table-striped" id="dataTables_{{rep.subject_id}}">
+
+        <form>
+            <input type="hidden" name="name" value="{{student_name}}">
+            <input type="hidden" name="student" value="{{student_id}}">
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="input-group">
+                      <span class="input-group-addon" id="basic-addon3">From Date </span>
+                      <input name ="from_date" class="form-control"id="from_date_id">
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="input-group">
+                      <span class="input-group-addon" id="basic-addon3">To Date </span>
+                      <input name ="to_date" class="form-control"id="end_date_id">
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <input type="submit" class="btn btn-default btn-red" value="Go">
+                </div>
+            </div>
+            <br/>
+        </form>
+
+    	   <table class="table table-bordered table-hover table-striped" id="dataTables">
     			<thead>
     				<tr>
     					<th class="col-lg-6">Date</th>
@@ -90,9 +139,9 @@
 
     			</tbody>
     		</table>
-        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({fileName: 'Studentwise Attendance',type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
-        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({fileName: 'Studentwise Attendance',type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
-        <button onClick ="$('#dataTables_{{rep.subject_id}}').tableExport({fileName: 'Studentwise Attendance',type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
+        <button onClick ="$('#dataTables').tableExport({fileName: 'Studentwise Attendance',type:'pdf',pdfFontSize:'7',escape:'false'});" class="btn btn-default btn-red">Export as PDF</button>
+        <button onClick ="$('#dataTables').tableExport({fileName: 'Studentwise Attendance',type:'excel',escape:'false'});" class="btn btn-default btn-red">Export as Excel</button>
+        <button onClick ="$('#dataTables').tableExport({fileName: 'Studentwise Attendance',type:'csv',escape:'false'});" class="btn btn-default btn-red">Export as Csv</button>
         <br/><br/>
 
         {% endif %}
@@ -149,5 +198,18 @@
 	{% endif %}
 
 </br>
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#dataTables').DataTable({
+            "iDisplayLength":25,
+            "oLanguage": {
+              "sEmptyTable":     "No Records Found"
+            }
+    });
+});
+</script>
 
 {% endblock %}

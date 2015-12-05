@@ -1545,7 +1545,13 @@ def daywise_studentwise_attendance(request):
 				context['student_name'] = request.GET['name']
 				page_type = 3
 				student_batch_id = get_student_batch(student_id=request.GET['student'])['id']
-				context['report'] = daywise_attendance_report(student_batch_id = student_batch_id)
+				date_dict = get_min_max_date(student_batch_id = student_batch_id)
+				if 'from_date' in request.GET:
+					date_dict['start_date'] = request.GET['from_date']
+				if 'to_date' in request.GET:
+					date_dict['end_date'] = request.GET['to_date']
+				context['dates'] = date_dict
+				context['report'] = daywise_attendance_report(student_batch_id = student_batch_id, start_date = datetime.datetime.strptime(date_dict['start_date'], '%Y-%m-%d'), end_date = datetime.datetime.strptime(date_dict['end_date'], '%Y-%m-%d'))
 			context['page_type'] = page_type
 			return render(request, 'manager/daywise_attendance_reports/studentwise_attendance.html', context)
 
@@ -1584,7 +1590,15 @@ def daywise_batchwise_attendance(request):
 
 			if 'batch' in request.GET:
 				page_type = 4
-				context['report'] = daywise_attendance_report(batch_id=request.GET['batch'])
+				date_dict = get_min_max_date(batch_id = request.GET['batch'])
+				context['dates'] = date_dict
+				if 'from_date' in request.GET:
+					date_dict['start_date'] = request.GET['from_date']
+				if 'to_date' in request.GET:
+					date_dict['end_date'] = request.GET['to_date']
+				context['batch_id'] = request.GET['batch']
+				context['report'] = daywise_attendance_report(batch_id=request.GET['batch'], start_date = datetime.datetime.strptime(date_dict['start_date'], '%Y-%m-%d'), end_date = datetime.datetime.strptime(date_dict['end_date'], '%Y-%m-%d'))
+				context['batch_obj'] = get_batch(id=request.GET['batch'])
 			elif 'branch' in request.GET:
 				page_type = 2
 				context['branch_id'] = int(request.GET['branch'])
