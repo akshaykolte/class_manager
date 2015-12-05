@@ -9,6 +9,7 @@ from portal.db_api.fee_db import *
 from portal.db_api.attendance_reports_db import *
 from portal.db_api.notice_db import *
 from portal.db_api.test_db import *
+from portal.db_api.subject_db import *
 import datetime
 from datetime import date
 from django.core.exceptions import *
@@ -121,9 +122,8 @@ def dashboard(request):
 	sorted_lectures = sorted(upcoming_lectures, key=lambda x: x['date'])
 	latest_lectures = sorted_lectures[:min(len(sorted_lectures) + 1, 10)]
 	context['latest_lectures'] = latest_lectures
-
-
 	marks_list = get_student_batch_marks(student_batch_id = get_student_batch(student_id=auth_dict['id'])['id'])
+	context['subjects'] = get_subjects(student_batch_id=get_student_batch(student_id=auth_dict['id'])['id'])['subjects']
 	context['marks_list'] = marks_list
 
 	return render(request,'student/dashboard.html', context)

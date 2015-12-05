@@ -16,18 +16,37 @@
 
 
 
-    <!-- <div class="col-lg-12">
+    <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 Marks
             </div>
+
             <div class="panel-body">
-                <div class="flot-chart">
-                    <div class="flot-chart-content" id="flot-line-chart"></div>
-                </div>
+                <ul class="nav nav-tabs">
+                  {% for subject in subjects %}
+                    {% if forloop.counter0 == 0%}
+                      <li class="active">
+                    {% else %}
+                      <li>
+                    {% endif %}
+                      <a data-toggle="tab" href="#flot_{{subject.subject_name}}">{{subject.subject_name}}</a></li>
+                  {% endfor%}
+                </ul>
+                <div class="tab-content">
+                  {% for subject in subjects %}
+                  {% if forloop.counter0 == 0%}
+                    <div id="flot_{{subject.subject_name}}" class="flot-chart tab-pane fade in active">
+                  {% else %}
+                    <div id="flot_{{subject.subject_name}}" class="flot-chart tab-pane fade in">
+                  {% endif %}
+
+                     <div class="flot-chart-content" id="flot-line-chart-{{subject.subject_name}}"></div>
+                  </div>
+                  {% endfor%}
             </div>
         </div>
-    </div> -->
+    </div>
     <!-- /.row -->
     <ul class="nav nav-tabs">
       <li class="active"><a data-toggle="tab" href="#latest_lectures">Latest Lectures</a></li>
@@ -264,8 +283,12 @@
     <script>
     $(document).ready(function() {
         var offset = 0;
-      var percentage = [[(new Date(2009, 12, 19)).getTime(), 70],[(new Date(2010, 6, 27)).getTime(), 90]];
-      var counter = 1
+        var percentage = [
+      [gd(2011, 1, 22), 16], [gd(2011, 4, 3), 96], [gd(2011, 7, 4), 65], [gd(2012, 1, 7), 68], [gd(2012, 7, 8), 56], [gd(2012, 12, 9), 83]];
+  function gd(year, month, day) {
+return new Date(year, month, day).getTime();
+}
+      var counter = 5
 
       var options = {
           series: {
@@ -284,8 +307,8 @@
               max: 100
           },
           xaxis: {
-              min: (new Date(2010, 11, 10)).getTime(),
-              max: (new Date(2010, 11, 15)).getTime(),
+              min: (new Date(2011, 1, 1)).getTime(),
+              max: (new Date(2013, 1, 1)).getTime(),
               mode: "time",
               tickSize: [1, "month"],
               monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
@@ -302,7 +325,7 @@
           }
       };
 
-      var plotObj = $.plot($("#flot-line-chart"), [{
+      var plotObj = $.plot($("#flot-line-chart-Physics"), [{
               data: percentage,
               label: "Marks Obtained"
           }],
