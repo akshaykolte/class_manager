@@ -248,11 +248,16 @@ def get_student_batch_marks(id=None, test_id=None, batch_id=None, student_batch_
 		test_student_batch['batch_id'] = test_student_batch_object.student_batch.batch.id
 		test_student_batch['batch_name'] = test_student_batch_object.student_batch.batch.name
 		test_student_batch['test_name'] = test_student_batch_object.test.name
-		test_student_batch['total_marks'] = test_student_batch_object.test.total_marks
+		test_student_batch['test_date'] = get_date_of_test(test_student_batch_object.test.id, test_student_batch_object.student_batch.batch.id)
+		test_student_batch['subject_id'] = test_student_batch_object.test.subject_year.subject.id
 		test_student_batch['subject_name'] = test_student_batch_object.test.subject_year.subject.name
+		test_student_batch['total_marks'] = test_student_batch_object.test.total_marks
 		test_student_batch['obtained_marks'] = test_student_batch_object.obtained_marks
 		student_batch_list.append(test_student_batch)
 	return student_batch_list
 
 def check_test_staff_permission(staff_id, test_id):
 	return TestStaffRole.objects.filter(staff_role__staff__id=staff_id, test__id=test_id).exists()
+
+def get_date_of_test(test_id, batch_id):
+	return TestBatch.objects.get(test=Test.objects.get(id=test_id), batch=Batch.objects.get(id=batch_id)).test_date
