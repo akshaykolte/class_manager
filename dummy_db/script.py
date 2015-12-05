@@ -535,7 +535,10 @@ def insert_test_batch():
 		for batch in batches:
 			if not TestBatch.objects.filter(test = test, batch = batch).exists():
 				if test.subject_year.subject.standard == batch.standard:
-					test_batch_object = TestBatch(test = test, batch = batch)
+					start_date = datetime.datetime.now() - timedelta(days=60)
+					end_date = datetime.datetime.now() + timedelta(days=60)
+					randdate = random_date(start_date,end_date)
+					test_batch_object = TestBatch(test = test, batch = batch,test_date = randdate)
 					test_batch_object.save()
 	print ""
 
@@ -612,6 +615,7 @@ def insert_attendance():
 
 
 starttime = datetime.datetime.now()
+'''
 insert_academic_years()
 insert_branches()
 insert_roles()
@@ -632,12 +636,14 @@ insert_lectures()
 insert_lecture_batches()
 insert_notices()
 insert_attendance()
+'''
 insert_tests()
 insert_test_batch()
 insert_test_student_batch()
+'''
 insert_base_fees()
 insert_transactions()
 
-
+'''
 endtime = datetime.datetime.now()
 print "Time taken: ",str((endtime-starttime).seconds)+"."+str((endtime-starttime).microseconds)[0:3],"seconds\n"
