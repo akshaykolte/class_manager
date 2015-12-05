@@ -122,9 +122,19 @@ def dashboard(request):
 	sorted_lectures = sorted(upcoming_lectures, key=lambda x: x['date'])
 	latest_lectures = sorted_lectures[:min(len(sorted_lectures) + 1, 10)]
 	context['latest_lectures'] = latest_lectures
+
+	# Code for student's graph of marks
 	marks_list = get_student_batch_marks(student_batch_id = get_student_batch(student_id=auth_dict['id'])['id'])
+	sorted_marks_list = sorted(marks_list, key=lambda x: x['test_date'])
+	segregated_marks = {}
+	for i in sorted_marks_list:
+		if not i['subject_id'] in segregated_marks:
+			segregated_marks[i['subject_id']] = []
+		segregated_marks[i['subject_id']].append(i);
+
 	context['subjects'] = get_subjects(student_batch_id=get_student_batch(student_id=auth_dict['id'])['id'])['subjects']
-	context['marks_list'] = marks_list
+	context['segregated_marks'] = segregated_marks
+	context['academic_year'] = get_current_academic_year()
 
 	return render(request,'student/dashboard.html', context)
 

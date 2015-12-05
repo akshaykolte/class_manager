@@ -30,18 +30,18 @@
                     {% else %}
                       <li>
                     {% endif %}
-                      <a data-toggle="tab" href="#flot_{{subject.subject_name}}">{{subject.subject_name}}</a></li>
+                      <a data-toggle="tab" href="#flot_{{subject.subject_id}}">{{subject.subject_name}}</a></li>
                   {% endfor%}
                 </ul>
                 <div class="tab-content">
                   {% for subject in subjects %}
                   {% if forloop.counter0 == 0%}
-                    <div id="flot_{{subject.subject_name}}" class="flot-chart tab-pane fade in active">
+                    <div id="flot_{{subject.subject_id}}" class="flot-chart tab-pane fade in active">
                   {% else %}
-                    <div id="flot_{{subject.subject_name}}" class="flot-chart tab-pane fade in">
+                    <div id="flot_{{subject.subject_id}}" class="flot-chart tab-pane fade in">
                   {% endif %}
 
-                     <div class="flot-chart-content" id="flot-line-chart-{{subject.subject_name}}"></div>
+                     <div class="flot-chart-content" id="flot-line-chart-{{subject.subject_id}}"></div>
                   </div>
                   {% endfor%}
             </div>
@@ -283,13 +283,7 @@
     <script>
     $(document).ready(function() {
         var offset = 0;
-        var percentage = [
-      [gd(2011, 1, 22), 16], [gd(2011, 4, 3), 96], [gd(2011, 7, 4), 65], [gd(2012, 1, 7), 68], [gd(2012, 7, 8), 56], [gd(2012, 12, 9), 83]];
-  function gd(year, month, day) {
-return new Date(year, month, day).getTime();
-}
       var counter = 5
-
       var options = {
           series: {
               lines: {
@@ -304,20 +298,21 @@ return new Date(year, month, day).getTime();
           },
           yaxis: {
               min: 0,
-              max: 100
+              max: 100,
+              axisLabel: 'Marks',
           },
           xaxis: {
-              min: (new Date(2011, 1, 1)).getTime(),
-              max: (new Date(2013, 1, 1)).getTime(),
+              min: (new Date(2000+{{academic_year.year_start}}, 5, 1)).getTime(),
+              max: (new Date(2000+{{academic_year.year_end}}, 4, 31)).getTime(),
               mode: "time",
               tickSize: [1, "month"],
-              monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-              tickLength: 0,
+              monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+              tickLength: 10,
               axisLabel: 'Month',
           },
           tooltip: true,
           tooltipOpts: {
-              content: "'%s' of %x.1 is %y.4",
+              content: "Test Marks: %y out of 100",
               shifts: {
                   x: -60,
                   y: 25
@@ -325,11 +320,22 @@ return new Date(year, month, day).getTime();
           }
       };
 
-      var plotObj = $.plot($("#flot-line-chart-Physics"), [{
-              data: percentage,
+      function gd(year, month, day) {
+      return new Date(year, month-1, day).getTime();
+      }
+
+      {% for k,v in segregated_marks.items %}
+      var plotObj_{{k}} = $.plot($("#flot-line-chart-{{k}}"), [{
+              data: [
+                {% for i in v %}
+                  [gd({{i.test_date.year}}, {{i.test_date.month}}, {{i.test_date.day}}), {{i.obtained_marks}}],
+                {% endfor %}
+              ],
               label: "Marks Obtained"
           }],
           options);
+      {% endfor %}
+
     });
     </script>
 
