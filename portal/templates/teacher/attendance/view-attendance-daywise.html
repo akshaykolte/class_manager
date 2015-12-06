@@ -26,7 +26,7 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Add/Edit Attendance</h1>
+        <h1 class="page-header">View Attendance</h1>
     </div>
 </div>
 	{% if message %}
@@ -180,7 +180,7 @@
                 <input name="date" class="form-control"  type = "text" id = "example1">
                 <br/>
 
-            <input class="col-lg-3 btn btn-default btn-red"  onchange="this.form.submit()" type='submit' value='Mark Attendance'>    
+            <input class="col-lg-3 btn btn-default btn-red"  onchange="this.form.submit()" type='submit' value='View Attendance'>    
         </form>
 
     {% endif %}    
@@ -194,14 +194,13 @@
             <input type="hidden" name="batch" value="{{batch_id}}">
             <input type="hidden" name="date" value="{{date}}">
 
-            <h3>Select all students who attended </h3>
                 <br/>
                 
                 <div class="col-md-9">
                     <div id="myTabContent" class="tab-content">
                         
                             <div>
-                                Batch: <strong>{{batchname}}</strong>   &nbsp;&nbsp; Standard: <strong>{{standardname}}</strong> &nbsp;&nbsp; Branch: <strong>{{branchname}}</strong> &nbsp;&nbsp; Date: <strong>{{date}}</strong>
+                                 Batch: <strong>{{batchname}}</strong>   &nbsp;&nbsp; Standard: <strong>{{standardname}}</strong> &nbsp;&nbsp; Branch: <strong>{{branchname}}</strong> &nbsp;&nbsp; Date: <strong>{{date}}</strong>
                                 <br/>
                                 <br/>
                                 <div class="dataTable_wrapper">
@@ -209,7 +208,6 @@
                                         <thead>
                                             <tr>
                                                 <td class="col-lg-5">Name</td>
-                                                <td align="center">&nbsp;&nbsp;<input type="checkbox" name="sample" class="batch_{{batch_id}}">
                                                 <td>Current Status</td>
                                             </tr>
                                         </thead>
@@ -218,9 +216,12 @@
                                         {%for i in batch_list %}
                                         <tr>
                                             <td>{{i.first_name}} {{i.last_name}}</td>
-                                            <td align="center"><input class="sub_batch_{{i.id}}" type="checkbox" name="batch_{{i.batch.id}}student_{{i.id}}"{% if i.present == True %} checked{% endif %}></td>
-                                            {% if i.present == True %}<td class="text-success"><strong>Present</strong></td>
-                                            {% else %}<td class="text-muted"><strong>Absent/Not Marked</strong></td>
+                                           
+
+                                            {% if i.present == True %}<td style="color:#226422"><b>Present</b></td>
+                                            
+                                            {% else %}<td style="color:#ee4444"><b>Absent</b></td>
+                                            
                                             {% endif %}
                                         </tr>
                                         {% endfor %}
@@ -228,7 +229,6 @@
                                     </table>
                                 </div>
                                 <br>
-                                <input class="col-lg-3 btn btn-default btn-red" type='submit' value='Mark Attendance'>
                                 <br/>
                             </div>
                         

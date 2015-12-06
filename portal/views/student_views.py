@@ -122,9 +122,19 @@ def dashboard(request):
 	sorted_lectures = sorted(upcoming_lectures, key=lambda x: x['date'])
 	latest_lectures = sorted_lectures[:min(len(sorted_lectures) + 1, 10)]
 	context['latest_lectures'] = latest_lectures
+
+	# Code for student's graph of marks
 	marks_list = get_student_batch_marks(student_batch_id = get_student_batch(student_id=auth_dict['id'])['id'])
+	sorted_marks_list = sorted(marks_list, key=lambda x: x['test_date'])
+	segregated_marks = {}
+	for i in sorted_marks_list:
+		if not i['subject_id'] in segregated_marks:
+			segregated_marks[i['subject_id']] = []
+		segregated_marks[i['subject_id']].append(i);
+
 	context['subjects'] = get_subjects(student_batch_id=get_student_batch(student_id=auth_dict['id'])['id'])['subjects']
-	context['marks_list'] = marks_list
+	context['segregated_marks'] = segregated_marks
+	context['academic_year'] = get_current_academic_year()
 
 	return render(request,'student/dashboard.html', context)
 
@@ -331,3 +341,29 @@ def view_marks(request):
 		# 	return redirect('./?message_error='+str(PentaError(998)))
 		# except Exception, e:
 		# 	return redirect('./?message_error='+str(PentaError(100)))
+
+def view_daywise_attendance(request):
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] == False or auth_dict['permission_student'] == False:
+		raise Http404
+
+	context = {}
+	context['details'] = auth_dict
+	context['auth_dict'] = auth_dict
+
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		student_batch_id = get_student_batch(student_id=auth_dict['id'])['id']
+		date_dict = get_min_max_date(student_batch_id = student_batch_id)
+		if 'from_date' in request.GET:
+			date_dict['start_date'] = request.GET['from_date']
+		if 'to_date' in request.GET:
+			date_dict['end_date'] = request.GET['to_date']
+		context['dates'] = date_dict
+		context['report'] = daywise_attendance_report(student_batch_id = student_batch_id, start_date = datetime.datetime.strptime(date_dict['start_date'], '%Y-%m-%d'), end_date = datetime.datetime.strptime(date_dict['end_date'], '%Y-%m-%d'))
+		return render(request, 'student/daywise_attendance/view_attendance.html', context)

@@ -1158,29 +1158,30 @@ def add_attendance_daywise(request):
 
 	elif request.method == 'POST':
 
-		#try:
-		standard = request.POST['standard']
-		
-		print 'her234'
-		academic_year_id = get_current_academic_year()['id']
-		batches = get_batch(academic_year_id = academic_year_id,standard_id = standard)
-		for batch in batches:
-			students = get_students(batch_id = batch['id'])
+		try:
+			standard = request.POST['standard']
+			batch_id = request.POST['batch']
+			print 'her234'
+			academic_year_id = get_current_academic_year()['id']
+			#batches = get_batch(academic_year_id = academic_year_id,standard_id = standard)
+			#for batch in batches:
+			students = get_students(batch_id = batch_id)
 
 			print 'heres'
 			for student in students:
-				if 'batch_'+str(batch['id'])+'student_'+str(student['id']) in request.POST:
+				if 'batch_'+str(batch_id)+'student_'+str(student['id']) in request.POST:
 					print '00here123'
 					print student
-					student_batch = get_student_batch(id = None,batch_id=None,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
+					student_batch = get_student_batch(id = None,batch_id=batch_id,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
 					set_attendance_daywise(id = None ,attended = True, student_batch_id = student['id'], date = request.POST['date'])
 					
 					print 'here1'
 				else:
-					delete_attendance_daywise(student_batch_id = student['id'] , date = request.POST['date'] )
+					student_batch = get_student_batch(id = None,batch_id=batch_id,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
+					set_attendance_daywise(id = None ,attended = False, student_batch_id = student['id'], date = request.POST['date'])
 
-		return redirect('./?message=Attendance Marked')
-		'''except ModelValidateError, e:
+			return redirect('./?message=Attendance Marked')
+		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
 			return redirect('./?message_error='+str(PentaError(1000)))
@@ -1189,4 +1190,108 @@ def add_attendance_daywise(request):
 		except MultiValueDictKeyError, e:
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
-			return redirect('./?message_error='+str(PentaError(100)))'''
+			return redirect('./?message_error='+str(PentaError(100)))
+
+@csrf_exempt
+def view_attendance_daywise(request):
+	auth_dict = get_user(request)
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		context = {}
+
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		page_type = 0
+
+		branches = get_branch(id=None)
+		context['branches'] = branches
+		
+		if 'branch' in request.GET:
+
+			context['branch_id'] = int(request.GET['branch'])
+			page_type = 1
+			standards = get_standard()
+			context['standards'] = standards
+			if 'standard' in request.GET:
+				page_type = 2
+				batches = get_batch(id=None,branch_id = int(request.GET['branch']) ,academic_year_id = get_current_academic_year()['id'] ,standard_id = int(request.GET['standard']))
+
+				context['batches'] = batches
+				context['standard_id'] = int(request.GET['standard'])
+
+
+				if 'batch' in request.GET:
+					page_type = 3
+					context['batch_id'] = int(request.GET['batch'])
+					if 'date' in request.GET:
+						page_type = 4
+						attendance_dict = {}
+						context['date'] = request.GET['date']
+						attendance_list = get_attendance_daywise(id= None, student_batch_id = None, date = request.GET['date'], batch_id = int(request.GET['batch']))
+						print attendance_list, len(attendance_list)
+						for attendance in attendance_list:
+							if attendance['attended'] :
+								attendance_dict[attendance['student_batch_id']] = True
+
+						batch_list = {}
+						
+							
+						students = get_students(batch_id = int(request.GET['batch']))
+						
+						for i in xrange(len(students)):
+							if students[i]['id'] in attendance_dict:
+								students[i]['present'] = True
+							else:
+								students[i]['present'] = False
+						batch_list = students
+						
+						context['batch_list'] = batch_list
+
+						context['batchname'] = get_batch(id= int(request.GET['batch']))['name']
+						context['branchname'] =  get_batch(id= int(request.GET['batch']))['branch']
+						context['standardname'] =  get_batch(id= int(request.GET['batch']))['standard']
+		context['page_type'] = page_type
+		context['details'] = auth_dict
+		return render(request, 'teacher/attendance/view-attendance-daywise.html', context)
+
+	elif request.method == 'POST':
+
+		try:
+			standard = request.POST['standard']
+			
+			print 'her234'
+			academic_year_id = get_current_academic_year()['id']
+			batches = get_batch(academic_year_id = academic_year_id,standard_id = standard)
+			for batch in batches:
+				students = get_students(batch_id = batch['id'])
+
+				print 'heres'
+				for student in students:
+					if 'batch_'+str(batch['id'])+'student_'+str(student['id']) in request.POST:
+						print '00here123'
+						print student
+						student_batch = get_student_batch(id = None,batch_id=None,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
+						set_attendance_daywise(id = None ,attended = True, student_batch_id = student['id'], date = request.POST['date'])
+						
+						print 'here1'
+					else:
+						delete_attendance_daywise(student_batch_id = student['id'] , date = request.POST['date'] )
+
+			return redirect('./?message=Attendance Marked')
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
