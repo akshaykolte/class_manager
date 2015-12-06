@@ -1262,29 +1262,29 @@ def view_attendance_daywise(request):
 
 	elif request.method == 'POST':
 
-		#try:
-		standard = request.POST['standard']
-		
-		print 'her234'
-		academic_year_id = get_current_academic_year()['id']
-		batches = get_batch(academic_year_id = academic_year_id,standard_id = standard)
-		for batch in batches:
-			students = get_students(batch_id = batch['id'])
+		try:
+			standard = request.POST['standard']
+			
+			print 'her234'
+			academic_year_id = get_current_academic_year()['id']
+			batches = get_batch(academic_year_id = academic_year_id,standard_id = standard)
+			for batch in batches:
+				students = get_students(batch_id = batch['id'])
 
-			print 'heres'
-			for student in students:
-				if 'batch_'+str(batch['id'])+'student_'+str(student['id']) in request.POST:
-					print '00here123'
-					print student
-					student_batch = get_student_batch(id = None,batch_id=None,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
-					set_attendance_daywise(id = None ,attended = True, student_batch_id = student['id'], date = request.POST['date'])
-					
-					print 'here1'
-				else:
-					delete_attendance_daywise(student_batch_id = student['id'] , date = request.POST['date'] )
+				print 'heres'
+				for student in students:
+					if 'batch_'+str(batch['id'])+'student_'+str(student['id']) in request.POST:
+						print '00here123'
+						print student
+						student_batch = get_student_batch(id = None,batch_id=None,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
+						set_attendance_daywise(id = None ,attended = True, student_batch_id = student['id'], date = request.POST['date'])
+						
+						print 'here1'
+					else:
+						delete_attendance_daywise(student_batch_id = student['id'] , date = request.POST['date'] )
 
-		return redirect('./?message=Attendance Marked')
-		'''except ModelValidateError, e:
+			return redirect('./?message=Attendance Marked')
+		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
 			return redirect('./?message_error='+str(PentaError(1000)))
@@ -1293,4 +1293,4 @@ def view_attendance_daywise(request):
 		except MultiValueDictKeyError, e:
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
-			return redirect('./?message_error='+str(PentaError(100)))'''			
+			return redirect('./?message_error='+str(PentaError(100)))
