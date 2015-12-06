@@ -19,6 +19,8 @@ urlpatterns = [
     url(r'^attendance/view-attendance/$', 'portal.views.teacher_views.view_attendance'),
 
     url(r'^attendance/add-attendance-daywise/$', 'portal.views.teacher_views.add_attendance_daywise'),
+    url(r'^attendance/view-attendance-daywise/$', 'portal.views.teacher_views.view_attendance_daywise'),
+
 
     # # Lecture
     url(r'^lectures/add-lectures/$', 'portal.views.teacher_views.add_lectures'),
