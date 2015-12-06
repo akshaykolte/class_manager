@@ -303,8 +303,8 @@ def insert_student_batches():
 				amount = 8000
 			elif rn == 3:
 				amount = 12000
-			if not FeeTransaction.objects.filter(student_batch = stud_bat_obj,amount = amount,fee_type = base_fee_object, date = datetime.datetime.now()).exists():
-				transaction_object = FeeTransaction(student_batch = stud_bat_obj,amount = amount,fee_type = base_fee_object, date = datetime.datetime.now())
+			if not FeeTransaction.objects.filter(student = stud_bat_obj.student,amount = amount,fee_type = base_fee_object, date = datetime.datetime.now()).exists():
+				transaction_object = FeeTransaction(student = stud_bat_obj.student,amount = amount,fee_type = base_fee_object, date = datetime.datetime.now())
 				transaction_object.save()
 			for i in range(rn):
 				stud_bat_obj.subject_years.add(subject_year_list[i].id)
@@ -574,14 +574,14 @@ def insert_transactions():
 		amount = random.randint(1,10)
 		amount *= 1000
 		present_payment_done = 0
-		fee_objects = FeeTransaction.objects.filter(student_batch=n, fee_type=payment_type)
+		fee_objects = FeeTransaction.objects.filter(student=n.student, fee_type=payment_type)
 		for fee_obj in fee_objects:
 			present_payment_done += fee_obj.amount
-		base_fee_obj = FeeTransaction.objects.get(student_batch=n, fee_type=base_fee_type)
+		base_fee_obj = FeeTransaction.objects.get(student=n.student, fee_type=base_fee_type)
 		if present_payment_done + amount > base_fee_obj.amount:
 			amount = base_fee_obj.amount - present_payment_done
 		if amount != 0:
-			transaction_object = FeeTransaction(student_batch = n,amount = amount,fee_type = payment_type, date = datetime.datetime.now())
+			transaction_object = FeeTransaction(student = n.student,amount = amount,fee_type = payment_type, date = datetime.datetime.now())
 			transaction_object.save()
 
 	print ""

@@ -489,13 +489,13 @@ class FeeTransaction(models.Model):
 	amount = models.IntegerField()
 	date = models.DateField()
 	timestamp = models.DateTimeField(auto_now_add=True)
-	student_batch = models.ForeignKey(StudentBatch)
+	student = models.ForeignKey(Student)
 	fee_type = models.ForeignKey(FeeType)
 	# TODO: uncomment the following line after finalising the Cheque model
 	# cheque = models.ForeignKey(Cheque, blank=True, null=True)
 
 	def __str__(self):
-		return str(self.student_batch) + ':' + str(self.fee_type) + '- Rs. ' + str(self.amount)
+		return str(self.student) + ':' + str(self.fee_type) + '- Rs. ' + str(self.amount)
 
 	pass
 	class Meta:
