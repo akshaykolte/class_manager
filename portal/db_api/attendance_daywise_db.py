@@ -11,8 +11,16 @@ def set_attendance_daywise(id = None ,attended = None, student_batch_id = None, 
 		student_batch_object = StudentBatch.objects.get(id = student_batch_id)
 		
 		if AttendanceDaywise.objects.filter(student_batch=student_batch_object, date = date).exists():
-			# attendance already marked for student_batch and date
-			return AttendanceDaywise.objects.get(student_batch=student_batch_object, date = date).id
+			# attendance already marked for student_batch and date/Edit
+			attendance_object = AttendanceDaywise.objects.get(student_batch=student_batch_object, date = date)
+			if not is_none_attended:
+				attendance_object.attended = attended
+			
+			if not is_none_date:
+				attendance_object.date = date
+			attendance_object.save()
+
+			return attendance_object.id
 		else:
 			attendance_object = AttendanceDaywise(attended = attended, student_batch = student_batch_object, date = date)
 			attendance_object.save()
