@@ -514,9 +514,9 @@ def make_transaction(request):
 			branches = get_branch(id=None)
 			context['branches'] = branches
 
-			if 'student_batch' in request.GET:
+			if 'student' in request.GET:
 				page_type = 1
-				context['student_batch_id'] = request.GET['student_batch']
+				context['student_id'] = request.GET['student']
 				context['student_name'] = request.GET['student_name']
 
 				fee_types = get_fee_types()
@@ -540,10 +540,10 @@ def make_transaction(request):
 
 	elif request.method == 'POST':
 		try:
-			id = request.POST['student_batch']
+			id = request.POST['student']
 
-			student_batch_object = StudentBatch.objects.get(id = request.POST['student_batch'])
-			student_batch_id = student_batch_object.id
+			'''student_batch_object = StudentBatch.objects.get(id = request.POST['student_batch'])
+			student_batch_id = student_batch_object.id'''
 
 			#print student_batch_id
 
@@ -560,7 +560,7 @@ def make_transaction(request):
 
 			#time = request.POST['time']
 
-			transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_batch_id = student_batch_id, fee_type_id = fee_type_id)
+			transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_id = request.POST['student'], fee_type_id = fee_type_id)
 
 			return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id))
 		except ModelValidateError, e:
