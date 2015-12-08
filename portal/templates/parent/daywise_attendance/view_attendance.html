@@ -1,0 +1,108 @@
+{% extends "parent/base_parent.html" %}
+
+{% block class_attendance %}class="current"{% endblock%}
+
+{% block date-picker-script %}
+
+ <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+ <script type="text/javascript">
+     // When the document is ready
+
+     $(document).ready(function () {
+
+         $('#from_date_id').datepicker({
+             format: "yyyy-mm-dd"
+         });
+         $('#from_date_id').datepicker('update', new Date("{{dates.start_date}}"));
+     });
+
+     $(document).ready(function () {
+
+         $('#end_date_id').datepicker({
+             format: "yyyy-mm-dd"
+         });
+         $('#end_date_id').datepicker('update', new Date("{{dates.end_date}}"));
+     });
+
+ </script>
+{% endblock %}
+
+{% block main_content%}
+<div class="row">
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">View Attendance</h1>
+    </div>
+</div>
+	{% if message %}
+	    <div class="panel-body">
+	        <div class="alert alert-success alert-dismissable col-lg-12">
+	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	            {{message}}
+	        </div>
+	    </div>
+    {% elif message_error %}
+	    <div class="panel-body">
+		    <div class="alert alert-danger alert-dismissable col-lg-12">
+		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		        {{message_error}}
+		    </div>
+		</div>
+	{% endif %}
+
+<div class="col-lg-12">
+
+    <form>
+        <input type="hidden" name="name" value="{{student_name}}">
+        <input type="hidden" name="student" value="{{student_id}}">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon3">From Date </span>
+                  <input name ="from_date" class="form-control"id="from_date_id">
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon3">To Date </span>
+                  <input name ="to_date" class="form-control"id="end_date_id">
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <input type="submit" class="btn btn-default btn-red" value="Go">
+            </div>
+        </div>
+        <br/>
+    </form>
+
+       <table class="table table-bordered table-hover table-striped" id="dataTables">
+            <thead>
+                <tr>
+                    <th class="col-lg-6">Date</th>
+                    <th class="col-lg-3">Attended</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                        {% for r in report %}
+                            <tr>
+                                <td>{{r.0}}</td>
+                                {% if r.1 == True %}
+                                    <td style="color:#226422"><b>P</b></td>
+                                {% else %}
+                                    <td style="color:#ee4444"><b>A</b></td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+
+            </tbody>
+        </table>
+
+
+
+
+
+</br>
+
+{% endblock %}

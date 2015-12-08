@@ -1,0 +1,52 @@
+{
+	"roles":{
+		"admin":"enabled",
+		"manager":"enabled",
+		"accountant":"enabled",
+		"teacher":"enabled",
+		"parent":"enabled",
+		"student":"enabled",
+	},
+
+	"attendance":{
+		"daywise_attendance":"true",
+		"topicwise_attendance":"false",
+		"sms_module":"enabled",
+
+	},
+
+	"branches":{
+		"branch_single":"true",
+		"branch_multiple":"false",
+		"syllabus_tracking_branchwise":"true",
+
+	},
+
+	"batches":{
+		"batches":"enabled",
+		"lectures":{
+			"topicwise_lectures":"enabled",
+			"lecturebatches":"enabled",
+		},
+	},
+
+	"fees":{
+		"subjectwise_fees":"true",
+
+		"installments":{
+			
+			"installments":"enabled",
+			"number_of_installments":"3",
+			},
+		"emi_module":"enabled",
+		"post_dated_cheques":"enabled",
+
+	},
+
+	"notices":{
+		"staff_to_staff":"enabled",
+		"staff_to_student":"enabled",
+		"student_to_staff":"disabled",
+	},
+
+}
