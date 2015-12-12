@@ -748,7 +748,7 @@ def admit_student(request):
 					total['base_fees'] = total['base_fees'] + basefee.amount
 
 				date = (time.strftime("%Y-%m-%d"))
-				transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_batch_id = student_batch_id, fee_type_id = FeeType.objects.get(name = 'base fee').id)
+				transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_id = student_id, fee_type_id = FeeType.objects.get(name = 'base fee').id)
 			else:
 				student_batch_id = set_student_batch(id=None,student_id = student_id, batch_id = batch_id, subject_year_id_list= subject_year_list, academic_year_id = None, standard_id = None)
 				#Creating base fee transaction after admission
@@ -761,7 +761,7 @@ def admit_student(request):
 					total['base_fees'] = total['base_fees'] + basefee.amount
 
 				date = (time.strftime("%Y-%m-%d"))
-				transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_batch_id = student_batch_id, fee_type_id = FeeType.objects.get(name = 'base fee').id )
+				transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_id = student_id, fee_type_id = FeeType.objects.get(name = 'base fee').id )
 
 
 			return redirect('./?message=Student Admitted')
