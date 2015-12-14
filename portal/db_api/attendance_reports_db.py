@@ -1,5 +1,6 @@
 from portal.models import Attendance, StudentBatch, LectureBatch, Lecture, SubjectYear, Batch, AttendanceDaywise
 from django.db.models import Count, IntegerField, Case, When, Max, Min
+from datetime import datetime
 
 '''
 		student_id here refers to id of StudentBatch
@@ -248,4 +249,8 @@ def get_min_max_date(student_batch_id = None, batch_id = None):
 	elif student_batch_id != None and batch_id == None:
 		date_dict['start_date'] = str(AttendanceDaywise.objects.filter(student_batch__id = student_batch_id).aggregate(Min('date'))['date__min'])[:10]
 		date_dict['end_date'] = str(AttendanceDaywise.objects.filter(student_batch__id = student_batch_id).aggregate(Max('date'))['date__max'])[:10]
+	if date_dict['start_date'] == 'None' and date_dict['end_date'] == 'None':
+		print 'x'
+		date_dict['start_date'] = str(datetime.now())[:10]
+		date_dict['end_date'] = str(datetime.now())[:10]
 	return date_dict

@@ -514,9 +514,9 @@ def make_transaction(request):
 			branches = get_branch(id=None)
 			context['branches'] = branches
 
-			if 'student_batch' in request.GET:
+			if 'student' in request.GET:
 				page_type = 1
-				context['student_batch_id'] = request.GET['student_batch']
+				context['student_id'] = request.GET['student']
 				context['student_name'] = request.GET['student_name']
 
 				fee_types = get_fee_types()
@@ -540,10 +540,10 @@ def make_transaction(request):
 
 	elif request.method == 'POST':
 		try:
-			id = request.POST['student_batch']
+			id = request.POST['student']
 
-			student_batch_object = StudentBatch.objects.get(id = request.POST['student_batch'])
-			student_batch_id = student_batch_object.id
+			'''student_batch_object = StudentBatch.objects.get(id = request.POST['student_batch'])
+			student_batch_id = student_batch_object.id'''
 
 			#print student_batch_id
 
@@ -560,7 +560,7 @@ def make_transaction(request):
 
 			#time = request.POST['time']
 
-			transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_batch_id = student_batch_id, fee_type_id = fee_type_id)
+			transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_id = request.POST['student'], fee_type_id = fee_type_id)
 
 			return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id))
 		except ModelValidateError, e:
@@ -748,7 +748,7 @@ def admit_student(request):
 					total['base_fees'] = total['base_fees'] + basefee.amount
 
 				date = (time.strftime("%Y-%m-%d"))
-				transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_batch_id = student_batch_id, fee_type_id = FeeType.objects.get(name = 'base fee').id)
+				transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_id = student_id, fee_type_id = FeeType.objects.get(name = 'base fee').id)
 			else:
 				student_batch_id = set_student_batch(id=None,student_id = student_id, batch_id = batch_id, subject_year_id_list= subject_year_list, academic_year_id = None, standard_id = None)
 				#Creating base fee transaction after admission
@@ -761,7 +761,7 @@ def admit_student(request):
 					total['base_fees'] = total['base_fees'] + basefee.amount
 
 				date = (time.strftime("%Y-%m-%d"))
-				transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_batch_id = student_batch_id, fee_type_id = FeeType.objects.get(name = 'base fee').id )
+				transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_id = student_id, fee_type_id = FeeType.objects.get(name = 'base fee').id )
 
 
 			return redirect('./?message=Student Admitted')

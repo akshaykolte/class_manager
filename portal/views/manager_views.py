@@ -1621,3 +1621,54 @@ def daywise_batchwise_attendance(request):
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))
+
+def sms_tests(request):
+	context = {}
+
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		try:
+			page_type = 1
+			context['branches'] = get_branch_of_manager(manager_id=auth_dict['id'])
+
+			if 'branch' in request.GET:
+				page_type = 2
+				context['branch_id'] = int(request.GET['branch'])
+				context['standards'] = get_standard()
+
+				if 'standard' in request.GET:
+					page_type = 3
+					context['standard_id'] = int(request.GET['standard'])
+					context['batches'] = get_batch(branch_id=request.GET['branch'], standard_id=request.GET['standard'])
+
+					if 'batch' in request.GET:
+						page_type = 4
+						context['batch_id'] = int(request.GET['batch'])
+						context['batch_obj'] = get_batch(id=request.GET['batch'])
+
+						if 'from_date' in request.GET and 'to_date' in request.GET:
+							page_type = 5
+
+			context['page_type'] = page_type
+			return render(request, 'manager/tests/sms_tests.html', context)
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))

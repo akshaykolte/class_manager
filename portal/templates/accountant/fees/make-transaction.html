@@ -34,9 +34,9 @@
 			<label><strong>Student Name</strong></label>
 			<div class="form-group input-group">
 				<input type="text" name="student_name" class="form-control" id="chooseStudentName" readonly>
-				<input type="hidden" name="student_batch" class="form-control" id="chooseStudentBatchId" onchange="this.form.submit()">
+				<input type="hidden" name="student" class="form-control" id="chooseStudentId" onchange="this.form.submit()">
 				<span class="input-group-btn">
-					<button class="btn btn-default" onClick="call_student_search_window('studentbatch')" type="button"><i class="fa fa-search"> Click Here to Search Student</i>
+					<button class="btn btn-default" onClick="call_student_search_window('student')" type="button"><i class="fa fa-search"> Click Here to Search Student</i>
 					</button>
 				</span>
 			</div>
@@ -51,14 +51,14 @@
 		<form>
 				<label><strong>Student Name</strong></label>
 				<input type="text" name="student_name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
-				<input type="hidden" name="student_batch" value="{{student_batch_id}}" class="form-control" onchange="this.form.submit()" disabled>
+				<input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
 		</form>
 		<br/>
 
 
 		<form>
 				<input type="hidden" name="student_name" value="{{student_name}}" >
-				<input type="hidden" name="student_batch" value="{{student_batch_id}}">
+				<input type="hidden" name="student" value="{{student_id}}">
 				<label><strong>Select Fee Type</strong></label>
 				<select name="fee_type" class="form-control" onchange="this.form.submit()">
 					<option>Select</option>
@@ -80,14 +80,14 @@
 	<form>
 				<label><strong>Student Name</strong></label>
 				<input type="text" name="student_name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
-				<input type="hidden" name="student_batch" value="{{student_batch_id}}" class="form-control" onchange="this.form.submit()" disabled>
+				<input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
 	</form>
 	<br/>
 
 
 	<form>
 		<input type="hidden" name="student_name" value="{{student_name}}">
-		<input type="hidden" name="student_batch" value="{{student_batch_id}}">
+		<input type="hidden" name="student" value="{{student_id}}">
 		<label><strong>Select Fee Type</strong></label>
 		<select name="fee_type" class="form-control" onchange="this.form.submit()">
 			{% for fee_type in fee_types %}
@@ -102,7 +102,7 @@
 	<form action="." method="POST">
 
 
-		<input type="hidden" name="student_batch" value="{{student_batch_id}}">
+		<input type="hidden" name="student" value="{{student_id}}">
 		<input type="hidden" name="fee_type" value="{{fee_type_id}}">
 		<br/>
 		<label><strong>Amount</strong></label>
