@@ -310,15 +310,29 @@
               tickLength: 10,
               axisLabel: 'Month',
           },
-          tooltip: true,
+          tooltip: false,
           tooltipOpts: {
-              content: "Test Marks: %y out of 100",
               shifts: {
                   x: -60,
                   y: 25
               }
           }
       };
+
+
+      function showTooltip(x, y, contents) {
+       $('<div id="tooltip">' + contents + '</div>').css( {
+           position: 'absolute',
+           display: 'none',
+           top: y + 5,
+           left: x + 5,
+           border: '1px solid #fdd',
+           padding: '2px',
+           'background-color': '#fee',
+           opacity: 0.80
+       }).appendTo("body").fadeIn(200);
+   }
+
 
       function gd(year, month, day) {
       return new Date(year, month-1, day).getTime();
@@ -334,7 +348,50 @@
               label: "Marks Obtained"
           }],
           options);
+
+          test_name_{{k}} = [];
+          marks_obtained_{{k}} = [];
+          marks_total_{{k}} = [];
+          dates_{{k}} = [];
+
+
+
+          {% for i in v %}
+            test_name_{{k}}.push("{{i.test_name}}");
+            marks_obtained_{{k}}.push("{{i.obtained_marks}}");
+            marks_total_{{k}}.push("{{i.total_marks}}");
+            dates_{{k}}.push("{{i.test_date}}");
+          {% endfor %}
+
+
+          var previousPoint = null;
+          $("#flot-line-chart-{{k}}").bind("plothover", function (event, pos, item) {
+                  if (item) {
+                      if (previousPoint != item.dataIndex) {
+                          previousPoint = item.dataIndex;
+
+                          $("#tooltip").remove();
+
+                          contents =    "Test: " + test_name_{{k}}[item.dataIndex] + "<br>"
+                                      + "Date: " + dates_{{k}}[item.dataIndex] + "<br>"
+                                      + "Marks: " + marks_obtained_{{k}}[item.dataIndex] + "/" + marks_total_{{k}}[item.dataIndex];
+                                      
+                          showTooltip(item.pageX, item.pageY,
+                                      contents);
+                      }
+                  }
+                  else {
+                      $("#tooltip").remove();
+                      previousPoint = null;
+                  }
+
+          });
+
       {% endfor %}
+
+
+
+
 
     });
     </script>
