@@ -652,7 +652,7 @@ class AttendanceDaywise(models.Model):
 class SMS(models.Model):
 	phone_number = models.CharField(max_length=13)
 	message_text = models.CharField(max_length=155)
-	status = models.CharField()
+	status = models.CharField(max_length=20)
 	tries = models.IntegerField(default=0)
 	creation_date = models.DateTimeField(default=datetime.now())
 	student = models.ForeignKey(Student)
