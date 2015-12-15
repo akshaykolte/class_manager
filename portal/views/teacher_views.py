@@ -1238,7 +1238,6 @@ def send_sms_submit(request):
 	for student in students:
 		if "student_"+str(student['id']) in request.POST:
 			student_id_list.append(student['id'])
-	
 	sms_for_attendance(student_id_list, request.POST['date'])
 
 	return redirect ('/teacher/sms-status/')
