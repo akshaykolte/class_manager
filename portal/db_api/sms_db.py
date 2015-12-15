@@ -7,8 +7,6 @@ def send_sms(phone_number, text):
 # Function that sends message to parents of absent students
 def sms_for_attendance(student_id_list, date):
 
-    date = str(date.day) + "/" + str(date.month) + "/" + str(date.year)
-
     for student_id in student_batch_id_list:
         parent_id = StudentParent.objects.get(student__id=student_id)
         parent_phone_number = Parent.objects.get(id=parent_id).phone_number
