@@ -666,6 +666,7 @@ class SMS(models.Model):
 
 
 
+
 class EMI(models.Model):
 	# Using student instead of studentbatch
 	student = models.ForeignKey(Student)

@@ -68,7 +68,7 @@ def get_cheque(id = None, student_id = None, start_date = None, end_date = None,
 		cheque_dict['bank_branch_name'] = i.bank_branch_name
 
 		return cheque_dict
-	
+	#====================================================================================================
 	#get cheques of particular student		
 	if not is_none_student_id:
 		cheques = Cheque.objects.filter(student = Student.objects.get(id = student_id))
@@ -179,15 +179,94 @@ def get_cheque(id = None, student_id = None, start_date = None, end_date = None,
 
 			return cheque_list		
 
+	#================================================================================================================
+	#get uncleared checques(they have passed their cheque date) (all/in a date range according to cheque date) 	
+	if not is_none_cleared and not cleared:
+		#all cheques
+		if is_none_start_date and is_none_end_date:
+			cheques = Cheque.objects.filter(cleared = False)
+			cheque_list = []
 
+			for i in cheques:
+				cheque_dict = {}
+				cheque_dict['id'] = i.id
+				cheque_dict['student_id'] = i.student.id
+				cheque_dict['amount'] = i.amount
+				cheque_dict['cheque_date'] = i.cheque_date
+				cheque_dict['cleared'] = i.cleared
+				cheque_dict['clearance_date'] = i.clearance_date
+				cheque_dict['description'] = i.description
+				cheque_dict['cheque_number'] = i.cheque_number
+				cheque_dict['bank_name'] = i.bank_name
+				cheque_dict['bank_branch_name'] = i.bank_branch_name
 
+				cheque_list.append(cheque_dict)
 
+			return cheque_list
 
+		#in a date range
+		if not is_none_start_date and is_none_end_date:
+			cheques = Cheque.objects.filter(cleared = False, cheque_date__gte = start_date)
+			cheque_list = []
 
+			for i in cheques:
+				cheque_dict = {}
+				cheque_dict['id'] = i.id
+				cheque_dict['student_id'] = i.student.id
+				cheque_dict['amount'] = i.amount
+				cheque_dict['cheque_date'] = i.cheque_date
+				cheque_dict['cleared'] = i.cleared
+				cheque_dict['clearance_date'] = i.clearance_date
+				cheque_dict['description'] = i.description
+				cheque_dict['cheque_number'] = i.cheque_number
+				cheque_dict['bank_name'] = i.bank_name
+				cheque_dict['bank_branch_name'] = i.bank_branch_name
 
+				cheque_list.append(cheque_dict)
 
+			return cheque_list
 
+		if is_none_start_date and not is_none_end_date:
+			cheques = Cheque.objects.filter(cleared = False, cheque_date__lte = end_date)
+			cheque_list = []
 
+			for i in cheques:
+				cheque_dict = {}
+				cheque_dict['id'] = i.id
+				cheque_dict['student_id'] = i.student.id
+				cheque_dict['amount'] = i.amount
+				cheque_dict['cheque_date'] = i.cheque_date
+				cheque_dict['cleared'] = i.cleared
+				cheque_dict['clearance_date'] = i.clearance_date
+				cheque_dict['description'] = i.description
+				cheque_dict['cheque_number'] = i.cheque_number
+				cheque_dict['bank_name'] = i.bank_name
+				cheque_dict['bank_branch_name'] = i.bank_branch_name
+
+				cheque_list.append(cheque_dict)
+
+			return cheque_list
+
+		if not is_none_start_date and not is_none_end_date:
+			cheques = Cheque.objects.filter(cleared = False, cheque_date__lte = end_date, cheque_date__gte = start_date)
+			cheque_list = []
+
+			for i in cheques:
+				cheque_dict = {}
+				cheque_dict['id'] = i.id
+				cheque_dict['student_id'] = i.student.id
+				cheque_dict['amount'] = i.amount
+				cheque_dict['cheque_date'] = i.cheque_date
+				cheque_dict['cleared'] = i.cleared
+				cheque_dict['clearance_date'] = i.clearance_date
+				cheque_dict['description'] = i.description
+				cheque_dict['cheque_number'] = i.cheque_number
+				cheque_dict['bank_name'] = i.bank_name
+				cheque_dict['bank_branch_name'] = i.bank_branch_name
+
+				cheque_list.append(cheque_dict)
+
+			return cheque_list
 
 
 	#get all cheques
