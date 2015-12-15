@@ -197,11 +197,11 @@ def dashboard(request):
 		raise Http404
 
 	context['details'] = auth_dict;
-	
+
 	# All notices
 	notices = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
 	context['notices'] = notices
-	
+
 	# Latest Maximum 10 Notices received in past 1 week. (Min(10, number of notices overall))
 	# Only considering expiry date uptil now.
 	# Later the expiry date, newer is document.
@@ -217,10 +217,10 @@ def dashboard(request):
 		cur_notice['document'] = notice['document']
 		cur_notice['expiry_date'] = notice['expiry_date']
 		notice_list.append(cur_notice)
-	
+
 	sorted_notices = sorted(notice_list, reverse=True, key=lambda x: x['expiry_date'])
 	context['latest_notices'] = sorted_notices[:min(len(sorted_notices) + 1, 10)]
-	
+
 	# List of lectures of teacher for dashboard
 	staff_role_list = get_staff_role(staff_id = auth_dict['id'])
 	staff_role_id_list = []
@@ -240,7 +240,7 @@ def dashboard(request):
 					l_b['difference'] = (l_b['date'] - date.today()).days
 		for i in lecturebatch:
 			lecturebatches.append(i)
-	
+
 	lecs = []
 	for lecturebatch in lecturebatches:
 		context['cur_batch_id'] = lecturebatch['batch_id']
@@ -251,7 +251,7 @@ def dashboard(request):
 			standard_id = lecture[0]['standard_id']
 			subject_year_id = lecture[0]['subject_year_id']
 			lectures = get_lecture(subject_year_id = subject_year_id)
-			
+
 			for lec in lectures:
 				cur_lec = {}
 				for x in lec:
@@ -260,14 +260,14 @@ def dashboard(request):
 				cur_lec['branch_name'] = lecturebatch['staff_role'].branch.name
 				cur_lec['date'] = lecturebatch['date']
 				lecs.append(cur_lec)
-				
+
 	context['lectures'] = lecs
-	
+
 	# 10 Latest lectures
 	sorted_lectures = sorted(lecs, key=lambda x: x['date'])
 	latest_lectures = sorted_lectures[:min(len(sorted_lectures) + 1, 10)]
 	context['latest_lectures'] = latest_lectures
-	
+
 	return render(request,'teacher/dashboard.html', context)
 
 
@@ -752,7 +752,7 @@ def add_student_notice(request):
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))
-		
+
 
 
 @csrf_exempt
@@ -1108,7 +1108,7 @@ def add_attendance_daywise(request):
 
 		branches = get_branch(id=None)
 		context['branches'] = branches
-		
+
 		if 'branch' in request.GET:
 
 			context['branch_id'] = int(request.GET['branch'])
@@ -1137,17 +1137,17 @@ def add_attendance_daywise(request):
 								attendance_dict[attendance['student_batch_id']] = True
 
 						batch_list = {}
-						
-							
+
+
 						students = get_students(batch_id = int(request.GET['batch']))
-						
+
 						for i in xrange(len(students)):
 							if students[i]['id'] in attendance_dict:
 								students[i]['present'] = True
 							else:
 								students[i]['present'] = False
 						batch_list = students
-						
+
 						context['batch_list'] = batch_list
 
 						context['batchname'] = get_batch(id= int(request.GET['batch']))['name']
@@ -1175,7 +1175,7 @@ def add_attendance_daywise(request):
 					print student
 					student_batch = get_student_batch(id = None,batch_id=batch_id,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
 					set_attendance_daywise(id = None ,attended = True, student_batch_id = student['id'], date = request.POST['date'])
-					
+
 					print 'here1'
 				else:
 					student_batch = get_student_batch(id = None,batch_id=batch_id,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
@@ -1253,6 +1253,11 @@ def sms_status(request):
 	if auth_dict['permission_teacher'] != True:
 		raise Http404
 
+	context['not_sent_sms'] = get_pending_sms(auth_dict['id'])
+	context['details'] = auth_dict
+	
+	return render(request, "teacher/sms-status.html", context)
+
 
 
 
@@ -1276,7 +1281,7 @@ def view_attendance_daywise(request):
 
 		branches = get_branch(id=None)
 		context['branches'] = branches
-		
+
 		if 'branch' in request.GET:
 
 			context['branch_id'] = int(request.GET['branch'])
@@ -1305,17 +1310,17 @@ def view_attendance_daywise(request):
 								attendance_dict[attendance['student_batch_id']] = True
 
 						batch_list = {}
-						
-							
+
+
 						students = get_students(batch_id = int(request.GET['batch']))
-						
+
 						for i in xrange(len(students)):
 							if students[i]['id'] in attendance_dict:
 								students[i]['present'] = True
 							else:
 								students[i]['present'] = False
 						batch_list = students
-						
+
 						context['batch_list'] = batch_list
 
 						context['batchname'] = get_batch(id= int(request.GET['batch']))['name']
@@ -1329,7 +1334,7 @@ def view_attendance_daywise(request):
 
 		try:
 			standard = request.POST['standard']
-			
+
 			print 'her234'
 			academic_year_id = get_current_academic_year()['id']
 			batches = get_batch(academic_year_id = academic_year_id,standard_id = standard)
@@ -1343,7 +1348,7 @@ def view_attendance_daywise(request):
 						print student
 						student_batch = get_student_batch(id = None,batch_id=None,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
 						set_attendance_daywise(id = None ,attended = True, student_batch_id = student['id'], date = request.POST['date'])
-						
+
 						print 'here1'
 					else:
 						delete_attendance_daywise(student_batch_id = student['id'] , date = request.POST['date'] )

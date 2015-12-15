@@ -1,4 +1,4 @@
-from portal.models import StudentBatch, SMS, StudentParent, Parent, Student
+from portal.models import StudentBatch, SMS, StudentParent, Parent, Student, Staff
 SIGNATURE = "Your Class Name."
 
 def send_sms(phone_number, text):
@@ -21,3 +21,29 @@ def sms_for_notices(student_batch_id_list):
 
 def sms_for_marks(student_batch_id_list):
     pass
+
+def get_pending_sms(staff_id):
+    sms_pending_objects = SMS.objects.filter(status="Pending", staff=Staff.objects.get(id=staff_id))
+    sms_list = []
+
+    for sms in sms_pending_objects:
+        sms_dict = {}
+        sms_dict['phone_number'] = sms.phone_number
+        sms_dict['student_name'] = sms.student.first_name + " " + sms.student.last_name
+        sms_dict['sms_type'] = sms.sms_type
+        sms_dict['status'] = sms.status
+        sms_dict['retry_link'] = "Put retry link here"
+        sms_list.append(sms_dict)
+
+    sms_failed_objects = SMS.objects.filter(status="Failed", staff=Staff.objects.get(id=staff_id))
+
+    for sms in sms_failed_objects:
+        sms_dict = {}
+        sms_dict['phone_number'] = sms.phone_number
+        sms_dict['student_name'] = sms.student.first_name + " " + sms.student.last_name
+        sms_dict['sms_type'] = sms.sms_type
+        sms_dict['status'] = sms.status
+        sms_dict['retry_link'] = "Put retry link here"
+        sms_list.append(sms_dict)
+
+    return sms_list

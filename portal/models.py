@@ -657,6 +657,7 @@ class SMS(models.Model):
 	tries = models.IntegerField(default=0)
 	creation_date = models.DateTimeField(default=datetime.now())
 	student = models.ForeignKey(Student)
+	staff = models.ForeignKey(Staff)
 
 	def __str__(self):
 		return str(self.phone_number) + ' - ' + str(self.status)
