@@ -13,7 +13,7 @@ admin.site.register(StaffRole)
 admin.site.register(Standard)
 admin.site.register(Subject)
 admin.site.register(SubjectYear)
-
+admin.site.register(SMS)
 class StudentBatchCustom(admin.ModelAdmin):
 
 	def save_model(self, request, obj, form, change):

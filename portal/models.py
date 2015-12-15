@@ -648,6 +648,20 @@ class AttendanceDaywise(models.Model):
 	def __str__(self):
 		return str(self.date) + ' - ' + str(self.student_batch)
 
+
+class SMS(models.Model):
+	phone_number = models.CharField(max_length=13)
+	message_text = models.CharField(max_length=155)
+	status = models.IntegerField()
+	creation_date = models.DateTimeField(default = datetime.now())
+	student = models.ForeignKey(Student)
+
+	def __str__(self):
+		return str(self.phone_number) + ' - ' + str(self.status)
+
+
+
+
 '''
 class EMI(models.Model):
 	# TODO: think about whether to use StudentBatch or Student
