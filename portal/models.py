@@ -650,6 +650,7 @@ class AttendanceDaywise(models.Model):
 
 
 class SMS(models.Model):
+	sms_type = models.CharField(max_length=20)
 	phone_number = models.CharField(max_length=13)
 	message_text = models.CharField(max_length=155)
 	status = models.CharField(max_length=20)
