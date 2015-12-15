@@ -1,0 +1,103 @@
+{% extends "teacher/base_teacher.html" %}
+
+{% block notices_nav %}{% endblock %}
+
+{% block date-picker-script %}
+
+    <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        // When the document is ready
+
+        $(document).ready(function () {
+
+            $('#example1').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            var future = new Date();
+            future.setDate(future.getDate());
+            $('#example1').datepicker('update', future);
+        });
+
+    </script>
+{% endblock %}
+
+{% block main_content%}
+
+<div class="row">
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Send SMS</h1>
+    </div>
+</div>    
+        {{absent_students}}
+        <h3>List of absent students</h3>
+        <form action="submit" method="POST">
+                <input type="hidden" name="batch_id" value={{batch_id}}>
+                <input type="hidden" name="date" value={{date}}>                
+                <div class="col-md-9">
+                    <div id="myTabContent" class="tab-content">
+                            <div>
+                                <br/>
+                                <br/>
+                                <div class="dataTable_wrapper">
+                                    <table class="display table table-striped table-bordered table-hover" id="">
+                                        <thead>
+                                            <tr>
+                                                <td class="col-lg-5">Name</td>
+                                                <td align="center">&nbsp;&nbsp;<input type="checkbox" name="sample" class="batch_check">
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        
+                                        {%for i in absent_students %}
+                                        <tr>
+                                            <td>{{i.student}}</td>
+                                            <td align="center"><input class="sub_batch" type="checkbox" name="student_{{i.student_id}}"></td>
+                                            
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br>
+                                <input class="col-lg-3 btn btn-default btn-red" type='submit' value='Send SMS'>
+                                <br/>
+                                <br/>
+                                <br/>
+                            </div>
+                        
+                    </div>
+                </div>
+            <br/>
+            <br/>
+    </form>
+
+
+        <!-- jQuery -->
+            <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
+            <script>
+
+            $(document).ready(function() {
+            $('table.display').DataTable({
+                "iDisplayLength":25,
+                "oLanguage": {
+                  "sEmptyTable":"No Students Found"
+                }
+
+                }); 
+        } );
+
+         $(function() {
+                $('.batch_check').on("click", function () { // IE<9 triggers change after blurred
+                    var checked = $(this).is(':checked');
+                    var $otherChecks = $('.sub_batch');
+                    $otherChecks.prop('checked', checked);
+                    $otherChecks.parent().toggleClass("disabled",checked);
+                });
+            });
+            </script>
+
+{% endblock %}
