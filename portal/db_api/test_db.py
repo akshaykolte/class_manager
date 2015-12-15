@@ -261,3 +261,23 @@ def check_test_staff_permission(staff_id, test_id):
 
 def get_date_of_test(test_id, batch_id):
 	return TestBatch.objects.get(test=Test.objects.get(id=test_id), batch=Batch.objects.get(id=batch_id)).test_date
+
+def get_batch_marks_report(batch_id, start_date, end_date):
+	test_student_batch_list = TestStudentBatch.objects.filter(student_batch__batch__id = batch_id, test__testbatch__test_date__gte = start_date, test__testbatch__test_date__lte = end_date)
+
+	students_test_report = {}
+	for test_student_batch_object in test_student_batch_list:
+		if not test_student_batch_object.student_batch in students_test_report:
+			students_test_report[test_student_batch_object.student_batch] = set([(test_student_batch_object.test.id, str(test_student_batch_object.obtained_marks)+"/"+str(test_student_batch_object.test.total_marks))])
+		else:
+			students_test_report[test_student_batch_object.student_batch].add((test_student_batch_object.test.id, str(test_student_batch_object.obtained_marks)+"/"+str(test_student_batch_object.test.total_marks)))
+	for student_id in students_test_report:
+		students_test_report[student_id] = list(students_test_report[student_id])
+		students_test_report[student_id].sort()
+	test_list = []
+	if len(students_test_report) > 0:
+		for test_student_batch_object in students_test_report:
+			for test_obj in students_test_report[test_student_batch_object]:
+				test_list.append(test_obj[0])
+			break
+	return [test_list, students_test_report]
