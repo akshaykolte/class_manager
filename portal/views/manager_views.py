@@ -1659,7 +1659,9 @@ def sms_tests(request):
 
 						if 'from_date' in request.GET and 'to_date' in request.GET:
 							page_type = 5
-
+							from_date = datetime.datetime.strptime(request.GET['from_date'], '%Y-%m-%d')
+							to_date = datetime.datetime.strptime(request.GET['to_date'], '%Y-%m-%d')
+							context['report'] = get_batch_marks_report(batch_id = request.GET['batch'], start_date = from_date, end_date = to_date)
 			context['page_type'] = page_type
 			return render(request, 'manager/tests/sms_tests.html', context)
 		except ModelValidateError, e:
