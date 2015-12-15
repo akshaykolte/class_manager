@@ -662,20 +662,23 @@ class SMS(models.Model):
 
 
 
-'''
+
 class EMI(models.Model):
-	# TODO: think about whether to use StudentBatch or Student
-	student_batch = models.ForeignKey(StudentBatch) or student = models.ForeignKey(Student)
+	# Using student instead of studentbatch
+	student = models.ForeignKey(Student) 
 	amount_due = models.IntegerField()
 	time_deadline = models.DateField()
 	description = models.CharField(max_length=50, blank=True, null=True)
 
 	class Meta:
-		unique_together = (('student_batch/student', 'time_deadline'))
+		unique_together = (('student', 'time_deadline'))
+
+	def __str__(self):
+		return str(self.student) + '-' + str(self.amount_due) + '-'	+ str(self.time_deadline)
 
 class Cheque(models.Model):
-	# TODO: think about whether to use StudentBatch or Student
-	student_batch = models.ForeignKey(StudentBatch) or student = models.ForeignKey(Student)
+	# Using student instead of studentbatch
+ 	student = models.ForeignKey(Student)
 	amount = models.IntegerField()
 	cheque_date = models.DateField()
 	cleared = models.BooleanField(default=False)
@@ -685,4 +688,5 @@ class Cheque(models.Model):
 	bank_name = models.CharField(max_length=50, blank=True, null=True)
 	bank_branch_name = models.CharField(max_length=100, blank=True, null=True)
 
-'''
+	def __str__(self):
+		return str(self.student) + '-' + str(self.amount) + '-'	+ str(self.cheque_date)
