@@ -14,6 +14,7 @@ from portal.db_api.attendance_db import *
 from portal.db_api.attendance_daywise_db import *
 from portal.db_api.notice_db import *
 from portal.db_api.test_db import *
+from portal.db_api.sms_db import *
 from portal.models import *
 from portal.db_api.attendance_reports_db import *
 import datetime
@@ -1179,8 +1180,7 @@ def add_attendance_daywise(request):
 				else:
 					student_batch = get_student_batch(id = None,batch_id=batch_id,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
 					set_attendance_daywise(id = None ,attended = False, student_batch_id = student['id'], date = request.POST['date'])
-
-			return redirect('./?message=Attendance Marked')
+			return redirect('/teacher/attendance/send-sms/?batch_id='+str(batch_id)+'&date='+str(request.POST['date']))
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
@@ -1191,6 +1191,71 @@ def add_attendance_daywise(request):
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))
+
+def send_sms(request):
+	auth_dict = get_user(request)
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		context = {}
+
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+	batch_id = request.GET['batch_id']
+	date = request.GET['date']
+	students = get_attendance_daywise(date = date,batch_id = batch_id)
+	absent_students = []
+
+	for student in students:
+		if student['attended'] == False:
+			absent_students.append(student)
+
+	print absent_students
+	context['batch_id'] = batch_id
+	context['date'] = date
+	context['absent_students'] = absent_students
+
+	return render(request, 'teacher/attendance/send-sms.html', context)
+
+@csrf_exempt
+def send_sms_submit(request):
+	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	student_id_list = []
+	students = get_students(batch_id=int(request.POST['batch_id']))
+	for student in students:
+		if "student_"+str(student['id']) in request.POST:
+			student_id_list.append(student['id'])
+	
+	sms_for_attendance(student_id_list, request.POST['date'])
+
+	return redirect ('/teacher/sms-status/')
+
+
+
+def sms_status(request):
+	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+
+
 
 @csrf_exempt
 def view_attendance_daywise(request):

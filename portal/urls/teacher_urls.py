@@ -21,6 +21,11 @@ urlpatterns = [
     url(r'^attendance/add-attendance-daywise/$', 'portal.views.teacher_views.add_attendance_daywise'),
     url(r'^attendance/view-attendance-daywise/$', 'portal.views.teacher_views.view_attendance_daywise'),
 
+    # SMS
+    url(r'^attendance/send-sms/$', 'portal.views.teacher_views.send_sms'),
+    url(r'^attendance/send-sms/submit$', 'portal.views.teacher_views.send_sms_submit'),
+    url(r'^sms-status/$', 'portal.views.teacher_views.sms_status'),
+
 
     # # Lecture
     url(r'^lectures/add-lectures/$', 'portal.views.teacher_views.add_lectures'),
