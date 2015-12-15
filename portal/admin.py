@@ -29,6 +29,8 @@ admin.site.register(Attendance)
 admin.site.register(BaseFee)
 admin.site.register(FeeType)
 admin.site.register(FeeTransaction)
+admin.site.register(EMI)
+admin.site.register(Cheque)
 
 admin.site.register(Test)
 admin.site.register(TestBatch)
