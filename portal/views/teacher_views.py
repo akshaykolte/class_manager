@@ -1238,7 +1238,7 @@ def send_sms_submit(request):
 	for student in students:
 		if "student_"+str(student['id']) in request.POST:
 			student_id_list.append(student['id'])
-	sms_for_attendance(student_id_list, request.POST['date'])
+	sms_for_attendance(student_id_list, request.POST['date'], auth_dict['id'])
 
 	return redirect ('/teacher/sms-status/')
 
@@ -1255,7 +1255,7 @@ def sms_status(request):
 
 	context['not_sent_sms'] = get_pending_sms(auth_dict['id'])
 	context['details'] = auth_dict
-	
+
 	return render(request, "teacher/sms-status.html", context)
 
 

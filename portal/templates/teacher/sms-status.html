@@ -37,7 +37,7 @@
                   {% if sms.status == "Pending" %}
                   <td>-</td>
                   {% elif sms.status == "Failed" %}
-                  <td>{{sms.retry_link}}</td>
+                  <td><a style = "background:transparent;color:#0645AD;" href="{{sms.retry_link}}">Link</a></td>
                   {% endif %}
 								</tr>
 							{% endfor %}
