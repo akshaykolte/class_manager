@@ -83,6 +83,7 @@ def get_attendance_daywise(id= None, student_batch_id = None, date = None, batch
 			attendance['student'] = str(attendance_object.student_batch.student.first_name) + " " +str(attendance_object.student_batch.student.last_name)
 			attendance['student_batch_id'] = attendance_object.student_batch.id
 			attendance['student_batch'] = attendance_object.student_batch.batch
+			attendance['student_id'] = attendance_object.student_batch.student.id
 			attendance['date'] = attendance_object.date
 			attendance_list.append(attendance)
 		return attendance_list
