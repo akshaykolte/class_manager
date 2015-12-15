@@ -652,8 +652,9 @@ class AttendanceDaywise(models.Model):
 class SMS(models.Model):
 	phone_number = models.CharField(max_length=13)
 	message_text = models.CharField(max_length=155)
-	status = models.IntegerField()
-	creation_date = models.DateTimeField(default = datetime.now())
+	status = models.CharField()
+	tries = models.IntegerField(default=0)
+	creation_date = models.DateTimeField(default=datetime.now())
 	student = models.ForeignKey(Student)
 
 	def __str__(self):
@@ -665,7 +666,7 @@ class SMS(models.Model):
 
 class EMI(models.Model):
 	# Using student instead of studentbatch
-	student = models.ForeignKey(Student) 
+	student = models.ForeignKey(Student)
 	amount_due = models.IntegerField()
 	time_deadline = models.DateField()
 	description = models.CharField(max_length=50, blank=True, null=True)
