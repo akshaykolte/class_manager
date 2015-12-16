@@ -1,6 +1,7 @@
 from urllib import quote
 import requests
 
+# Function returns true if the message is sent to the carrier successfully else returns false
 def send_sms(message_text, phone_number):
 
     text = quote(message_text)
