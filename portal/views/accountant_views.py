@@ -92,11 +92,11 @@ def dashboard(request):
 		raise Http404
 
 	context['details'] = auth_dict
-	
+
 	# All notices
 	notices = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
 	context['notices'] = notices
-	
+
 	# Latest Maximum 10 Notices received in past 1 week. (Min(10, number of notices overall))
 	# Only considering expiry date uptil now.
 	# Later the expiry date, newer is document.
@@ -112,10 +112,10 @@ def dashboard(request):
 		cur_notice['document'] = notice['document']
 		cur_notice['expiry_date'] = notice['expiry_date']
 		notice_list.append(cur_notice)
-	
+
 	sorted_notices = sorted(notice_list, reverse=True, key=lambda x: x['expiry_date'])
 	context['latest_notices'] = sorted_notices[:min(len(sorted_notices) + 1, 10)]
-	
+
 	# All transactions that accountant is responsible for
 	branches_of_accountant = get_branch_of_accountant(accountant_id=auth_dict['id'])
 	batches_of_accountant = []
@@ -124,28 +124,28 @@ def dashboard(request):
 		batches = get_batch(branch_id = branch_id)
 		for batch in batches:
 			batches_of_accountant.append(batch)
-	
+
 	transactions = []
-	
+
 	for batch in batches_of_accountant:
 		fees = get_batch_fees(batch_id = batch['id'])
 		for fee in fees:
 			transactions.append(fee)
-	
+
 	print transactions
-	
+
 	# 10 Latest Transactions
 	sorted_transactions = sorted(transactions, reverse=True, key=lambda x: x['date'])
 	latest_transactions = sorted_transactions[:min(len(sorted_transactions) + 1, 10)]
 	context['latest_transactions'] = latest_transactions
-		
+
 	# Pending Fee transactions
 	pending_transactions = []
 	for transaction in transactions:
 		if transaction['total_fees_remaining'] > 0:
 			pending_transactions.append(transaction)
 	context['pending_transactions'] = pending_transactions
-	
+
 	return render(request,'accountant/dashboard.html', context)
 
 def view_profile(request):
@@ -486,6 +486,7 @@ def make_transaction(request):
 		Page Type					GET  (optional: 'msg')
 				0					None
 				1					student
+				3					cheque/cash if transaction=payment
 				2					student, fee_type
 
 		Post request for making transaction: /accountant/fees/make_transaction/
@@ -509,34 +510,42 @@ def make_transaction(request):
 		elif 'message_error' in request.GET:
 			context['message_error'] = request.GET['message_error']
 
-		try:
-			page_type = 0
-			branches = get_branch(id=None)
-			context['branches'] = branches
+		# try:
+		page_type = 0
+		branches = get_branch(id=None)
+		context['branches'] = branches
 
-			if 'student' in request.GET:
-				page_type = 1
-				context['student_id'] = request.GET['student']
-				context['student_name'] = request.GET['student_name']
+		if 'student' in request.GET:
+			page_type = 1
+			context['student_id'] = request.GET['student']
+			context['student_name'] = request.GET['student_name']
 
-				fee_types = get_fee_types()
-				context['fee_types'] = fee_types
-				if 'fee_type' in request.GET:
-					page_type = 2
-					context['fee_type_id'] = int(request.GET['fee_type'])
-			context['page_type'] = page_type
-			print context
-			return render(request,'accountant/fees/make-transaction.html', context)
-		except ModelValidateError, e:
-			return redirect('./?message_error='+str(e))
-		except ValueError, e:
-			return redirect('./?message_error='+str(PentaError(1000)))
-		except ObjectDoesNotExist, e:
-			return redirect('./?message_error='+str(PentaError(999)))
-		except MultiValueDictKeyError, e:
-			return redirect('./?message_error='+str(PentaError(998)))
-		except Exception, e:
-			return redirect('./?message_error='+str(PentaError(100)))
+			fee_types = get_fee_types()
+			context['fee_types'] = fee_types
+			if 'fee_type' in request.GET:
+				page_type = 2
+				context['fee_type_id'] = int(request.GET['fee_type'])
+				# 1 represents fee type payment
+				if int(request.GET['fee_type']) == 1:
+					page_type = 3
+					if 'payment_method' in request.GET:
+						if request.GET['payment_method'] == 'cash':
+							page_type = 2
+						else:
+							page_type = 4
+		context['page_type'] = page_type
+		print context
+		return render(request,'accountant/fees/make-transaction.html', context)
+		# except ModelValidateError, e:
+		# 	return redirect('./?message_error='+str(e))
+		# except ValueError, e:
+		# 	return redirect('./?message_error='+str(PentaError(1000)))
+		# except ObjectDoesNotExist, e:
+		# 	return redirect('./?message_error='+str(PentaError(999)))
+		# except MultiValueDictKeyError, e:
+		# 	return redirect('./?message_error='+str(PentaError(998)))
+		# except Exception, e:
+		# 	return redirect('./?message_error='+str(PentaError(100)))
 
 	elif request.method == 'POST':
 		try:
@@ -877,7 +886,7 @@ def add_student_notice(request):
 				document = None
 
 			notice_id = set_notice(id=None, title=title, description= description, uploader_id= auth_dict['id'], expiry_date = expiry_date , important= is_imp, document = document)
-			
+
 			if int(request.POST['branch']):
 				if int(request.POST['batch']):
 					students = get_students(id = None,batch_id = int(request.POST['batch']))
@@ -888,15 +897,15 @@ def add_student_notice(request):
 						if 'student_'+str(student['id']) in request.POST:
 							#print subject_year
 							upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = student['id'], staff_id = None)
-			
+
 			if not int(request.POST['branch']) :
 				#print "ddd"
 				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = None, batch_id = None, student_id = None, staff_id = None)
 			elif int(request.POST['branch']) and not int(request.POST['batch']):
 				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = int(request.POST['branch']) , batch_id = None, student_id = None, staff_id = None)
-			
+
 			return redirect('./?message=Notice Uploaded')
-		
+
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
