@@ -134,22 +134,6 @@ class Student(models.Model):
 		except IntegrityError, e:
 			PentaError(1021).raise_error()
 
-class Cheque(models.Model):
-	# Using student instead of studentbatch
- 	student = models.ForeignKey(Student)
-	amount = models.IntegerField()
-	cheque_date = models.DateField()
-	cleared = models.BooleanField(default=False)
-	clearance_date = models.DateField(blank=True, null=True)
-	description = models.CharField(max_length=100, blank=True, null=True)
-	cheque_number = models.CharField(max_length=30, blank=True, null=True)
-	bank_name = models.CharField(max_length=50, blank=True, null=True)
-	bank_branch_name = models.CharField(max_length=100, blank=True, null=True)
-
-	def __str__(self):
-		return str(self.student) + '-' + str(self.amount) + '-'	+ str(self.cheque_date)
-
-
 class Parent(models.Model):
 
 	username = models.CharField(max_length=50)
@@ -507,7 +491,8 @@ class FeeTransaction(models.Model):
 	timestamp = models.DateTimeField(auto_now_add=True)
 	student = models.ForeignKey(Student)
 	fee_type = models.ForeignKey(FeeType)
-	cheque = models.ForeignKey(Cheque, blank=True, null=True, default=None)
+	# TODO: uncomment the following line after finalising the Cheque model
+	# cheque = models.ForeignKey(Cheque, blank=True, null=True)
 
 	def __str__(self):
 		return str(self.student) + ':' + str(self.fee_type) + '- Rs. ' + str(self.amount)
@@ -681,7 +666,6 @@ class SMS(models.Model):
 
 
 
-
 class EMI(models.Model):
 	# Using student instead of studentbatch
 	student = models.ForeignKey(Student)
@@ -694,3 +678,18 @@ class EMI(models.Model):
 
 	def __str__(self):
 		return str(self.student) + '-' + str(self.amount_due) + '-'	+ str(self.time_deadline)
+
+class Cheque(models.Model):
+	# Using student instead of studentbatch
+ 	student = models.ForeignKey(Student)
+	amount = models.IntegerField()
+	cheque_date = models.DateField()
+	cleared = models.BooleanField(default=False)
+	clearance_date = models.DateField(blank=True, null=True)
+	description = models.CharField(max_length=100, blank=True, null=True)
+	cheque_number = models.CharField(max_length=30, blank=True, null=True)
+	bank_name = models.CharField(max_length=50, blank=True, null=True)
+	bank_branch_name = models.CharField(max_length=100, blank=True, null=True)
+
+	def __str__(self):
+		return str(self.student) + '-' + str(self.amount) + '-'	+ str(self.cheque_date)
