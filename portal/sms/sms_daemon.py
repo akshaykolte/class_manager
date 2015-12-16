@@ -5,8 +5,8 @@ from portal.sms.sms import *
 
 # Daemon function which picks all pending sms from SMS table and sends using send_sms function from sms.py
 def sms_daemon():
-
-    SMSDaemonLogFile = open('./SMSDaemonLogFile', 'w')
+    print "SMS Daemon Initiated"
+    SMSDaemonLogFile = open('portal/sms/SMSDaemonLogFile', 'w')
     with daemon.DaemonContext(stdout=SMSDaemonLogFile,stderr=SMSDaemonLogFile):
         while True:
             pending_sms = SMS.objects.filter(status="Pending")
