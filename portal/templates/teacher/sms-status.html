@@ -49,13 +49,14 @@
 	</div>
 </div>
 <small>Note: Keep refreshing the page to get latest list of pending SMS</small>
-
+<br>
+<br>
 <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
 
     <script>
     $(document).ready(function() {
         $('#dataTables').DataTable({
-                "iDisplayLength":5,
+                "iDisplayLength":25,
                 "oLanguage": {
                   "sEmptyTable":     "No Pending SMS"
                 }
