@@ -510,42 +510,42 @@ def make_transaction(request):
 		elif 'message_error' in request.GET:
 			context['message_error'] = request.GET['message_error']
 
-		# try:
-		page_type = 0
-		branches = get_branch(id=None)
-		context['branches'] = branches
+		try:
+			page_type = 0
+			branches = get_branch(id=None)
+			context['branches'] = branches
 
-		if 'student' in request.GET:
-			page_type = 1
-			context['student_id'] = request.GET['student']
-			context['student_name'] = request.GET['student_name']
+			if 'student' in request.GET:
+				page_type = 1
+				context['student_id'] = request.GET['student']
+				context['student_name'] = request.GET['student_name']
 
-			fee_types = get_fee_types()
-			context['fee_types'] = fee_types
-			if 'fee_type' in request.GET:
-				page_type = 2
-				context['fee_type_id'] = int(request.GET['fee_type'])
-				# 1 represents fee type payment
-				if int(request.GET['fee_type']) == 1:
-					page_type = 3
-					if 'payment_method' in request.GET:
-						if request.GET['payment_method'] == 'cash':
-							page_type = 2
-						else:
-							page_type = 4
-		context['page_type'] = page_type
-		print context
-		return render(request,'accountant/fees/make-transaction.html', context)
-		# except ModelValidateError, e:
-		# 	return redirect('./?message_error='+str(e))
-		# except ValueError, e:
-		# 	return redirect('./?message_error='+str(PentaError(1000)))
-		# except ObjectDoesNotExist, e:
-		# 	return redirect('./?message_error='+str(PentaError(999)))
-		# except MultiValueDictKeyError, e:
-		# 	return redirect('./?message_error='+str(PentaError(998)))
-		# except Exception, e:
-		# 	return redirect('./?message_error='+str(PentaError(100)))
+				fee_types = get_fee_types()
+				context['fee_types'] = fee_types
+				if 'fee_type' in request.GET:
+					page_type = 2
+					context['fee_type_id'] = int(request.GET['fee_type'])
+					# 1 represents fee type payment
+					if int(request.GET['fee_type']) == 1:
+						page_type = 3
+						if 'payment_method' in request.GET:
+							if request.GET['payment_method'] == 'cash':
+								page_type = 2
+							else:
+								page_type = 4
+			context['page_type'] = page_type
+			print context
+			return render(request,'accountant/fees/make-transaction.html', context)
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 	elif request.method == 'POST':
 		try:
@@ -1103,3 +1103,48 @@ def edit_my_notice(request):
 			return redirect('../view-my-notices?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('../view-my-notices?message_error='+str(PentaError(100)))
+
+def add_emi(request):
+	auth_dict = get_user(request)
+	if auth_dict['logged_in'] != True:
+		raise Http404
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	context = {}
+	context['details'] = auth_dict
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		try:
+			page_type = -1
+			if 'student' in request.GET:
+				page_type = 0
+				context['student_id'] = request.GET['student']
+				context['student_name'] = request.GET['name']
+				fee_details = get_student_fees( student_id = int(request.GET['student']) )
+				context['fee_details'] = fee_details
+				if 'number_emi' in request.GET:
+					page_type = 1
+					context['number_emi'] = int(request.GET['number_emi'])
+					context['down_payment_amount'] = int(request.GET['down_payment_amount'])
+					list_emi = []
+					list_emi.append([1, context['down_payment_amount'], "Down Payment"])
+					remaining_amount = (float(fee_details[0]['total_fees'])-context['down_payment_amount'])/context['number_emi']
+					for i in range(context['number_emi']):
+						list_emi.append([i+2, int(remaining_amount), "EMI "+str(i+1)])
+					context['emis'] = list_emi
+
+			context['page_type'] = page_type
+			return render(request,'accountant/student/add-emi.html', context)
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
