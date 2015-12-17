@@ -36,14 +36,14 @@
 {% if message %}
         <div class="panel-body">
             <div class="alert alert-success alert-dismissable col-lg-12">
-                <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <button onclick="javascript:hide_message()" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{message}}
             </div>
         </div>
     {% elif message_error %}
         <div class="panel-body">
             <div class="alert alert-danger alert-dismissable col-lg-12">
-                <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <button onclick="javascript:hide_message()" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{message_error}}
             </div>
         </div>

@@ -841,55 +841,57 @@ def admit_student2(request):
 			context['message'] = request.GET['message']
 		elif 'message_error' in request.GET:
 			context['message_error'] = request.GET['message_error']
-		# try:
-		page_type = -1
-		if 'student' in request.GET:
-			page_type = 0
-			context['student_id'] = request.GET['student']
-			context['student_name'] = request.GET['name']
-			academic_years = get_academic_year(id=None)
-			context['academic_years'] = academic_years
-			standards = get_standard(id=None)
-			context['standards'] = standards
+		try:
+			page_type = -1
+			if 'student' in request.GET:
+				page_type = 0
+				context['student_id'] = request.GET['student']
+				context['student_name'] = request.GET['name']
+				academic_years = get_academic_year(id=None)
+				context['academic_years'] = academic_years
+				standards = get_standard(id=None)
+				context['standards'] = standards
+				if 'base_fee' in request.GET:
+					page_type = 2
+					context['fee'] = request.GET['fee']
+				elif 'academic_year' in request.GET:
+					page_type = 1
+					count = 0
+					acs_list = []
+					academic_year_set = set()
+					standard_set = set()
+					for get_params in request.GET.keys():
+						if get_params[:4] == 'acs_':
+							acs_dict = {}
+							acs_dict['academic_year'] = int(get_params[4:].split('_')[0])
+							if acs_dict['academic_year'] in academic_year_set:
+								return redirect('./?message_error=Academic Year should be unique')
+							academic_year_set.add(acs_dict['academic_year'])
+							acs_dict['academic_year_name'] = get_academic_year(id=acs_dict['academic_year'])['name']
+							acs_dict['standard'] = int(get_params[4:].split('_')[1])
+							if acs_dict['standard'] in standard_set:
+								return redirect('./?message_error=Standard should be unique')
+							standard_set.add(acs_dict['standard'])
+							acs_dict['standard_name'] = get_standard(id=acs_dict['standard'])['name']
+							acs_dict['batches'] = get_batch(academic_year_id=acs_dict['academic_year'], standard_id=acs_dict['standard'])
+							acs_dict['batches'].append({'id' : -1, 'name' : 'Assign batch later'})
+							acs_dict['subject_years'] = get_subjects(standard_id=acs_dict['standard'], academic_year_id=acs_dict['academic_year'])
+							acs_list.append(acs_dict)
+							count += 1
+					context['acs_list'] = acs_list
 
-			if 'academic_year' in request.GET:
-				page_type = 1
-				count = 0
-				acs_list = []
-				academic_year_set = set()
-				standard_set = set()
-				for get_params in request.GET.keys():
-					if get_params[:4] == 'acs_':
-						acs_dict = {}
-						acs_dict['academic_year'] = int(get_params[4:].split('_')[0])
-						if acs_dict['academic_year'] in academic_year_set:
-							return redirect('./?message_error=Academic Year should be unique')
-						academic_year_set.add(acs_dict['academic_year'])
-						acs_dict['academic_year_name'] = get_academic_year(id=acs_dict['academic_year'])['name']
-						acs_dict['standard'] = int(get_params[4:].split('_')[1])
-						if acs_dict['standard'] in standard_set:
-							return redirect('./?message_error=Standard should be unique')
-						standard_set.add(acs_dict['standard'])
-						acs_dict['standard_name'] = get_standard(id=acs_dict['standard'])['name']
-						acs_dict['batches'] = get_batch(academic_year_id=acs_dict['academic_year'], standard_id=acs_dict['standard'])
-						acs_dict['batches'].append({'id' : -1, 'name' : 'Assign batch later'})
-						acs_dict['subject_years'] = get_subjects(standard_id=acs_dict['standard'], academic_year_id=acs_dict['academic_year'])
-						acs_list.append(acs_dict)
-						count += 1
-				context['acs_list'] = acs_list
-
-		context['page_type'] = page_type
-		return render(request,'accountant/student/admit-student2.html', context)
-		# except ModelValidateError, e:
-		# 	return redirect('./?message_error='+str(e))
-		# except ValueError, e:
-		# 	return redirect('./?message_error='+str(PentaError(1000)))
-		# except ObjectDoesNotExist, e:
-		# 	return redirect('./?message_error='+str(PentaError(999)))
-		# except MultiValueDictKeyError, e:
-		# 	return redirect('./?message_error='+str(PentaError(998)))
-		# except Exception, e:
-		# 	return redirect('./?message_error='+str(PentaError(100)))
+			context['page_type'] = page_type
+			return render(request,'accountant/student/admit-student2.html', context)
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
 
 
 	elif request.method == 'POST':
@@ -898,46 +900,59 @@ def admit_student2(request):
 
 			student_object = Student.objects.get(id = request.POST['student'])
 			student_id = student_object.id
-			academic_year_id = request.POST['academic_year']
-			standard_id = request.POST['standard']
-			batch_id = request.POST['batch']
-			print batch_id
-			subject_years = get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard_id=int(request.POST['standard']), academic_year_id=int(request.POST['academic_year']), subject_year_id=None)
-			subject_year_list = []
-			for subject_year in subject_years:
-				if 'subject_year_'+str(subject_year['id']) in request.POST:
-					print subject_year
-					subject_year_list.append(subject_year['id'])
-			if batch_id == '-1':
-
-				student_batch_id = set_student_batch(id=None,student_id = student_id, batch_id = None, subject_year_id_list= subject_year_list, academic_year_id = academic_year_id, standard_id = standard_id)
-				#Creating base fee transaction after admission
-				subject_years = StudentBatch.objects.get(id = student_batch_id).subject_years.all()
-				basefees = get_base_fee(id = None , subject_years_list = subject_years)
-				total = {}
-				total['base_fees'] = 0
-				for basefee in basefees :
-					#print basefee
-					total['base_fees'] = total['base_fees'] + basefee.amount
-
+			total_cost = 0
+			if 'fee_amount' in request.POST:
 				date = (time.strftime("%Y-%m-%d"))
-				transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_id = student_id, fee_type_id = FeeType.objects.get(name = 'base fee').id)
+				transaction_id = set_fee_transaction(amount = request.POST['fee_amount'], date =  date, student_id = student_id, fee_type_id = FeeType.objects.get(name = 'base fee').id)
+				if 'emi' in request.POST:
+					return redirect('../add-emi/?name='+request.POST['name']+'&student='+str(student_id)+'&message=Fee set for Student - Please enter EMI details')
+				else:
+					return redirect('./?message=Fee set for Student')
 			else:
-				student_batch_id = set_student_batch(id=None,student_id = student_id, batch_id = batch_id, subject_year_id_list= subject_year_list, academic_year_id = None, standard_id = None)
-				#Creating base fee transaction after admission
-				subject_years = StudentBatch.objects.get(id = student_batch_id).subject_years.all()
-				basefees = get_base_fee(id = None , subject_years_list = subject_years)
-				total = {}
-				total['base_fees'] = 0
-				for basefee in basefees :
-					#print basefee
-					total['base_fees'] = total['base_fees'] + basefee.amount
+				for post_params in request.POST.keys():
+					if post_params[:4] == 'acs_':
+						academic_year_id = int(post_params[4:].split('_')[0])
+						standard_id = int(post_params[4:].split('_')[1])
+						batch_id = request.POST['batch_'+str(academic_year_id)+'_'+str(standard_id)]
+						subject_years = get_subjects(standard_id=standard_id, academic_year_id=academic_year_id)
+						subject_year_list = []
+						for subject_year in subject_years:
+							if 'subject_year_'+str(academic_year_id)+'_'+str(standard_id)+'_'+str(subject_year['id']) in request.POST:
+								subject_year_list.append(subject_year['id'])
+						if batch_id == '-1':
 
-				date = (time.strftime("%Y-%m-%d"))
-				transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_id = student_id, fee_type_id = FeeType.objects.get(name = 'base fee').id )
+							student_batch_id = set_student_batch(student_id = student_id, batch_id = None, subject_year_id_list= subject_year_list, academic_year_id = academic_year_id, standard_id = standard_id)
+							#Creating base fee transaction after admission
+							subject_years = StudentBatch.objects.get(id = student_batch_id).subject_years.all()
+							basefees = get_base_fee(subject_years_list = subject_years)
+							total = {}
+							total['base_fees'] = 0
+							for basefee in basefees :
+								#print basefee
+								total['base_fees'] = total['base_fees'] + basefee.amount
+								total_cost += basefee.amount
+
+							date = (time.strftime("%Y-%m-%d"))
+							# Commenting transaction as user can edit at a further stage
+							# transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_id = student_id, fee_type_id = FeeType.objects.get(name = 'base fee').id)
+						else:
+							student_batch_id = set_student_batch(id=None,student_id = student_id, batch_id = batch_id, subject_year_id_list= subject_year_list, academic_year_id = None, standard_id = None)
+							#Creating base fee transaction after admission
+							subject_years = StudentBatch.objects.get(id = student_batch_id).subject_years.all()
+							basefees = get_base_fee(id = None , subject_years_list = subject_years)
+							total = {}
+							total['base_fees'] = 0
+							for basefee in basefees :
+								#print basefee
+								total['base_fees'] = total['base_fees'] + basefee.amount
+								total_cost += basefee.amount
+
+							date = (time.strftime("%Y-%m-%d"))
+							# Commenting transaction as user can edit at a further stage
+							# transaction_id = set_fee_transaction(id = None ,amount = total['base_fees'], date =  date, student_id = student_id, fee_type_id = FeeType.objects.get(name = 'base fee').id )
 
 
-			return redirect('./?message=Student Admitted')
+				return redirect('./?message=Student Admitted&base_fee=True&fee='+str(total_cost)+'&student='+str(student_id)+'&name='+request.POST['name'])
 
 
 		except ModelValidateError, e:
