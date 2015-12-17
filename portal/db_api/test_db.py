@@ -269,6 +269,8 @@ def get_batch_marks_report(batch_id, start_date, end_date):
 	for test_batch in test_batch_objects:
 		test_batch_dict = {}
 		test_batch_dict['id'] = test_batch.id
+		test_batch_dict['test_id'] = test_batch.test.id
+		test_batch_dict['batch_id'] = test_batch.batch.id
 		test_batch_dict['name'] = test_batch.test.name
 		test_batch_dict['subject_name'] = test_batch.test.subject_year.subject.name
 		test_batch_dict['total_marks'] = test_batch.test.total_marks
