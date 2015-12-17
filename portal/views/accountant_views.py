@@ -11,11 +11,8 @@ from portal.db_api.academic_year_db import *
 from portal.db_api.standard_db import *
 from portal.db_api.subject_db import *
 from portal.db_api.notice_db import *
-<<<<<<< HEAD
 from portal.db_api.cheque_db import *
-=======
 from portal.db_api.emi_db import *
->>>>>>> 42776c78d99736e84d472eb74d4eea4052dc98fe
 from portal.models import Notice
 from django.core.exceptions import *
 from django.utils.datastructures import *
@@ -535,7 +532,7 @@ def make_transaction(request):
 						page_type = 3
 						if 'payment_method' in request.GET:
 							context['payment_method'] = request.GET['payment_method']
-							
+
 							if request.GET['payment_method'] == 'cash':
 								page_type = 2
 							else:
@@ -567,13 +564,13 @@ def make_transaction(request):
 	elif request.method == 'POST':
 		try:
 			id = request.POST['student']
-			
+
 			'''student_batch_object = StudentBatch.objects.get(id = request.POST['student_batch'])
 			student_batch_id = student_batch_object.id'''
 
 			#print student_batch_id
 
-			
+
 
 			fee_type_id = request.POST['fee_type']
 
@@ -588,7 +585,7 @@ def make_transaction(request):
 				bank_branch_name = request.POST['bank_branch_name']
 				description = request.POST['description']
 				date = request.POST['date']
-				
+
 				cheque_id = set_cheque(id = None, student_id = id, amount = amount, cheque_date = cheque_date, cleared = False, clearance_date = None, description = description, cheque_number = cheque_number, bank_name = bank_name, bank_branch_name = bank_branch_name)
 				#print date
 				#print "herera"
@@ -608,12 +605,12 @@ def make_transaction(request):
 
 				#time = request.POST['time']
 
-				transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_id = request.POST['student'], fee_type_id = fee_type_id)	
+				transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_id = request.POST['student'], fee_type_id = fee_type_id)
 			return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id))
 
-		
-			
-		
+
+
+
 
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
