@@ -11,22 +11,22 @@ def sms_for_attendance(student_id_list, date, staff_id):
         student_object = Student.objects.get(id=student_id)
         parent_id = StudentParent.objects.get(student=student_object).parent.id
         parent_phone_number = Parent.objects.get(id=parent_id).phone_number
-        text = "Your ward " + student_object.first_name + " " + student_object.last_name + " was absent on " + date + ". " + SIGNATURE
+        text = "Your ward " + student_object.first_name + " " + student_object.last_name + " was absent on " + date + ".\n" + SIGNATURE
         sms_object = SMS(phone_number=parent_phone_number, sms_type = "Attendance", message_text=text, status="Pending", student=student_object, staff=Staff.objects.get(id=staff_id))
         sms_object.save()
 
 
 def sms_for_notices(student_id_list = None,notice_title=None,notice_description=None,staff_id=None):
-    
+
     for student_id in student_id_list:
         student_object = Student.objects.get(id=student_id)
         parent_id = StudentParent.objects.get(student=student_object).parent.id
-        
+
         parent_phone_number = Parent.objects.get(id=parent_id).phone_number
         text = "Class Notice:\n" + notice_title + "\nNotice Description:\n" +notice_description+'\n'+ SIGNATURE
         sms_object = SMS(phone_number=parent_phone_number, sms_type = "Notice", message_text=text, status="Pending", student=student_object, staff=Staff.objects.get(id=staff_id))
         sms_object.save()
-    
+
 
 def sms_for_marks(student_batch_id_list):
     pass
