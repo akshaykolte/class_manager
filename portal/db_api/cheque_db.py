@@ -57,7 +57,7 @@ def get_cheque(id = None, student_id = None, start_date = None, end_date = None,
 		i = Cheque.objects.get(id = id)
 		cheque_dict = {}
 		cheque_dict['id'] = i.id
-		cheque_dict['student_id'] = i.student.id
+		cheque_dict['student'] = i.student
 		cheque_dict['amount'] = i.amount
 		cheque_dict['cheque_date'] = i.cheque_date
 		cheque_dict['cleared'] = i.cleared
@@ -77,7 +77,7 @@ def get_cheque(id = None, student_id = None, start_date = None, end_date = None,
 		for i in cheques:
 			cheque_dict = {}
 			cheque_dict['id'] = i.id
-			cheque_dict['student_id'] = i.student.id
+			cheque_dict['student'] = i.student
 			cheque_dict['amount'] = i.amount
 			cheque_dict['cheque_date'] = i.cheque_date
 			cheque_dict['cleared'] = i.cleared
@@ -101,7 +101,7 @@ def get_cheque(id = None, student_id = None, start_date = None, end_date = None,
 			for i in cheques:
 				cheque_dict = {}
 				cheque_dict['id'] = i.id
-				cheque_dict['student_id'] = i.student.id
+				cheque_dict['student'] = i.student
 				cheque_dict['amount'] = i.amount
 				cheque_dict['cheque_date'] = i.cheque_date
 				cheque_dict['cleared'] = i.cleared
@@ -123,7 +123,7 @@ def get_cheque(id = None, student_id = None, start_date = None, end_date = None,
 			for i in cheques:
 				cheque_dict = {}
 				cheque_dict['id'] = i.id
-				cheque_dict['student_id'] = i.student.id
+				cheque_dict['student'] = i.student
 				cheque_dict['amount'] = i.amount
 				cheque_dict['cheque_date'] = i.cheque_date
 				cheque_dict['cleared'] = i.cleared
@@ -144,7 +144,7 @@ def get_cheque(id = None, student_id = None, start_date = None, end_date = None,
 			for i in cheques:
 				cheque_dict = {}
 				cheque_dict['id'] = i.id
-				cheque_dict['student_id'] = i.student.id
+				cheque_dict['student'] = i.student
 				cheque_dict['amount'] = i.amount
 				cheque_dict['cheque_date'] = i.cheque_date
 				cheque_dict['cleared'] = i.cleared
@@ -165,7 +165,7 @@ def get_cheque(id = None, student_id = None, start_date = None, end_date = None,
 			for i in cheques:
 				cheque_dict = {}
 				cheque_dict['id'] = i.id
-				cheque_dict['student_id'] = i.student.id
+				cheque_dict['student'] = i.student
 				cheque_dict['amount'] = i.amount
 				cheque_dict['cheque_date'] = i.cheque_date
 				cheque_dict['cleared'] = i.cleared
@@ -190,7 +190,7 @@ def get_cheque(id = None, student_id = None, start_date = None, end_date = None,
 			for i in cheques:
 				cheque_dict = {}
 				cheque_dict['id'] = i.id
-				cheque_dict['student_id'] = i.student.id
+				cheque_dict['student'] = i.student
 				cheque_dict['amount'] = i.amount
 				cheque_dict['cheque_date'] = i.cheque_date
 				cheque_dict['cleared'] = i.cleared
@@ -212,7 +212,7 @@ def get_cheque(id = None, student_id = None, start_date = None, end_date = None,
 			for i in cheques:
 				cheque_dict = {}
 				cheque_dict['id'] = i.id
-				cheque_dict['student_id'] = i.student.id
+				cheque_dict['student'] = i.student
 				cheque_dict['amount'] = i.amount
 				cheque_dict['cheque_date'] = i.cheque_date
 				cheque_dict['cleared'] = i.cleared
@@ -233,7 +233,7 @@ def get_cheque(id = None, student_id = None, start_date = None, end_date = None,
 			for i in cheques:
 				cheque_dict = {}
 				cheque_dict['id'] = i.id
-				cheque_dict['student_id'] = i.student.id
+				cheque_dict['student'] = i.student
 				cheque_dict['amount'] = i.amount
 				cheque_dict['cheque_date'] = i.cheque_date
 				cheque_dict['cleared'] = i.cleared
@@ -254,7 +254,7 @@ def get_cheque(id = None, student_id = None, start_date = None, end_date = None,
 			for i in cheques:
 				cheque_dict = {}
 				cheque_dict['id'] = i.id
-				cheque_dict['student_id'] = i.student.id
+				cheque_dict['student'] = i.student
 				cheque_dict['amount'] = i.amount
 				cheque_dict['cheque_date'] = i.cheque_date
 				cheque_dict['cleared'] = i.cleared
@@ -277,7 +277,7 @@ def get_cheque(id = None, student_id = None, start_date = None, end_date = None,
 		for i in cheques:
 			cheque_dict = {}
 			cheque_dict['id'] = i.id
-			cheque_dict['student_id'] = i.student.id
+			cheque_dict['student'] = i.student
 			cheque_dict['amount'] = i.amount
 			cheque_dict['cheque_date'] = i.cheque_date
 			cheque_dict['cleared'] = i.cleared
