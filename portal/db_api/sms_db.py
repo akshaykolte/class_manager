@@ -16,7 +16,7 @@ def sms_for_attendance(student_id_list, date, staff_id):
         sms_object.save()
 
 
-def sms_for_notices(student_id_list = None,notice_title=None,notice_description=None,staff_id=None):
+def sms_for_notices(student_id_list,notice_title,notice_description,staff_id):
 
     for student_id in student_id_list:
         student_object = Student.objects.get(id=student_id)
