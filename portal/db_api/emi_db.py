@@ -108,4 +108,4 @@ def get_next_week_emi():
 			if student_tuple[0] not in student_id_set:
 				pending_students_list.append(list(student_tuple) + [emi['time_deadline__max']])
 
-	print pending_students_list
+	return pending_students_list
