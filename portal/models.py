@@ -499,14 +499,14 @@ class Cheque(models.Model):
 
 	def __str__(self):
 		return str(self.student) + '-' + str(self.amount) + '-'	+ str(self.cheque_date)
-		
+
 class FeeTransaction(models.Model):
 	amount = models.IntegerField()
 	date = models.DateField()
 	timestamp = models.DateTimeField(auto_now_add=True)
 	student = models.ForeignKey(Student)
 	fee_type = models.ForeignKey(FeeType)
-	
+
 	cheque = models.ForeignKey(Cheque, blank=True, null=True)
 
 	def __str__(self):
@@ -552,6 +552,7 @@ class TestBatch(models.Model):
 	test = models.ForeignKey(Test)
 	batch = models.ForeignKey(Batch)
 	test_date = models.DateField(default=datetime.now())
+	is_sms_sent = models.BooleanField(default=False)
 
 	class Meta:
 		unique_together = (('test','batch',),)
@@ -693,5 +694,3 @@ class EMI(models.Model):
 
 	def __str__(self):
 		return str(self.student) + '-' + str(self.amount_due) + '-'	+ str(self.time_deadline)
-
-

@@ -1626,7 +1626,7 @@ def sms_tests(request):
 	context = {}
 
 	auth_dict = get_user(request)
-
+	context['details'] = auth_dict
 	if auth_dict['logged_in'] != True:
 		raise Http404
 
@@ -1661,7 +1661,15 @@ def sms_tests(request):
 							page_type = 5
 							from_date = datetime.datetime.strptime(request.GET['from_date'], '%Y-%m-%d')
 							to_date = datetime.datetime.strptime(request.GET['to_date'], '%Y-%m-%d')
-							context['report'] = get_batch_marks_report(batch_id = request.GET['batch'], start_date = from_date, end_date = to_date)
+							tests = get_batch_marks_report(batch_id = request.GET['batch'], start_date = from_date, end_date = to_date)
+
+							test_student_dict = {}
+							for test in tests:
+								test_student_dict[test['name']] = get_student_batch_marks(test_id=int(test['test_id']),batch_id=int(request.GET['batch']))
+
+							context['tests'] = tests
+							context['test_student_dict'] = test_student_dict
+
 			context['page_type'] = page_type
 			return render(request, 'manager/tests/sms_tests.html', context)
 		except ModelValidateError, e:
@@ -1674,3 +1682,16 @@ def sms_tests(request):
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))
+
+@csrf_exempt
+def sms_tests_submit(request):
+	context = {}
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+	print "---",request.POST
