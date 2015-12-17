@@ -1,0 +1,275 @@
+{% extends "accountant/base_accountant.html" %}
+
+{% block students_nav %}{% endblock %}
+
+{% block main_content%}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Admit Student</h1>
+    </div>
+</div>
+{% if message %}
+        <div class="panel-body">
+            <div class="alert alert-success alert-dismissable col-lg-12">
+                <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{message}}
+            </div>
+        </div>
+    {% elif message_error %}
+        <div class="panel-body">
+            <div class="alert alert-danger alert-dismissable col-lg-12">
+                <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{message_error}}
+            </div>
+        </div>
+    {% endif %}
+
+        <div class="col-lg-12">
+                {% if page_type == -1 %}
+                    <form>
+                    <label><strong>Student Name</strong></label>
+                    <div class="form-group input-group">
+                        <input type="text" name="name" class="form-control" id="chooseStudentName" onchange="this.form.submit()" readonly>
+                        <input type="hidden" name="student" class="form-control" id="chooseStudentId" onchange="this.form.submit()">
+                        <span class="input-group-btn">
+                            <button onClick="call_student_search_window('student')" class="btn btn-default" type="button"><i class="fa fa-search"> Click Here to Search Student</i>
+                            </button>
+                        </span>
+                    </div>
+                    <input type="submit" class="btn btn-default btn-red">
+                </form>
+                {% endif %}
+
+            {% if page_type == 0 %}
+
+                        <form>
+                            <label><strong>Student Name</strong></label>
+                            <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
+                            <input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
+                        </form>
+                        <br/>
+
+
+                        <form>
+                            <input type="hidden" name="name" value="{{student_name}}">
+                            <input type="hidden" name="student" value="{{student_id}}">
+                            <input type="hidden" name="academic_year" value="True">
+                            <label><strong>Select Academic Years and standard for student's admission</strong></label>
+                            <table class="table table-bordered table-hover table-striped" id="dataTables">
+                     			<thead>
+                     				<tr>
+                     					<th>Academic Year</th>
+                                        {% for standard in standards %}
+                                            <th>{{standard.name}} Standard</th>
+                                        {% endfor %}
+                     				</tr>
+                     			</thead>
+                     			<tbody>
+                                    {% for academic_year in academic_years %}
+                                        <tr>
+                                            <td>
+                                                {{academic_year.year_start}}-{{academic_year.year_end}}
+                                            </td>
+                                            {% for standard in standards %}
+                                                <td>
+                                                    <input type="checkbox" name="acs_{{academic_year.id}}_{{standard.id}}" value="True">
+                                                    <!-- acs_{{academic_year.id}}_{{standard.id}} -->
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                     			</tbody>
+                     		</table>
+
+
+                            <input type="submit" value="Proceed" class="btn btn-default btn-red">
+                        </form>
+            {% endif %}
+
+            {% if page_type == 1 %}
+                <form method="POST">
+                    <label><strong>Student Name</strong></label>
+                    <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" readonly>
+                    <input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" readonly>
+                    <br/>
+                    <h3>Enter admission details</h3>
+                    <div class="row">
+                        {% for acs in acs_list %}
+                            <div class="col-lg-6">
+                                <hr/>
+                                <label><strong>Academic Year</strong></label>
+                                <input class="form-control" type="text" value="{{acs.academic_year_name}}" readonly>
+                                <br/>
+                                <label><strong>Standard</strong></label>
+                                <input class="form-control" type="text" value="{{acs.standard_name}}" readonly>
+                                <br/>
+                                <input type="hidden" name="acs_{{acs.academic_year}}_{{acs.standard}}" value="True">
+                                <label><strong>Select Batch</strong></label>
+                                <select name="batch_{{acs.academic_year}}_{{acs.standard}}" class="form-control">
+                                    <option>Select Batch</option>
+                                    {% for batch in acs.batches %}
+                                    <option value="{{batch.id}}">{{batch.branch}} - {{batch.name}}</option>
+                                    {% endfor %}
+                                </select>
+                                <br/>
+                                <label><strong>Select Subjects</strong></label>
+                                {% for subject_year in acs.subject_years %}
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" name="subject_year_{{acs.academic_year}}_{{acs.standard}}_{{subject_year.id}}" value="True">{{subject_year.name}} </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <input class="btn btn-default btn-red" type="submit" value="Proceed">
+                    <br/><br/>
+                </form>
+
+            {% endif %}
+
+            {% if page_type == 2 %}
+
+                        <form>
+                            <label><strong>Student Name</strong></label>
+                            <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
+                            <input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
+                        </form>
+                        <br/>
+
+
+                        <form>
+                            <input type="hidden" name="name" value="{{student_name}}">
+                            <input type="hidden" name="student" value="{{student_id}}">
+                            <label><strong>Select Academic Year</strong></label>
+
+                            <select name="academic_year" class="form-control" onchange="this.form.submit()">
+                                {% for academic_year in academic_years %}
+                                <option value="{{academic_year.id}}"{% if academic_year_id == academic_year.id %} selected{% endif %}>{{academic_year.year_start}} - {{academic_year.year_end}}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                        <br/>
+
+                        <form>
+                            <input type="hidden" name="name" value="{{student_name}}">
+                            <input type="hidden" name="student" value="{{student_id}}">
+                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">
+
+                            <label><strong>Select Standard</strong></label>
+                            <select name="standard" class="form-control" onchange="this.form.submit()">
+                                {% for standard in standards %}
+                                <option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}} </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                        <br/>
+
+                         <form>
+                            <input type="hidden" name="name" value="{{student_name}}">
+                            <input type="hidden" name="student" value="{{student_id}}">
+                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">
+                            <input type="hidden" name="standard" value="{{standard_id}}">
+                            <label><strong>Select Batch</strong></label>
+                            <select name="batch" class="form-control" onchange="this.form.submit()">
+                                <option>Select Batch</option>
+                                {% for batch in batches %}
+                                <option value="{{batch.id}}">{{batch.branch}} - {{batch.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                            <br/>
+
+
+
+
+
+            {% endif %}
+
+
+
+            {% if page_type == 3 %}
+
+                        <form>
+                            <label><strong>Student Name</strong></label>
+                            <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
+                            <input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
+                        </form>
+                        <br/>
+
+
+                        <form>
+                            <input type="hidden" name="name" value="{{student_name}}">
+                            <input type="hidden" name="student" value="{{student_id}}">
+                            <label><strong>Select Academic Year</strong></label>
+
+                            <select name="academic_year" class="form-control" onchange="this.form.submit()">
+                                {% for academic_year in academic_years %}
+                                <option value="{{academic_year.id}}"{% if academic_year_id == academic_year.id %} selected{% endif %}>{{academic_year.year_start}} - {{academic_year.year_end}}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                        <br/>
+
+
+
+                        <form>
+                            <input type="hidden" name="student" value="{{student_id}}">
+                            <input type="hidden" name="name" value="{{student_name}}">
+                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">
+                            <label><strong>Select Standard</strong></label>
+                            <select name="standard" class="form-control" onchange="this.form.submit()">
+                                {% for standard in standards %}
+                                <option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}} </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                            <br/>
+
+
+                         <form>
+                            <input type="hidden" name="student" value="{{student_id}}">
+                            <input type="hidden" name="name" value="{{student_name}}">
+                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">
+                             <input type="hidden" name="standard" value="{{standard_id}}">
+                            <label><strong>Select Batch</strong></label>
+                            <select name="batch" class="form-control" onchange="this.form.submit()">
+                                {% for batch in batches %}
+                                <option value="{{batch.id}}" {% if batch_id == batch.id %} selected {% endif %}> {{batch.branch}} - {{batch.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                            <br/>
+
+                        <form action="." method="POST">
+                            <input type="hidden" name="name" value="{{student_name}}">
+                            <input type="hidden" name="student" value="{{student_id}}">
+                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">
+                            <input type="hidden" name="standard" value="{{standard_id}}">
+                            <input type="hidden" name="batch" value="{{batch_id}}">
+
+                            <label><strong>Select Subject Years Combination</strong></label>
+                            {% for subject_year in subject_years %}
+                                <div class="checkbox">
+                                    <label><input type="checkbox" name="subject_year_{{subject_year.id}}" value="True">{{subject_year.name}} </label>
+                                </div>
+                            {% endfor %}
+                            <input class="btn btn-default btn-red" type='submit' value='Admit Student'>
+                        </form>
+                            <br/>
+
+
+
+
+            {% endif %}
+
+
+            </br>
+        </div>
+
+
+
+
+
+
+
+{% endblock %}
