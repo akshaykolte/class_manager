@@ -33,8 +33,37 @@ def set_emi(id = None, student_id = None, amount_due = None, time_deadline = Non
 		raise Exception('Wrong set of arguments')
 
 def get_student_emi(student_id):
-	#TODO
-	pass
+	emis = EMI.objects.filter(student__id=student_id)
+	payment = FeeTransaction.objects.filter(student__id=student_id, fee_type__name='payment').aggregate(total_amount=Sum('amount'))['total_amount']
+	balance = payment
+	emi_list = []
+	for emi in emis:
+		emi_dict = {}
+		if balance == 0:
+			# print 'payment pending, paid=0 pending='+str(emi.amount_due)+' total='+str(emi.amount_due)
+			emi_dict['status'] = "Payment Pending"
+			emi_dict['paid_amount'] = 0
+			emi_dict['pending_amount'] = emi.amount_due
+			emi_dict['total_emi_amount'] = emi.amount_due
+		elif balance < emi.amount_due:
+			# print 'partially paid, paid='+str(balance)+' pending='+str(emi.amount_due-balance)+' total='+str(emi.amount_due)
+			emi_dict['status'] = "Partially Paid"
+			emi_dict['paid_amount'] = balance
+			emi_dict['pending_amount'] = (emi.amount_due-balance)
+			emi_dict['total_emi_amount'] = emi.amount_due
+			balance -= balance
+		else:
+			# print 'fully paid, paid='+str(emi.amount_due)+' pending=0 total='+str(emi.amount_due)
+			emi_dict['status'] = "Fully Paid"
+			emi_dict['paid_amount'] = emi.amount_due
+			emi_dict['pending_amount'] = 0
+			emi_dict['total_emi_amount'] = emi.amount_due
+			balance -= emi.amount_due
+		emi_list.append(emi_dict)
+	student_emi_report = {}
+	student_emi_report['total_payment'] = payment
+	student_emi_report['emi_list'] = emi_list
+	return student_emi_report
 
 def get_pending_emi():
 	emis = EMI.objects.filter(time_deadline__lte = datetime.datetime.now()).values('student__id', 'student__first_name', 'student__last_name').annotate(Sum('amount_due'), Max('time_deadline'))
