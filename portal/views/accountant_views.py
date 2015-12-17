@@ -11,6 +11,7 @@ from portal.db_api.academic_year_db import *
 from portal.db_api.standard_db import *
 from portal.db_api.subject_db import *
 from portal.db_api.notice_db import *
+from portal.db_api.emi_db import *
 from portal.models import Notice
 from django.core.exceptions import *
 from django.utils.datastructures import *
@@ -1135,7 +1136,18 @@ def add_emi(request):
 					for i in range(context['number_emi']):
 						list_emi.append([i+2, int(remaining_amount), "EMI "+str(i+1)])
 					context['emis'] = list_emi
-
+					if 'emi1' in request.GET and 'emi_deadline1' in request.GET:
+						index = 1
+						while 'emi'+str(index) in request.GET and 'emi_deadline'+str(index) in request.GET:
+							print 'Creating EMI ', request.GET['emi'+str(index)], request.GET['emi_deadline'+str(index)]
+							set_emi(
+								student_id = context['student_id'],
+								amount_due = int(request.GET['emi'+str(index)]),
+								time_deadline = datetime.datetime.strptime(request.GET['emi_deadline'+str(index)], '%Y-%m-%d'),
+								description = request.GET['description'+str(index)]
+							)
+							index += 1
+						return redirect('./?message=Added EMIs')
 			context['page_type'] = page_type
 			return render(request,'accountant/student/add-emi.html', context)
 		except ModelValidateError, e:
