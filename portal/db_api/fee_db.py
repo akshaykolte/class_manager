@@ -162,11 +162,11 @@ def get_base_fee(id = None , subject_years_list = None, academic_year_id=None, s
 
 		return base_fee_object'''
 
-def set_fee_transaction(id = None ,amount=None ,date = None, student_id = None, fee_type_id = None):
+def set_fee_transaction(id = None ,amount=None ,date = None, student_id = None, fee_type_id = None, cheque_id = None):
 	is_none_id = id == None
 	is_none_amount = amount == None
 	is_none_date = date == None
-
+	is_none_cheque_id = cheque_id == None
 
 	is_none_student_id = student_id == None
 	is_none_fee_type_id = fee_type_id == None
@@ -174,7 +174,13 @@ def set_fee_transaction(id = None ,amount=None ,date = None, student_id = None, 
 	if is_none_id:
 		student_object = Student.objects.get(id = student_id)
 		fee_type_object = FeeType.objects.get(id = fee_type_id)
-		fee_transaction_object = FeeTransaction(amount = amount, date = date, student = student_object, fee_type = fee_type_object)
+
+		if not is_none_cheque_id:
+			cheque_object = Cheque.objects.get(id = cheque_id)
+			#print cheque_object
+			fee_transaction_object = FeeTransaction(amount = amount, date = date, student = student_object, fee_type = fee_type_object, cheque = cheque_object)
+		else:
+			fee_transaction_object = FeeTransaction(amount = amount, date = date, student = student_object, fee_type = fee_type_object)				
 		fee_transaction_object.save()
 
 		return fee_transaction_object.id

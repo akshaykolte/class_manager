@@ -11,6 +11,7 @@ from portal.db_api.academic_year_db import *
 from portal.db_api.standard_db import *
 from portal.db_api.subject_db import *
 from portal.db_api.notice_db import *
+from portal.db_api.cheque_db import *
 from portal.models import Notice
 from django.core.exceptions import *
 from django.utils.datastructures import *
@@ -501,7 +502,7 @@ def make_transaction(request):
 		raise Http404
 	context = {}
 	context['details'] = auth_dict
-
+	page_type = 0
 
 	if request.method == 'GET':
 
@@ -510,54 +511,78 @@ def make_transaction(request):
 		elif 'message_error' in request.GET:
 			context['message_error'] = request.GET['message_error']
 
-		# try:
-		page_type = 0
-		branches = get_branch(id=None)
-		context['branches'] = branches
+		try:
+			page_type = 0
+			branches = get_branch(id=None)
+			context['branches'] = branches
 
-		if 'student' in request.GET:
-			page_type = 1
-			context['student_id'] = request.GET['student']
-			context['student_name'] = request.GET['student_name']
+			if 'student' in request.GET:
+				page_type = 1
+				context['student_id'] = request.GET['student']
+				context['student_name'] = request.GET['student_name']
 
-			fee_types = get_fee_types()
-			context['fee_types'] = fee_types
-			if 'fee_type' in request.GET:
-				page_type = 2
-				context['fee_type_id'] = int(request.GET['fee_type'])
-				# 1 represents fee type payment
-				if int(request.GET['fee_type']) == 1:
-					page_type = 3
-					if 'payment_method' in request.GET:
-						if request.GET['payment_method'] == 'cash':
-							page_type = 2
-						else:
-							page_type = 4
-		context['page_type'] = page_type
-		print context
-		return render(request,'accountant/fees/make-transaction.html', context)
-		# except ModelValidateError, e:
-		# 	return redirect('./?message_error='+str(e))
-		# except ValueError, e:
-		# 	return redirect('./?message_error='+str(PentaError(1000)))
-		# except ObjectDoesNotExist, e:
-		# 	return redirect('./?message_error='+str(PentaError(999)))
-		# except MultiValueDictKeyError, e:
-		# 	return redirect('./?message_error='+str(PentaError(998)))
-		# except Exception, e:
-		# 	return redirect('./?message_error='+str(PentaError(100)))
+				fee_types = get_fee_types()
+				context['fee_types'] = fee_types
+				if 'fee_type' in request.GET:
+					page_type = 2
+					context['fee_type_id'] = int(request.GET['fee_type'])
+					# 1 represents fee type payment
+					if int(request.GET['fee_type']) == 1:
+						page_type = 3
+						if 'payment_method' in request.GET:
+							context['payment_method'] = request.GET['payment_method']
+							
+							if request.GET['payment_method'] == 'cash':
+								page_type = 2
+							else:
+								page_type = 4
+			context['page_type'] = page_type
+			print context
+			return render(request,'accountant/fees/make-transaction.html', context)
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+		 	return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+		 	return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+		 	return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+		 	return redirect('./?message_error='+str(PentaError(100)))
 
 	elif request.method == 'POST':
-		try:
-			id = request.POST['student']
+		#try:
+		id = request.POST['student']
+		
+		'''student_batch_object = StudentBatch.objects.get(id = request.POST['student_batch'])
+		student_batch_id = student_batch_object.id'''
 
-			'''student_batch_object = StudentBatch.objects.get(id = request.POST['student_batch'])
-			student_batch_id = student_batch_object.id'''
+		#print student_batch_id
 
-			#print student_batch_id
+		
 
-			fee_type_id = request.POST['fee_type']
+		fee_type_id = request.POST['fee_type']
 
+		if request.POST['payment_method'] == 'cheque':
+			#print fee_type_id
+			#receipt_number = request.POST['receipt_number']
+
+			amount = request.POST['amount']
+			cheque_date = request.POST['cheque_date']
+			cheque_number = request.POST['cheque_number']
+			bank_name = request.POST['bank_name']
+			bank_branch_name = request.POST['bank_branch_name']
+			description = request.POST['description']
+			date = request.POST['date']
+			
+			cheque_id = set_cheque(id = None, student_id = id, amount = amount, cheque_date = cheque_date, cleared = False, clearance_date = None, description = description, cheque_number = cheque_number, bank_name = bank_name, bank_branch_name = bank_branch_name)
+			#print date
+			#print "herera"
+
+			#time = request.POST['time']
+
+			transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_id = request.POST['student'], fee_type_id = fee_type_id, cheque_id = cheque_id)
+		if request.POST['payment_method'] == 'cash':
 			#print fee_type_id
 			#receipt_number = request.POST['receipt_number']
 
@@ -569,10 +594,14 @@ def make_transaction(request):
 
 			#time = request.POST['time']
 
-			transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_id = request.POST['student'], fee_type_id = fee_type_id)
+			transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_id = request.POST['student'], fee_type_id = fee_type_id)	
+		return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id))
 
-			return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id))
-		except ModelValidateError, e:
+		
+			
+		
+
+		'''except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
 			return redirect('./?message_error='+str(PentaError(1000)))
@@ -581,7 +610,7 @@ def make_transaction(request):
 		except MultiValueDictKeyError, e:
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
-			return redirect('./?message_error='+str(PentaError(100)))
+			return redirect('./?message_error='+str(PentaError(100)))'''
 
 def render_to_pdf(template_src, context_dict):
     template = get_template(template_src)
