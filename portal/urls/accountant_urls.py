@@ -21,8 +21,8 @@ urlpatterns = [
 	#url(r'^fees/edit-base-fees/submit$', 'portal.views.accountant_views.edit_base_fees_submit'),
 
 	url(r'^student/create-student/$', 'portal.views.accountant_views.create_student'),
+	url(r'^student/admit-student-old/$', 'portal.views.accountant_views.admit_student_old'),
 	url(r'^student/admit-student/$', 'portal.views.accountant_views.admit_student'),
-	url(r'^student/admit-student2/$', 'portal.views.accountant_views.admit_student2'),
 	url(r'^student/add-emi/$', 'portal.views.accountant_views.add_emi'),
 
 	url(r'^notices/add-student-notice/$', 'portal.views.accountant_views.add_student_notice'),

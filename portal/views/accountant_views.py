@@ -716,7 +716,7 @@ def create_student(request):
 				return redirect('./?message_error='+str(PentaError(100)))
 
 @csrf_exempt
-def admit_student(request):
+def admit_student_old(request):
 	auth_dict = get_user(request)
 	if auth_dict['logged_in'] != True:
 		raise Http404
@@ -755,7 +755,7 @@ def admit_student(request):
 							context['subject_years'] = subject_years
 
 			context['page_type'] = page_type
-			return render(request,'accountant/student/admit-student.html', context)
+			return render(request,'accountant/student/admit-student-old.html', context)
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
@@ -828,7 +828,7 @@ def admit_student(request):
 			return redirect('./?message_error='+str(PentaError(100)))
 
 @csrf_exempt
-def admit_student2(request):
+def admit_student(request):
 	auth_dict = get_user(request)
 	if auth_dict['logged_in'] != True:
 		raise Http404
@@ -881,7 +881,7 @@ def admit_student2(request):
 					context['acs_list'] = acs_list
 
 			context['page_type'] = page_type
-			return render(request,'accountant/student/admit-student2.html', context)
+			return render(request,'accountant/student/admit-student.html', context)
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
