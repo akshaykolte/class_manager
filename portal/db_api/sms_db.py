@@ -1,4 +1,4 @@
-from portal.models import StudentBatch, SMS, StudentParent, Parent, Student, Staff
+from portal.models import StudentBatch, SMS, StudentParent, Parent, Student, Staff, Notice
 SIGNATURE = "Your Class Name."
 
 def send_sms(phone_number, text):
@@ -16,8 +16,17 @@ def sms_for_attendance(student_id_list, date, staff_id):
         sms_object.save()
 
 
-def sms_for_notices(student_batch_id_list):
-    pass
+def sms_for_notices(student_id_list = None,notice_title=None,notice_description=None,staff_id=None):
+    
+    for student_id in student_id_list:
+        student_object = Student.objects.get(id=student_id)
+        parent_id = StudentParent.objects.get(student=student_object).parent.id
+        
+        parent_phone_number = Parent.objects.get(id=parent_id).phone_number
+        text = "Class Notice:\n" + notice_title + "\nNotice Description:\n" +notice_description+'\n'+ SIGNATURE
+        sms_object = SMS(phone_number=parent_phone_number, sms_type = "Notice", message_text=text, status="Pending", student=student_object, staff=Staff.objects.get(id=staff_id))
+        sms_object.save()
+    
 
 def sms_for_marks(student_batch_id_list):
     pass

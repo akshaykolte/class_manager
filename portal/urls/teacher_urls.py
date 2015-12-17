@@ -36,6 +36,8 @@ urlpatterns = [
 	url(r'^notices/view-my-notices/$', 'portal.views.teacher_views.view_my_notices'),
 	url(r'^notices/edit-my-notice/$', 'portal.views.teacher_views.edit_my_notice'),
 	url(r'^download/$', 'portal.views.teacher_views.respond_as_attachment'),
+    url(r'^notices/send-sms-notice/$', 'portal.views.teacher_views.send_sms_notice'),
+    url(r'^notices/send-sms-notice/submit$', 'portal.views.teacher_views.send_sms_notice_submit'),
 	
     url(r'^test/add-test-marks/$', 'portal.views.teacher_views.add_test_marks'),
     url(r'^test/view-test-marks/$', 'portal.views.teacher_views.view_test_marks'),
