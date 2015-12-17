@@ -22,6 +22,7 @@ def sms_for_notices(student_batch_id_list):
 def sms_for_marks(student_batch_id_list):
     pass
 
+# Returns all pending and failed sms sent by the respective staff
 def get_pending_sms(staff_id):
     sms_pending_objects = SMS.objects.filter(status="Pending", staff=Staff.objects.get(id=staff_id))
     sms_list = []
