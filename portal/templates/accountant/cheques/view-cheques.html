@@ -47,20 +47,20 @@
 
 <div class="col-lg-12">
 
-	
+
 
     {% if page_type == 0 %}
 
         <form>
-            
+
 
                 <br/>
-                
+
                 <div class="col-md-9">
                     <div id="myTabContent" class="tab-content">
-                        
+
                             <div>
-                                
+
                                 <h2>Upcoming Cheques</h2>
                                 <div class="dataTable_wrapper">
                                     <table class="display table table-striped table-bordered table-hover" id="">
@@ -87,9 +87,9 @@
                                             <td>{% if i.bank_name %}{{i.bank_name}}{% endif %}</td>
 
                                             {% if i.cleared == True %}<td style="color:#226422"><b>Cleared</b></td>
-                                            
+
                                             {% else %}<td style="color:#ee4444"><b>Pending</b></td>
-                                            
+
                                             {% endif %}
 
                                             <td><a style="background:transparent;color:#0645AD;" class="hyperlink-default" href = "">Edit</a></td>
@@ -101,7 +101,7 @@
                                 <br/>
                                 <br/>
                                 <div>
-                                
+
                                 <h2>Deadline Passed Cheques</h2>
                                 <div class="dataTable_wrapper">
                                     <table class="display table table-striped table-bordered table-hover" id="">
@@ -128,9 +128,9 @@
                                             <td>{% if i.bank_name %}{{i.bank_name}}{% endif %}</td>
 
                                             {% if i.cleared == True %}<td style="color:#226422"><b>Cleared</b></td>
-                                            
+
                                             {% else %}<td style="color:#ee4444"><b>Pending</b></td>
-                                            
+
                                             {% endif %}
 
                                             <td><a style="background:transparent;color:#0645AD;" class="hyperlink-default" href = "">Edit</a></td>
@@ -142,7 +142,7 @@
                                 <br/>
 
                                 <div>
-                                
+
                                 <h2>Cleared Cheques</h2>
                                 <div class="dataTable_wrapper">
                                     <table class="display table table-striped table-bordered table-hover" id="">
@@ -169,9 +169,9 @@
                                             <td>{% if i.bank_name %}{{i.bank_name}}{% endif %}</td>
 
                                             {% if i.cleared == True %}<td style="color:#226422"><b>Cleared</b></td>
-                                            
+
                                             {% else %}<td style="color:#ee4444"><b>Deadline Passed</b></td>
-                                            
+
                                             {% endif %}
 
                                             <td><a style="background:transparent;color:#0645AD;" class="hyperlink-default" href = "">Edit</a></td>
@@ -182,7 +182,7 @@
                                 </div>
                                 <br/>
                             </div>
-                        
+
                     </div>
                 </div>
             <br/>
@@ -197,12 +197,12 @@
 
             $(document).ready(function() {
             $('table.display').DataTable({
-                "iDisplayLength":25,
+                "iDisplayLength":10,
                 "oLanguage": {
                   "sEmptyTable":"No Students Found"
                 }
 
-                }); 
+                });
         } );
 
         {%for i in batch_list %}
@@ -217,5 +217,5 @@
             {% endfor %}
             </script>
 
-    {% endif %}        
+    {% endif %}
 {% endblock %}
