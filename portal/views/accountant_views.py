@@ -11,11 +11,8 @@ from portal.db_api.academic_year_db import *
 from portal.db_api.standard_db import *
 from portal.db_api.subject_db import *
 from portal.db_api.notice_db import *
-<<<<<<< HEAD
 from portal.db_api.cheque_db import *
-=======
 from portal.db_api.emi_db import *
->>>>>>> 42776c78d99736e84d472eb74d4eea4052dc98fe
 from portal.models import Notice
 from django.core.exceptions import *
 from django.utils.datastructures import *
