@@ -15,6 +15,7 @@ urlpatterns = [
 	url(r'^tests/add-tests/$', 'portal.views.manager_views.add_tests'),
 	url(r'^tests/view-tests/$', 'portal.views.manager_views.view_tests'),
 	url(r'^tests/sms-tests/$', 'portal.views.manager_views.sms_tests'),
+    url(r'^tests/sms-tests/submit$', 'portal.views.manager_views.sms_tests_submit'),
 	url(r'^attendance-reports/lecturewise-attendance/$', 'portal.views.manager_views.lecturewise_attendance'),
 	url(r'^attendance-reports/studentwise-attendance/$', 'portal.views.manager_views.studentwise_attendance'),
 	url(r'^attendance-reports/batchwise-attendance/$', 'portal.views.manager_views.batchwise_attendance'),
