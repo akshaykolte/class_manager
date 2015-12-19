@@ -555,7 +555,8 @@ def make_transaction(request):
 			student_batch_id = student_batch_object.id'''
 
 			#print student_batch_id
-
+			print 'here bitch'
+			print request.POST
 			fee_type_id = request.POST['fee_type']
 
 			#print fee_type_id
@@ -571,7 +572,7 @@ def make_transaction(request):
 
 			transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_id = request.POST['student'], fee_type_id = fee_type_id)
 
-			return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id))
+			return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id)+'&cheque_number='+str(request.POST['cheque_number']))
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
@@ -610,6 +611,11 @@ def view_transaction(request):
 
 	if 'transaction' in request.GET:
 		context['transaction_id'] = request.GET['transaction']
+		context['payment_method'] = 'Cash'
+		if 'cheque_number' in request.GET:
+			context['payment_method'] = 'Cheque'
+
+
 	elif 'message_error' in request.GET:
 		context['message_error'] = request.GET['message_error']
 	context['transaction_details'] = get_fee_transaction(id = request.GET['transaction'])
