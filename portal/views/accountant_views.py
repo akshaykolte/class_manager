@@ -1367,28 +1367,77 @@ def view_cheques(request):
 		elif 'message_error' in request.GET:
 			context['message_error'] = request.GET['message_error']
 
+		try:
+			page_type = 0
+			cheques = get_cheque(id = None, student_id = None, start_date = None, end_date = None, cleared = None, cheque_number = None)
+			upcoming_cheques = []
+			cleared_cheques = []
+			deadline_cheques = []
+			for cheque in cheques :
+				if cheque['cheque_date'] > datetime.date.today() and  not cheque['cleared']:
+					print "upcoming"
+					upcoming_cheques.append(cheque)
+				if cheque['cheque_date'] <= datetime.date.today() and  not cheque['cleared']:
+					deadline_cheques.append(cheque)	
+				if cheque['cleared']:
+					cleared_cheques.append(cheque)	
+
+
+			context['upcoming_cheques'] = upcoming_cheques
+			context['cleared_cheques'] = cleared_cheques
+			context['deadline_cheques'] = deadline_cheques
+
+			context['page_type'] = page_type
+			return render(request,'accountant/cheques/view-cheques.html', context)
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
+
+
+@csrf_exempt
+def edit_cheque(request):
+	auth_dict = get_user(request)
+	context = {}
+	context['details'] = auth_dict
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		try:
+			cheque = get_cheque(id = int(request.GET['cheque']))
+			
+			context['cheque'] = cheque
+			return render(request, 'accountant/cheques/edit-cheque.html', context)
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
+
+	elif request.method == 'POST':
 		#try:
-		page_type = 0
-		cheques = get_cheque(id = None, student_id = None, start_date = None, end_date = None, cleared = None, cheque_number = None)
-		upcoming_cheques = []
-		cleared_cheques = []
-		deadline_cheques = []
-		for cheque in cheques :
-			if cheque['cheque_date'] > datetime.date.today() and  not cheque['cleared']:
-				print "upcoming"
-				upcoming_cheques.append(cheque)
-			if cheque['cheque_date'] <= datetime.date.today() and  not cheque['cleared']:
-				deadline_cheques.append(cheque)	
-			if cheque['cleared']:
-				cleared_cheques.append(cheque)	
-
-
-		context['upcoming_cheques'] = upcoming_cheques
-		context['cleared_cheques'] = cleared_cheques
-		context['deadline_cheques'] = deadline_cheques
-
-		context['page_type'] = page_type
-		return render(request,'accountant/cheques/view-cheques.html', context)
+		set_cheque(id = int(request.POST['cheque_id']), student_id = None, amount = None, cheque_date = None, cleared = request.POST['cleared'], clearance_date = request.POST['clearance_date'], description = request.POST['description'], cheque_number = None, bank_name = request.POST['bank_name'], bank_branch_name = request.POST['bank_branch_name'])
+		return redirect('/accountant/cheques/edit-cheque/?cheque='+str((request.POST.get('cheque_id')))+'&message=Cheque Details Updated')
 		'''except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:

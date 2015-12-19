@@ -17,15 +17,22 @@ def set_cheque(id = None, student_id = None, amount = None, cheque_date = None, 
 	if not is_none_id :
 		#Edit amount, chequedate, description,cleared, clearancedate. Student cannot be edited
 		cheque_object = Cheque.objects.get(id = id)
-		
-		cheque_object.amount = amount
-		cheque_object.cheque_date = cheque_date
-		cheque_object.cleared = cleared
-		cheque_object.clearance_date = clearance_date
-		cheque_object.description = description
-		cheque_object.cheque_number =cheque_number
-		cheque_object.bank_name = bank_name
-		cheque_object.bank_branch_name = bank_branch_name
+		if not is_none_amount:
+			cheque_object.amount = amount
+		if not is_none_cheque_date:
+			cheque_object.cheque_date = cheque_date
+		if not is_none_cleared:
+			cheque_object.cleared = cleared
+		if not is_none_clearance_date:	
+			cheque_object.clearance_date = clearance_date
+		if not is_none_description:
+			cheque_object.description = description
+		if not is_none_cheque_number:	
+			cheque_object.cheque_number =cheque_number
+		if not is_none_bank_name:
+			cheque_object.bank_name = bank_name
+		if not is_none_bank_branch_name:
+			cheque_object.bank_branch_name = bank_branch_name
 
 		cheque_object.save()
 
