@@ -5,7 +5,7 @@
 <!--
 body {
   font-family:Tahoma;
-  font-size:2;
+  font-size:3;
 }
 
 img {
@@ -69,14 +69,15 @@ tr.odd {
 
   <div id="content">
     <p>
-      <strong>Customer Details</strong><br />
+      <strong>Customer Details:</strong><br />
+      <hr>
       Name: {{transaction_details.student.first_name}} {{transaction_details.student.last_name}}<br />
       Email: {{transaction_details.student.email}}<br />
       Payment Type: {{transaction_details.fee_type}}    </p>
     <hr>
     <table>
       <tr><td><strong>Description</strong></td><td><strong>Qty</strong></td><td><strong>Payment Method</strong></td><td><strong>Amount</strong></td></tr>
-      <tr class="odd"><td>{{transaction_details.fee_type}} type </td><td>1</td><td>Cash</td><td>{{transaction_details.amount}}</td></tr>              <tr><td>&nbsp;</td><td>&nbsp;</td><td><strong>Total</strong></td><td><strong>&#8377;{{transaction_details.amount}}/-</strong></td></tr>
+      <tr class="odd"><td>{{transaction_details.fee_type}} type </td><td>1</td><td>{{payment_method}}</td><td>{{transaction_details.amount}}</td></tr>              <tr><td>&nbsp;</td><td>&nbsp;</td><td><strong>Total</strong></td><td><strong>Rs {{transaction_details.amount}}/-</strong></td></tr>
 
     </table>
 
