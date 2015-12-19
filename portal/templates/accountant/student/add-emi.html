@@ -2,22 +2,46 @@
 
 {% block students_nav %}{% endblock %}
 
-{% block main_content%}
+{% block date-picker-script %}
 
+    <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        // When the document is ready
+
+        $(document).ready(function () {
+            var count = {{number_emi}}+1;
+            var i;
+            var date = new Date();
+            var date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            for(i=1; i<=count; i++) {
+                // alert('#date'+i);
+                $('#date'+i).datepicker({
+                    format: "yyyy-mm-dd"
+                });
+                $('#date'+i).datepicker('update', date);
+                date.setDate(date.getDate() + 1);
+                date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            }
+        });
+
+    </script>
+{% endblock %}
+
+{% block main_content%}
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Admit Student</h1>
+        <h1 class="page-header">Add EMI</h1>
     </div>
 </div>
 {% if message %}
-        <div id="message" class="panel-body">
+        <div class="panel-body">
             <div class="alert alert-success alert-dismissable col-lg-12">
                 <button onclick="javascript:hide_message()" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{message}}
             </div>
         </div>
     {% elif message_error %}
-        <div id="message" class="panel-body">
+        <div class="panel-body">
             <div class="alert alert-danger alert-dismissable col-lg-12">
                 <button onclick="javascript:hide_message()" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{message_error}}
@@ -42,7 +66,6 @@
                 {% endif %}
 
             {% if page_type == 0 %}
-
                         <form>
                             <label><strong>Student Name</strong></label>
                             <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
@@ -54,77 +77,74 @@
                         <form>
                             <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="student" value="{{student_id}}">
-                            <input type="hidden" name="academic_year" value="True">
-                            <label><strong>Select Academic Years and standard for student's admission</strong></label>
-                            <table class="table table-bordered table-hover table-striped" id="dataTables">
-                     			<thead>
-                     				<tr>
-                     					<th>Academic Year</th>
-                                        {% for standard in standards %}
-                                            <th>{{standard.name}} Standard</th>
-                                        {% endfor %}
-                     				</tr>
-                     			</thead>
-                     			<tbody>
-                                    {% for academic_year in academic_years %}
-                                        <tr>
-                                            <td>
-                                                {{academic_year.year_start}}-{{academic_year.year_end}}
-                                            </td>
-                                            {% for standard in standards %}
-                                                <td>
-                                                    <input type="checkbox" name="acs_{{academic_year.id}}_{{standard.id}}" value="True">
-                                                    <!-- acs_{{academic_year.id}}_{{standard.id}} -->
-                                                </td>
-                                            {% endfor %}
-                                        </tr>
-                                    {% endfor %}
-                     			</tbody>
-                     		</table>
-
-
-                            <input type="submit" value="Proceed" class="btn btn-default btn-red">
+                            <label><strong>Total Fees</strong></label>
+                            <input class="form-control" type="text" value="{{fee_details.0.total_fees}}" readonly>
+                            <br/>
+                            <label><strong>Select Number of EMIs</strong></label>
+                            <input class="form-control" type="text" name="number_emi">
+                            <br/>
+                            <label><strong>Down Payment Amount</strong></label>
+                            <input class="form-control" type="text" name="down_payment_amount">
+                            <br/>
+                            <input type="submit" class="btn btn-default btn-red" value="Confirm">
                         </form>
             {% endif %}
 
             {% if page_type == 1 %}
-                <form method="POST">
-                    <label><strong>Student Name</strong></label>
-                    <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" readonly>
-                    <input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" readonly>
-                    <br/>
-                    <h3>Enter admission details</h3>
-                    <div class="row">
-                        {% for acs in acs_list %}
-                            <div class="col-lg-6">
-                                <hr/>
-                                <label><strong>Academic Year</strong></label>
-                                <input class="form-control" type="text" value="{{acs.academic_year_name}}" readonly>
-                                <br/>
-                                <label><strong>Standard</strong></label>
-                                <input class="form-control" type="text" value="{{acs.standard_name}}" readonly>
-                                <br/>
-                                <input type="hidden" name="acs_{{acs.academic_year}}_{{acs.standard}}" value="True">
-                                <label><strong>Select Batch</strong></label>
-                                <select name="batch_{{acs.academic_year}}_{{acs.standard}}" class="form-control">
-                                    <option>Select Batch</option>
-                                    {% for batch in acs.batches %}
-                                    <option value="{{batch.id}}">{{batch.branch}} - {{batch.name}}</option>
-                                    {% endfor %}
-                                </select>
-                                <br/>
-                                <label><strong>Select Subjects</strong></label>
-                                {% for subject_year in acs.subject_years %}
-                                    <div class="checkbox">
-                                        <label><input type="checkbox" name="subject_year_{{acs.academic_year}}_{{acs.standard}}_{{subject_year.id}}" value="True">{{subject_year.name}} </label>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <input class="btn btn-default btn-red" type="submit" value="Proceed">
-                    <br/><br/>
-                </form>
+
+            <form>
+                <label><strong>Student Name</strong></label>
+                <input type="text" name="name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
+                <input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
+            </form>
+            <br/>
+
+
+            <form>
+                <input type="hidden" name="name" value="{{student_name}}">
+                <input type="hidden" name="student" value="{{student_id}}">
+                <label><strong>Total Fees</strong></label>
+                <input class="form-control" type="text" value="{{fee_details.0.total_fees}}" readonly>
+                <br/>
+                <label><strong>Select Number of EMIs</strong></label>
+                <input class="form-control" type="text" name="number_emi" value="{{number_emi}}" readonly>
+                <br/>
+                <label><strong>Down Payment Amount</strong></label>
+                <input class="form-control" type="text" name="down_payment_amount" value={{down_payment_amount}} readonly>
+                <br/>
+                <div class="dataTable_wrapper">
+                    <table class="display table table-striped table-bordered table-hover" id="dataTables">
+                        <thead>
+                            <tr>
+                                <td>Name</td>
+                                <td>Amount</td>
+                                <td>Deadline</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for emi in emis %}
+                                <tr>
+                                    <td>
+                                        {{emi.2}}
+                                        <input type="hidden" name="description{{emi.0}}" value="{{emi.2}}">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="emi{{emi.0}}" value="{{emi.1}}">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="emi_deadline{{emi.0}}" id="date{{emi.0}}">
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <input type="submit" value="Create EMIs" class="btn btn-default btn-red">
+
+            </form>
+
 
             {% endif %}
 
@@ -138,18 +158,52 @@
                         <br/>
 
 
-                        <form method="POST">
+                        <form>
                             <input type="hidden" name="name" value="{{student_name}}">
                             <input type="hidden" name="student" value="{{student_id}}">
-                            <label><strong>Enter Fee Amount</strong></label>
-                            <input type="text" name="fee_amount" value="{{fee}}" class="form-control">
-                            <br/>
-                            <div class="checkbox">
-                                <label><input type="checkbox" name="emi" value="True">Eligible for EMIs </label>
-                            </div>
-                            <input class="btn btn-default btn-red" type="submit" value="Save Fees">
+                            <label><strong>Select Academic Year</strong></label>
+
+                            <select name="academic_year" class="form-control" onchange="this.form.submit()">
+                                {% for academic_year in academic_years %}
+                                <option value="{{academic_year.id}}"{% if academic_year_id == academic_year.id %} selected{% endif %}>{{academic_year.year_start}} - {{academic_year.year_end}}</option>
+                                {% endfor %}
+                            </select>
                         </form>
                         <br/>
+
+                        <form>
+                            <input type="hidden" name="name" value="{{student_name}}">
+                            <input type="hidden" name="student" value="{{student_id}}">
+                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">
+
+                            <label><strong>Select Standard</strong></label>
+                            <select name="standard" class="form-control" onchange="this.form.submit()">
+                                {% for standard in standards %}
+                                <option value="{{standard.id}}"{% if standard_id == standard.id %} selected{% endif %}>{{standard.name}} </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                        <br/>
+
+                         <form>
+                            <input type="hidden" name="name" value="{{student_name}}">
+                            <input type="hidden" name="student" value="{{student_id}}">
+                            <input type="hidden" name="academic_year" value="{{academic_year_id}}">
+                            <input type="hidden" name="standard" value="{{standard_id}}">
+                            <label><strong>Select Batch</strong></label>
+                            <select name="batch" class="form-control" onchange="this.form.submit()">
+                                <option>Select Batch</option>
+                                {% for batch in batches %}
+                                <option value="{{batch.id}}">{{batch.branch}} - {{batch.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                            <br/>
+
+
+
+
+
             {% endif %}
 
 

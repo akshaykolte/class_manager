@@ -59,6 +59,9 @@
     function call_student_search_window(type) {
         window.open("/student-search/?type="+type,"name_" + Math.random(), "scrollbars=1");
     }
+    function hide_message() {
+        $('#message').hide();
+    }
   </script>
 
 </head>
@@ -189,6 +192,9 @@
                                 <li>
                                     <a href="/accountant/student/admit-student/">Admit Student to Batches</a>
                                 </li>
+                                <li>
+                                    <a href="/accountant/student/add-emi/">Add Student EMIs</a>
+                                </li>
 
                             </ul>
                             <!-- /.nav-second-level -->
@@ -222,6 +228,20 @@
                                 <li>
                                     <a href="/accountant/notices/view-my-notices/">View/Edit My Notices</a>
                                 </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+
+
+                        <li style="border-color:#4A777A;">
+                            <a href="#"><i class="fa fa-user fa-fw "></i> Cheques<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block cheques_nav %}collapse{% endblock %}">
+                                <li>
+                                    <a href="/accountant/cheques/view-cheques/">View Cheques</a>
+                                </li>
+                                
+                                
+
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>

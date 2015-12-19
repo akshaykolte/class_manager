@@ -613,36 +613,40 @@ def insert_attendance():
 
 
 
+def main():
+	starttime = datetime.datetime.now()
 
-starttime = datetime.datetime.now()
+	insert_academic_years()
+	insert_branches()
+	insert_roles()
+	insert_fee_types()
+	insert_standards()
+	insert_batches()
+	insert_subjects()
+	insert_subject_years()
 
-insert_academic_years()
-insert_branches()
-insert_roles()
-insert_fee_types()
-insert_standards()
-insert_batches()
-insert_subjects()
-insert_subject_years()
+	insert_students()
+	insert_parents()
+	assign_student_parent()
+	insert_student_batches()
 
-insert_students()
-insert_parents()
-assign_student_parent()
-insert_student_batches()
+	insert_staff()
+	insert_staff_role()
+	insert_lectures()
+	insert_lecture_batches()
+	insert_notices()
+	insert_attendance()
 
-insert_staff()
-insert_staff_role()
-insert_lectures()
-insert_lecture_batches()
-insert_notices()
-insert_attendance()
+	insert_tests()
+	insert_test_batch()
+	insert_test_student_batch()
 
-insert_tests()
-insert_test_batch()
-insert_test_student_batch()
+	insert_base_fees()
+	insert_transactions()
 
-insert_base_fees()
-insert_transactions()
+	endtime = datetime.datetime.now()
+	print "Time taken: ",str((endtime-starttime).seconds)+"."+str((endtime-starttime).microseconds)[0:3],"seconds\n"
 
-endtime = datetime.datetime.now()
-print "Time taken: ",str((endtime-starttime).seconds)+"."+str((endtime-starttime).microseconds)[0:3],"seconds\n"
+
+if __name__ == "__main__":
+	main()
