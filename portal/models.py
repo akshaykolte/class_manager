@@ -113,8 +113,8 @@ class Student(models.Model):
 	def __str__(self):
 		return self.first_name + ' ' + self.last_name
 
-	class Meta:
-		unique_together = (('username',), ('email',), ('phone_number',),)
+	'''class Meta:
+		unique_together = (('username',), ('email',), ('phone_number',),)'''
 
 	def save(self, validate=True):
 		from portal.validator.validator import validate_student
