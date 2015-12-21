@@ -100,15 +100,15 @@ class Batch(models.Model):
 
 class Student(models.Model):
 
-	username = models.CharField(max_length=50)
-	password = models.CharField(max_length=50)
+	username = models.CharField(max_length=50,blank=True, null=True)
+	password = models.CharField(max_length=50,blank=True, null=True)
 
-	first_name = models.CharField(max_length=50)
-	last_name = models.CharField(max_length=50)
-	address = models.CharField(max_length=200)
-	email = models.CharField(max_length=50)
-	phone_number = models.CharField(max_length=13)
-	gender = models.CharField(max_length=1)
+	first_name = models.CharField(max_length=50,blank=True, null=True)
+	last_name = models.CharField(max_length=50,blank=True, null=True)
+	address = models.CharField(max_length=200,blank=True, null=True)
+	email = models.CharField(max_length=50,blank=True, null=True)
+	phone_number = models.CharField(max_length=13,blank=True, null=True)
+	gender = models.CharField(max_length=1,blank=True, null=True)
 
 	def __str__(self):
 		return self.first_name + ' ' + self.last_name
@@ -119,10 +119,10 @@ class Student(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_student
 		if validate:
-			if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
+			'''if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
 				PentaError(997).raise_error()
 			if self.gender != 'M' and self.gender != 'F':
-				PentaError(995).raise_error()
+				PentaError(995).raise_error()'''
 			if not validate_phone_number(self.phone_number):
 				PentaError(996).raise_error()
 			validation = validate_student(self)
@@ -136,15 +136,15 @@ class Student(models.Model):
 
 class Parent(models.Model):
 
-	username = models.CharField(max_length=50)
-	password = models.CharField(max_length=50)
+	username = models.CharField(max_length=50,blank=True, null=True)
+	password = models.CharField(max_length=50,blank=True, null=True)
 
-	first_name = models.CharField(max_length=50)
-	last_name = models.CharField(max_length=50)
-	address = models.CharField(max_length=200)
-	email = models.CharField(max_length=50)
-	phone_number = models.CharField(max_length=13)
-	gender = models.CharField(max_length=1)
+	first_name = models.CharField(max_length=50,blank=True, null=True)
+	last_name = models.CharField(max_length=50,blank=True, null=True)
+	address = models.CharField(max_length=200,blank=True, null=True)
+	email = models.CharField(max_length=50,blank=True, null=True)
+	phone_number = models.CharField(max_length=13,blank=True, null=True)
+	gender = models.CharField(max_length=1,blank=True, null=True)
 
 	def __str__(self):
 		return self.first_name + ' ' + self.last_name
@@ -155,7 +155,7 @@ class Parent(models.Model):
 	def save(self, validate=True):
 		from portal.validator.validator import validate_parent
 		if validate:
-			if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
+			'''if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
 				print 'username', self.username
 				print 'password', self.password
 				print 'first name', self.first_name
@@ -165,7 +165,7 @@ class Parent(models.Model):
 				print 'gender', self.gender
 				PentaError(997).raise_error()
 			if self.gender != 'M' and self.gender != 'F':
-				PentaError(995).raise_error()
+				PentaError(995).raise_error()'''
 			if not validate_phone_number(self.phone_number):
 				PentaError(996).raise_error()
 			validation = validate_parent(self)
