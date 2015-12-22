@@ -30,6 +30,13 @@ urlpatterns = [
 	url(r'^notices/view-my-notices/$', 'portal.views.accountant_views.view_my_notices'),
 	url(r'^notices/edit-my-notice/$', 'portal.views.accountant_views.edit_my_notice'),
 
+	#SMS
+	url(r'^sms-status/$', 'portal.views.accountant_views.sms_status'),
+	url(r'^notices/send-sms-notice/$', 'portal.views.accountant_views.send_sms_notice'),
+    url(r'^notices/send-sms-notice/submit$', 'portal.views.accountant_views.send_sms_notice_submit'),
+	
+
+
 
 	url(r'^cheques/view-cheques/$', 'portal.views.accountant_views.view_cheques'),
 	url(r'^cheques/edit-cheque/$', 'portal.views.accountant_views.edit_cheque'),
