@@ -492,7 +492,7 @@ def get_previous_students(batch_id = None):
 
 def search_students(first_name='', last_name='', username='', email='', phone_number=''):
 	# TODO Think of optimisation (probably using indexes
-	students = Student.objects.filter(first_name__icontains=first_name, last_name__icontains=last_name, username__icontains=username, email__icontains=email, phone_number__icontains=phone_number)
+	students = Student.objects.filter(first_name__icontains=first_name, last_name__icontains=last_name, phone_number__icontains=phone_number)
 	student_list = []
 	for i in students:
 		student_dict = {}
