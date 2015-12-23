@@ -608,9 +608,11 @@ def make_transaction(request):
 
 				transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_id = request.POST['student'], fee_type_id = fee_type_id)
 			
-
-			return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id)+'&cheque_number='+str(request.POST['cheque_number']))
-
+			if request.POST['payment_method'] == 'cheque':
+				return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id)+'&cheque_number='+str(request.POST['cheque_number']))
+			else:
+				return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id)+'&message='+str('Transaction Completed'))
+				
 
 
 

@@ -412,14 +412,15 @@ def get_batch_fees(batch_id = None):
 	for object in student_batch_objects:
 
 		fee_transaction = FeeTransaction.objects.filter(student = object.student)
-
+		if not fee_transaction:
+			return []
 		total = {}
 		total['total_fees_paid'] =0
 		total['total_fees_remaining'] =0
 		total['discount'] = 0
 		total['base_fees'] = 0
 		total['total_fees'] = 0
-
+		total['date'] = ''
 		studentbatches = StudentBatch.objects.filter(student = object.student)
 
 		for studentbatch in studentbatches:
