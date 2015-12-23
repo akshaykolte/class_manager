@@ -2,6 +2,29 @@
 
 {% block fees_nav %}{% endblock %}
 
+{% block date-picker-script %}
+
+    <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        // When the document is ready
+
+        $(document).ready(function () {
+
+            $('#example1').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            $('#example1').datepicker('update', new Date());
+
+            $('#example2').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            $('#example2').datepicker('update', new Date());
+
+        });
+
+    </script>
+{% endblock %}
+
 {% block main_content%}
 <div class="row">
 
@@ -34,9 +57,9 @@
 			<label><strong>Student Name</strong></label>
 			<div class="form-group input-group">
 				<input type="text" name="student_name" class="form-control" id="chooseStudentName" readonly>
-				<input type="hidden" name="student_batch" class="form-control" id="chooseStudentBatchId" onchange="this.form.submit()">
+				<input type="hidden" name="student" class="form-control" id="chooseStudentId" onchange="this.form.submit()">
 				<span class="input-group-btn">
-					<button class="btn btn-default" onClick="call_student_search_window('studentbatch')" type="button"><i class="fa fa-search"> Click Here to Search Student</i>
+					<button class="btn btn-default" onClick="call_student_search_window('student')" type="button"><i class="fa fa-search"> Click Here to Search Student</i>
 					</button>
 				</span>
 			</div>
@@ -51,14 +74,14 @@
 		<form>
 				<label><strong>Student Name</strong></label>
 				<input type="text" name="student_name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
-				<input type="hidden" name="student_batch" value="{{student_batch_id}}" class="form-control" onchange="this.form.submit()" disabled>
+				<input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
 		</form>
 		<br/>
 
 
 		<form>
 				<input type="hidden" name="student_name" value="{{student_name}}" >
-				<input type="hidden" name="student_batch" value="{{student_batch_id}}">
+				<input type="hidden" name="student" value="{{student_id}}">
 				<label><strong>Select Fee Type</strong></label>
 				<select name="fee_type" class="form-control" onchange="this.form.submit()">
 					<option>Select</option>
@@ -75,19 +98,61 @@
 
 	{% endif %}
 
+    {% if page_type == 3 %}
+        <form>
+    				<label><strong>Student Name</strong></label>
+    				<input type="text" name="student_name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
+    				<input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
+    	</form>
+    	<br/>
+
+
+    	<form>
+    		<input type="hidden" name="student_name" value="{{student_name}}">
+    		<input type="hidden" name="student" value="{{student_id}}">
+    		<label><strong>Select Fee Type</strong></label>
+    		<select name="fee_type" class="form-control" onchange="this.form.submit()">
+    			{% for fee_type in fee_types %}
+    			<option value="{{fee_type.id}}"{% if fee_type_id == fee_type.id %} selected{% endif %}>{%if fee_type.name == 'payment'%}Payment{%endif%}
+    														{%if fee_type.name == 'discount'%}Discount{%endif%}
+    														{%if fee_type.name == 'base fee'%}Base Fee{%endif%}
+    														{%if fee_type.name == 'fine'%}Fine{%endif%}</option>
+    			{% endfor %}
+    		</select>
+    	</form>
+    	<form>
+
+            <input type="hidden" name="student_name" value="{{student_name}}">
+    		<input type="hidden" name="student" value="{{student_id}}">
+    		<input type="hidden" name="fee_type" value="{{fee_type_id}}">
+    		<br/>
+    		<label><strong>Payment method: </strong></label>
+            <br/>
+            <div class="radio-inline">
+              <input type="radio" name="payment_method" value="cash" onchange="this.form.submit()">Cash
+            </div>
+            <div class="radio-inline">
+              <input type="radio" name="payment_method" value="cheque" onchange="this.form.submit()">Cheque
+            </div>
+            <br/>
+    		<br/>
+    	</form>
+
+    {% endif %}
+
 	{% if page_type == 2 %}
 
 	<form>
 				<label><strong>Student Name</strong></label>
 				<input type="text" name="student_name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
-				<input type="hidden" name="student_batch" value="{{student_batch_id}}" class="form-control" onchange="this.form.submit()" disabled>
+				<input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
 	</form>
 	<br/>
 
 
 	<form>
 		<input type="hidden" name="student_name" value="{{student_name}}">
-		<input type="hidden" name="student_batch" value="{{student_batch_id}}">
+		<input type="hidden" name="student" value="{{student_id}}">
 		<label><strong>Select Fee Type</strong></label>
 		<select name="fee_type" class="form-control" onchange="this.form.submit()">
 			{% for fee_type in fee_types %}
@@ -99,15 +164,34 @@
 		</select>
 	</form>
 	<br/>
+    {% if fee_type_id == 1 %}
+        <form>
+            <input type="hidden" name="student_name" value="{{student_name}}">
+            <input type="hidden" name="student" value="{{student_id}}">
+            <input type="hidden" name="fee_type" value="{{fee_type_id}}">
+            <label><strong>Payment method: </strong></label>
+            <br/>
+            <div class="radio-inline">
+              <input type="radio" name="payment_method" value="cash" onchange="this.form.submit()" checked>Cash
+            </div>
+            <div class="radio-inline">
+              <input type="radio" name="payment_method" value="cheque" onchange="this.form.submit()">Cheque
+            </div>
+            <br/>
+        </form>
+        <br/>
+    {% endif %}
 	<form action="." method="POST">
 
 
-		<input type="hidden" name="student_batch" value="{{student_batch_id}}">
+		<input type="hidden" name="student" value="{{student_id}}">
 		<input type="hidden" name="fee_type" value="{{fee_type_id}}">
-		<br/>
+		{{payment_method}}
+		<input type="hidden" name="payment_method" value="{{payment_method}}">
+
 		<label><strong>Amount</strong></label>
 		<input name="amount" class="form-control">
-		<br/>
+        <br/>
 		<label><strong>Date</strong></label>
 			<input name ="date" class="form-control"id="example1"><br/>
 		<br/>
@@ -120,7 +204,80 @@
 
 	{% endif %}
 
+    {% if page_type == 4 %}
 
+	<form>
+				<label><strong>Student Name</strong></label>
+				<input type="text" name="student_name" value="{{student_name}}" class="form-control" onchange="this.form.submit()" disabled>
+				<input type="hidden" name="student" value="{{student_id}}" class="form-control" onchange="this.form.submit()" disabled>
+	</form>
+	<br/>
+
+
+	<form>
+		<input type="hidden" name="student_name" value="{{student_name}}">
+		<input type="hidden" name="student" value="{{student_id}}">
+		<label><strong>Select Fee Type</strong></label>
+		<select name="fee_type" class="form-control" onchange="this.form.submit()">
+			{% for fee_type in fee_types %}
+			<option value="{{fee_type.id}}"{% if fee_type_id == fee_type.id %} selected{% endif %}>{%if fee_type.name == 'payment'%}Payment{%endif%}
+														{%if fee_type.name == 'discount'%}Discount{%endif%}
+														{%if fee_type.name == 'base fee'%}Base Fee{%endif%}
+														{%if fee_type.name == 'fine'%}Fine{%endif%}</option>
+			{% endfor %}
+		</select>
+	</form>
+	<br/>
+    <form>
+        <input type="hidden" name="student_name" value="{{student_name}}">
+        <input type="hidden" name="student" value="{{student_id}}">
+        <input type="hidden" name="fee_type" value="{{fee_type_id}}">
+        <label><strong>Payment method: </strong></label>
+        <br/>
+        <div class="radio-inline">
+          <input type="radio" name="payment_method" value="cash" onchange="this.form.submit()">Cash
+        </div>
+        <div class="radio-inline">
+          <input type="radio" name="payment_method" value="cheque" onchange="this.form.submit()" checked>Cheque
+        </div>
+        <br/>
+    </form>
+    <br/>
+	<form action="." method="POST">
+
+
+		<input type="hidden" name="student" value="{{student_id}}">
+		<input type="hidden" name="fee_type" value="{{fee_type_id}}">
+		<input type="hidden" name="payment_method" value="{{payment_method}}">
+		<label><strong>Amount</strong></label>
+		<input name="amount" class="form-control">
+        <br/>
+		<label><strong>Cheque Date</strong></label>
+		<input name ="cheque_date" class="form-control"id="example1"><br/>
+		<br/>
+        <label><strong>Cheque Number</strong></label>
+		<input name="cheque_number" class="form-control">
+        <br/>
+        <label><strong>Bank Name</strong></label>
+		<input name="bank_name" class="form-control">
+        <br/>
+        <label><strong>Branch Name</strong></label>
+		<input name="bank_branch_name" class="form-control">
+        <br/>
+        <label><strong>Description</strong></label>
+		<input name="description" class="form-control">
+        <br/>
+        <label><strong>Transaction Date</strong></label>
+		<input name ="date" class="form-control"id="example2"><br/>
+		<br/>
+		<!--<label><strong>Time</strong></label>
+		<input name="time" class="form-control">
+		<br/>
+		-->
+		<input class="btn btn-default btn-red" type='submit' value='Make Transaction'>
+	</form>
+
+	{% endif %}
 
 </br>
 

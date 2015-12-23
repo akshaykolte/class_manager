@@ -303,8 +303,8 @@ def insert_student_batches():
 				amount = 8000
 			elif rn == 3:
 				amount = 12000
-			if not FeeTransaction.objects.filter(student_batch = stud_bat_obj,amount = amount,fee_type = base_fee_object, date = datetime.datetime.now()).exists():
-				transaction_object = FeeTransaction(student_batch = stud_bat_obj,amount = amount,fee_type = base_fee_object, date = datetime.datetime.now())
+			if not FeeTransaction.objects.filter(student = stud_bat_obj.student,amount = amount,fee_type = base_fee_object, date = datetime.datetime.now()).exists():
+				transaction_object = FeeTransaction(student = stud_bat_obj.student,amount = amount,fee_type = base_fee_object, date = datetime.datetime.now())
 				transaction_object.save()
 			for i in range(rn):
 				stud_bat_obj.subject_years.add(subject_year_list[i].id)
@@ -535,7 +535,10 @@ def insert_test_batch():
 		for batch in batches:
 			if not TestBatch.objects.filter(test = test, batch = batch).exists():
 				if test.subject_year.subject.standard == batch.standard:
-					test_batch_object = TestBatch(test = test, batch = batch)
+					start_date = datetime.datetime.now() - timedelta(days=60)
+					end_date = datetime.datetime.now() + timedelta(days=60)
+					randdate = random_date(start_date,end_date)
+					test_batch_object = TestBatch(test = test, batch = batch,test_date = randdate)
 					test_batch_object.save()
 	print ""
 
@@ -571,14 +574,14 @@ def insert_transactions():
 		amount = random.randint(1,10)
 		amount *= 1000
 		present_payment_done = 0
-		fee_objects = FeeTransaction.objects.filter(student_batch=n, fee_type=payment_type)
+		fee_objects = FeeTransaction.objects.filter(student=n.student, fee_type=payment_type)
 		for fee_obj in fee_objects:
 			present_payment_done += fee_obj.amount
-		base_fee_obj = FeeTransaction.objects.get(student_batch=n, fee_type=base_fee_type)
+		base_fee_obj = FeeTransaction.objects.get(student=n.student, fee_type=base_fee_type)
 		if present_payment_done + amount > base_fee_obj.amount:
 			amount = base_fee_obj.amount - present_payment_done
 		if amount != 0:
-			transaction_object = FeeTransaction(student_batch = n,amount = amount,fee_type = payment_type, date = datetime.datetime.now())
+			transaction_object = FeeTransaction(student = n.student,amount = amount,fee_type = payment_type, date = datetime.datetime.now())
 			transaction_object.save()
 
 	print ""
@@ -610,34 +613,40 @@ def insert_attendance():
 
 
 
+def main():
+	starttime = datetime.datetime.now()
 
-starttime = datetime.datetime.now()
-insert_academic_years()
-insert_branches()
-insert_roles()
-insert_fee_types()
-insert_standards()
-insert_batches()
-insert_subjects()
-insert_subject_years()
+	insert_academic_years()
+	insert_branches()
+	insert_roles()
+	insert_fee_types()
+	insert_standards()
+	insert_batches()
+	insert_subjects()
+	insert_subject_years()
 
-insert_students()
-insert_parents()
-assign_student_parent()
-insert_student_batches()
+	insert_students()
+	insert_parents()
+	assign_student_parent()
+	insert_student_batches()
 
-insert_staff()
-insert_staff_role()
-insert_lectures()
-insert_lecture_batches()
-insert_notices()
-insert_attendance()
-insert_tests()
-insert_test_batch()
-insert_test_student_batch()
-insert_base_fees()
-insert_transactions()
+	insert_staff()
+	insert_staff_role()
+	insert_lectures()
+	insert_lecture_batches()
+	insert_notices()
+	insert_attendance()
+
+	insert_tests()
+	insert_test_batch()
+	insert_test_student_batch()
+
+	insert_base_fees()
+	insert_transactions()
+
+	endtime = datetime.datetime.now()
+	print "Time taken: ",str((endtime-starttime).seconds)+"."+str((endtime-starttime).microseconds)[0:3],"seconds\n"
 
 
-endtime = datetime.datetime.now()
-print "Time taken: ",str((endtime-starttime).seconds)+"."+str((endtime-starttime).microseconds)[0:3],"seconds\n"
+if __name__ == "__main__":
+	main()

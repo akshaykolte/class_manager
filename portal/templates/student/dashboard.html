@@ -15,16 +15,37 @@
     </div>
 
 
+    <!-- Commented temporarily for demo, reason: all marks are in a same line for now, does not look good,
+    need to take input of test dates for proper displaying of graphs -->
 
     <!-- <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 Marks
             </div>
+
             <div class="panel-body">
-                <div class="flot-chart">
-                    <div class="flot-chart-content" id="flot-line-chart"></div>
-                </div>
+                <ul class="nav nav-tabs">
+                  {% for subject in subjects %}
+                    {% if forloop.counter0 == 0%}
+                      <li class="active">
+                    {% else %}
+                      <li>
+                    {% endif %}
+                      <a data-toggle="tab" href="#flot_{{subject.subject_id}}">{{subject.subject_name}}</a></li>
+                  {% endfor%}
+                </ul>
+                <div class="tab-content">
+                  {% for subject in subjects %}
+                  {% if forloop.counter0 == 0%}
+                    <div id="flot_{{subject.subject_id}}" class="flot-chart tab-pane fade in active">
+                  {% else %}
+                    <div id="flot_{{subject.subject_id}}" class="flot-chart tab-pane fade in">
+                  {% endif %}
+
+                     <div class="flot-chart-content" id="flot-line-chart-{{subject.subject_id}}"></div>
+                  </div>
+                  {% endfor%}
             </div>
         </div>
     </div> -->
@@ -264,9 +285,7 @@
     <script>
     $(document).ready(function() {
         var offset = 0;
-      var percentage = [[(new Date(2009, 12, 19)).getTime(), 70],[(new Date(2010, 6, 27)).getTime(), 90]];
-      var counter = 1
-
+      var counter = 5
       var options = {
           series: {
               lines: {
@@ -281,20 +300,20 @@
           },
           yaxis: {
               min: 0,
-              max: 100
+              max: 100,
+              axisLabel: 'Marks',
           },
           xaxis: {
-              min: (new Date(2010, 11, 10)).getTime(),
-              max: (new Date(2010, 11, 15)).getTime(),
+              min: (new Date(2000+{{academic_year.year_start}}, 5, 1)).getTime(),
+              max: (new Date(2000+{{academic_year.year_end}}, 4, 31)).getTime(),
               mode: "time",
               tickSize: [1, "month"],
-              monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-              tickLength: 0,
+              monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+              tickLength: 10,
               axisLabel: 'Month',
           },
-          tooltip: true,
+          tooltip: false,
           tooltipOpts: {
-              content: "'%s' of %x.1 is %y.4",
               shifts: {
                   x: -60,
                   y: 25
@@ -302,11 +321,79 @@
           }
       };
 
-      var plotObj = $.plot($("#flot-line-chart"), [{
-              data: percentage,
+
+      function showTooltip(x, y, contents) {
+       $('<div id="tooltip">' + contents + '</div>').css( {
+           position: 'absolute',
+           display: 'none',
+           top: y + 5,
+           left: x + 5,
+           border: '1px solid #fdd',
+           padding: '2px',
+           'background-color': '#fee',
+           opacity: 0.80
+       }).appendTo("body").fadeIn(200);
+   }
+
+
+      function gd(year, month, day) {
+      return new Date(year, month-1, day).getTime();
+      }
+
+      {% for k,v in segregated_marks.items %}
+      var plotObj_{{k}} = $.plot($("#flot-line-chart-{{k}}"), [{
+              data: [
+                {% for i in v %}
+                  [gd({{i.test_date.year}}, {{i.test_date.month}}, {{i.test_date.day}}), {{i.obtained_marks}}],
+                {% endfor %}
+              ],
               label: "Marks Obtained"
           }],
           options);
+
+          test_name_{{k}} = [];
+          marks_obtained_{{k}} = [];
+          marks_total_{{k}} = [];
+          dates_{{k}} = [];
+
+
+
+          {% for i in v %}
+            test_name_{{k}}.push("{{i.test_name}}");
+            marks_obtained_{{k}}.push("{{i.obtained_marks}}");
+            marks_total_{{k}}.push("{{i.total_marks}}");
+            dates_{{k}}.push("{{i.test_date}}");
+          {% endfor %}
+
+
+          var previousPoint = null;
+          $("#flot-line-chart-{{k}}").bind("plothover", function (event, pos, item) {
+                  if (item) {
+                      if (previousPoint != item.dataIndex) {
+                          previousPoint = item.dataIndex;
+
+                          $("#tooltip").remove();
+
+                          contents =    "Test: " + test_name_{{k}}[item.dataIndex] + "<br>"
+                                      + "Date: " + dates_{{k}}[item.dataIndex] + "<br>"
+                                      + "Marks: " + marks_obtained_{{k}}[item.dataIndex] + "/" + marks_total_{{k}}[item.dataIndex];
+                          showTooltip(item.pageX, item.pageY,
+                                      contents);
+                      }
+                  }
+                  else {
+                      $("#tooltip").remove();
+                      previousPoint = null;
+                  }
+
+          });
+
+      {% endfor %}
+
+
+
+
+
     });
     </script>
 

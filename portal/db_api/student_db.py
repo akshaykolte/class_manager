@@ -68,6 +68,7 @@ def get_students(id = None,batch_id = None, subject_year_id = None):
 		return student_list
 	elif is_none_id and is_none_batch_id and is_none_subject_year_id:
 		student_list = []
+
 		student = Student.objects.all()
 		for i in student:
 			student_dict = {}
@@ -80,6 +81,7 @@ def get_students(id = None,batch_id = None, subject_year_id = None):
 			student_dict['email'] = i.email
 			student_dict['phone_number'] = i.phone_number
 			student_dict['gender'] = i.gender
+			student_list.append(student_dict)
 		return student_list
 	elif is_none_id and not is_none_batch_id and not is_none_subject_year_id:
 		student_list = []

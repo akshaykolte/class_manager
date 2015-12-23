@@ -160,7 +160,7 @@
                        <li style="border-color:#4A777A;">
                             <a href="/teacher/dashboard/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
-                        <li style="border-color:#4A777A;">
+                        <!-- <li style="border-color:#4A777A;">
                             <a href="#"><i class="fa fa-calendar fa-fw"></i> Attendance<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level {% block attendance_nav %}collapse{% endblock %}">
                                 <li>
@@ -170,8 +170,22 @@
                                     <a href="/teacher/attendance/view-attendance/">View Attendance</a>
                                 </li>
                             </ul>
+                        </li> -->
+
+                        <li style="border-color:#4A777A;">
+                            <a href="#"><i class="fa fa-calendar fa-fw"></i><!--Daywise--> Attendance<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block attendance_daywise_nav %}collapse{% endblock %}">
+                                <li>
+                                    <a href="/teacher/attendance/add-attendance-daywise/">Add/Edit Attendance</a>
+                                </li>
+                                <li>
+                                    <a href="/teacher/attendance/view-attendance-daywise/">View Attendance</a>
+                                </li>
+                            </ul>
                             <!-- /.nav-second-level -->
                         </li>
+
+
                         <li style="border-color:#4A777A;">
                             <a href="#"><i class="fa fa-pencil fa-fw"></i> Lectures<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level {% block lectures_nav %}collapse{% endblock %}">
@@ -211,6 +225,12 @@
                                     <a href="/teacher/test/view-test-marks/">View/Edit test marks</a>
                                 </li>
                             </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+
+                         <li style="border-color:#4A777A;">
+                            <a href="/teacher/sms-status/"><i class="fa fa-envelope-o fa-fw"></i> SMS Status</span></a>
+                            
                             <!-- /.nav-second-level -->
                         </li>
                     </ul>

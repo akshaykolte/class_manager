@@ -1,0 +1,99 @@
+{% extends "accountant/base_accountant.html" %}
+
+{% block main_content %}
+
+{% block date-picker-script %}
+
+    <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        // When the document is ready
+
+        $(document).ready(function () {
+
+            $('#example1').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            $('#example1').datepicker('update', new Date());
+
+            $('#example2').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            $('#example2').datepicker('update', new Date());
+
+        });
+
+    </script>
+{% endblock %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Edit Cheque Details</h1>
+    </div>
+</div>
+{% if message %}
+        <div class="panel-body">
+            <div class="alert alert-success alert-dismissable col-lg-12">
+                <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{message}}
+            </div>
+        </div>
+    {% elif message_error %}
+        <div class="panel-body">
+            <div class="alert alert-danger alert-dismissable col-lg-12">
+                <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{message_error}}
+            </div>
+        </div>
+    {% endif %}
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            
+            <h4>Student: <b>{{cheque.student}}</b> &nbsp;&nbsp; Cheque Number: <b>{{cheque.cheque_number}}</b>&nbsp;&nbsp; Amount: <b> Rs. {{cheque.amount}}</b> </h4>
+        </div>
+        <!-- /.panel-heading -->
+        
+        <div class="panel-body">
+                <form action="." method="POST">
+
+
+                    <input type="hidden" name="cheque_id" value="{{cheque.id}}">
+                    
+                    <label><strong>Cheque Status: </strong></label>
+                    <br/>
+                    <div class="radio-inline">
+                      <input type="radio" name="cleared" value="False"{% if not cheque.cleared  %} checked="checked"{% endif %} >Not Cleared
+                    </div>
+                    <div class="radio-inline">
+                      <input type="radio" name="cleared" value="True" {% if cheque.cleared %}checked="checked"{% endif %}>Cleared
+                    </div>
+                    <br/>
+                    <br/>
+
+                    <label><strong>Clearance Date</strong></label>
+                   <input name ="clearance_date" value = "{{cheque.clearance_date}}" class="form-control"id="example1">
+                    <br/>
+
+                    <label><strong>Description</strong></label>
+                    <input name="description" value = "{{cheque.description}}" class="form-control">
+                    <br/>
+                    
+                    <label><strong>Bank Name</strong></label>
+                    <input name="bank_name" value = "{{cheque.bank_name}}" class="form-control">
+                    <br/>
+                    <label><strong>Branch Name</strong></label>
+                    <input name="bank_branch_name" value = "{{cheque.bank_branch_name}}" class="form-control">
+                    <br/>
+                    
+                    
+                    
+                    <input class="btn btn-default btn-red" type='submit' value='Update Details'>
+                </form>
+        </div>
+
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+
+{% endblock %}

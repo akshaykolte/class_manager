@@ -46,9 +46,6 @@
     <!-- Timeline CSS -->
     <link href="/static/dist/css/timeline.css" rel="stylesheet">
 
-       <!--Datepicker CSS -->
-    <link href="/static/datepicker/css/datepicker.css" rel="stylesheet">
-
     <!-- Custom CSS -->
     <link href="/static/dist/css/sb-admin-2.css" rel="stylesheet">
 
@@ -203,6 +200,9 @@
                                 <li>
 									<a href="/manager/tests/view-tests/">View/Edit Tests</a>		<!-- Also consider assigning of test to batch/teacher -->
                                 </li>
+                                <li>
+									<a href="/manager/tests/sms-tests/">Send tests SMS</a>
+                                </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -219,7 +219,7 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        <li style="border-color:#4A777A;">
+                        <!-- <li style="border-color:#4A777A;">
 							<a href="#"><i class="fa fa-bar-chart fa-fw"></i> Attendance Reports<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level {% block attendance_nav %}collapse{% endblock %}">
                                 <li>
@@ -230,6 +230,17 @@
                                 </li>
                                 <li>
 									<a href="/manager/attendance-reports/batchwise-attendance/">Batchwise Attendance</a>
+                                </li>
+                            </ul>
+                        </li> -->
+                        <li style="border-color:#4A777A;">
+							<a href="#"><i class="fa fa-bar-chart fa-fw"></i><!-- Daywise--> Attendance Reports<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block daywise_attendance_nav %}collapse{% endblock %}">
+                                <li>
+									<a href="/manager/daywise-attendance-reports/studentwise-attendance/">Studentwise Attendance</a>
+                                </li>
+                                <li>
+									<a href="/manager/daywise-attendance-reports/batchwise-attendance/">Batchwise Attendance</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

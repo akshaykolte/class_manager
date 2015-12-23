@@ -13,7 +13,7 @@ admin.site.register(StaffRole)
 admin.site.register(Standard)
 admin.site.register(Subject)
 admin.site.register(SubjectYear)
-
+admin.site.register(SMS)
 class StudentBatchCustom(admin.ModelAdmin):
 
 	def save_model(self, request, obj, form, change):
@@ -29,6 +29,8 @@ admin.site.register(Attendance)
 admin.site.register(BaseFee)
 admin.site.register(FeeType)
 admin.site.register(FeeTransaction)
+admin.site.register(EMI)
+admin.site.register(Cheque)
 
 admin.site.register(Test)
 admin.site.register(TestBatch)
@@ -38,3 +40,4 @@ admin.site.register(Notice)
 admin.site.register(NoticeViewer)
 
 admin.site.register(TestStudentBatch)
+admin.site.register(AttendanceDaywise)

@@ -115,8 +115,11 @@
                        <li style="border-color:#4A777A;">
                             <a href="/student/dashboard/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
-                        <li style="border-color:#4A777A;">
+                        <!-- <li style="border-color:#4A777A;">
                             <a href="/student/attendance/view-attendance/"><i class="fa fa-calendar fa-fw"></i>&nbsp;&nbsp;Attendance</a>
+                        </li> -->
+                        <li style="border-color:#4A777A;">
+                            <a href="/student/daywise-attendance/view-attendance/"><i class="fa fa-calendar fa-fw"></i>&nbsp;&nbsp;<!--Daywise--> Attendance</a>
                             <!-- /.nav-second-level -->
                         </li>
                         <li style="border-color:#4A777A;">
@@ -197,6 +200,7 @@
 
     <script type="text/javascript" src="/static/table_export2/tableExport.min.js"></script>
 
+    {% block date-picker-script %}{% endblock %}
 </body>
 
 </html>

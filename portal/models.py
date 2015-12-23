@@ -100,29 +100,29 @@ class Batch(models.Model):
 
 class Student(models.Model):
 
-	username = models.CharField(max_length=50)
-	password = models.CharField(max_length=50)
+	username = models.CharField(max_length=50,blank=True, null=True)
+	password = models.CharField(max_length=50,blank=True, null=True)
 
-	first_name = models.CharField(max_length=50)
-	last_name = models.CharField(max_length=50)
-	address = models.CharField(max_length=200)
-	email = models.CharField(max_length=50)
-	phone_number = models.CharField(max_length=13)
-	gender = models.CharField(max_length=1)
+	first_name = models.CharField(max_length=50,blank=True, null=True)
+	last_name = models.CharField(max_length=50,blank=True, null=True)
+	address = models.CharField(max_length=200,blank=True, null=True)
+	email = models.CharField(max_length=50,blank=True, null=True)
+	phone_number = models.CharField(max_length=13,blank=True, null=True)
+	gender = models.CharField(max_length=1,blank=True, null=True)
 
 	def __str__(self):
 		return self.first_name + ' ' + self.last_name
 
-	class Meta:
-		unique_together = (('username',), ('email',), ('phone_number',),)
+	'''class Meta:
+		unique_together = (('username',), ('email',), ('phone_number',),)'''
 
 	def save(self, validate=True):
 		from portal.validator.validator import validate_student
 		if validate:
-			if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
+			'''if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
 				PentaError(997).raise_error()
 			if self.gender != 'M' and self.gender != 'F':
-				PentaError(995).raise_error()
+				PentaError(995).raise_error()'''
 			if not validate_phone_number(self.phone_number):
 				PentaError(996).raise_error()
 			validation = validate_student(self)
@@ -136,26 +136,26 @@ class Student(models.Model):
 
 class Parent(models.Model):
 
-	username = models.CharField(max_length=50)
-	password = models.CharField(max_length=50)
+	username = models.CharField(max_length=50,blank=True, null=True)
+	password = models.CharField(max_length=50,blank=True, null=True)
 
-	first_name = models.CharField(max_length=50)
-	last_name = models.CharField(max_length=50)
-	address = models.CharField(max_length=200)
-	email = models.CharField(max_length=50)
-	phone_number = models.CharField(max_length=13)
-	gender = models.CharField(max_length=1)
+	first_name = models.CharField(max_length=50,blank=True, null=True)
+	last_name = models.CharField(max_length=50,blank=True, null=True)
+	address = models.CharField(max_length=200,blank=True, null=True)
+	email = models.CharField(max_length=50,blank=True, null=True)
+	phone_number = models.CharField(max_length=13,blank=True, null=True)
+	gender = models.CharField(max_length=1,blank=True, null=True)
 
 	def __str__(self):
 		return self.first_name + ' ' + self.last_name
 
-	class Meta:
-		unique_together = (('username',), ('email',), ('phone_number',),)
+	'''class Meta:
+		unique_together = (('username',), ('email',), ('phone_number',),)'''
 
 	def save(self, validate=True):
 		from portal.validator.validator import validate_parent
 		if validate:
-			if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
+			'''if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
 				print 'username', self.username
 				print 'password', self.password
 				print 'first name', self.first_name
@@ -165,7 +165,7 @@ class Parent(models.Model):
 				print 'gender', self.gender
 				PentaError(997).raise_error()
 			if self.gender != 'M' and self.gender != 'F':
-				PentaError(995).raise_error()
+				PentaError(995).raise_error()'''
 			if not validate_phone_number(self.phone_number):
 				PentaError(996).raise_error()
 			validation = validate_parent(self)
@@ -485,15 +485,32 @@ class FeeType(models.Model):
 		except IntegrityError, e:
 			PentaError(1034).raise_error()
 
+class Cheque(models.Model):
+	# Using student instead of studentbatch
+ 	student = models.ForeignKey(Student)
+	amount = models.IntegerField()
+	cheque_date = models.DateField()
+	cleared = models.BooleanField(default=False)
+	clearance_date = models.DateField(blank=True, null=True)
+	description = models.CharField(max_length=100, blank=True, null=True)
+	cheque_number = models.CharField(max_length=30, blank=True, null=True)
+	bank_name = models.CharField(max_length=50, blank=True, null=True)
+	bank_branch_name = models.CharField(max_length=100, blank=True, null=True)
+
+	def __str__(self):
+		return str(self.student) + '-' + str(self.amount) + '-'	+ str(self.cheque_date)
+
 class FeeTransaction(models.Model):
 	amount = models.IntegerField()
 	date = models.DateField()
 	timestamp = models.DateTimeField(auto_now_add=True)
-	student_batch = models.ForeignKey(StudentBatch)
+	student = models.ForeignKey(Student)
 	fee_type = models.ForeignKey(FeeType)
 
+	cheque = models.ForeignKey(Cheque, blank=True, null=True)
+
 	def __str__(self):
-		return str(self.student_batch) + ':' + str(self.fee_type) + '- Rs. ' + str(self.amount)
+		return str(self.student) + ':' + str(self.fee_type) + '- Rs. ' + str(self.amount)
 
 	pass
 	class Meta:
@@ -535,6 +552,7 @@ class TestBatch(models.Model):
 	test = models.ForeignKey(Test)
 	batch = models.ForeignKey(Batch)
 	test_date = models.DateField(default=datetime.now())
+	is_sms_sent = models.BooleanField(default=False)
 
 	class Meta:
 		unique_together = (('test','batch',),)
@@ -634,3 +652,45 @@ class NoticeViewer(models.Model):
 
 	def __str__(self):
 		return str(self.notice)
+
+class AttendanceDaywise(models.Model):
+	date = models.DateField()
+	student_batch = models.ForeignKey(StudentBatch)
+	attended = models.BooleanField()
+
+	class Meta:
+		unique_together = (('date', 'student_batch', ), )
+
+	def __str__(self):
+		return str(self.date) + ' - ' + str(self.student_batch)
+
+
+class SMS(models.Model):
+	sms_type = models.CharField(max_length=20)
+	phone_number = models.CharField(max_length=13)
+	message_text = models.CharField(max_length=155)
+	status = models.CharField(max_length=20)
+	tries = models.IntegerField(default=0)
+	creation_date = models.DateTimeField(default=datetime.now())
+	student = models.ForeignKey(Student)
+	staff = models.ForeignKey(Staff)
+
+	def __str__(self):
+		return str(self.phone_number) + ' - ' + str(self.status)
+
+
+
+
+
+class EMI(models.Model):
+	# Using student instead of studentbatch
+	student = models.ForeignKey(Student)
+	amount_due = models.IntegerField()
+	time_deadline = models.DateField()
+	description = models.CharField(max_length=50, blank=True, null=True)
+
+	class Meta:
+		unique_together = (('student', 'time_deadline'))
+
+	def __str__(self):
+		return str(self.student) + '-' + str(self.amount_due) + '-'	+ str(self.time_deadline)

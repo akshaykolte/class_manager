@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404
+from portal.models import NoticeViewer
 from portal.db_api.staff_db import *
 from portal.db_api.auth_db import *
 from portal.db_api.subject_db import *
@@ -11,8 +12,10 @@ from portal.db_api.branch_db import *
 from portal.db_api.academic_year_db import *
 from portal.db_api.student_db import *
 from portal.db_api.attendance_db import *
+from portal.db_api.attendance_daywise_db import *
 from portal.db_api.notice_db import *
 from portal.db_api.test_db import *
+from portal.db_api.sms_db import *
 from portal.models import *
 from portal.db_api.attendance_reports_db import *
 import datetime
@@ -195,11 +198,11 @@ def dashboard(request):
 		raise Http404
 
 	context['details'] = auth_dict;
-	
+
 	# All notices
 	notices = get_personal_notices(staff_id=auth_dict['id'], for_staff =True)
 	context['notices'] = notices
-	
+
 	# Latest Maximum 10 Notices received in past 1 week. (Min(10, number of notices overall))
 	# Only considering expiry date uptil now.
 	# Later the expiry date, newer is document.
@@ -215,10 +218,10 @@ def dashboard(request):
 		cur_notice['document'] = notice['document']
 		cur_notice['expiry_date'] = notice['expiry_date']
 		notice_list.append(cur_notice)
-	
+
 	sorted_notices = sorted(notice_list, reverse=True, key=lambda x: x['expiry_date'])
 	context['latest_notices'] = sorted_notices[:min(len(sorted_notices) + 1, 10)]
-	
+
 	# List of lectures of teacher for dashboard
 	staff_role_list = get_staff_role(staff_id = auth_dict['id'])
 	staff_role_id_list = []
@@ -238,7 +241,7 @@ def dashboard(request):
 					l_b['difference'] = (l_b['date'] - date.today()).days
 		for i in lecturebatch:
 			lecturebatches.append(i)
-	
+
 	lecs = []
 	for lecturebatch in lecturebatches:
 		context['cur_batch_id'] = lecturebatch['batch_id']
@@ -249,7 +252,7 @@ def dashboard(request):
 			standard_id = lecture[0]['standard_id']
 			subject_year_id = lecture[0]['subject_year_id']
 			lectures = get_lecture(subject_year_id = subject_year_id)
-			
+
 			for lec in lectures:
 				cur_lec = {}
 				for x in lec:
@@ -258,14 +261,14 @@ def dashboard(request):
 				cur_lec['branch_name'] = lecturebatch['staff_role'].branch.name
 				cur_lec['date'] = lecturebatch['date']
 				lecs.append(cur_lec)
-				
+
 	context['lectures'] = lecs
-	
+
 	# 10 Latest lectures
 	sorted_lectures = sorted(lecs, key=lambda x: x['date'])
 	latest_lectures = sorted_lectures[:min(len(sorted_lectures) + 1, 10)]
 	context['latest_lectures'] = latest_lectures
-	
+
 	return render(request,'teacher/dashboard.html', context)
 
 
@@ -738,7 +741,19 @@ def add_student_notice(request):
 			elif int(request.POST['branch']) and not int(request.POST['batch']):
 				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = int(request.POST['branch']) , batch_id = None, student_id = None, staff_id = None)
 
-			return redirect('./?message=Notice Uploaded')
+
+			print 'hereeer'
+			if is_important:
+				if int(request.POST['branch']):
+					if int(request.POST['batch']):
+						return redirect('/teacher/notices/send-sms-notice/?branch_id='+str(request.POST['branch'])+'&batch_id='+str(request.POST['batch'])+'&title='+title+'&description='+description+'&notice='+str(notice_id))
+					else:
+						return redirect('/teacher/notices/send-sms-notice/?branch_id='+str(request.POST['branch'])+'&batch_id='+str(request.POST['batch'])+'&title='+title+'&description='+description+'&notice='+str(notice_id))
+				else:
+					return redirect('/teacher/notices/send-sms-notice/?branch_id='+str(request.POST['branch'])+'&title='+title+'&description='+description+'&notice='+str(notice_id))
+
+			else:
+				return redirect('./?message=Notice Uploaded')
 
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
@@ -750,7 +765,86 @@ def add_student_notice(request):
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))
+
+
+def send_sms_notice(request):
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+
+	
+	context = {}
+	
+	print 'GET:'
+	print request.GET
+	context['details'] = auth_dict
+	branch_id = request.GET['branch_id']
+	notice_id = request.GET['notice']
+	student_list = []
+	if int(request.GET['branch_id']):
+		if int(request.GET['batch_id']):
+			batch_id = request.GET['batch_id']
+			context['batch_id'] = batch_id
+			notice_viewers = NoticeViewer.objects.filter(notice_id = notice_id)
+			print 'notice::'
+			print notice_viewers
+			for notice_viewer in notice_viewers:
+				if notice_viewer.student:
+					student_list.append(notice_viewer.student)
+
+		else:
+			batch_id = request.GET['batch_id']
+			context['batch_id'] = batch_id
+			notice_viewers = NoticeViewer.objects.filter(notice_id = notice_id)
+			for notice_viewer in notice_viewers:
+				if notice_viewer.student:
+					student_list.append(notice_viewer.student)
+			
+
+	else:
 		
+		student_list = get_students()
+		
+	
+	
+	context['students'] = student_list
+	context['notice_id'] = notice_id
+	context['branch_id'] = branch_id
+	context['title'] = request.GET['title']
+	context['description'] = request.GET['description']
+
+
+	return render(request, 'teacher/notices/send-sms-notice.html', context)
+
+@csrf_exempt
+def send_sms_notice_submit(request):
+	auth_dict = get_user(request)
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+
+	print 'here'
+	print request.POST
+	
+	
+		
+	student_id_list = []
+	students = get_students()
+	for student in students:
+		if "student_"+str(student['id']) in request.POST:
+			student_id_list.append(student['id'])
+	sms_for_notices(student_id_list = student_id_list, notice_title = request.POST['title'],notice_description = request.POST['description'],staff_id = auth_dict['id'])
+
+	return redirect ('/teacher/sms-status/')
+
 
 
 @csrf_exempt
@@ -1083,3 +1177,282 @@ def view_test_marks(request):
 			context['batches'] = batches
 	context['page_type'] = page_type
 	return render(request, 'teacher/test/view_test_marks.html', context)
+
+
+
+@csrf_exempt
+def add_attendance_daywise(request):
+	auth_dict = get_user(request)
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		context = {}
+
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		page_type = 0
+
+		branches = get_branch(id=None)
+		context['branches'] = branches
+
+		if 'branch' in request.GET:
+
+			context['branch_id'] = int(request.GET['branch'])
+			page_type = 1
+			standards = get_standard()
+			context['standards'] = standards
+			if 'standard' in request.GET:
+				page_type = 2
+				batches = get_batch(id=None,branch_id = int(request.GET['branch']) ,academic_year_id = get_current_academic_year()['id'] ,standard_id = int(request.GET['standard']))
+
+				context['batches'] = batches
+				context['standard_id'] = int(request.GET['standard'])
+
+
+				if 'batch' in request.GET:
+					page_type = 3
+					context['batch_id'] = int(request.GET['batch'])
+					if 'date' in request.GET:
+						page_type = 4
+						attendance_dict = {}
+						context['date'] = request.GET['date']
+						attendance_list = get_attendance_daywise(id= None, student_batch_id = None, date = request.GET['date'], batch_id = int(request.GET['batch']))
+						print attendance_list, len(attendance_list)
+						for attendance in attendance_list:
+							if attendance['attended'] :
+								attendance_dict[attendance['student_batch_id']] = True
+
+						batch_list = {}
+
+
+						students = get_students(batch_id = int(request.GET['batch']))
+
+						for i in xrange(len(students)):
+							if students[i]['id'] in attendance_dict:
+								students[i]['present'] = True
+							else:
+								students[i]['present'] = False
+						batch_list = students
+
+						context['batch_list'] = batch_list
+
+						context['batchname'] = get_batch(id= int(request.GET['batch']))['name']
+						context['branchname'] =  get_batch(id= int(request.GET['batch']))['branch']
+						context['standardname'] =  get_batch(id= int(request.GET['batch']))['standard']
+		context['page_type'] = page_type
+		context['details'] = auth_dict
+		return render(request, 'teacher/attendance/add-attendance-daywise.html', context)
+
+	elif request.method == 'POST':
+
+		try:
+			standard = request.POST['standard']
+			batch_id = request.POST['batch']
+			print 'her234'
+			academic_year_id = get_current_academic_year()['id']
+			#batches = get_batch(academic_year_id = academic_year_id,standard_id = standard)
+			#for batch in batches:
+			students = get_students(batch_id = batch_id)
+
+			print 'heres'
+			for student in students:
+				if 'batch_'+str(batch_id)+'student_'+str(student['id']) in request.POST:
+					print '00here123'
+					print student
+					student_batch = get_student_batch(id = None,batch_id=batch_id,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
+					set_attendance_daywise(id = None ,attended = True, student_batch_id = student['id'], date = request.POST['date'])
+
+					print 'here1'
+				else:
+					student_batch = get_student_batch(id = None,batch_id=batch_id,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
+					set_attendance_daywise(id = None ,attended = False, student_batch_id = student['id'], date = request.POST['date'])
+			return redirect('/teacher/attendance/send-sms/?batch_id='+str(batch_id)+'&date='+str(request.POST['date']))
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
+
+def send_sms(request):
+	auth_dict = get_user(request)
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		context = {}
+
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+	batch_id = request.GET['batch_id']
+	date = request.GET['date']
+	students = get_attendance_daywise(date = date,batch_id = batch_id)
+	absent_students = []
+
+	for student in students:
+		if student['attended'] == False:
+			absent_students.append(student)
+
+	print absent_students
+	context['batch_id'] = batch_id
+	context['date'] = date
+	context['absent_students'] = absent_students
+
+	return render(request, 'teacher/attendance/send-sms.html', context)
+
+@csrf_exempt
+def send_sms_submit(request):
+	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	student_id_list = []
+	students = get_students(batch_id=int(request.POST['batch_id']))
+	for student in students:
+		if "student_"+str(student['id']) in request.POST:
+			student_id_list.append(student['id'])
+	sms_for_attendance(student_id_list, request.POST['date'], auth_dict['id'])
+
+	return redirect ('/teacher/sms-status/')
+
+
+
+def sms_status(request):
+	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	context['not_sent_sms'] = get_pending_sms(auth_dict['id'])
+	context['details'] = auth_dict
+
+	return render(request, "teacher/sms-status.html", context)
+
+
+
+
+@csrf_exempt
+def view_attendance_daywise(request):
+	auth_dict = get_user(request)
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		context = {}
+
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		page_type = 0
+
+		branches = get_branch(id=None)
+		context['branches'] = branches
+
+		if 'branch' in request.GET:
+
+			context['branch_id'] = int(request.GET['branch'])
+			page_type = 1
+			standards = get_standard()
+			context['standards'] = standards
+			if 'standard' in request.GET:
+				page_type = 2
+				batches = get_batch(id=None,branch_id = int(request.GET['branch']) ,academic_year_id = get_current_academic_year()['id'] ,standard_id = int(request.GET['standard']))
+
+				context['batches'] = batches
+				context['standard_id'] = int(request.GET['standard'])
+
+
+				if 'batch' in request.GET:
+					page_type = 3
+					context['batch_id'] = int(request.GET['batch'])
+					if 'date' in request.GET:
+						page_type = 4
+						attendance_dict = {}
+						context['date'] = request.GET['date']
+						attendance_list = get_attendance_daywise(id= None, student_batch_id = None, date = request.GET['date'], batch_id = int(request.GET['batch']))
+						print attendance_list, len(attendance_list)
+						for attendance in attendance_list:
+							if attendance['attended'] :
+								attendance_dict[attendance['student_batch_id']] = True
+
+						batch_list = {}
+
+
+						students = get_students(batch_id = int(request.GET['batch']))
+
+						for i in xrange(len(students)):
+							if students[i]['id'] in attendance_dict:
+								students[i]['present'] = True
+							else:
+								students[i]['present'] = False
+						batch_list = students
+
+						context['batch_list'] = batch_list
+
+						context['batchname'] = get_batch(id= int(request.GET['batch']))['name']
+						context['branchname'] =  get_batch(id= int(request.GET['batch']))['branch']
+						context['standardname'] =  get_batch(id= int(request.GET['batch']))['standard']
+		context['page_type'] = page_type
+		context['details'] = auth_dict
+		return render(request, 'teacher/attendance/view-attendance-daywise.html', context)
+
+	elif request.method == 'POST':
+
+		try:
+			standard = request.POST['standard']
+
+			print 'her234'
+			academic_year_id = get_current_academic_year()['id']
+			batches = get_batch(academic_year_id = academic_year_id,standard_id = standard)
+			for batch in batches:
+				students = get_students(batch_id = batch['id'])
+
+				print 'heres'
+				for student in students:
+					if 'batch_'+str(batch['id'])+'student_'+str(student['id']) in request.POST:
+						print '00here123'
+						print student
+						student_batch = get_student_batch(id = None,batch_id=None,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
+						set_attendance_daywise(id = None ,attended = True, student_batch_id = student['id'], date = request.POST['date'])
+
+						print 'here1'
+					else:
+						delete_attendance_daywise(student_batch_id = student['id'] , date = request.POST['date'] )
+
+			return redirect('./?message=Attendance Marked')
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
