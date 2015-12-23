@@ -167,30 +167,7 @@
                        <li style="border-color:#4A777A;">
 							<a href="/manager/dashboard/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
-                        <li style="border-color:#4A777A;">
-							<a href="#"><i class="fa fa-file-text-o fa-fw"></i> Syllabus<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level {% block syllabus_nav %}collapse{% endblock %}">
-                                <li>
-									<a href="/manager/lectures/add-lectures/">Add Topics</a>
-                                </li>
-                                <li>
-									<a href="/manager/lectures/view-lectures/">View/Edit Topics</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li style="border-color:#4A777A;">
-							<a href="#"><i class="fa fa-user fa-fw"></i> Teachers<span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level {% block teachers_nav %}collapse{% endblock %}">
-                                <li>
-									<a href="/manager/teacher/add-teacher/">Add Teacher</a>
-                                </li>
-                                <li>
-									<a href="/manager/teacher/view-teacher/">View/Edit Teacher</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
+                        
                         <li style="border-color:#4A777A;">
 							<a href="#"><i class="fa fa-edit fa-fw"></i> Tests<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level {% block tests_nav %}collapse{% endblock %}">
@@ -234,7 +211,7 @@
                             </ul>
                         </li> -->
                         <li style="border-color:#4A777A;">
-							<a href="#"><i class="fa fa-bar-chart fa-fw"></i><!-- Daywise--> Attendance Reports<span class="fa arrow"></span></a>
+							<a href="#"><br/><br/><br/><br/><br/><i class="fa fa-bar-chart fa-fw"></i><!-- Daywise--> Attendance Reports<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level {% block daywise_attendance_nav %}collapse{% endblock %}">
                                 <li>
 									<a href="/manager/daywise-attendance-reports/studentwise-attendance/">Studentwise Attendance</a>
@@ -257,6 +234,31 @@
                                 </li>
                                 <li>
 									<a href="/manager/notices/view-my-notices/">View/Edit My Notices</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+
+                        <li style="border-color:#4A777A;">
+                            <a href="#"><i class="fa fa-file-text-o fa-fw"></i> Syllabus<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block syllabus_nav %}collapse{% endblock %}">
+                                <li>
+                                    <a href="/manager/lectures/add-lectures/">Add Topics</a>
+                                </li>
+                                <li>
+                                    <a href="/manager/lectures/view-lectures/">View/Edit Topics</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li style="border-color:#4A777A;">
+                            <a href="#"><i class="fa fa-user fa-fw"></i> Teachers<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block teachers_nav %}collapse{% endblock %}">
+                                <li>
+                                    <a href="/manager/teacher/add-teacher/">Add Teacher</a>
+                                </li>
+                                <li>
+                                    <a href="/manager/teacher/view-teacher/">View/Edit Teacher</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

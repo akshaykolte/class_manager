@@ -170,6 +170,32 @@
                         <li style="border-color:#4A777A;">
 							<a href="/admin/fees/view-fees"><i class="fa fa-inr fa-fw"></i> Batchwise Fees</a>
                         </li>
+
+
+                        <li style="border-color:#4A777A;">
+                            <a href="#"><i class="fa fa-envelope-o fa-fw"></i> Notices<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block notices_nav %}collapse{% endblock %}">
+                                <li>
+                                    <a href="/admin/notices/add-student-notice/">Upload Student Notice</a>
+                                </li>
+                                <li>
+                                    <a href="/admin/notices/add-staff-notice/">Upload Staff Notice</a>
+                                </li>
+                                <li>
+                                    <a href="/admin/notices/view-my-notices/">View/Edit My Notices</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                         <li style="border-color:#4A777A;">
+                            <a href="/admin/sms-status/"><i class="fa fa-envelope-o fa-fw"></i> SMS Status <br/>
+                        <br/><br/><br/><br/><br/><br/></span></a>
+                            
+                            <!-- /.nav-second-level -->
+
+                        </li>
+
+
                         <li style="border-color:#4A777A;">
 							<a href="#"><i class="fa fa-user fa-fw"></i> Manage Staff<span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level {% block staff_nav %}collapse{% endblock %}">
@@ -201,26 +227,7 @@
                             </ul>
                         </li>
 
-                        <li style="border-color:#4A777A;">
-                            <a href="#"><i class="fa fa-envelope-o fa-fw"></i> Notices<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level {% block notices_nav %}collapse{% endblock %}">
-                                <li>
-                                    <a href="/admin/notices/add-student-notice/">Upload Student Notice</a>
-                                </li>
-                                <li>
-                                    <a href="/admin/notices/add-staff-notice/">Upload Staff Notice</a>
-                                </li>
-                                <li>
-                                    <a href="/admin/notices/view-my-notices/">View/Edit My Notices</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                         <li style="border-color:#4A777A;">
-                            <a href="/admin/sms-status/"><i class="fa fa-envelope-o fa-fw"></i> SMS Status</span></a>
-                            
-                            <!-- /.nav-second-level -->
-                        </li>
+                        
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
