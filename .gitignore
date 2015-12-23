@@ -1,6 +1,6 @@
 *.pyc
 *~
 *.log
-
+db.sqlite
 media/
 portal/migrations
