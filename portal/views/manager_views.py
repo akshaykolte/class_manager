@@ -1320,9 +1320,9 @@ def send_sms_notice(request):
 		raise Http404
 
 
-	
+
 	context = {}
-	
+
 	print 'GET:'
 	print request.GET
 	context['details'] = auth_dict
@@ -1347,14 +1347,14 @@ def send_sms_notice(request):
 			for notice_viewer in notice_viewers:
 				if notice_viewer.student:
 					student_list.append(notice_viewer.student)
-			
+
 
 	else:
-		
+
 		student_list = get_students()
-		
-	
-	
+
+
+
 	context['students'] = student_list
 	context['notice_id'] = notice_id
 	context['branch_id'] = branch_id
@@ -1376,9 +1376,9 @@ def send_sms_notice_submit(request):
 
 	print 'here'
 	print request.POST
-	
-	
-		
+
+
+
 	student_id_list = []
 	students = get_students()
 	for student in students:
@@ -1796,3 +1796,9 @@ def sms_tests_submit(request):
 		raise Http404
 
 	print "---",request.POST
+	test_student_batch_list = []
+	for test_student_id in request.POST:
+		test_student_batch_list.append(test_student_id)
+
+	sms_for_marks(test_student_batch_list, auth_dict['id'])
+	return redirect ('/manager/sms-status/')
