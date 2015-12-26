@@ -24,6 +24,11 @@ urlpatterns = [
 	url(r'^batches/add-batch/$', 'portal.views.manager_views.add_batch'),
 	url(r'^batches/view-batch/$', 'portal.views.manager_views.view_batch'),
 
+	#SMS
+    url(r'^sms-status/$', 'portal.views.manager_views.sms_status'),
+    url(r'^notices/send-sms-notice/$', 'portal.views.manager_views.send_sms_notice'),
+    url(r'^notices/send-sms-notice/submit$', 'portal.views.manager_views.send_sms_notice_submit'),
+
 	url(r'^notices/add-student-notice/$', 'portal.views.manager_views.add_student_notice'),
 	url(r'^notices/add-staff-notice/$', 'portal.views.manager_views.add_staff_notice'),
 	url(r'^notices/view-my-notices/$', 'portal.views.manager_views.view_my_notices'),

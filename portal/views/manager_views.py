@@ -12,6 +12,7 @@ from portal.db_api.batch_db import *
 from portal.db_api.notice_db import *
 from portal.db_api.attendance_reports_db import *
 from portal.db_api.student_db import *
+from portal.db_api.sms_db import *
 from django.core.exceptions import *
 from django.utils.datastructures import *
 from portal.validator.validator import ModelValidateError
@@ -1288,7 +1289,15 @@ def add_student_notice(request):
 			elif int(request.POST['branch']) and not int(request.POST['batch']):
 				upload_notice(id=None, notice_id = notice_id, for_students = True, for_staff = False, branch_id = int(request.POST['branch']) , batch_id = None, student_id = None, staff_id = None)
 
-			return redirect('./?message=Notice Uploaded')
+			if is_important:
+				if int(request.POST['branch']):
+					if int(request.POST['batch']):
+						return redirect('/manager/notices/send-sms-notice/?branch_id='+str(request.POST['branch'])+'&batch_id='+str(request.POST['batch'])+'&title='+title+'&description='+description+'&notice='+str(notice_id))
+					else:
+						return redirect('/manager/notices/send-sms-notice/?branch_id='+str(request.POST['branch'])+'&batch_id='+str(request.POST['batch'])+'&title='+title+'&description='+description+'&notice='+str(notice_id))
+				else:
+					return redirect('/manager/notices/send-sms-notice/?branch_id='+str(request.POST['branch'])+'&title='+title+'&description='+description+'&notice='+str(notice_id))
+
 
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
@@ -1300,6 +1309,98 @@ def add_student_notice(request):
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))
+
+def send_sms_notice(request):
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] != True:
+		raise Http404
+
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+
+	
+	context = {}
+	
+	print 'GET:'
+	print request.GET
+	context['details'] = auth_dict
+	branch_id = request.GET['branch_id']
+	notice_id = request.GET['notice']
+	student_list = []
+	if int(request.GET['branch_id']):
+		if int(request.GET['batch_id']):
+			batch_id = request.GET['batch_id']
+			context['batch_id'] = batch_id
+			notice_viewers = NoticeViewer.objects.filter(notice_id = notice_id)
+			print 'notice::'
+			print notice_viewers
+			for notice_viewer in notice_viewers:
+				if notice_viewer.student:
+					student_list.append(notice_viewer.student)
+
+		else:
+			batch_id = request.GET['batch_id']
+			context['batch_id'] = batch_id
+			notice_viewers = NoticeViewer.objects.filter(notice_id = notice_id)
+			for notice_viewer in notice_viewers:
+				if notice_viewer.student:
+					student_list.append(notice_viewer.student)
+			
+
+	else:
+		
+		student_list = get_students()
+		
+	
+	
+	context['students'] = student_list
+	context['notice_id'] = notice_id
+	context['branch_id'] = branch_id
+	context['title'] = request.GET['title']
+	context['description'] = request.GET['description']
+
+
+	return render(request, 'manager/notices/send-sms-notice.html', context)
+
+@csrf_exempt
+def send_sms_notice_submit(request):
+	auth_dict = get_user(request)
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+
+	print 'here'
+	print request.POST
+	
+	
+		
+	student_id_list = []
+	students = get_students()
+	for student in students:
+		if "student_"+str(student['id']) in request.POST:
+			student_id_list.append(student['id'])
+	sms_for_notices(student_id_list = student_id_list, notice_title = request.POST['title'],notice_description = request.POST['description'],staff_id = auth_dict['id'])
+
+	return redirect ('/manager/sms-status/')
+
+def sms_status(request):
+	auth_dict = get_user(request)
+	context = {}
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_manager'] != True:
+		raise Http404
+
+	context['not_sent_sms'] = get_pending_sms(auth_dict['id'])
+	context['details'] = auth_dict
+
+	return render(request, "manager/sms-status.html", context)
 
 
 @csrf_exempt
