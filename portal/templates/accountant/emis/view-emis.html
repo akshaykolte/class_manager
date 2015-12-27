@@ -1,0 +1,156 @@
+{% extends "accountant/base_accountant.html" %}
+
+{% block emis_nav %}{% endblock %}
+
+{% block date-picker-script %}
+
+    <script src="/static/datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        // When the document is ready
+
+        $(document).ready(function () {
+
+            $('#example1').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            var future = new Date();
+            future.setDate(future.getDate());
+            $('#example1').datepicker('update', future);
+        });
+
+    </script>
+{% endblock %}
+
+{% block main_content%}
+<div class="row">
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">View EMIs</h1>
+    </div>
+</div>
+	{% if message %}
+	    <div class="panel-body">
+	        <div class="alert alert-success alert-dismissable col-lg-12">
+	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	            {{message}}
+	        </div>
+	    </div>
+    {% elif message_error %}
+	    <div class="panel-body">
+		    <div class="alert alert-danger alert-dismissable col-lg-12">
+		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		        {{message_error}}
+		    </div>
+		</div>
+	{% endif %}
+
+<div class="col-md-12">
+
+
+
+    {% if page_type == 0 %}
+
+        <form>
+
+
+                <br/>
+
+                <div class="col-md-9">
+                    <div id="myTabContent" class="tab-content">
+
+                            <div>
+
+                                <h2>Pending EMIs</h2>
+                                <div class="dataTable_wrapper">
+                                    <table class="display table table-striped table-bordered table-hover" id="">
+                                        <thead>
+                                            <tr>
+                                                <th>Student Name</th>
+                                                <th>EMI Deadline</th>
+                                                <th>EMI Status</th>
+                                                <th>Link</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% for emi in pending_emis %}
+
+                                        <tr>
+                                            <td>{{emi.1}} {{emi.2}}</td>
+                                            <td>{{emi.3}}</td>
+                                            <td style="color:#ee4444"><b>Pending</b></td>
+                                            <td><a style="background:transparent;color:#0645AD;" class="hyperlink-default" href = "/accountant/fees/view-fees/?name={{emi.1}}+{{emi.2}}&student={{emi.0}}">EMI Details</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div>
+
+                                <h2>Upcoming EMIs</h2>
+                                <div class="dataTable_wrapper">
+                                    <table class="display table table-striped table-bordered table-hover" id="">
+                                        <thead>
+                                            <tr>
+                                                <th>Student Name</th>
+                                                <th>EMI Deadline</th>
+                                                <th>EMI Status</th>
+                                                <th>Link</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% for emi in upcoming_emis %}
+
+                                            <tr>
+                                                <td>{{emi.1}} {{emi.2}}</td>
+                                                <td>{{emi.3}}</td>
+                                                <td class="text-warning"><b>Upcoming</b></td>
+                                                <td><a style="background:transparent;color:#0645AD;" class="hyperlink-default" href = "/accountant/fees/view-fees/?name={{emi.1}}+{{emi.2}}&student={{emi.0}}">EMI Details</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br/>
+                            </div>
+
+                    </div>
+                </div>
+            <br/>
+            <br/>
+    </form>
+
+
+        <!-- jQuery -->
+            <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
+            <script>
+
+            $(document).ready(function() {
+            $('table.display').DataTable({
+                "iDisplayLength":10,
+                "oLanguage": {
+                  "sEmptyTable":"No Students Found"
+                }
+
+                });
+        } );
+
+        {%for i in batch_list %}
+         $(function() {
+                $('.batch_{{batch_id}}').on("click", function () { // IE<9 triggers change after blurred
+                    var checked = $(this).is(':checked');
+                    var $otherChecks = $('.sub_batch_{{i.id}}');
+                    $otherChecks.prop('checked', checked);
+                    $otherChecks.parent().toggleClass("disabled",checked);
+                });
+            });
+            {% endfor %}
+            </script>
+
+    {% endif %}
+{% endblock %}

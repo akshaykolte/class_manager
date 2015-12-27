@@ -81,7 +81,7 @@ def get_pending_emi():
 
 	for emi in emis:
 		student_tuple = (emi['student__id'], emi['student__first_name'], emi['student__last_name'])
-		if emi['amount_due__sum'] > payments_dict[student_tuple]:
+		if (student_tuple in payments_dict and emi['amount_due__sum'] > payments_dict[student_tuple]) or (student_tuple not in payments_dict and emi['amount_due__sum'] > 0):
 			pending_students_list.append(list(student_tuple) + [emi['time_deadline__max']])
 
 	#print pending_students_list
@@ -107,7 +107,7 @@ def get_next_week_emi():
 
 	for emi in emis:
 		student_tuple = (emi['student__id'], emi['student__first_name'], emi['student__last_name'])
-		if emi['amount_due__sum'] > payments_dict[student_tuple]:
+		if (student_tuple in payments_dict and emi['amount_due__sum'] > payments_dict[student_tuple]) or (student_tuple not in payments_dict and emi['amount_due__sum'] > 0):
 			if student_tuple[0] not in student_id_set:
 				pending_students_list.append(list(student_tuple) + [emi['time_deadline__max']])
 

@@ -607,7 +607,7 @@ def make_transaction(request):
 				#time = request.POST['time']
 
 				transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_id = request.POST['student'], fee_type_id = fee_type_id)
-			
+
 
 			return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id)+'&cheque_number='+str(request.POST['cheque_number']))
 
@@ -1120,9 +1120,9 @@ def send_sms_notice(request):
 		raise Http404
 
 
-	
+
 	context = {}
-	
+
 	print 'GET:'
 	print request.GET
 	context['details'] = auth_dict
@@ -1147,14 +1147,14 @@ def send_sms_notice(request):
 			for notice_viewer in notice_viewers:
 				if notice_viewer.student:
 					student_list.append(notice_viewer.student)
-			
+
 
 	else:
-		
+
 		student_list = get_students()
-		
-	
-	
+
+
+
 	context['students'] = student_list
 	context['notice_id'] = notice_id
 	context['branch_id'] = branch_id
@@ -1176,9 +1176,9 @@ def send_sms_notice_submit(request):
 
 	print 'here'
 	print request.POST
-	
-	
-		
+
+
+
 	student_id_list = []
 	students = get_students()
 	for student in students:
@@ -1479,9 +1479,9 @@ def view_cheques(request):
 					print "upcoming"
 					upcoming_cheques.append(cheque)
 				if cheque['cheque_date'] <= datetime.date.today() and  not cheque['cleared']:
-					deadline_cheques.append(cheque)	
+					deadline_cheques.append(cheque)
 				if cheque['cleared']:
-					cleared_cheques.append(cheque)	
+					cleared_cheques.append(cheque)
 
 
 			context['upcoming_cheques'] = upcoming_cheques
@@ -1521,7 +1521,7 @@ def edit_cheque(request):
 			context['message_error'] = request.GET['message_error']
 		try:
 			cheque = get_cheque(id = int(request.GET['cheque']))
-			
+
 			context['cheque'] = cheque
 			return render(request, 'accountant/cheques/edit-cheque.html', context)
 		except ModelValidateError, e:
@@ -1549,3 +1549,39 @@ def edit_cheque(request):
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))'''
+
+def view_emis(request):
+	auth_dict = get_user(request)
+
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_accountant'] != True:
+		raise Http404
+	context = {}
+	context['details'] = auth_dict
+
+
+
+	if request.method == 'GET':
+
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+
+		try:
+			context['page_type'] = 0
+			context['pending_emis'] = get_pending_emi()
+			context['upcoming_emis'] = get_next_week_emi()
+			return render(request,'accountant/emis/view-emis.html', context)
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))
