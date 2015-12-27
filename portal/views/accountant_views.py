@@ -1489,7 +1489,7 @@ def view_cheques(request):
 			context['deadline_cheques'] = deadline_cheques
 
 			context['page_type'] = page_type
-			return render(request,'accountant/cheques/view-cheques.html', context)
+			return render(request,'accountant/fees/view-cheques.html', context)
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
@@ -1523,7 +1523,7 @@ def edit_cheque(request):
 			cheque = get_cheque(id = int(request.GET['cheque']))
 
 			context['cheque'] = cheque
-			return render(request, 'accountant/cheques/edit-cheque.html', context)
+			return render(request, 'accountant/fees/edit-cheque.html', context)
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
@@ -1538,7 +1538,7 @@ def edit_cheque(request):
 	elif request.method == 'POST':
 		#try:
 		set_cheque(id = int(request.POST['cheque_id']), student_id = None, amount = None, cheque_date = None, cleared = request.POST['cleared'], clearance_date = request.POST['clearance_date'], description = request.POST['description'], cheque_number = None, bank_name = request.POST['bank_name'], bank_branch_name = request.POST['bank_branch_name'])
-		return redirect('/accountant/cheques/edit-cheque/?cheque='+str((request.POST.get('cheque_id')))+'&message=Cheque Details Updated')
+		return redirect('/accountant/fees/edit-cheque/?cheque='+str((request.POST.get('cheque_id')))+'&message=Cheque Details Updated')
 		'''except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
@@ -1574,7 +1574,7 @@ def view_emis(request):
 			context['page_type'] = 0
 			context['pending_emis'] = get_pending_emi()
 			context['upcoming_emis'] = get_next_week_emi()
-			return render(request,'accountant/emis/view-emis.html', context)
+			return render(request,'accountant/fees/view-emis.html', context)
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:

@@ -38,10 +38,10 @@ urlpatterns = [
 
 
 
-	url(r'^cheques/view-cheques/$', 'portal.views.accountant_views.view_cheques'),
-	url(r'^cheques/edit-cheque/$', 'portal.views.accountant_views.edit_cheque'),
+	url(r'^fees/view-cheques/$', 'portal.views.accountant_views.view_cheques'),
+	url(r'^fees/edit-cheque/$', 'portal.views.accountant_views.edit_cheque'),
 
-	url(r'^emis/view-emis/$', 'portal.views.accountant_views.view_emis'),
+	url(r'^fees/view-emis/$', 'portal.views.accountant_views.view_emis'),
 
 	url(r'^download/$', 'portal.views.accountant_views.respond_as_attachment'),
 ]
