@@ -7,7 +7,9 @@ def get_user(request):
 		username = request.POST['username']
 		password = request.POST['password']
 
-		if Staff.objects.filter(username=username,password=password).exists():
+		if username == "" or password == "":
+			pass
+		elif Staff.objects.filter(username=username,password=password).exists():
 			staff_obj = Staff.objects.get(username=username,password=password)
 
 			request.session['user']['logged_in'] = True
