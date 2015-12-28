@@ -1796,3 +1796,9 @@ def sms_tests_submit(request):
 		raise Http404
 
 	print "---",request.POST
+	test_student_batch_list = []
+	for test_student_id in request.POST:
+		test_student_batch_list.append(test_student_id)
+
+	sms_for_marks(test_student_batch_list, auth_dict['id'])
+	return redirect ('/manager/sms-status/')
