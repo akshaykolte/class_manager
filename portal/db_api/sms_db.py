@@ -1,5 +1,5 @@
 from portal.models import StudentBatch, SMS, StudentParent, Parent, Student, Staff, Notice, TestStudentBatch
-SIGNATURE = "Venkatesh Classes"
+SIGNATURE = "VENKATESH CLASSES"
 
 def send_sms(phone_number, text):
     pass
