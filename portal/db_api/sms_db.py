@@ -28,7 +28,7 @@ def sms_for_notices(student_id_list,notice_title,notice_description,staff_id):
         sms_object.save()
 
 
-def sms_for_marks(student_batch_id_list):
+def sms_for_marks(test_student_batch_list, staff_id):
     test_marks_dict = {} # key: student object; value: list of marks of that respective student
     for test_student_batch in test_student_batch_list:
         student_object = TestStudentBatch.objects.get(id=test_student_batch).student_batch.student
