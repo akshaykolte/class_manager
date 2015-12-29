@@ -35,6 +35,8 @@ def set_emi(id = None, student_id = None, amount_due = None, time_deadline = Non
 def get_student_emi(student_id):
 	emis = EMI.objects.filter(student__id=student_id)
 	payment = FeeTransaction.objects.filter(student__id=student_id, fee_type__name='payment').aggregate(total_amount=Sum('amount'))['total_amount']
+	if payment == None:
+		payment = 0
 	balance = payment
 	emi_list = []
 	for emi in emis:

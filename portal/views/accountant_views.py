@@ -271,6 +271,11 @@ def view_fees(request):
 				context['fee_details'] = fee_details
 				context['transaction_details'] = transaction_details
 				context['emi_details'] = get_student_emi(student_id=context['student_id'])
+				context['cheque_details'] = get_cheque(student_id=context['student_id'])
+				if 'active_tab' in request.GET:
+					context['active_tab'] = request.GET['active_tab']
+				else:
+					context['active_tab'] = 'fee-details'
 
 			context['page_type'] = page_type
 			print context
