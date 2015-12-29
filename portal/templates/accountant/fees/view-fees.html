@@ -41,25 +41,25 @@
                     <div class="col-md-3">
                         <br/>
                         <ul class="nav nav-tabs nav-stacked">
-                              <li class="active" >
+                              <li {% if active_tab == 'fee-details' %}class="active"{% endif %} >
                                   <a href="#view-type-overall-details" data-toggle="tab">
                                       <i class="fa fa-chevron-circle-right"></i>
                                       Overall fee details
                                   </a>
                               </li>
-                              <li>
+                              <li {% if active_tab == 'transaction-details' %}class="active"{% endif %}>
                                   <a href="#view-type-transactions" data-toggle="tab">
                                       <i class="fa fa-chevron-circle-right"></i>
                                       Transactions details
                                   </a>
                               </li>
-                              <li>
+                              <li {% if active_tab == 'emi-details' %}class="active"{% endif %}>
                                   <a href="#view-type-emis" data-toggle="tab">
                                       <i class="fa fa-chevron-circle-right"></i>
                                       EMI details
                                   </a>
                               </li>
-                              <li>
+                              <li {% if active_tab == 'cheque-details' %}class="active"{% endif %}>
                                   <a href="#view-type-cheques" data-toggle="tab">
                                       <i class="fa fa-chevron-circle-right"></i>
                                       Cheque details
@@ -71,7 +71,7 @@
                     <div class="col-lg-9">
                         <div class="tab-content">
 
-                            <div class="tab-pane fade active in" id="view-type-overall-details">
+                            <div class="tab-pane fade {% if active_tab == 'fee-details' %}active{% endif %} in" id="view-type-overall-details">
                                 <div class="dataTable_wrapper">
                                     <label><strong>Total Fee Summary of Student</strong></label>
                                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
@@ -106,7 +106,7 @@
 
 
 
-                            <div class="tab-pane fade in" id="view-type-transactions">
+                            <div class="tab-pane fade {% if active_tab == 'transaction-details' %}active{% endif %} in" id="view-type-transactions">
 
                                 <div class="dataTable_wrapper">
                                     <label><strong> Fee Transactions of Student</strong></label>
@@ -175,7 +175,7 @@
                              </div>
 
 
-                                 <div class="tab-pane fade in" id="view-type-emis">
+                                 <div class="tab-pane fade {% if active_tab == 'emi-details' %}active{% endif %} in" id="view-type-emis">
 
                                      <div class="dataTable_wrapper">
                                          <label><strong> EMI Details of Student</strong></label>
@@ -213,6 +213,40 @@
                                       </div>
 
                              </div>
+
+                             <div class="tab-pane fade {% if active_tab == 'cheque-details' %}active{% endif %} in" id="view-type-cheques">
+
+                                <div class="dataTable_wrapper">
+                                     <label><strong> Cheque Details of Student</strong></label>
+                                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                         <thead>
+                                             <tr>
+                                                 <th>Cheque Number</th>
+                                                 <th>Cheque Amount</th>
+                                                 <th>Cheque Date</th>
+                                                 <th>Status</th>
+                                             </tr>
+                                         </thead>
+                                         <tbody>
+                                             {% for cheque in cheque_details %}
+                                                <tr>
+                                                    <td>{{cheque.cheque_number}}</td>
+                                                    <td>{{cheque.amount}}</td>
+                                                    <td>{{cheque.cheque_date}}</td>
+                                                    {% if cheque.cleared %}
+                                                        <td class="text-success"><b>Cleared</b></td>
+                                                    {% else %}
+                                                        <td class="text-warning"><b>Not Cleared</b></td>
+                                                    {% endif %}
+                                                </tr>
+                                             {% endfor %}
+                                         </tbody>
+                                     </table>
+                                 <!-- /.table-responsive -->
+                                  </div>
+
+                         </div>
+
                         </div>
                     </div>
                 </div>
