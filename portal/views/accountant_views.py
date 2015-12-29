@@ -270,6 +270,7 @@ def view_fees(request):
 				#print fee_details
 				context['fee_details'] = fee_details
 				context['transaction_details'] = transaction_details
+				context['emi_details'] = get_student_emi(student_id=context['student_id'])
 
 			context['page_type'] = page_type
 			print context

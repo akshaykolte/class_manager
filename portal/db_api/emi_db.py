@@ -46,6 +46,7 @@ def get_student_emi(student_id):
 			emi_dict['pending_amount'] = emi.amount_due
 			emi_dict['total_emi_amount'] = emi.amount_due
 			emi_dict['date'] = str(emi.time_deadline)
+			emi_dict['description'] = emi.description
 		elif balance < emi.amount_due:
 			# print 'partially paid, paid='+str(balance)+' pending='+str(emi.amount_due-balance)+' total='+str(emi.amount_due)
 			emi_dict['status'] = "Partially Paid"
@@ -54,6 +55,7 @@ def get_student_emi(student_id):
 			emi_dict['total_emi_amount'] = emi.amount_due
 			balance -= balance
 			emi_dict['date'] = str(emi.time_deadline)
+			emi_dict['description'] = emi.description
 		else:
 			# print 'fully paid, paid='+str(emi.amount_due)+' pending=0 total='+str(emi.amount_due)
 			emi_dict['status'] = "Fully Paid"
@@ -62,6 +64,7 @@ def get_student_emi(student_id):
 			emi_dict['total_emi_amount'] = emi.amount_due
 			balance -= emi.amount_due
 			emi_dict['date'] = str(emi.time_deadline)
+			emi_dict['description'] = emi.description
 		emi_list.append(emi_dict)
 	student_emi_report = {}
 	student_emi_report['total_payment'] = payment
