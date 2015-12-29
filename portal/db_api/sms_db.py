@@ -1,4 +1,4 @@
-from portal.models import StudentBatch, SMS, StudentParent, Parent, Student, Staff, Notice, TestStudentBatch
+from portal.models import StudentBatch, SMS, StudentParent, Parent, Student, Staff, Notice, TestStudentBatch, TestBatch
 SIGNATURE = "Your Class Name."
 
 def send_sms(phone_number, text):
@@ -31,8 +31,14 @@ def sms_for_notices(student_id_list,notice_title,notice_description,staff_id):
 def sms_for_marks(test_student_batch_list,staff_id):
 
     test_marks_dict = {} # key: student object; value: list of marks of that respective student
+    test_batch_dict = {}
     for test_student_batch in test_student_batch_list:
-        student_object = TestStudentBatch.objects.get(id=test_student_batch).student_batch.student
+        test_student_batch_object = TestStudentBatch.objects.get(id=test_student_batch)
+        student_object = test_student_batch_object.student_batch.student
+        batch_object = test_student_batch_object.student_batch.batch
+        test_object = test_student_batch_object.test
+        if not (test_object, batch_object) in test_batch_dict:
+            test_batch_dict[(test_object, batch_object)] = 1
         if not student_object in test_marks_dict:
                 test_marks_dict[student_object] = []
         test_marks_dict[student_object].append(test_student_batch)
@@ -50,6 +56,11 @@ def sms_for_marks(test_student_batch_list,staff_id):
             text += temporary_text + "\n"
         sms_object = SMS(phone_number=parent_phone_number, sms_type = "Test Marks", message_text=text, status="Pending", student=k, staff=Staff.objects.get(id=staff_id))
         sms_object.save()
+
+    for k,v in test_batch_dict.items():
+        test_batch_object = TestBatch.objects.get(test=k[0], batch=k[1])
+        test_batch_object.is_sms_sent = True
+        test_batch_object.save()
 
 # Returns all pending and failed sms sent by the respective staff
 def get_pending_sms(staff_id):

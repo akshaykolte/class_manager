@@ -1766,7 +1766,7 @@ def sms_tests(request):
 
 							test_student_dict = {}
 							for test in tests:
-								test_student_dict[test['name']] = get_student_batch_marks(test_id=int(test['test_id']),batch_id=int(request.GET['batch']))
+								test_student_dict[(test['name'], test['is_sms_sent'])] = get_student_batch_marks(test_id=int(test['test_id']),batch_id=int(request.GET['batch']))
 
 							context['tests'] = tests
 							context['test_student_dict'] = test_student_dict

@@ -189,9 +189,9 @@
           <ul class="nav nav-tabs">
             {% for k,v in test_student_dict.items %}
               {% if forloop.counter0 == 0 %}
-                <li class="active"><a data-toggle="tab" href="#{{forloop.counter0}}">{{k}}</a></li>
+                <li class="active"><a data-toggle="tab" href="#{{forloop.counter0}}">{{k.0}}&nbsp;&nbsp;{% if k.1 == True %}<i class="fa fa-check"></i> {% else %}<i class="fa fa-times"></i> {% endif %}</a></li>
               {% else %}
-                <li><a data-toggle="tab" href="#{{forloop.counter0}}">{{k}}</a></li>
+                <li><a data-toggle="tab" href="#{{forloop.counter0}}">{{k.0}}&nbsp;&nbsp;{% if k.1 == True %}<i class="fa fa-check"></i> {% else %}<i class="fa fa-times"></i> {% endif %}</a></li>
               {% endif %}
 
             {% endfor %}
@@ -234,7 +234,10 @@
           <input class="col-lg-3 btn btn-default btn-red" type='submit' value='Send SMS'>
         </form>
           <br><br><br>
-          <small>Note: Messages will be sent to all the selected students.</small>
+          <small>Note: Messages will be sent to all the selected students.<br>
+                 <i class="fa fa-check"></i> : SMS for the respective test was sent earlier.<br>
+                 <i class="fa fa-times"></i> : SMS for the respective test has not been sent.<br>
+          </small>
     {% endif %}
 
 </br>
