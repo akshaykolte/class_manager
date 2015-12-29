@@ -13,6 +13,9 @@
             $('#example1').datepicker({
                 format: "yyyy-mm-dd"
             });
+            $('#example1').on('change', function () {
+                $('.datepicker').hide();
+            });
             var future = new Date();
             future.setDate(future.getDate() + 30);
             $('#example1').datepicker('update', future);

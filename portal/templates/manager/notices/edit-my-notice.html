@@ -11,6 +11,9 @@
             $('#example1').datepicker({
                 format: "yyyy-mm-dd"
             });
+            $('#example1').on('change', function () {
+                $('.datepicker').hide();
+            });
             var future = new Date();
             future.setDate(future.getDate() + 30);
             $('#example1').datepicker('update', future);
@@ -64,7 +67,7 @@
 				<input name="expiry-date" class="form-control" type = "text" id = "example1">
 				<br/>
 				<label>
-	            
+
 	            <strong>Change Uploaded File</strong></label><br/>
 	            <span style = "">
  				<input  type="file" name="myfile" />

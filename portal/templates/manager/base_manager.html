@@ -315,6 +315,9 @@
                 $('#example1').datepicker({
                     format: "yyyy-mm-dd"
                 });
+                $('#example1').on('change', function () {
+                    $('.datepicker').hide();
+                });
                 $('#example1').datepicker('update', new Date());
             });
 

@@ -10,15 +10,23 @@
 
         $(document).ready(function () {
 
-            $('#example1').datepicker({
-                format: "yyyy-mm-dd"
-            });
-            $('#example1').datepicker('update', new Date());
+          $('#example1').datepicker({
+              format: "yyyy-mm-dd"
+          });
+          $('#example1').datepicker('update', new Date());
 
-            $('#example2').datepicker({
-                format: "yyyy-mm-dd"
-            });
-            $('#example2').datepicker('update', new Date());
+          $('#example1').on('change', function () {
+              $('.datepicker').hide();
+          });
+
+          $('#example2').datepicker({
+              format: "yyyy-mm-dd"
+          });
+          $('#example2').datepicker('update', new Date());
+
+          $('#example2').on('change', function () {
+              $('.datepicker').hide();
+          });
 
         });
 

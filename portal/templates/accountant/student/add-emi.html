@@ -19,6 +19,9 @@
                     format: "yyyy-mm-dd"
                 });
                 $('#date'+i).datepicker('update', date);
+                $('#date'+i).on('change', function () {
+                    $('.datepicker').hide();
+                });
                 date.setDate(date.getDate() + 1);
                 date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
             }

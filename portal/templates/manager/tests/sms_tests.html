@@ -13,6 +13,9 @@
          $('#from_date_id').datepicker({
              format: "yyyy-mm-dd"
          });
+         $('#from_date_id').on('change', function () {
+             $('.datepicker').hide();
+         });
          $('#from_date_id').datepicker('update', new Date());
      });
 
@@ -20,6 +23,9 @@
 
          $('#end_date_id').datepicker({
              format: "yyyy-mm-dd"
+         });
+         $('#end_date_id').on('change', function () {
+             $('.datepicker').hide();
          });
          $('#end_date_id').datepicker('update', new Date());
      });

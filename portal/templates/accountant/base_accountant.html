@@ -318,6 +318,9 @@
                     format: "yyyy-mm-dd"
                 });
                 $('#example1').datepicker('update', new Date());
+                $('#example1').on('change', function () {
+                    $('.datepicker').hide();
+                });
             });
 
         </script>
