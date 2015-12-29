@@ -551,7 +551,7 @@ class Test(models.Model):
 class TestBatch(models.Model):
 	test = models.ForeignKey(Test)
 	batch = models.ForeignKey(Batch)
-	test_date = models.DateField(default=datetime.now())
+	test_date = models.DateField(default=datetime.now)
 	is_sms_sent = models.BooleanField(default=False)
 
 	class Meta:
@@ -671,7 +671,7 @@ class SMS(models.Model):
 	message_text = models.CharField(max_length=155)
 	status = models.CharField(max_length=20)
 	tries = models.IntegerField(default=0)
-	creation_date = models.DateTimeField(default=datetime.now())
+	creation_date = models.DateTimeField(default=datetime.now)
 	student = models.ForeignKey(Student)
 	staff = models.ForeignKey(Staff)
 
