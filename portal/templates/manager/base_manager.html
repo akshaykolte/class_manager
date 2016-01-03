@@ -197,6 +197,21 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li style="border-color:#4A777A;">
+							<a href="#"><i class="fa fa-envelope-o fa-fw"></i> Notices<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level {% block notices_nav %}collapse{% endblock %}">
+                                <li>
+									<a href="/manager/notices/add-student-notice/">Upload Student Notice</a>
+                                </li>
+                                <li>
+									<a href="/manager/notices/add-staff-notice/">Upload Staff Notice</a>
+                                </li>
+                                <li>
+									<a href="/manager/notices/view-my-notices/">View/Edit My Notices</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li style="border-color:#4A777A;">
                             <a href="/manager/sms-status/"><i class="fa fa-envelope-o fa-fw"></i> SMS Status </span></a>
 
                             <!-- /.nav-second-level -->
@@ -217,59 +232,46 @@
                             </ul>
                         </li> -->
                         <li style="border-color:#4A777A;">
-							<a href="#"><br/><br/><br/><br/><br/><i class="fa fa-bar-chart fa-fw"></i><!-- Daywise--> Attendance Reports<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level {% block daywise_attendance_nav %}collapse{% endblock %}">
-                                <li>
-									<a href="/manager/daywise-attendance-reports/studentwise-attendance/">Studentwise Attendance</a>
+                            <a href="#"><i class="fa fa-arrow-down"></i><!-- Daywise--> More<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li style="border-color:#4A777A;">
+        							<a href="#"><i class="fa fa-bar-chart fa-fw"></i><!-- Daywise--> Attendance Reports<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level {% block daywise_attendance_nav %}collapse{% endblock %}">
+                                        <li>
+        									<a href="/manager/daywise-attendance-reports/studentwise-attendance/">Studentwise Attendance</a>
+                                        </li>
+                                        <li>
+        									<a href="/manager/daywise-attendance-reports/batchwise-attendance/">Batchwise Attendance</a>
+                                        </li>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
                                 </li>
-                                <li>
-									<a href="/manager/daywise-attendance-reports/batchwise-attendance/">Batchwise Attendance</a>
+
+                                <li style="border-color:#4A777A;">
+                                    <a href="#"><i class="fa fa-file-text-o fa-fw"></i> Syllabus<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level {% block syllabus_nav %}collapse{% endblock %}">
+                                        <li>
+                                            <a href="/manager/lectures/add-lectures/">Add Topics</a>
+                                        </li>
+                                        <li>
+                                            <a href="/manager/lectures/view-lectures/">View/Edit Topics</a>
+                                        </li>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+                                <li style="border-color:#4A777A;">
+                                    <a href="#"><i class="fa fa-user fa-fw"></i> Teachers<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level {% block teachers_nav %}collapse{% endblock %}">
+                                        <li>
+                                            <a href="/manager/teacher/add-teacher/">Add Teacher</a>
+                                        </li>
+                                        <li>
+                                            <a href="/manager/teacher/view-teacher/">View/Edit Teacher</a>
+                                        </li>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
                                 </li>
                             </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
-                        <li style="border-color:#4A777A;">
-							<a href="#"><i class="fa fa-envelope-o fa-fw"></i> Notices<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level {% block notices_nav %}collapse{% endblock %}">
-                                <li>
-									<a href="/manager/notices/add-student-notice/">Upload Student Notice</a>
-                                </li>
-                                <li>
-									<a href="/manager/notices/add-staff-notice/">Upload Staff Notice</a>
-                                </li>
-                                <li>
-									<a href="/manager/notices/view-my-notices/">View/Edit My Notices</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
-
-
-                        <li style="border-color:#4A777A;">
-                            <a href="#"><i class="fa fa-file-text-o fa-fw"></i> Syllabus<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level {% block syllabus_nav %}collapse{% endblock %}">
-                                <li>
-                                    <a href="/manager/lectures/add-lectures/">Add Topics</a>
-                                </li>
-                                <li>
-                                    <a href="/manager/lectures/view-lectures/">View/Edit Topics</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li style="border-color:#4A777A;">
-                            <a href="#"><i class="fa fa-user fa-fw"></i> Teachers<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level {% block teachers_nav %}collapse{% endblock %}">
-                                <li>
-                                    <a href="/manager/teacher/add-teacher/">Add Teacher</a>
-                                </li>
-                                <li>
-                                    <a href="/manager/teacher/view-teacher/">View/Edit Teacher</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
                         </li>
                     </ul>
                 </div>

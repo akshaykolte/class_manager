@@ -192,9 +192,6 @@
                                 <li>
                                     <a href="/accountant/student/admit-student/">Admit Student to Batches</a>
                                 </li>
-                                <li>
-                                    <a href="/accountant/student/add-emi/">Add Student EMIs</a>
-                                </li>
 
                             </ul>
                             <!-- /.nav-second-level -->
@@ -232,24 +229,43 @@
                             <!-- /.nav-second-level -->
                         </li>
 
-
-                        <li style="border-color:#4A777A;">
-                            <a href="#"><i class="fa fa-user fa-fw "></i> Cheques<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level {% block cheques_nav %}collapse{% endblock %}">
-                                <li>
-                                    <a href="/accountant/cheques/view-cheques/">View Cheques</a>
-                                </li>
-
-
-
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
                         <li style="border-color:#4A777A;">
                             <a href="/accountant/sms-status/"><i class="fa fa-envelope-o fa-fw"></i> SMS Status</span></a>
 
                             <!-- /.nav-second-level -->
                         </li>
+
+                        <li style="border-color:#4A777A;">
+                            <a href="#"><i class="fa fa-arrow-down"></i> More<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li style="border-color:#4A777A;">
+                                    <a href="#"><i class="fa fa-user fa-fw "></i> Cheques<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level {% block cheques_nav %}collapse{% endblock %}">
+                                        <li>
+                                            <a href="/accountant/cheques/view-cheques/">View Cheques</a>
+                                        </li>
+
+
+
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+
+                                <li style="border-color:#4A777A;">
+                                    <a href="#"><i class="fa fa-user fa-fw "></i> EMIs<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level {% block emis_nav %}collapse{% endblock %}">
+                                        <li>
+                                            <a href="/accountant/student/add-emi/">Add Student EMIs</a>
+                                        </li>
+
+
+
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+                            </ul>
+                        </li>
+
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

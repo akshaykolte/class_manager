@@ -202,28 +202,6 @@
                             <!-- /.nav-second-level -->
                         </li>
 
-                         <li style="border-color:#4A777A;">
-                            <a href="/teacher/sms-status/"><i class="fa fa-envelope-o fa-fw"></i> SMS Status<br/><br/><br/><br/><br/><br/></span></a>
-
-                            <!-- /.nav-second-level -->
-                        </li>
-
-
-
-                        <li style="border-color:#4A777A;">
-                            <a href="#"><i class="fa fa-pencil fa-fw"></i> Lectures<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level {% block lectures_nav %}collapse{% endblock %}">
-                                <li>
-                                    <a href="/teacher/lectures/add-lectures/">Add Lectures</a>
-                                </li>
-                                <li>
-                                    <a href="/teacher/lectures/view-lecture/">View/Edit Lectures</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
-
                         <li style="border-color:#4A777A;">
                             <a href="#"><i class="fa fa-envelope-o fa-fw"></i> Notices<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level {% block notices_nav %}collapse{% endblock %}">
@@ -237,6 +215,31 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+
+                        <li style="border-color:#4A777A;">
+                            <a href="/teacher/sms-status/"><i class="fa fa-envelope-o fa-fw"></i> SMS Status</span></a>
+
+                            <!-- /.nav-second-level -->
+                        </li>
+
+                        <li style="border-color:#4A777A;">
+                            <a href="#"><i class="fa fa-arrow-down"></i> More<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li style="border-color:#4A777A;">
+                                    <a href="#"><i class="fa fa-pencil fa-fw"></i> Lectures<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level {% block lectures_nav %}collapse{% endblock %}">
+                                        <li>
+                                            <a href="/teacher/lectures/add-lectures/">Add Lectures</a>
+                                        </li>
+                                        <li>
+                                            <a href="/teacher/lectures/view-lecture/">View/Edit Lectures</a>
+                                        </li>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+                            </ul>
+                        </li>
+
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
