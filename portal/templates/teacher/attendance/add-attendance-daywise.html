@@ -90,7 +90,7 @@
     {% if page_type == 2 %}
 
         <form>
-            
+
             <label><strong>Select Branch</strong></label>
             <select name="branch" class="form-control" onchange="this.form.submit()">
                 <option>Select</option>
@@ -104,7 +104,7 @@
 
         <form>
             <input type="hidden" name="branch" value="{{branch_id}}">
-            
+
             <label><strong>Select Standard</strong></label>
             <select name="standard" class="form-control" onchange="this.form.submit()">
                 {% for standard in standards %}
@@ -112,12 +112,12 @@
                 {% endfor %}
             </select>
         </form>
-    
+
         <br/>
         <form>
             <input type="hidden" name="branch" value="{{branch_id}}">
             <input type="hidden" name="standard" value="{{standard_id}}">
-               
+
                 <label><strong>Select Batch</strong></label>
                     <select name="batch" class="form-control" onchange="this.form.submit()">
                         <option>Select</option>
@@ -134,7 +134,7 @@
     {% if page_type == 3 %}
 
         <form>
-            
+
             <label><strong>Select Branch</strong></label>
             <select name="branch" class="form-control" onchange="this.form.submit()">
                 <option>Select</option>
@@ -148,7 +148,7 @@
 
         <form>
             <input type="hidden" name="branch" value="{{branch_id}}">
-            
+
             <label><strong>Select Standard</strong></label>
             <select name="standard" class="form-control" onchange="this.form.submit()">
                 {% for standard in standards %}
@@ -156,12 +156,12 @@
                 {% endfor %}
             </select>
         </form>
-    
+
         <br/>
         <form>
             <input type="hidden" name="branch" value="{{branch_id}}">
             <input type="hidden" name="standard" value="{{standard_id}}">
-               
+
                 <label><strong>Select Batch</strong></label>
                     <select name="batch" class="form-control" onchange="this.form.submit()">
                         <option>Select</option>
@@ -180,10 +180,10 @@
                 <input name="date" class="form-control"  type = "text" id = "example1">
                 <br/>
 
-            <input class="col-lg-3 btn btn-default btn-red"  onchange="this.form.submit()" type='submit' value='Mark Attendance'>    
+            <input class="col-lg-3 btn btn-default btn-red"  onchange="this.form.submit()" type='submit' value='Mark Attendance'>
         </form>
 
-    {% endif %}    
+    {% endif %}
 
 
     {% if page_type == 4 %}
@@ -196,10 +196,10 @@
 
             <h3>Select all students who attended </h3>
                 <br/>
-                
+
                 <div class="col-md-9">
                     <div id="myTabContent" class="tab-content">
-                        
+
                             <div>
                                 Batch: <strong>{{batchname}}</strong>   &nbsp;&nbsp; Standard: <strong>{{standardname}}</strong> &nbsp;&nbsp; Branch: <strong>{{branchname}}</strong> &nbsp;&nbsp; Date: <strong>{{date}}</strong>
                                 <br/>
@@ -231,7 +231,7 @@
                                 <input class="col-lg-3 btn btn-default btn-red" type='submit' value='Mark Attendance'>
                                 <br/>
                             </div>
-                        
+
                     </div>
                 </div>
             <br/>
@@ -246,12 +246,12 @@
 
             $(document).ready(function() {
             $('table.display').DataTable({
-                "iDisplayLength":25,
+                "iDisplayLength":100,
                 "oLanguage": {
                   "sEmptyTable":"No Students Found"
                 }
 
-                }); 
+                });
         } );
 
         {%for i in batch_list %}
@@ -266,5 +266,5 @@
             {% endfor %}
             </script>
 
-    {% endif %}        
+    {% endif %}
 {% endblock %}
