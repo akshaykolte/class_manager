@@ -22,7 +22,7 @@ def set_subject(subject_id=None, standard_id=None, subject_name=None):
 	elif not is_subject_id_none:
 
 		subject_object = Subject.objects.get(id=subject_id)
-		
+
 		if not is_standard_id_none:
 			subject_object.standard = Standard.objects.get(id=standard_id)
 
@@ -88,8 +88,8 @@ def get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard
 
 		student_batch_object = StudentBatch.objects.get(id=student_batch_id)
 
-		subject_year_list = [] 
-		
+		subject_year_list = []
+
 		for i in student_batch_object.subject_years.all():
 			subject_year_dict={}
 			subject_year_dict['id'] = i.id
@@ -104,14 +104,14 @@ def get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard
 		student_dict = {}
 		student_dict['id'] = student_batch_object.id
 		student_dict['name'] = student_batch_object.student.first_name + ' ' + student_batch_object.student.last_name
-		student_dict['batch_id'] = student_batch_object.batch.id 
+		student_dict['batch_id'] = student_batch_object.batch.id
 		student_dict['batch_name'] = student_batch_object.batch.name
 		student_dict['subjects'] = subject_year_list
 
 		return student_dict
 
 	elif is_subject_id_none and is_student_batch_id_none and not is_batch_id_none and is_standard_id_none and is_subject_year_id_none and is_academic_year_id_none:
-		
+
 		student_batch_object = StudentBatch.objects.filter(batch=Batch.objects.get(id=batch_id))
 
 		student_list=[]
@@ -138,7 +138,7 @@ def get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard
 
 
 	elif is_subject_id_none and is_student_batch_id_none and is_batch_id_none and not is_standard_id_none and is_subject_year_id_none and not is_academic_year_id_none:
-		
+
 		subject_year_object = SubjectYear.objects.filter(subject__standard=(Standard.objects.get(id=standard_id)),academic_year=(AcademicYear.objects.get(id=academic_year_id)))
 		subject_year_list = []
 		for subject_year in subject_year_object:
@@ -151,7 +151,7 @@ def get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard
 		return subject_year_list
 
 	elif is_subject_id_none and is_student_batch_id_none and is_batch_id_none and not is_standard_id_none and is_subject_year_id_none and is_academic_year_id_none:
-		
+
 		subject_year_object = SubjectYear.objects.filter(subject__standard=(Standard.objects.get(id=standard_id)),academic_year=(AcademicYear.objects.get(id=get_current_academic_year()['id'])))
 		subject_year_list = []
 		for subject_year in subject_year_object:
@@ -176,6 +176,20 @@ def get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard
 
 		return subject_year_dict
 
+	elif is_subject_id_none and is_student_batch_id_none and is_batch_id_none and is_standard_id_none and is_subject_year_id_none and not is_academic_year_id_none:
+
+		subject_year_object = SubjectYear.objects.filter(academic_year__id = academic_year_id)
+		subject_year_list = []
+		for subject_year in subject_year_object:
+			subject_year_dict = {}
+			subject_year_dict['id'] = subject_year.id
+			subject_year_dict['name'] = subject_year.subject.name
+			subject_year_dict['subject_id'] = subject_year.subject.id
+			subject_year_dict['subject_name'] = subject_year.subject.name
+			subject_year_dict['standard_id'] = subject_year.subject.standard.id
+			subject_year_list.append(subject_year_dict)
+
+		return subject_year_list
 
 
 	else:
@@ -198,7 +212,7 @@ def get_subject_year(id = None,subject_id=None, academic_year_id=None):
 		subject_year_dict['academic_year_id'] = subject_year_obj.academic_year.id
 		return subject_year_dict
 
-	
+
 
 	else:
 		subject_year_dict = {}

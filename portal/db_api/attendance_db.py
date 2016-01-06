@@ -31,10 +31,11 @@ def set_attendance(id = None ,count = None, student_batch_id = None, lecture_bat
 	else :
 		raise Exception('Wrong set of arguments')
 
-def get_attendance(id= None,student_batch_id=None,lecture_batch_id= None):
+def get_attendance(id= None,student_batch_id=None,lecture_batch_id= None, staff_id = None):
 	is_none_id = id == None
 	is_none_student_batch_id = student_batch_id == None
 	is_none_lecture_batch_id = lecture_batch_id == None
+	is_none_staff_id = staff_id == None
 
 	if not is_none_id:
 		attendance_object = Attendance.objects.get(id=id)
@@ -69,6 +70,22 @@ def get_attendance(id= None,student_batch_id=None,lecture_batch_id= None):
 
 	elif is_none_id and is_none_student_batch_id and not is_none_lecture_batch_id:
 		attendance_object_list = Attendance.objects.filter(lecture_batch = LectureBatch.objects.get(id=lecture_batch_id))
+		attendance_list=[]
+		for attendance_object in attendance_object_list:
+			attendance = {}
+			attendance['id'] = attendance_object.id
+			attendance['count'] = attendance_object.count
+			attendance['student'] = str(attendance_object.student_batch.student.first_name) + " " +str(attendance_object.student_batch.student.last_name)
+			attendance['student_batch_id'] = attendance_object.student_batch.id
+			attendance['student_batch'] = attendance_object.student_batch.batch.name
+			attendance['lecture_batch'] = attendance_object.lecture_batch.name
+			attendance['date'] = attendance_object.lecture_batch.date
+			attendance['duration'] = attendance_object.lecture_batch.duration
+			attendance_list.append(attendance)
+		return attendance_list
+
+	elif is_none_id and is_none_student_batch_id and is_none_lecture_batch_id and not is_none_staff_id:
+		attendance_object_list = Attendance.objects.filter(lecture_batch__staff_role__staff__id = staff_id)
 		attendance_list=[]
 		for attendance_object in attendance_object_list:
 			attendance = {}
