@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from portal.db_api.branch_db import *
 from portal.db_api.academic_year_db import *
 from portal.db_api.standard_db import *
@@ -17,6 +17,33 @@ def auth(request):
     pass
 
 @csrf_exempt
+def get_all(request):
+    branches_list = get_branch()
+    academic_year_object = get_current_academic_year()
+    standards = get_standard()
+    batches = get_batch(academic_year_id=get_current_academic_year()['id'])
+    subject_years = get_subjects(academic_year_id=get_current_academic_year()['id'])
+    staff_role_list = get_staff_role(staff_id=request.GET['staff_id'])
+    lectures = get_lecture_batch(staff_id = request.GET['staff_id'])
+    student_batch_list = get_student_batch()
+    lecture_batch_list = get_lecture_batch(staff_id = request.GET['staff_id'])
+    attendance_list = get_attendance(staff_id = request.GET['staff_id'])
+    all_dict = {
+        'branches':branches_list,
+        'academic_year': academic_year_object,
+        'standards': standards,
+        'batches': batches,
+        'subject_year': subject_years,
+        'staff_role': staff_role_list,
+        'lectures': lectures,
+        'student_batch': student_batch_list,
+        'lecture_batch': lecture_batch_list,
+        'attendance': attendance_list
+    }
+    return JsonResponse(all_dict)
+
+
+@csrf_exempt
 def branches(request):
     branches_list = get_branch()
     return JsonResponse({'branches':branches_list})
@@ -24,7 +51,7 @@ def branches(request):
 @csrf_exempt
 def academic_year(request):
     academic_year_object = get_current_academic_year()
-    return JsonResponse({'academic_year': academic_year})
+    return JsonResponse({'academic_year': academic_year_object})
 
 @csrf_exempt
 def standard(request):
@@ -39,7 +66,7 @@ def batch(request):
 @csrf_exempt
 def subject_year(request):
     subject_years = get_subjects(academic_year_id=get_current_academic_year()['id'])
-    return JsonResponse({'batches': batches})
+    return JsonResponse({'subject_year': subject_years})
 
 @csrf_exempt
 def staff_role(request):
