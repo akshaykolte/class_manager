@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^pentadmin/', include(admin.site.urls)),
+    url(r'^mobile/', include('mobile_app.urls')),
     url(r'^change/', 'portal.views.change.change_use_as'),
     url(r'^$', 'portal.views.auth_views.home'),
     url(r'^login/$', 'portal.views.auth_views.login'),
