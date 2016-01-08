@@ -95,6 +95,7 @@ def get_attendance(id= None,student_batch_id=None,lecture_batch_id= None, staff_
 			attendance['student_batch_id'] = attendance_object.student_batch.id
 			attendance['student_batch'] = attendance_object.student_batch.batch.name
 			attendance['lecture_batch'] = attendance_object.lecture_batch.name
+			attendance['lecture_batch_id'] = attendance_object.lecture_batch.id
 			attendance['date'] = attendance_object.lecture_batch.date
 			attendance['duration'] = attendance_object.lecture_batch.duration
 			attendance_list.append(attendance)

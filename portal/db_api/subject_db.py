@@ -187,6 +187,7 @@ def get_subjects(subject_id=None, student_batch_id=None, batch_id=None, standard
 			subject_year_dict['subject_id'] = subject_year.subject.id
 			subject_year_dict['subject_name'] = subject_year.subject.name
 			subject_year_dict['standard_id'] = subject_year.subject.standard.id
+			subject_year_dict['academic_year_id'] = subject_year.academic_year.id
 			subject_year_list.append(subject_year_dict)
 
 		return subject_year_list
