@@ -92,3 +92,21 @@ def lecture_batch(request):
 def attendance(request):
     attendance_list = get_student_batch(staff_id = request.GET['staff_id'])
     return JsonResponse({'attendance': attendance_list})
+
+@csrf_exempt
+def save_lecture_batch(request):
+    is_done_lecture_batch = False
+    if request.GET['is_done'] == 'true':
+        is_done_lecture_batch = True
+    lecture_batch_id = set_lecture_batch(name = request.GET['name'], description = request.GET['description'], date = request.GET['date'], duration = "2 Hours", lecture_id = request.GET['lecture_id'], staff_role_id = request.GET['staff_id'], batch_id = request.GET['batch_id'], is_done = is_done_lecture_batch)
+    return JsonResponse({'status': 'Success', 'server_id': lecture_batch_id})
+
+@csrf_exempt
+def save_attendance(request):
+    attendance_id = set_attendance(count = 1, student_batch_id = request.GET['student_batch_id'], lecture_batch_id = request.GET['lecture_batch_id'])
+    return JsonResponse({'status': 'Success', 'server_id': attendance_id})
+
+@csrf_exempt
+def remove_attendance(request):
+    delete_attendance(student_batch_id = request.GET['student_batch_id'], lecture_batch_id = request.GET['lecture_batch_id'])
+    return JsonResponse({'status': 'Success'})

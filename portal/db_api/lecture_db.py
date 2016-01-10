@@ -284,7 +284,7 @@ def get_lecture_batch(id = None,date = None,lecture_id = None,staff_role_id = No
 
 
 
-def set_lecture_batch(id = None, name = None, description = None, date = None, duration = None, lecture_id = None, staff_role_id = None,batch_id = None, is_done=None):
+def set_lecture_batch(id = None, name = None, description = None, date = None, duration = None, lecture_id = None, staff_role_id = None, batch_id = None, is_done=None):
 	print is_done
 	is_none_id = id == None
 	is_none_name = name == None
