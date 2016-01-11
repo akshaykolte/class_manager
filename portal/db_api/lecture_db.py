@@ -297,6 +297,9 @@ def set_lecture_batch(id = None, name = None, description = None, date = None, d
 	is_none_is_done = is_done == None
 
 	if is_none_id and not is_none_lecture_id and not is_none_staff_role_id and not is_none_batch_id:
+		if LectureBatch.objects.filter(name = name,description = description, date = date, duration = duration, lecture = Lecture.objects.get(id = lecture_id), staff_role = StaffRole.objects.get(id = staff_role_id),batch = Batch.objects.get(id = batch_id)).exists():
+			# Already exists, dont add again
+			return LectureBatch.objects.get(name = name,description = description, date = date, duration = duration, lecture = Lecture.objects.get(id = lecture_id), staff_role = StaffRole.objects.get(id = staff_role_id),batch = Batch.objects.get(id = batch_id)).id
 		lecture_object = LectureBatch(name = name,description = description,date = date, duration = duration, lecture = Lecture.objects.get(id = lecture_id),
 						staff_role = StaffRole.objects.get(id = staff_role_id),batch = Batch.objects.get(id = batch_id))
 		lecture_object.save()
