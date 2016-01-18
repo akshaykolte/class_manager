@@ -55,16 +55,18 @@ def auth(request):
 def get_all(request):
     if not is_teacher(request.GET['sessionid']):
         return JsonResponse( {'status': "Authentication Failed"} )
+    session = Session.objects.get(session_key=request.GET['sessionid'])
+    staff_id = session.get_decoded()['user']['id']
     branches_list = get_branch()
     academic_year_object = get_current_academic_year()
     standards = get_standard()
     batches = get_batch(academic_year_id=get_current_academic_year()['id'])
     subject_years = get_subjects(academic_year_id=get_current_academic_year()['id'])
-    staff_role_list = get_staff_role(staff_id=request.GET['staff_id'])
+    staff_role_list = get_staff_role(staff_id=staff_id)
     lectures = get_lecture()
     student_batch_list = get_student_batch()
-    lecture_batch_list = get_lecture_batch(staff_id = request.GET['staff_id'])
-    attendance_list = get_attendance(staff_id = request.GET['staff_id'])
+    lecture_batch_list = get_lecture_batch(staff_id = staff_id)
+    attendance_list = get_attendance(staff_id = staff_id)
     all_dict = {
         'status': 'Success',
         'branches':branches_list,
