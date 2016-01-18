@@ -41,7 +41,7 @@ def auth(request):
         request.session.create()
     auth_dict = get_user(request)
     return_dict = {}
-    if auth_dict['logged_in'] == True:
+    if auth_dict['logged_in'] == True and auth_dict['permission_teacher'] == True:
         return_dict['status'] = 'Success'
         request.session.set_expiry(10**7)
         return_dict['session_key'] = request.session.session_key
@@ -78,6 +78,7 @@ def get_all(request):
         'lecture_batch': lecture_batch_list,
         'attendance': attendance_list
     }
+    print 'status in get_all: ', all_dict['status']
     return JsonResponse(all_dict)
 
 @csrf_exempt
