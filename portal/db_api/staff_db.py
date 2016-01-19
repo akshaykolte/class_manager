@@ -248,6 +248,23 @@ def get_staff_role(id = None,role_id = None,staff_id = None,branch_id = None,rol
 			staff_role['branch_id'] = staff_role_object.branch.id
 			staff_role_list.append(staff_role)
 		return staff_role_list
+	#01001
+	elif is_none_id and is_none_role_id and not is_none_staff_id and is_none_branch_id and not is_none_role_name:
+		staff_role_object_list = StaffRole.objects.filter(staff = Staff.objects.get(id=staff_id), role__name = role_name)
+		staff_role_list = []
+		for staff_role_object in staff_role_object_list:
+			staff_role = {}
+			staff_role['id'] = staff_role_object.id
+			staff_role['role'] = staff_role_object.role.name
+			staff_role['staff_first_name'] = staff_role_object.staff.first_name
+			staff_role['staff_last_name'] = staff_role_object.staff.last_name
+			staff_role['branch'] = staff_role_object.branch.name
+			staff_role['branch_id'] = staff_role_object.branch.id
+			staff_role['branch_name'] = staff_role_object.branch.name
+			staff_role['staff_id'] = staff_role_object.staff.id
+			staff_role_list.append(staff_role)
+		print 'lololo', staff_role_list
+		return staff_role_list
 	#00111
 	elif is_none_id and is_none_role_id and not is_none_staff_id and not is_none_branch_id and not is_none_role_name:
 		print "---!"
