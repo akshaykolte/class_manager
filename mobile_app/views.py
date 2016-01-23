@@ -97,7 +97,7 @@ def save_lecture_batch(request):
 def save_attendance(request):
     if not is_teacher(request.GET['sessionid']):
         return JsonResponse( {'status': "Authentication Failed"} )
-    attendance_id = set_attendance(count = 1, student_batch_id = request.GET['student_batch_id'], lecture_batch_id = request.GET['lecture_batch_id'])
+    attendance_id = set_attendance(count = int(request.GET["count"]), student_batch_id = int(request.GET['student_batch_id']), lecture_batch_id = int(request.GET['lecture_batch_id']))
     return JsonResponse({'status': 'Success', 'server_id': attendance_id})
 
 @csrf_exempt
