@@ -80,7 +80,8 @@ def get_all(request):
         'lecture_batch': lecture_batch_list,
         'attendance': attendance_list
     }
-    print 'status in get_all: ', all_dict['status']
+    # print 'status in get_all: ', all_dict['status']
+    # print 'lecture_batch', all_dict['lecture_batch']
     return JsonResponse(all_dict)
 
 @csrf_exempt
