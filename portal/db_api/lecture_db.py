@@ -325,3 +325,9 @@ def set_lecture_batch(id = None, name = None, description = None, date = None, d
 			lecture_object.is_done = is_done
 		lecture_object.save()
 		return lecture_object.id
+
+def lecture_batch_exists(lecture_id, batch_id, name):
+	if LectureBatch.objects.filter(lecture__id = lecture_id, batch__id = batch_id, name = name).exists():
+		return LectureBatch.objects.get(lecture__id = lecture_id, batch__id = batch_id, name = name).id
+	else:
+		return -1

@@ -14,6 +14,7 @@ from portal.db_api.attendance_db import *
 from portal.db_api.auth_db import *
 from django.contrib.sessions.models import Session
 import traceback
+from portal.validator.validator import *
 
 def is_teacher(session_key):
     if not Session.objects.filter(session_key=session_key).exists():
@@ -91,14 +92,22 @@ def save_lecture_batch(request):
     is_done_lecture_batch = False
     if request.GET['is_done'] == 'true':
         is_done_lecture_batch = True
-    lecture_batch_id = set_lecture_batch(name = request.GET['name'], description = request.GET['description'], date = request.GET['date'], duration = "2 Hours", lecture_id = request.GET['lecture_id'], staff_role_id = request.GET['staff_id'], batch_id = request.GET['batch_id'], is_done = is_done_lecture_batch)
-    return JsonResponse({'status': 'Success', 'server_id': lecture_batch_id})
+    t_lecture_batch_id = lecture_batch_exists(name = request.GET['name'], lecture_id = request.GET['lecture_id'], batch_id = request.GET['batch_id'])
+    if t_lecture_batch_id != -1:
+        return JsonResponse({'status': 'Success', 'server_id': t_lecture_batch_id})
+    else:
+        lecture_batch_id = set_lecture_batch(name = request.GET['name'], description = request.GET['description'], date = request.GET['date'], duration = "2 Hours", lecture_id = request.GET['lecture_id'], staff_role_id = request.GET['staff_id'], batch_id = request.GET['batch_id'], is_done = is_done_lecture_batch)
+        return JsonResponse({'status': 'Success', 'server_id': lecture_batch_id})
 
 @csrf_exempt
 def save_attendance(request):
     if not is_teacher(request.GET['sessionid']):
         return JsonResponse( {'status': "Authentication Failed"} )
-    attendance_id = set_attendance(count = int(request.GET["count"]), student_batch_id = int(request.GET['student_batch_id']), lecture_batch_id = int(request.GET['lecture_batch_id']))
+    try:
+        attendance_id = set_attendance(count = int(request.GET["count"]), student_batch_id = int(request.GET['student_batch_id']), lecture_batch_id = int(request.GET['lecture_batch_id']))
+    except Exception as e:
+        if str(e) == 'Student not admitted to subject (1013)':
+            return JsonResponse({'status': 'Not Admitted'})
     return JsonResponse({'status': 'Success', 'server_id': attendance_id})
 
 @csrf_exempt
