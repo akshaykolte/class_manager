@@ -125,7 +125,7 @@ def insert_batches():
 	cur_ay_obj = AcademicYear.objects.get(id=cur_ay)
 	branches = Branch.objects.all()
 	standards = Standard.objects.all()
-	batches = ['Morning Batch', 'Evening Batch']
+	batches = ['Batch 1']
 	length = len(standards)
 	for i,std in enumerate(standards):
 		add_progress(i,length)
@@ -230,7 +230,7 @@ def insert_parents(n=105):
 	print ""
 
 
-def assign_student_parent(n=105):
+def assign_student_parent(n=51):
 
 	print "Assigning Students to Parents",
 	# n+=1
@@ -271,47 +271,24 @@ def assign_student_parent(n=105):
 
 def insert_student_batches():
 	print "Adding Student Batches...",
+	batch = Batch.objects.get(name='Batch 1', standard__name = '11th', branch__name = 'Tarabai Park')
+	f = open("dummy_db/student_subjects.txt", "r+").read().split('\n')
+	for i in range(len(f)-1):
+		line = f[i].split('$')
+		student_username = line[0]
+		subjects = list(line[1])
+		student_batch = StudentBatch(student = Student.objects.get(username = student_username),
+							batch = batch)
+		student_batch.save()
+		sub_dict = {}
+		sub_dict['P'] = SubjectYear.objects.get(subject__name='Physics', subject__standard__name = '11th', academic_year__is_current = True)
+		sub_dict['C'] = SubjectYear.objects.get(subject__name='Chemistry', subject__standard__name = '11th', academic_year__is_current = True)
+		sub_dict['M'] = SubjectYear.objects.get(subject__name='Maths', subject__standard__name = '11th', academic_year__is_current = True)
+		sub_dict['B'] = SubjectYear.objects.get(subject__name='Biology', subject__standard__name = '11th', academic_year__is_current = True)
+		for subject in subjects:
+			student_batch.subject_years.add(sub_dict[subject])
+	print '\n'
 
-	batches = Batch.objects.all()
-	batch_len = len(batches)
-	students = Student.objects.all()
-	stud_len = len(students)
-	it_len = stud_len/batch_len
-	it_len += 1
-	cur_ay_obj = AcademicYear.objects.get(id=get_current_academic_year()['id'])
-	batch_it = 0
-	counter = 0
-	base_fee_object = FeeType.objects.get(name="base fee")
-	for i,stud in enumerate(students):
-		add_progress(i,stud_len)
-		if counter >= it_len:
-			batch_it+=1
-			counter = 0
-
-		if batch_it > batch_len:
-			break
-
-		if not StudentBatch.objects.filter(student=stud, batch=batches[batch_it]).exists():
-			stud_bat_obj = StudentBatch(student=stud, batch=batches[batch_it])
-			stud_bat_obj.save()
-			subject_year_list = SubjectYear.objects.filter(subject=(Subject.objects.filter(standard=stud_bat_obj.batch.standard)), academic_year=cur_ay_obj)
-			rn = random.randint(1, len(subject_year_list))
-			# For 1 subject fee is 5000 for 2 it is 8000 and for 3 it is 12000 (Randomly considered, nothing specific)
-			if rn == 1:
-				amount = 5000
-			elif rn == 2:
-				amount = 8000
-			elif rn == 3:
-				amount = 12000
-			if not FeeTransaction.objects.filter(student = stud_bat_obj.student,amount = amount,fee_type = base_fee_object, date = datetime.datetime.now()).exists():
-				transaction_object = FeeTransaction(student = stud_bat_obj.student,amount = amount,fee_type = base_fee_object, date = datetime.datetime.now())
-				transaction_object.save()
-			for i in range(rn):
-				stud_bat_obj.subject_years.add(subject_year_list[i].id)
-
-		counter+=1
-
-	print ""
 
 def insert_staff(n=20):
 
@@ -630,19 +607,19 @@ def main():
 	assign_student_parent()
 	insert_student_batches()
 
-	insert_staff()
-	insert_staff_role()
-	insert_lectures()
-	insert_lecture_batches()
-	insert_notices()
-	insert_attendance()
+	# insert_staff()
+	# insert_staff_role()
+	# insert_lectures()
+	# insert_lecture_batches()
+	# insert_notices()
+	# insert_attendance()
 
-	insert_tests()
-	insert_test_batch()
-	insert_test_student_batch()
+	# insert_tests()
+	# insert_test_batch()
+	# insert_test_student_batch()
 
-	insert_base_fees()
-	insert_transactions()
+	# insert_base_fees()
+	# insert_transactions()
 
 	endtime = datetime.datetime.now()
 	print "Time taken: ",str((endtime-starttime).seconds)+"."+str((endtime-starttime).microseconds)[0:3],"seconds\n"

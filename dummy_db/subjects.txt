@@ -1,6 +1,4 @@
 Physics 11th
 Chemistry 11th
 Maths 11th
-Physics 12th
-Chemistry 12th
-Maths 12th
+Biology 11th
