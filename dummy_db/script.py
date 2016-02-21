@@ -287,6 +287,11 @@ def insert_student_batches():
 		sub_dict['B'] = SubjectYear.objects.get(subject__name='Biology', subject__standard__name = '11th', academic_year__is_current = True)
 		for subject in subjects:
 			student_batch.subject_years.add(sub_dict[subject])
+		FeeTransaction(amount = len(subjects)*10000,
+			date = datetime.date.today(),
+			student=student_batch.student,
+			fee_type = FeeType.objects.get(name='base fee')
+			).save()
 	print '\n'
 
 
