@@ -205,7 +205,7 @@ class Staff(models.Model):
 	first_name = models.CharField(max_length=50)
 	last_name = models.CharField(max_length=50)
 	address = models.CharField(max_length=200)
-	email = models.CharField(max_length=50)
+	email = models.CharField(max_length=50, blank=True, null=True)
 	phone_number = models.CharField(max_length=13)
 	gender = models.CharField(max_length=1)
 
@@ -213,12 +213,12 @@ class Staff(models.Model):
 		return self.first_name + ' ' + self.last_name
 
 	class Meta:
-		unique_together = (('username',), ('email',), ('phone_number',),)
+		unique_together = (('username',), ('phone_number',),)
 
 	def save(self, validate=True):
 		from portal.validator.validator import validate_staff
 		if validate:
-			if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.email == '' or self.gender == '':
+			if self.username == '' or self.password == '' or self.first_name == '' or self.last_name == '' or self.address == '' or self.gender == '':
 				PentaError(997).raise_error()
 			if self.gender != 'M' and self.gender != 'F':
 				PentaError(995).raise_error()

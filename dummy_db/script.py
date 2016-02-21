@@ -322,37 +322,22 @@ def insert_staff(n=20):
 def insert_staff_role():
 
 	print "Assigning Roles to each Staff...",
-	staff_obj = Staff.objects.all()
-	role_obj = Role.objects.all()
-	branch_obj = Branch.objects.all()
 
-	bsize = len(branch_obj)
-	rsize = len(role_obj)
+	f = open("dummy_db/staff_roles.txt", "r+").read().split('\n')
 
-	for i in xrange(len(staff_obj)):
-		add_progress(i,len(staff_obj))
-		branch = branch_obj[i%bsize]
-		role = role_obj[i%rsize]
-		staff = staff_obj[i]
-
-		if role.name == 'admin':
-			for rl in role_obj:
-				for br in branch_obj:
-					if not StaffRole.objects.filter(staff=staff, role=rl, branch=br).exists():
-						staff_role_obj = StaffRole(staff=staff, role=rl, branch=br)
-						staff_role_obj.save()
-		elif role.name != 'teacher':
-			if not StaffRole.objects.filter(staff=Staff.objects.get(id=staff.id), role=Role.objects.get(id=role.id), branch=Branch.objects.get(id=branch.id)).exists():
-
-				staff_role_obj = StaffRole(staff=Staff.objects.get(id=staff.id), role=Role.objects.get(id=role.id), branch=Branch.objects.get(id=branch.id))
-
-				staff_role_obj.save()
-
-		else:
-			for br in branch_obj:
-				if not StaffRole.objects.filter(staff=staff, role=role, branch=br).exists():
-					staff_role_obj = StaffRole(staff=staff, role=role, branch=br)
-					staff_role_obj.save()
+	for i in range(len(f)-1):
+		line = f[i].split('$')
+		roles = {}
+		roles['A'] = Role.objects.get(name = "admin")
+		roles['C'] = Role.objects.get(name = "accountant")
+		roles['T'] = Role.objects.get(name = "teacher")
+		roles['M'] = Role.objects.get(name = "manager")
+		staff_roles = list(line[1])
+		for staff_role in staff_roles:
+			ss = StaffRole(role = roles[staff_role],
+					staff=Staff.objects.get(username=line[0]),
+					branch = Branch.objects.get(name='Tarabai Park'))
+			ss.save()
 
 	print ""
 
@@ -607,8 +592,8 @@ def main():
 	assign_student_parent()
 	insert_student_batches()
 
-	# insert_staff()
-	# insert_staff_role()
+	insert_staff()
+	insert_staff_role()
 	# insert_lectures()
 	# insert_lecture_batches()
 	# insert_notices()
