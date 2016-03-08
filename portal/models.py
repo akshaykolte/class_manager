@@ -664,6 +664,17 @@ class AttendanceDaywise(models.Model):
 	def __str__(self):
 		return str(self.date) + ' - ' + str(self.student_batch)
 
+class StaffAttendanceDaywise(models.Model):
+	date = models.DateField()
+	staff = models.ForeignKey(Staff)
+	attended = models.BooleanField()
+
+	class Meta:
+		unique_together = (('date', 'staff', ), )
+
+	def __str__(self):
+		return str(self.date) + ' - ' + str(self.staff)
+
 
 class SMS(models.Model):
 	sms_type = models.CharField(max_length=20)
