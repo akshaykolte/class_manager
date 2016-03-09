@@ -615,7 +615,10 @@ def make_transaction(request):
 				transaction_id = set_fee_transaction(id = None ,amount = amount, date =  date, student_id = request.POST['student'], fee_type_id = fee_type_id)
 
 
-			return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id)+'&cheque_number='+str(request.POST['cheque_number']))
+			if 'cheque_number' in request.POST:
+				return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id)+'&cheque_number='+str(request.POST['cheque_number']))
+			else:
+				return redirect('/accountant/fees/view-transaction/?transaction='+str(transaction_id))
 
 
 
@@ -627,10 +630,10 @@ def make_transaction(request):
 			return redirect('./?message_error='+str(PentaError(1000)))
 		except ObjectDoesNotExist, e:
 			return redirect('./?message_error='+str(PentaError(999)))
-		except MultiValueDictKeyError, e:
-			return redirect('./?message_error='+str(PentaError(998)))
-		except Exception, e:
-			return redirect('./?message_error='+str(PentaError(100)))
+		# except MultiValueDictKeyError, e:
+		# 	return redirect('./?message_error='+str(PentaError(998)))
+		# except Exception, e:
+		# 	return redirect('./?message_error='+str(PentaError(100)))
 
 def render_to_pdf(template_src, context_dict):
     template = get_template(template_src)
