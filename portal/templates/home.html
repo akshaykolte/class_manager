@@ -14,9 +14,13 @@
  * General styles
  */
 body, html {
-    height: 100%;
+    /*height: 100%;
     background-repeat: no-repeat;
-    background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+    background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
+    background-image:    url('/static/img/bg.jpg');
+    background-size:     cover;                      /* <------ */
+    background-repeat:   no-repeat;
+    background-position: center center;
 }
 
 .card-container.card {
@@ -148,6 +152,7 @@ body, html {
 .forgot-password:focus{
     color: rgb(12, 97, 33);
 }
+
     </style>
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -179,14 +184,15 @@ body, html {
 
             {% if message %}
                 <br/>
-                <div style="text-align:center;" class="forgot-password">
-                    {{message}}
+                <div style="text-align:center;" class="text-danger" class="forgot-password">
+                    <strong>{{message}}</strong>
                 </div>
             {% endif %}
-
+            <br>
+            <h6 align=center>If interested in using the product, email us at contact@pentaflux.com</h6>
+          	<h6 align=center>Or Call us at +919819077607 </h6>
         </div><!-- /card-container -->
-	<h6 align=center>If interested in using the product, email us at contact@pentaflux.com</h6>
-	<h6 align=center>Or Call us at +919819077607 </h6>
+
     </div><!-- /container -->
 <script type="text/javascript">
 $( document ).ready(function() {
