@@ -746,9 +746,9 @@ def send_sms_notice(request):
 		raise Http404
 
 
-	
+
 	context = {}
-	
+
 	print 'GET:'
 	print request.GET
 	context['details'] = auth_dict
@@ -773,14 +773,14 @@ def send_sms_notice(request):
 			for notice_viewer in notice_viewers:
 				if notice_viewer.student:
 					student_list.append(notice_viewer.student)
-			
+
 
 	else:
-		
+
 		student_list = get_students()
-		
-	
-	
+
+
+
 	context['students'] = student_list
 	context['notice_id'] = notice_id
 	context['branch_id'] = branch_id
@@ -802,9 +802,9 @@ def send_sms_notice_submit(request):
 
 	print 'here'
 	print request.POST
-	
-	
-		
+
+
+
 	student_id_list = []
 	students = get_students()
 	for student in students:
@@ -997,3 +997,73 @@ def edit_my_notice(request):
 			return redirect('../view-my-notices?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('../view-my-notices?message_error='+str(PentaError(100)))
+
+
+
+@csrf_exempt
+def delete_staff(request):
+	auth_dict = get_user(request)
+	if auth_dict['logged_in'] == False:
+		raise Http404
+
+	if auth_dict['permission_teacher'] != True:
+		raise Http404
+
+	if request.method == 'GET':
+		context = {}
+
+		if 'message' in request.GET:
+			context['message'] = request.GET['message']
+		elif 'message_error' in request.GET:
+			context['message_error'] = request.GET['message_error']
+		page_type = 0
+
+		branches = get_branch(id=None)
+		context['branches'] = branches
+
+
+		staff_list = search_staffs(first_name='', last_name='', username='', email='', phone_number='')
+		print staff_list, len(staff_list)
+
+		batch_list = {}
+
+		context['staff_list'] = staff_list
+
+		context['page_type'] = page_type
+		context['details'] = auth_dict
+		return render(request, 'admin/staff/delete-staff.html', context)
+
+	elif request.method == 'POST':
+
+		try:
+			standard = request.POST['standard']
+			batch_id = request.POST['batch']
+			print 'her234'
+			academic_year_id = get_current_academic_year()['id']
+			#batches = get_batch(academic_year_id = academic_year_id,standard_id = standard)
+			#for batch in batches:
+			students = get_students(batch_id = batch_id)
+
+			print 'heres'
+			for student in students:
+				if 'batch_'+str(batch_id)+'student_'+str(student['id']) in request.POST:
+					print '00here123'
+					print student
+					student_batch = get_student_batch(id = None,batch_id=batch_id,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
+					set_attendance_daywise(id = None ,attended = True, student_batch_id = student['id'], date = request.POST['date'])
+
+					print 'here1'
+				else:
+					student_batch = get_student_batch(id = None,batch_id=batch_id,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
+					set_attendance_daywise(id = None ,attended = False, student_batch_id = student['id'], date = request.POST['date'])
+			return redirect('/teacher/attendance/send-sms/?batch_id='+str(batch_id)+'&date='+str(request.POST['date']))
+		except ModelValidateError, e:
+			return redirect('./?message_error='+str(e))
+		except ValueError, e:
+			return redirect('./?message_error='+str(PentaError(1000)))
+		except ObjectDoesNotExist, e:
+			return redirect('./?message_error='+str(PentaError(999)))
+		except MultiValueDictKeyError, e:
+			return redirect('./?message_error='+str(PentaError(998)))
+		except Exception, e:
+			return redirect('./?message_error='+str(PentaError(100)))

@@ -208,6 +208,8 @@ class Staff(models.Model):
 	email = models.CharField(max_length=50)
 	phone_number = models.CharField(max_length=13)
 	gender = models.CharField(max_length=1)
+	current_employee = models.BooleanField(default = True)
+
 
 	def __str__(self):
 		return self.first_name + ' ' + self.last_name

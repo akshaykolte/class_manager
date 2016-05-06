@@ -293,6 +293,7 @@ def search_staffs(first_name='', last_name='', username='', email='', phone_numb
 		staff_dict['last_name'] = i.last_name
 		staff_dict['email'] = i.email
 		staff_dict['phone_number'] = i.phone_number
+		staff_dict['current_employee'] = i.current_employee
 		staff_list.append(staff_dict)
 
 	return staff_list

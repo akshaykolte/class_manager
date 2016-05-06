@@ -1,0 +1,120 @@
+{% extends "admin/base_admin.html" %}
+
+{% block staff_nav %}{% endblock %}
+
+{% block main_content%}
+<div class="row">
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header"> &nbsp;&nbsp;View/Edit Staff</h1>
+    </div>
+</div>
+
+	{% if message %}
+	    <div class="panel-body">
+	        <div class="alert alert-success alert-dismissable col-lg-12">
+	            <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	            {{message}}
+	        </div>
+	    </div>
+    {% elif message_error %}
+	    <div class="panel-body">
+		    <div class="alert alert-danger alert-dismissable col-lg-12">
+		        <button onclick="window.location='.'" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		        {{message_error}}
+		    </div>
+		</div>
+	{% endif %}
+
+
+
+<form action="." method="POST">
+
+    <h3>Select staff who needs to be deleted </h3>
+        <br/>
+
+        <div class="col-md-12">
+            <div id="myTabContent" class="tab-content">
+
+                    <div>
+                        <br/>
+                        <br/>
+                        <div class="dataTable_wrapper">
+                            <table class="display table table-striped table-bordered table-hover" id="">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Name</th>
+                                  <th>Username</th>
+                                  <th>Email</th>
+                                  <th>Phone Number</th>
+                                  <th>Currently Employed</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for staff in staff_list %}
+                                  <tr>
+                                    <td>{{staff.id}}</td>
+                                    <td>{{staff.first_name}} {{staff.last_name}}</td>
+                                    <td>{{staff.username}}</td>
+                                    <td>{{staff.email}}</td>
+                                    <td>{{staff.phone_number}}</td>
+                                    <!--{% if staff.current_employee == True %}
+                                      <td>Currently Employed</td>
+                                    {% else %}
+                                      <td>Past Employee</td>
+                                    {% endif %} -->
+                                    <td align="center"><input class="staff_{{staff.id}}" type="checkbox" name="staff_{{staff.id}}"{% if staff.current_employee == False %} checked{% endif %}></td>
+                                    {% if staff.current_employee == True %}<td class="text-success"><strong>Current Employee</strong></td>
+                                    {% else %}<td class="text-muted"><strong>Past Employee</strong></td>
+                                    {% endif %}
+                                  </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                        </div>
+                        <br>
+                        <input class="col-lg-3 btn btn-default btn-red" type='submit' value='Delete Staff'>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                    </div>
+
+            </div>
+        </div>
+    <br/>
+    <br/>
+</form>
+
+
+<!-- jQuery -->
+    <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
+    <script>
+
+    $(document).ready(function() {
+    $('table.display').DataTable({
+        "iDisplayLength":25,
+        "oLanguage": {
+          "sEmptyTable":"No Students Found"
+        }
+
+        });
+} );
+
+{%for staff in staff_list %}
+ $(function() {
+        $('.staff_{{staff_id}}').on("click", function () { // IE<9 triggers change after blurred
+            var checked = $(this).is(':checked');
+            var $otherChecks = $('.staff_{{staff.id}}');
+            $otherChecks.prop('checked', checked);
+            $otherChecks.parent().toggleClass("disabled",checked);
+        });
+    });
+    {% endfor %}
+</script>
+
+
+{% endblock %}
