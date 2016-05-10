@@ -1023,7 +1023,7 @@ def delete_staff(request):
 
 
 		staff_list = search_staffs(first_name='', last_name='', username='', email='', phone_number='')
-		print staff_list, len(staff_list)
+		#print staff_list, len(staff_list)
 
 		batch_list = {}
 
@@ -1036,27 +1036,18 @@ def delete_staff(request):
 	elif request.method == 'POST':
 
 		try:
-			standard = request.POST['standard']
-			batch_id = request.POST['batch']
-			print 'her234'
-			academic_year_id = get_current_academic_year()['id']
-			#batches = get_batch(academic_year_id = academic_year_id,standard_id = standard)
-			#for batch in batches:
-			students = get_students(batch_id = batch_id)
 
-			print 'heres'
-			for student in students:
-				if 'batch_'+str(batch_id)+'student_'+str(student['id']) in request.POST:
-					print '00here123'
-					print student
-					student_batch = get_student_batch(id = None,batch_id=batch_id,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
-					set_attendance_daywise(id = None ,attended = True, student_batch_id = student['id'], date = request.POST['date'])
-
-					print 'here1'
+			#print 'heres'
+			staff_list = search_staffs(first_name='', last_name='', username='', email='', phone_number='')
+			for staff in staff_list:
+				if 'staff_'+str(staff['id']) in request.POST:
+					#print '00here123'
+					mark_staff_past(staff_id= staff['id'])
+					#print staff
 				else:
-					student_batch = get_student_batch(id = None,batch_id=batch_id,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
-					set_attendance_daywise(id = None ,attended = False, student_batch_id = student['id'], date = request.POST['date'])
-			return redirect('/teacher/attendance/send-sms/?batch_id='+str(batch_id)+'&date='+str(request.POST['date']))
+					mark_staff_current(staff_id=staff['id'])
+					#print staff
+			return redirect('/admin/staff/delete-staff/?message=Staff Status Changed')
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:

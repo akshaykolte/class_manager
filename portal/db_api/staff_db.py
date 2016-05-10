@@ -298,6 +298,15 @@ def search_staffs(first_name='', last_name='', username='', email='', phone_numb
 
 	return staff_list
 
+def mark_staff_current(staff_id=None):
+	staff = Staff.objects.get(id = staff_id)
+	staff.current_employee = True
+	staff.save()
+
+def mark_staff_past(staff_id=None):
+	staff = Staff.objects.get(id = staff_id)
+	staff.current_employee = False
+	staff.save()
 
 def delete_staff_role(staff=None, role=None, branch=None):
 	StaffRole.objects.filter(staff__id=staff, role__id=role, branch__id=branch).delete()
