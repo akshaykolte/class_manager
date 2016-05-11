@@ -777,9 +777,9 @@ def send_sms_notice(request):
 		raise Http404
 
 
-	
+
 	context = {}
-	
+
 	print 'GET:'
 	print request.GET
 	context['details'] = auth_dict
@@ -804,14 +804,14 @@ def send_sms_notice(request):
 			for notice_viewer in notice_viewers:
 				if notice_viewer.student:
 					student_list.append(notice_viewer.student)
-			
+
 
 	else:
-		
+
 		student_list = get_students()
-		
-	
-	
+
+
+
 	context['students'] = student_list
 	context['notice_id'] = notice_id
 	context['branch_id'] = branch_id
@@ -833,9 +833,9 @@ def send_sms_notice_submit(request):
 
 	print 'here'
 	print request.POST
-	
-	
-		
+
+
+
 	student_id_list = []
 	students = get_students()
 	for student in students:
@@ -1234,7 +1234,7 @@ def add_attendance_daywise(request):
 						students = get_students(batch_id = int(request.GET['batch']))
 
 						for i in xrange(len(students)):
-							if students[i]['id'] in attendance_dict:
+							if students[i]['student_batch_id'] in attendance_dict:
 								students[i]['present'] = True
 							else:
 								students[i]['present'] = False
@@ -1262,16 +1262,16 @@ def add_attendance_daywise(request):
 
 			print 'heres'
 			for student in students:
-				if 'batch_'+str(batch_id)+'student_'+str(student['id']) in request.POST:
+				if 'batch_'+str(batch_id)+'student_'+str(student['student_batch_id']) in request.POST:
 					print '00here123'
 					print student
 					student_batch = get_student_batch(id = None,batch_id=batch_id,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
-					set_attendance_daywise(id = None ,attended = True, student_batch_id = student['id'], date = request.POST['date'])
+					set_attendance_daywise(id = None ,attended = True, student_batch_id = student['student_batch_id'], date = request.POST['date'])
 
 					print 'here1'
 				else:
 					student_batch = get_student_batch(id = None,batch_id=batch_id,standard_id=None,academic_year_id=None,student_id = student['id'], batch_assigned=True)
-					set_attendance_daywise(id = None ,attended = False, student_batch_id = student['id'], date = request.POST['date'])
+					set_attendance_daywise(id = None ,attended = False, student_batch_id = student['student_batch_id'], date = request.POST['date'])
 			return redirect('/teacher/attendance/send-sms/?batch_id='+str(batch_id)+'&date='+str(request.POST['date']))
 		except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))

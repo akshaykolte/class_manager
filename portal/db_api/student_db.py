@@ -44,6 +44,7 @@ def get_students(id = None,batch_id = None, subject_year_id = None):
 		for i in student_batch:
 			student_dict = {}
 			student_dict['id'] = i.student.id
+			student_dict['student_batch_id'] = i.id
 			student_dict['username'] = i.student.username
 			student_dict['password'] = i.student.password
 			student_dict['first_name'] = i.student.first_name
