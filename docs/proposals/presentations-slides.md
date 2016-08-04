@@ -17,9 +17,9 @@
 
  4. Syllabus Oriented System
     - Syllabus Tracking for Student and Teacher
-    - One-click access to check Syllabus Progress
+    - One-click access to check Syllabus Progress over various remote branches
 
- 5. Online Lecture Material and Assignment Submissions
+ 5. Online Lecture Material and Assignment Submissions (work in progress)
     - Access to Lecture Material for every Student
     - Uploading Assignments for individual Student according to individual progress
 
@@ -27,11 +27,11 @@
     - Online Test Portal for Tests(Weekly/Monthly) integrated with the Student Module.
     - Branchwise, Batchwise and Individual Marks Analysis and detailed Reports
 
- 7. Online Availability of Video Lectures
+ 7. Online Availability of Video Lectures (work in progress)
     - Video Lectures for Distance-Learning and Revision
 
  8. Centralised System (For Multiple Branch Support)
-    - Manage numerous Branches from one central account (Syllabus tracking, Fee Reports of all Branches)
+    - Manage numerous Branches from one central account (Syllabus tracking, Fee Reports of all Branches, etc.)
 
  9. Administrator(Director) Login
     - Administrator access to manage Staff, view detailed Reports for Fees, Attendance and Marks
@@ -40,8 +40,8 @@
  10. Fees Management
     - Secure Fee Transactions with automatic receipt generation, Transaction tracking with discount management.
 
- 11. Integrated Distance Learning System
+ 11. Integrated Distance Learning System (work in progress)
 
- 12. Realtime Online Test Portal
+ 12. Realtime Online Test Portal (work in progress)
 
- 13. Library Management System
+ 13. Library Management System (work in progress)
