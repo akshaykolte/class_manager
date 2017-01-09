@@ -1,3 +1,4 @@
+
 from portal.models import *
 from portal.db_api.student_db import *
 from portal.db_api.academic_year_db import get_current_academic_year
@@ -10,10 +11,9 @@ import string
 def insert_studentparent():
 	students = Student.objects.all()
 	parents = Parent.objects.all()
-	for i in range(1, 96):
-		studparent_obj = StudentParent(student = Student.objects.get(id = i), parent = Parent.objects.get(id = i))
+	for i in range(318, 357):
+		studparent_obj = StudentParent(student = Student.objects.get(id = i), parent = Parent.objects.get(id = i-1))
 		studparent_obj.save()
-
 
 def backup():
 	students = Student.objects.all()
@@ -62,10 +62,11 @@ def edit_student():
 			break
 
 def add_student_batch():
-	for i in range(64, 96):
+	for i in range(318, 357):
 		student = Student.objects.get(id = i)
-		batch = Batch.objects.get(id = 3)
-		subject_years = SubjectYear.objects.all()
+		batch = Batch.objects.get(id = 14)
+		subject_years = SubjectYear.objects.filter(subject__standard__id = 1 )
+	        print subject_years
 		subject_year_list = []
 		for subject_year in subject_years:
 			subject_year_list.append(subject_year.id)
@@ -73,8 +74,39 @@ def add_student_batch():
 		
 
 
+def writebackup1():
+    cnt = 0
+    with open("data_entry/data.txt", "r") as ins:
+        i = 210
+	for line in ins:
+            #print line	
+	    #line = line.split()
+            print line
+	    #print line[1]
+	    stud =Parent.objects.get(id = i)
+	    i = i + 1
+	    stud.phone_number = line
+	    stud.save()
+
+
+def insertstudent():
+        cnt = 0
+        with open("data_entry/data.txt", "r") as ins:
+        	with open("data_entry/data2.txt", "r") as ins2:
+
+	    		for line,line1 in zip(ins,ins2):
+				name = line.split()
+				s = Student(first_name = name[0], last_name = name[1])
+				s.save()
+				p = Parent(first_name = name[0], last_name = name[1]+" Senior", phone_number = line1 )
+				p.save()
+				print name[0] + "---- " + name[1]+"----" + line1
+		
+
+
+#insertstudent()
 #insert_parent()
-#writebackup()
-#insert_studentparent()
+#writebackup1()
+insert_studentparent()
 #edit_student()
-#add_student_batch()
+add_student_batch()

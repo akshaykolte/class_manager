@@ -11,7 +11,7 @@ def get_test(id=None, subject_year_id=None, academic_year_id=None, batch_id=None
 		test = {}
 		test['id'] = test_obj.id
 		test['name'] = test_obj.name
-		test['subject_year_id'] = test_obj.subject_year.id
+		test['subject_year_id'] = test_obj.subject_year.subject.id
 		test['subject_year_name'] = test_obj.subject_year.subject.name + ' - ' + test_obj.subject_year.subject.standard.name
 		test['standard_id'] = test_obj.subject_year.subject.standard.id
 		test['standard_name'] = test_obj.subject_year.subject.standard.name
@@ -49,7 +49,7 @@ def get_test(id=None, subject_year_id=None, academic_year_id=None, batch_id=None
 		test = {}
 		test['id'] = test_obj.id
 		test['name'] = test_obj.name
-		test['subject_year_id'] = test_obj.subject_year.id
+		test['subject_year_id'] = test_obj.subject_year.subject.id
 		test['subject_year_name'] = test_obj.subject_year.subject.name + ' - ' + test_obj.subject_year.subject.standard.name
 		test['standard_id'] = test_obj.subject_year.subject.standard.id
 		test['standard_name'] = test_obj.subject_year.subject.standard.name
@@ -113,7 +113,7 @@ def get_batches_of_test(id=None, test_id=None):
 		test = {}
 		test['id'] = test_obj.id
 		test['name'] = test_obj.test.name
-		test['subject_year_id'] = test_obj.test.subject_year.id
+		test['subject_year_id'] = test_obj.test.subject_year.subject.id
 		test['subject_year_name'] = test_obj.test.subject_year.subject.name + ' - ' + test_obj.test.subject_year.subject.standard.name
 		test['batch_id'] = test_obj.batch.id
 		test['batch_name'] = test_obj.batch.name
@@ -130,7 +130,7 @@ def get_batches_of_test(id=None, test_id=None):
 		test = {}
 		test['id'] = test_obj.id
 		test['name'] = test_obj.test.name
-		test['subject_year_id'] = test_obj.test.subject_year.id
+		test['subject_year_id'] = test_obj.test.subject_year.subject.id
 		test['subject_year_name'] = test_obj.test.subject_year.subject.name + ' - ' + test_obj.test.subject_year.subject.standard.name
 		test['batch_id'] = test_obj.batch.id
 		test['batch_name'] = test_obj.batch.name
@@ -146,7 +146,7 @@ def get_teachers_of_test(id=None, test_id=None):
 		test = {}
 		test['id'] = test_obj.id
 		test['name'] = test_obj.test.name
-		test['subject_year_id'] = test_obj.test.subject_year.id
+		test['subject_year_id'] = test_obj.test.subject_year.subject.id
 		test['subject_year_name'] = test_obj.test.subject_year.subject.name + ' - ' + test_obj.test.subject_year.subject.standard.name
 		test['staff_role_id'] = test_obj.staff_role.id
 		test['staff_name'] = test_obj.staff_role.staff.first_name + ' ' + test_obj.staff_role.staff.last_name
@@ -161,7 +161,7 @@ def get_teachers_of_test(id=None, test_id=None):
 		test = {}
 		test['id'] = test_obj.id
 		test['name'] = test_obj.test.name
-		test['subject_year_id'] = test_obj.test.subject_year.id
+		test['subject_year_id'] = test_obj.test.subject_year.subject.id
 		test['subject_year_name'] = test_obj.test.subject_year.subject.name + ' - ' + test_obj.test.subject_year.subject.standard.name
 		test['staff_role_id'] = test_obj.staff_role.id
 		test['staff_id'] = test_obj.staff_role.staff.id

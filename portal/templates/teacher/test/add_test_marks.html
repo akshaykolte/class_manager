@@ -56,7 +56,7 @@
 			<select name="subject" class="form-control" onchange="this.form.submit()">
 				<option>Select</option>
 				{% for subject in subjects %}
-				<option value="{{subject.id}}">{{subject.name}}</option>
+				<option value="{{subject.subject_id}}">{{subject.name}}</option>
 				{% endfor %}
 			</select>
 			</form>

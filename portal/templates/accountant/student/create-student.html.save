@@ -40,13 +40,13 @@
                     <tbody>
 
                         <tr>
-                            <td style='border-top:none' align="center"><strong>First Name <sup style="color:red;">*</sup></strong></td>
-                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='first_name' placeholder='First Name' required ></td>
+                            <td style='border-top:none' align="center"><strong>First Name <sup><style= """color:"red">*</style></sup></strong></td>
+                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='first_name' placeholder='First Name'></td>
                         </tr>
 
                         <tr>
-                            <td style='border-top:none' align="center"><strong>Last Name <sup style="color:red;">*</sup></strong></td>
-                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='last_name' placeholder='Last Name' required ></td>
+                            <td style='border-top:none' align="center"><strong>Last Name</strong></td>
+                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='last_name' placeholder='Last Name'></td>
                         </tr>
 
                         <tr>
@@ -70,8 +70,8 @@
                             <td style='border-top:none' align="center"><input name='email' class='form-control' style='width:250px' type='text' placeholder='Email'></td>
                         </tr>
                         <tr>
-                            <td style='border-top:none' align="center"><strong>Phone Number <sup style="color:red;">*</sup></strong></td>
-                            <td style='border-top:none' align="center"><input name='phone_number' class='form-control' style='width:250px' type='text' placeholder='Phone Number' required ></td>
+                            <td style='border-top:none' align="center"><strong>Phone Number</strong></td>
+                            <td style='border-top:none' align="center"><input name='phone_number' class='form-control' style='width:250px' type='text' placeholder='Phone Number'></td>
                         </tr>
 
                         <tr>
@@ -108,13 +108,13 @@
                     <tbody>
 
                         <tr>
-                            <td style='border-top:none' align="center"><strong>First Name <sup style="color:red;">*</sup></strong></td>
-                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='pfirst_name' placeholder='First Name' required ></td>
+                            <td style='border-top:none' align="center"><strong>First Name</strong></td>
+                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='pfirst_name' placeholder='First Name'></td>
                         </tr>
 
                         <tr>
-                            <td style='border-top:none' align="center"><strong>Last Name <sup style="color:red;">*</sup></strong></td>
-                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='plast_name' placeholder='Last Name' required ></td>
+                            <td style='border-top:none' align="center"><strong>Last Name</strong></td>
+                            <td style='border-top:none' align="center"><input class='form-control' style='width:250px' type='text' name='plast_name' placeholder='Last Name'></td>
                         </tr>
 
                         <tr>
@@ -138,8 +138,8 @@
                             <td style='border-top:none' align="center"><input name='pemail' class='form-control' style='width:250px' type='text' placeholder='Email'></td>
                         </tr>
                         <tr>
-                            <td style='border-top:none' align="center"><strong>Phone Number <sup style="color:red;">*</sup></strong></td>
-                            <td style='border-top:none' align="center"><input name='pphone_number' class='form-control' style='width:250px' type='text' placeholder='Phone Number' required ></td>
+                            <td style='border-top:none' align="center"><strong>Phone Number</strong></td>
+                            <td style='border-top:none' align="center"><input name='pphone_number' class='form-control' style='width:250px' type='text' placeholder='Phone Number'></td>
                         </tr>
 
                         <tr>

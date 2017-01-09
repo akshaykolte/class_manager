@@ -218,7 +218,7 @@
                                         {%for i in batch_list %}
                                         <tr>
                                             <td>{{i.first_name}} {{i.last_name}}</td>
-                                            <td align="center"><input class="sub_batch_{{i.id}}" type="checkbox" name="batch_{{i.batch.id}}student_{{i.id}}"{% if i.present == True %} checked{% endif %}></td>
+                                            <td align="center"><input class="sub_batch_{{i.id}}" type="checkbox" name="batch_{{i.batch.id}}student_{{i.student_batch_id}}"{% if i.present == True %} checked{% endif %}></td>
                                             {% if i.present == True %}<td class="text-success"><strong>Present</strong></td>
                                             {% else %}<td class="text-muted"><strong>Absent/Not Marked</strong></td>
                                             {% endif %}
