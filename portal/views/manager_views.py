@@ -620,19 +620,16 @@ def add_tests(request):
 			if not 'standard' in request.GET:
 				page_type = 0
 				context['standards'] = get_standard()
-			elif not 'subject' in request.GET:
-				page_type = 1
-				context['standards'] = get_standard()
-				context['standard_id'] = int(request.GET['standard'])
-				context['subjects'] = get_subjects(standard_id=request.GET['standard'])
+			
 			else:
 				page_type = 2
 				context['standards'] = get_standard()
 				context['standard_id'] = int(request.GET['standard'])
 				context['subjects'] = get_subjects(standard_id=request.GET['standard'])
-				context['subject_id'] = int(request.GET['subject'])
+				#context['subject_id'] = int(request.GET['subject'])
 				branches = get_branch_of_manager(manager_id=auth_dict['id'])
 				batches = []
+
 				for branch in branches:
 					batches += get_batch(branch_id=branch['id'], standard_id = request.GET['standard'])
 				context['batches'] = batches
@@ -659,41 +656,48 @@ def add_tests(request):
 			return redirect('./?message_error='+str(PentaError(100)))
 
 	elif request.method == 'POST':
-		try:
-			test_name = request.POST['test_name']
-			test_marks = request.POST['test_marks']
-			subject_id = request.POST['subject']
-			print "here"
-			test = set_test(name=test_name, marks=test_marks, subject_year_id=subject_id)
-			branches = get_branch_of_manager(manager_id=auth_dict['id'])
-			batches = []
-			for branch in branches:
-				batches += get_batch(branch_id=branch['id'], standard_id=request.POST['standard'])
+		#try:
+		standard_id = request.POST['standard']
+		test_name = request.POST['test_name']
+		test_marks = request.POST['test_marks']
+		#subject_id = request.POST['subject']
+		subjects = get_subjects(standard_id = standard_id)
+		print "here"
+		for subject in subjects:
+			if 'subject_'+str(subject['id']) in request.POST:
 
-			print batches
-			for batch in batches:
-				if 'batch_'+str(batch['id']) in request.POST:
-					set_test_of_batch(test_id=test, batch_id=batch['id'])
+				subject_year_id = subject['id']
 
-			teachers = []
-			for branch in branches:
-				teachers += get_staff(role_name='teacher', branch_id=branch['id'])
+				test = set_test(name=test_name, marks=test_marks, subject_year_id=subject_year_id)
+				branches = get_branch_of_manager(manager_id=auth_dict['id'])
+				batches = []
+				for branch in branches:
+					batches += get_batch(branch_id=branch['id'], standard_id=request.POST['standard'])
 
-			'''
-				To make sure the manager doesn't assign test to teacher outside his/her branches
-			'''
-			for teacher in teachers:
-				if 'teacher_'+str(teacher['id']) in request.POST:
-					staff_role_id = None
-					for branch in branches:
-						staff_role_list = get_staff_role(role_id = get_role_by_name('teacher')['id'], staff_id=teacher['id'], branch_id = branch['id'])
-						if len(staff_role_list) == 1:
-							set_test_of_staff_role(test_id=test, staff_role_id = staff_role_list[0]['id'])
-							break
+				print batches
+				for batch in batches:
+					if 'batch_'+str(batch['id']) in request.POST:
+						set_test_of_batch(test_id=test, batch_id=batch['id'])
+
+				teachers = []
+				for branch in branches:
+					teachers += get_staff(role_name='teacher', branch_id=branch['id'])
+
+				'''
+					To make sure the manager doesn't assign test to teacher outside his/her branches
+				'''
+				for teacher in teachers:
+					if 'teacher_'+str(teacher['id']) in request.POST:
+						staff_role_id = None
+						for branch in branches:
+							staff_role_list = get_staff_role(role_id = get_role_by_name('teacher')['id'], staff_id=teacher['id'], branch_id = branch['id'])
+							if len(staff_role_list) == 1:
+								set_test_of_staff_role(test_id=test, staff_role_id = staff_role_list[0]['id'])
+								break
 
 
-			return redirect('./?message=Test Added')
-		except ModelValidateError, e:
+		return redirect('./?message=Test Added')
+		'''except ModelValidateError, e:
 			return redirect('./?message_error='+str(e))
 		except ValueError, e:
 			return redirect('./?message_error='+str(PentaError(1000)))
@@ -703,7 +707,7 @@ def add_tests(request):
 			return redirect('./?message_error='+str(PentaError(998)))
 		except Exception, e:
 			return redirect('./?message_error='+str(PentaError(100)))
-
+		'''
 @csrf_exempt
 def view_tests(request):
 	context = {}
