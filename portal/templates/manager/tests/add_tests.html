@@ -73,25 +73,39 @@
 		</select>
 	</form>
 	<br/>
-	<form>
-		<input type="hidden" name="standard" value="{{standard_id}}">
-		<label><strong>Select Subject</strong></label>
-		<select name="subject" class="form-control" onchange="this.form.submit()">
-			{% for subject in subjects %}
-			<option value="{{subject.id}}"{% if subject_id == subject.id %} selected{% endif %}>{{subject.name}}</option>
-			{% endfor %}
-		</select>
-	</form>
+	
 	<br/>
 	<form action="." method="POST">
 		<input type="hidden" name="standard" value="{{standard_id}}">
-		<input type="hidden" name="subject" value="{{subject_id}}">
+		
 		<label><strong>Test Name</strong></label>
 		<input name="test_name" class="form-control">
 		<br/>
     <label><strong>Total Marks</strong></label>
 		<input name="test_marks" class="form-control">
     <br/>
+    <label><strong>Select Subjects</strong></label>
+    	<div class="dataTable_wrapper">
+            			   	<table class="display table table-striped table-bordered table-hover" id="">
+            					<thead>
+            						<tr>
+            							<td class="col-lg-5">Subject</td>
+            							<td align="center">&nbsp;&nbsp;<input type="checkbox" name="sample" class="subject_check">
+            							
+            						</tr>
+            					</thead>
+            					<tbody>
+            					
+            						{%for subject in subjects %}
+            						<tr>
+            							<td>{{subject.name}}</td>
+            							<td align="center"><input class="subject_sub_check" type="checkbox" name="subject_{{subject.id}}"></td>
+            							
+            						</tr>
+            						{% endfor %}
+            					</tbody>
+            				</table>
+            			</div>
 		<label><strong>Select batches which can give the test</strong></label>
         <div class="dataTable_wrapper">
             <table class="display table table-striped table-bordered table-hover" id="">
@@ -176,6 +190,15 @@
            $('.teacher_check').on("click", function () { // IE<9 triggers change after blurred
                var checked = $(this).is(':checked');
                var $otherChecks = $('.sub_teacher_check');
+               $otherChecks.prop('checked', checked);
+               $otherChecks.parent().toggleClass("disabled",checked);
+           });
+       });
+
+        $(function() {
+           $('.subject_check').on("click", function () { // IE<9 triggers change after blurred
+               var checked = $(this).is(':checked');
+               var $otherChecks = $('.subject_sub_check');
                $otherChecks.prop('checked', checked);
                $otherChecks.parent().toggleClass("disabled",checked);
            });
