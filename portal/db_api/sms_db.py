@@ -37,16 +37,16 @@ def sms_for_marks(test_student_batch_list, staff_id):
         test_marks_dict[student_object].append(test_student_batch)
 
     for k,v in test_marks_dict.items():
-        text = SIGNATURE + "\nTest Results for " + k.first_name + " " + k.last_name + ":\n"
+        text = SIGNATURE + "\nTestResults:" + k.first_name + " " + k.last_name + ":"
         parent_id = StudentParent.objects.get(student=k).parent.id
         parent_phone_number = Parent.objects.get(id=parent_id).phone_number
         for test_student_id in v:
             test_student_object = TestStudentBatch.objects.get(id=test_student_id)
-            test_name = test_student_object.test.name
+            test_name = test_student_object.test.subject_year.subject.name
             total_marks = test_student_object.test.total_marks
             obtained_marks = test_student_object.obtained_marks
-            temporary_text = test_name + ": " + str(obtained_marks) + "/" + str(total_marks)
-            text += temporary_text + "\n"
+            temporary_text = test_name[:3] + ":" + str(obtained_marks) + "/" + str(total_marks)
+            text += temporary_text
         sms_object = SMS(phone_number=parent_phone_number, sms_type = "Test Marks", message_text=text, status="Pending", student=k, staff=Staff.objects.get(id=staff_id))
         sms_object.save()
 
