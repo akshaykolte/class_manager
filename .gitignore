@@ -3,5 +3,4 @@
 *.log
 media/
 portal/migrations
-db.sqlite
 portal/sms/SMSDaemonLogFile.log
